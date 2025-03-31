@@ -5,6 +5,7 @@ public class Blocking : MonoBehaviour
 {
     [Header("Events")]
     [SerializeField] private GameEvent _succesfullBlockevent;
+    [SerializeField] private GameEvent _equipmentUpdate;
     [SerializeField] private GameEvent _succesfullHitEvent;
 
     [Header("Stamina")]
@@ -113,6 +114,7 @@ public class Blocking : MonoBehaviour
         }
         else
         {
+
             switch (blockResult)
             {
                 case BlockResult.FullyBlocked:
@@ -130,6 +132,7 @@ public class Blocking : MonoBehaviour
             }
             
             _succesfullBlockevent.Raise(this, new StunEventArgs { StunDuration = 2, ComesFromEnemy = true});
+            _equipmentUpdate.Raise(this, defenceEventArgs);
         }
 
     }

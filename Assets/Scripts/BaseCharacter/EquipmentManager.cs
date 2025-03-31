@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
@@ -11,6 +12,7 @@ public class EquipmentManager : MonoBehaviour
     [SerializeField] private Equipment _fists;
     [Header("Events")]
     [SerializeField] private GameEvent _onEquipmentBreak;
+    [SerializeField] private GameEvent _onEquipmentDamage;
     [Header("Item")]
     [SerializeField] private LayerMask _itemMask;
     [Header("Blackboard")]
@@ -49,6 +51,7 @@ public class EquipmentManager : MonoBehaviour
             HeldEquipment[FISTS] = fist;
         }
 
+        UpdateBlackboard();
 
     }
 
@@ -82,10 +85,40 @@ public class EquipmentManager : MonoBehaviour
     public void CheckDurability(Component sender, object obj)
     {
         //Check for vallid signal
-        if (sender.gameObject != gameObject) return;
         DefenceEventArgs args = obj as DefenceEventArgs;
         if (args == null) return;
 
+        if (sender.gameObject == gameObject)
+            BlockMediumReduction(args);
+        else
+            AttackMediumReduction(args);
+
+        UpdateBlackboard();
+    }
+
+    private void AttackMediumReduction(DefenceEventArgs args)
+    {
+        //Attackmedium
+        int attackIndex = 2;
+        if (HeldEquipment[RIGHT_HAND])
+            attackIndex = RIGHT_HAND;
+        else if (HeldEquipment[LEFT_HAND])
+            attackIndex = RIGHT_HAND;
+        else
+            attackIndex = FISTS;
+
+        //Reduce durability
+        HeldEquipment[attackIndex].Damage(args.AttackPower, args.BlockResult);
+        _onEquipmentDamage.Raise(this, new EquipmentEventArgs
+        {
+            ShieldDurability = GetDurabilityPercentage(LEFT_HAND),
+            WeaponDurability = GetDurabilityPercentage(RIGHT_HAND)
+        });
+
+    }
+
+    private void BlockMediumReduction(DefenceEventArgs args)
+    {
         //Reduce durability
         int index = 2;
         switch (args.BlockMedium)
@@ -101,6 +134,11 @@ public class EquipmentManager : MonoBehaviour
                 break;
         }
         HeldEquipment[index].Damage(args.AttackPower, args.BlockResult);
+        _onEquipmentDamage.Raise(this, new EquipmentEventArgs
+        {
+            ShieldDurability = GetDurabilityPercentage(LEFT_HAND),
+            WeaponDurability = GetDurabilityPercentage(RIGHT_HAND)
+        });
 
         //Check if broken
         if (HeldEquipment[index].Durability < 0f)
@@ -116,9 +154,9 @@ public class EquipmentManager : MonoBehaviour
             };
             _onEquipmentBreak.Raise(this, send);
         }
-
-        UpdateBlackboard();
     }
+
+
 
     private void UpdateBlackboard()
     {

@@ -45,10 +45,10 @@ public class PlayerController : MonoBehaviour
     [Header("ItemPickup")]
     [SerializeField]
     private GameEvent _pickupEvent;
-
-    [Header("ShieldGrab")]
+    
+    [Header("Perception")]
     [SerializeField]
-    private GameEvent _shieldGrabEvent;
+    private GameEvent _LookForTarget;
 
     private Vector2 _moveInput;
 
@@ -67,6 +67,9 @@ public class PlayerController : MonoBehaviour
         _aimInputRef.variable.ValueChanged += AimInputRef_ValueChanged;
         _aimInputRef.variable.StateManager = _stateManager;
         _moveInputRef.variable.StateManager = _stateManager;
+
+        StartCoroutine(CheckSurrounding());
+
     }
 
     public void GetStun(Component sender, object obj)
@@ -231,12 +234,8 @@ public class PlayerController : MonoBehaviour
 
     public void ProccesInteractInput(InputAction.CallbackContext ctx)
     {
-        if (!ctx.performed) return;
-        if(_stateManager.AttackState == AttackState.ShieldDefence)
-        {
-            _shieldGrabEvent.Raise(this, new ShieldGrabEventArgs { StateManager = _stateManager});
-        }
-        _pickupEvent.Raise(this);
+        if (ctx.performed)
+            _pickupEvent.Raise(this);
         //TODO add intract event
     }
 
@@ -287,4 +286,17 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(1);
         _stateManager.AttackHeight = AttackHeight.Torso;
     }
+
+
+    private IEnumerator CheckSurrounding()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(0.5f);
+            _LookForTarget.Raise(this, new OrientationEventArgs { NewOrientation = _stateManager.Orientation });
+        }
+
+    }
+
+
 }

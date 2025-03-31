@@ -189,4 +189,14 @@ namespace UnityEngine
        Agressive,
        Coward
     }
+
+    public enum AnimationState 
+    {
+        Idle,
+        Walk,
+        Run,
+        LeftSwing,
+        RightSwing,
+        Defend
+    }
 }

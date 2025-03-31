@@ -36,6 +36,10 @@ public class Attacking : MonoBehaviour
     private LayerMask _characterLayer;
     [SerializeField] BlackboardReference _blackboardRef;
 
+    [Header("Animation")]
+    [SerializeField]
+    private GameEvent _changeAnimation;
+
 
     private float _chargePower;
     private float _attackPower;

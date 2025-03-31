@@ -17,6 +17,10 @@ public class CharacterMovement : MonoBehaviour
     [SerializeField]
     private GameEvent _removeStamina;
 
+    [Header("Animation")]
+    [SerializeField]
+    private GameEvent _changeAnimation;
+
     private Rigidbody _rb;
     private StateManager _stateManager;
     private Vector3 _movedirection;
@@ -40,6 +44,13 @@ public class CharacterMovement : MonoBehaviour
             _removeStamina.Raise(this, new StaminaEventArgs { StaminaCost = _staminaCost.value * Time.deltaTime });
         _movedirection = new Vector3(_moveInput.Value.x, 0, _moveInput.Value.y);
 
+        if (_moveInput.Value != Vector2.zero)
+        {
+            if(_moveInput.variable.SpeedMultiplier > 1) _changeAnimation.Raise(this, AnimationState.Run);
+            else _changeAnimation.Raise(this, AnimationState.Walk);
+        }
+        else _changeAnimation.Raise(this, AnimationState.Idle);
+
         if (_stateManager.Target == null)
             UpdateOrientation();
     }
@@ -51,20 +62,44 @@ public class CharacterMovement : MonoBehaviour
         moveInputAngle = moveInputAngle * Mathf.Rad2Deg;
 
         if (moveInputAngle > 0 - _angleInterval && moveInputAngle < 0 + _angleInterval)
+        {
             _moveInput.variable.StateManager.Orientation = Orientation.East;
+            transform.rotation = Quaternion.Euler(new Vector3(0, 90, 0));
+        }
         else if (moveInputAngle > 45 - _angleInterval && moveInputAngle < 45 + _angleInterval)
-        _moveInput.variable.StateManager.Orientation = Orientation.NorthEast;
+        {
+            _moveInput.variable.StateManager.Orientation = Orientation.NorthEast;
+            transform.rotation = Quaternion.Euler(new Vector3(0, 45, 0));
+        }
         else if (moveInputAngle > 90 - _angleInterval && moveInputAngle < 90 + _angleInterval)
-        _moveInput.variable.StateManager.Orientation = Orientation.North;
+        {
+            _moveInput.variable.StateManager.Orientation = Orientation.North;
+            transform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
+        }
         else if (moveInputAngle > 135 - _angleInterval && moveInputAngle < 135 + _angleInterval)
+        {
             _moveInput.variable.StateManager.Orientation = Orientation.NorthWest;
+            transform.rotation = Quaternion.Euler(new Vector3(0, -45, 0));
+        }
         else if (moveInputAngle > 180 - _angleInterval && moveInputAngle < 180 || moveInputAngle < -180 + _angleInterval && moveInputAngle > -180)
+        {
             _moveInput.variable.StateManager.Orientation = Orientation.West;
+            transform.rotation = Quaternion.Euler(new Vector3(0, -90, 0));
+        }
         else if (moveInputAngle > -135 - _angleInterval && moveInputAngle < -135 + _angleInterval)
+        {
             _moveInput.variable.StateManager.Orientation = Orientation.SouthWest;
+            transform.rotation = Quaternion.Euler(new Vector3(0, -135, 0));
+        }
         else if (moveInputAngle > -90 - _angleInterval && moveInputAngle < -90 + _angleInterval)
+        {
             _moveInput.variable.StateManager.Orientation = Orientation.South;
+            transform.rotation = Quaternion.Euler(new Vector3(0, 180, 0));
+        }
         else if (moveInputAngle > -45 - _angleInterval && moveInputAngle < -45 + _angleInterval)
+        {
             _moveInput.variable.StateManager.Orientation = Orientation.SouthEast;
+            transform.rotation = Quaternion.Euler(new Vector3(0, 135, 0));
+        }
     }
 }

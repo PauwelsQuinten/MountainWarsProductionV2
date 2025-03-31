@@ -37,7 +37,7 @@ public class Blocking : MonoBehaviour
         else
             return;
 
-        Debug.Log($"package to Block State = {args.AttackState}, hold: {args.AimingInputState}, {_blockMedium}");
+        Debug.Log($"package to Block State = {args.AttackState}, hold: {args.AimingInputState}, {_blockMedium}, {args.BlockDirection}");
 
         //When Shield is locked and state hasnt changed, keep previous values
         if (_holdBlock && args.AttackState == AttackState.BlockAttack)

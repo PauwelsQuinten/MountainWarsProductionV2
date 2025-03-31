@@ -115,6 +115,7 @@ public class EquipmentManager : MonoBehaviour
             WeaponDurability = GetDurabilityPercentage(RIGHT_HAND)
         });
 
+        CheckIfBroken(args, attackIndex);
     }
 
     private void BlockMediumReduction(DefenceEventArgs args)
@@ -140,6 +141,11 @@ public class EquipmentManager : MonoBehaviour
             WeaponDurability = GetDurabilityPercentage(RIGHT_HAND)
         });
 
+        CheckIfBroken(args, index);
+    }
+
+    private void CheckIfBroken(DefenceEventArgs args, int index)
+    {
         //Check if broken
         if (HeldEquipment[index].Durability < 0f)
         {
@@ -155,8 +161,6 @@ public class EquipmentManager : MonoBehaviour
             _onEquipmentBreak.Raise(this, send);
         }
     }
-
-
 
     private void UpdateBlackboard()
     {

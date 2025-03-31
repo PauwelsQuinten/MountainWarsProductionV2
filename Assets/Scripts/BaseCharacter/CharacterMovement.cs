@@ -19,7 +19,7 @@ public class CharacterMovement : MonoBehaviour
 
     private Rigidbody _rb;
     private StateManager _stateManager;
-    private Vector2 _movedirection;
+    private Vector3 _movedirection;
     private float _angleInterval = 22.5f;
 
     private void Start()
@@ -31,14 +31,14 @@ public class CharacterMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        _rb.MovePosition(new Vector2(transform.position.x, transform.position.y) + (_movedirection * (_speed * _moveInput.variable.SpeedMultiplier)) * Time.deltaTime);
+        _rb.MovePosition(new Vector3(transform.position.x, transform.position.y,transform.position.z) + (_movedirection * (_speed * _moveInput.variable.SpeedMultiplier)) * Time.deltaTime);
     }
 
     private void MoveInput_ValueChanged(object sender, EventArgs e)
     {
         if (_moveInput.variable.SpeedMultiplier > 1)
             _removeStamina.Raise(this, new StaminaEventArgs { StaminaCost = _staminaCost.value * Time.deltaTime });
-        _movedirection = _moveInput.Value;
+        _movedirection = new Vector3(_moveInput.Value.x, 0, _moveInput.Value.y);
 
         if (_stateManager.Target == null)
             UpdateOrientation();
@@ -46,8 +46,8 @@ public class CharacterMovement : MonoBehaviour
 
     private void UpdateOrientation()
     {
-        if (_movedirection == Vector2.zero) return;
-        float moveInputAngle = Mathf.Atan2(_movedirection.y, _movedirection.x);
+        if (_movedirection == Vector3.zero) return;
+        float moveInputAngle = Mathf.Atan2(_movedirection.z, _movedirection.x);
         moveInputAngle = moveInputAngle * Mathf.Rad2Deg;
 
         if (moveInputAngle > 0 - _angleInterval && moveInputAngle < 0 + _angleInterval)

@@ -52,6 +52,7 @@ public class Attacking : MonoBehaviour
         AimingOutputArgs args = obj as AimingOutputArgs;
         if (args == null) return;
 
+        //PrintInput(args);
 
         CalculateChargePower(args);
 
@@ -75,7 +76,8 @@ public class Attacking : MonoBehaviour
         if (!IsEnemyInRange()) return;
         _doAttack.Raise(this, new AttackEventArgs { AttackType = _attackType, AttackHeight = args.AttackHeight, AttackPower = _attackPower});
 
-        PrintInput(args);
+        Debug.Log("AttackCalculate");
+        PrintInput2(args);
         //Signal to blackboard
         if (gameObject.CompareTag(PLAYER))
             _blackboardRef.variable.TargetCurrentAttack = _attackType;
@@ -150,5 +152,10 @@ public class Attacking : MonoBehaviour
     private void PrintInput(AimingOutputArgs args)
     {
         Debug.Log($"attack input : {args.AttackSignal}, state: {args.AttackState}, {args.Direction}, {args.AngleTravelled}. owner: {gameObject}");
+    }
+    
+    private void PrintInput2(AimingOutputArgs args)
+    {
+        Debug.Log($"attack input after checking : {args.AttackSignal}, state: {args.AttackState}, {args.Direction}, {args.AngleTravelled}. owner: {gameObject}");
     }
 }

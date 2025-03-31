@@ -14,7 +14,7 @@ public class Equipment : MonoBehaviour
     [SerializeField] private float _range = 1f;
     public float Range { get { return _range; } private set { _range = value; } }
 
-    private void Start()
+    private void Awake()
     {
         _maxDurability = _durability;
     }
@@ -28,13 +28,13 @@ public class Equipment : MonoBehaviour
                 damageMultiplier = 0f;
                 break;
             case BlockResult.SwordBlock:
-                damageMultiplier = 0.7f;
+                damageMultiplier = 0.35f;
                 break;
             case BlockResult.SwordHalfBlock:
-                damageMultiplier = 1f;
+                damageMultiplier = 0.25f;
                 break;
             case BlockResult.HalfBlocked:
-                damageMultiplier = 0.7f;
+                damageMultiplier = 0.25f;
                 break;
             case BlockResult.FullyBlocked:
                 damageMultiplier = 0.5f;

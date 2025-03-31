@@ -25,7 +25,6 @@ public class CharacterMovement : MonoBehaviour
     private void Start()
     {
         _rb = GetComponent<Rigidbody>();
-        _stateManager = _moveInput.variable.StateManager;
         _moveInput.variable.ValueChanged += MoveInput_ValueChanged;
     }
 
@@ -40,7 +39,7 @@ public class CharacterMovement : MonoBehaviour
             _removeStamina.Raise(this, new StaminaEventArgs { StaminaCost = _staminaCost.value * Time.deltaTime });
         _movedirection = new Vector3(_moveInput.Value.x, 0, _moveInput.Value.y);
 
-        if (_stateManager.Target == null)
+        if (_moveInput.variable.StateManager.Target == null)
             UpdateOrientation();
     }
 

@@ -34,6 +34,8 @@ public class EquipmentManager : MonoBehaviour
         if (_leftHand && !_leftHand.IsRightHandEquipment)
         {
             var leftEquipment = Instantiate(_leftHand);
+            leftEquipment.transform.parent = transform;
+            leftEquipment.transform.localPosition = Vector3.zero;
             HeldEquipment[LEFT_HAND] = leftEquipment;
         }
 
@@ -41,6 +43,8 @@ public class EquipmentManager : MonoBehaviour
         if (_rightHand && _rightHand.IsRightHandEquipment)
         {
             var rightEquipment = Instantiate(_rightHand);
+            rightEquipment.transform.parent = transform;
+            rightEquipment.transform.localPosition = Vector3.zero;
             HeldEquipment[RIGHT_HAND] = rightEquipment;
         }
 
@@ -48,6 +52,8 @@ public class EquipmentManager : MonoBehaviour
         if (_fists && _fists.Type == EquipmentType.Fist)
         {
             var fist = Instantiate(_fists);
+            fist.transform.parent = transform;
+            fist.transform.localPosition = Vector3.zero;
             HeldEquipment[FISTS] = fist;
         }
 
@@ -102,8 +108,8 @@ public class EquipmentManager : MonoBehaviour
         int attackIndex = 2;
         if (HeldEquipment[RIGHT_HAND])
             attackIndex = RIGHT_HAND;
-        else if (HeldEquipment[LEFT_HAND])
-            attackIndex = RIGHT_HAND;
+        else if (!HeldEquipment[RIGHT_HAND] && HeldEquipment[LEFT_HAND])
+            attackIndex = LEFT_HAND;
         else
             attackIndex = FISTS;
 
@@ -149,7 +155,7 @@ public class EquipmentManager : MonoBehaviour
         //Check if broken
         if (HeldEquipment[index].Durability < 0f)
         {
-            Debug.Log($"!!!!!!!!!!!!!!!!!!!!! breaks {args.BlockMedium} !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            Debug.Log($"!!!!!!!!!!!!!!!!!!!!! breaks {HeldEquipment[index]} !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
             Destroy(HeldEquipment[index].gameObject);
             HeldEquipment[index] = null;
 
@@ -220,15 +226,6 @@ public class EquipmentManager : MonoBehaviour
         return HeldEquipment[index] != null;
     }
     
-    public float GetEquipmentPower()
-    {
-        if (HeldEquipment[RIGHT_HAND])
-            return HeldEquipment[RIGHT_HAND].Power;
-        else if (HeldEquipment[LEFT_HAND])
-            return HeldEquipment[RIGHT_HAND].Power;
-        return HeldEquipment[FISTS].Power;
-    }
-
     private void DropEquipment(bool isRightHand)
     {
         int index = isRightHand ? 1 : 0;
@@ -238,12 +235,21 @@ public class EquipmentManager : MonoBehaviour
         HeldEquipment[index] = null; 
     }
 
+    public float GetEquipmentPower()
+    {
+        if (HeldEquipment[RIGHT_HAND])
+            return HeldEquipment[RIGHT_HAND].Power;
+        else if (!HeldEquipment[RIGHT_HAND] && HeldEquipment[LEFT_HAND])
+            return HeldEquipment[LEFT_HAND].Power;
+        return HeldEquipment[FISTS].Power;
+    }
+
     private float GetAttackRange()
     {
         if (HeldEquipment[RIGHT_HAND])
             return HeldEquipment[RIGHT_HAND].Range;
-        else if (HeldEquipment[LEFT_HAND])
-            return HeldEquipment[RIGHT_HAND].Range;
+        else if (!HeldEquipment[RIGHT_HAND] && HeldEquipment[LEFT_HAND])
+            return HeldEquipment[LEFT_HAND].Range;
         return HeldEquipment[FISTS].Range;
     }
 

@@ -1,0 +1,192 @@
+namespace UnityEngine 
+{
+    public enum Orientation
+    {
+        North = 90,
+        NorthEast = 45,
+        East = 0,
+        SouthEast = -45,
+        South = -90,
+        SouthWest = -135,
+        West = 180,
+        NorthWest = 135
+    }
+
+    public enum AttackHeight
+    {
+        Head,
+        Torso
+    }
+
+
+    public enum CharacterState
+    {
+        Idle,
+        Knocked,
+        Dodging
+    }
+
+    public enum AttackState
+    {
+        Idle,
+        Attack,
+        ShieldDefence,
+        SwordDefence,
+        BlockAttack,
+        Stun
+    }
+
+    public enum AimingInputState
+    {
+        Idle, 
+        Moving, 
+        Hold, 
+        Reset
+    }
+
+    public enum Direction
+    {
+        Idle,
+        ToRight, 
+        ToLeft, 
+        ToCenter,
+        Wrong
+    }
+
+    public enum AttackSignal
+    {
+        Idle,
+        Stab,
+        Feint,
+        Swing,
+        Charge
+    }
+
+    public enum AttackType
+    {
+        Stab,
+        HorizontalSlashToLeft,
+        HorizontalSlashToRight,
+        ShieldBash,
+        None
+    }
+
+    public enum BodyParts 
+    { 
+        Head,
+        Torso,
+        LeftArm,
+        RightArm,
+        LeftLeg,
+        RightLeg,
+    }
+
+
+    public enum BlockResult
+    {
+        
+        //When no defence and clean hit
+        //Take full damage and stamina loss
+        Hit,
+        //This will happen when you block with sword in right direction
+        //This will half the damage taken.
+        SwordBlock,
+        //This will happen when you block with sword a stab from center position
+        //Take 3/4 of the damage
+        SwordHalfBlock,
+        
+        //This will happen when you are holding the shield up in center position while the attack comes either from left or right.
+        //this will not cause damage but will cut down your Stamina more. 
+        HalfBlocked, 
+        //This will happen when you are holding the shield up in position of the attack.
+        //this will take less Stamina from you and cause a small knockback to the opponent. 
+        FullyBlocked,
+        //This will take the least amount of Stamina and create the biggest opening to attack the opponent afterwards
+        Parried
+    }
+    
+    public enum BlockMedium
+    {
+        Shield = 0,
+        Sword = 1,
+        Nothing = 2
+    }
+
+    public enum EquipmentType
+    {
+        Melee,
+        Ranged,
+        Shield,
+        Fist
+    }
+
+
+    public enum WorldStateType
+    {
+        Desired,
+        Satisfying,
+        Current
+    }
+    
+    public enum EWorldState
+    {
+        Behaviour,
+        Health,
+        Stamina,
+        RHEquipment,
+        LHEquipment,
+        HasTarget,
+
+        TargetBehaviour,
+        TargetHealth,
+        TargetStamina,
+        TargetRHEquipment,
+        TargetLHEquipment,
+
+        TargetOpening,
+        TargetAttackRange,
+        AttackRange
+
+    }
+
+    public enum EWorldStateValue
+    {
+        Full,
+        High,
+        Mid,
+        Low,
+        Zero,
+        Default
+    }
+    
+    public enum EWorldStatePossesion
+    {       
+        InPossesion,
+        NotInPossesion,
+        Default
+    }
+
+    public enum EBehaviourValue
+    {
+        Recovering,
+        Attacking,
+        Defending,
+        Knock,
+        Default
+    }
+    
+    public enum EWorldStateRange
+    {
+       InRange,
+       OutOfRange,
+       FarAway,
+        Default
+    }
+     
+    public enum CharacterMentality
+    {
+       Basic,
+       Agressive,
+       Coward
+    }
+}

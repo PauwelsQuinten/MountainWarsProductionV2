@@ -17,7 +17,6 @@ public class Blocking : MonoBehaviour
     private Direction _blockDirection;
     private AimingInputState _aimingInputState;
     private BlockMedium _blockMedium = BlockMedium.Shield;
-    private bool _holdBlock = false;
 
     public void BlockMovement(Component sender, object obj)
     {
@@ -35,28 +34,23 @@ public class Blocking : MonoBehaviour
             )
             _blockMedium = Blocking.GetBlockMedium(args);
         else
+        {
+            _aimingInputState = AimingInputState.Idle;
+            //Debug.Log($"package to Block State = {args.AttackState}, hold: {args.AimingInputState}, {_blockMedium}, {args.BlockDirection}");
             return;
+        }
 
         Debug.Log($"package to Block State = {args.AttackState}, hold: {args.AimingInputState}, {_blockMedium}, {args.BlockDirection}");
 
         //When Shield is locked and state hasnt changed, keep previous values
-        if (_holdBlock && args.AttackState == AttackState.BlockAttack)
+        if (args.IsHoldingBlock && args.AttackState == AttackState.BlockAttack)
             return;
-        else
-            _holdBlock = false;
+       
 
         //Store Blocking values
         _blockDirection = args.BlockDirection;
         _aimingInputState = args.AimingInputState;
 
-        if (args.AttackState == AttackState.BlockAttack)
-        {
-            _holdBlock = true;
-        }
-
-        //Debug.Log($"BlockEvent : {_blockDirection}");
-        //Debug.Log($"BlockEvent : {_aimingInputState}");
-        
     }
 
     public void CheckBlock(Component sender, object obj)
@@ -92,10 +86,8 @@ public class Blocking : MonoBehaviour
                 blockResult = BlockResult.Hit;
                 break;
 
-               
         }
-
-
+               
 
         //Send the result as a gameEvent
         DefenceEventArgs defenceEventArgs = new DefenceEventArgs
@@ -105,7 +97,7 @@ public class Blocking : MonoBehaviour
             AttackPower = args.AttackPower,
             BlockMedium = _blockMedium
         };
-        Debug.Log($"{blockResult}");
+        Debug.Log($"{blockResult}, {gameObject}");
 
 
         if (blockResult == BlockResult.Hit)
@@ -173,6 +165,14 @@ public class Blocking : MonoBehaviour
         bool isRightHand = _blockMedium == BlockMedium.Shield ? false:  true;
         return equipment.HasEquipmentInHand(isRightHand);
     }
+    
+    private bool IsShieldPresent()
+    {
+        var equipment = GetComponent<EquipmentManager>();
+        if (equipment == null) return false;
+
+        return equipment.HasEquipmentInHand(false);
+    }
 
 
     private BlockResult UsingSword(AttackEventArgs args)
@@ -191,10 +191,21 @@ public class Blocking : MonoBehaviour
                 break;
 
             case AttackType.HorizontalSlashToLeft:
-                if (_blockDirection == Direction.ToLeft)
-                    blockResult = BlockResult.FullyBlocked;
+                if (IsShieldPresent())
+                {
+                    if (_blockDirection == Direction.ToLeft)
+                        blockResult = BlockResult.FullyBlocked;
+                    else
+                        blockResult = BlockResult.HalfBlocked;
+                }
                 else
-                    blockResult = BlockResult.HalfBlocked;
+                {
+                    if (_blockDirection == Direction.ToLeft)
+                        blockResult = BlockResult.SwordBlock;
+                    else
+                        blockResult = BlockResult.Hit;
+                }
+                
                 break;
 
             case AttackType.HorizontalSlashToRight:

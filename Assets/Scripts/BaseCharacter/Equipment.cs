@@ -19,7 +19,7 @@ public class Equipment : MonoBehaviour
         _maxDurability = _durability;
     }
 
-    public void Damage(float damage, BlockResult blockResult)
+    public void Damage(float damage, BlockResult blockResult, bool wasDefending)
     {
         float damageMultiplier = 1f;
         switch (blockResult)
@@ -28,16 +28,28 @@ public class Equipment : MonoBehaviour
                 damageMultiplier = 0f;
                 break;
             case BlockResult.SwordBlock:
-                damageMultiplier = 0.35f;
+                if (wasDefending)
+                    damageMultiplier = 0.25f;
+                else
+                    damageMultiplier = 0.35f;
                 break;
             case BlockResult.SwordHalfBlock:
-                damageMultiplier = 0.25f;
+                if (wasDefending)
+                    damageMultiplier = 0.25f;
+                else
+                    damageMultiplier = 0.35f;
                 break;
             case BlockResult.HalfBlocked:
-                damageMultiplier = 0.25f;
+                if (wasDefending)
+                    damageMultiplier = 0.35f;
+                else
+                    damageMultiplier = 0.15f;
                 break;
             case BlockResult.FullyBlocked:
-                damageMultiplier = 0.5f;
+                if (wasDefending)
+                    damageMultiplier = 0.15f;
+                else
+                    damageMultiplier = 0.35f;
                 break;
             case BlockResult.Parried:
                 damageMultiplier = 0f;

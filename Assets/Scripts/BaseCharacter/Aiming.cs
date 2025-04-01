@@ -32,6 +32,7 @@ public class Aiming : MonoBehaviour
     private float _fMovingTime = 0f;
     private float _previousLength = 0f;
     private float _traversedAngle = 0f;
+    private Direction _swingDirection = Direction.Idle;
     
     void Start()
     {
@@ -93,12 +94,14 @@ public class Aiming : MonoBehaviour
                 //update final movement to the traverseAngle
                 _traversedAngle += Vector2.Angle(_vec2previousDirection, _refAimingInput.variable.value);
 
-                var dir = CalculateSwingDirection(_traversedAngle);
-                _enmAttackSignal = IsFeintMovement(dir);
+                //var dir = CalculateSwingDirection(_traversedAngle);
+                _enmAttackSignal = IsFeintMovement(_swingDirection);
                 _enmAimingInput = AimingInputState.Idle;
                 SendPackage();
+                Debug.Log($"storredDirection= {_swingDirection}");
+
             }
-            
+
             //Reset signal e.g. when stop charging or stop Blocking
             else if (_enmAimingInput != AimingInputState.Idle)
             {
@@ -110,6 +113,7 @@ public class Aiming : MonoBehaviour
             _enmAttackSignal = AttackSignal.Idle;
             _vec2Start = Vector2.zero;
             _traversedAngle = 0f;
+            _swingDirection = Direction.Idle;
         }
 
 
@@ -145,6 +149,9 @@ public class Aiming : MonoBehaviour
 
                     break;
             }
+
+            if (_traversedAngle >= F_MIN_ACCEPTED_MOVEMENT_ANGLE && _swingDirection == Direction.Idle)
+                _swingDirection = CalculateSwingDirection(_traversedAngle);
         }
             
 
@@ -322,7 +329,8 @@ public class Aiming : MonoBehaviour
                 ,
             AttackHeight = _refAimingInput.variable.StateManager.AttackHeight
                 ,
-            Direction = CalculateSwingDirection(distance)
+            //Direction = CalculateSwingDirection(distance)
+            Direction = _swingDirection
                 ,
             BlockDirection = CalculateBlockDirection(_refAimingInput.variable.StateManager.Orientation)
                 ,
@@ -343,15 +351,19 @@ public class Aiming : MonoBehaviour
     {
         Vector2 inputVec = Vector2.zero;
         if (_refAimingInput.variable.value == Vector2.zero)
-            inputVec = _vec2previousDirection;
-        else 
             inputVec = _refAimingInput.variable.value;
+        else 
+            inputVec = _vec2previousDirection;//Debug switching--------------------------------------------------
 
         float cross = _vec2Start.x * inputVec.y - _vec2Start.y * inputVec.x;
         if (cross == 0f)
             return Direction.ToCenter;
-        
+
+        var startAngle = CalculateAngleRadOfInput(_vec2Start);
+        var endAngle = CalculateAngleRadOfInput(inputVec);
+
         if (angleDegree < 180)
+        //if (Mathf.Abs(startAngle) + Mathf.Abs(endAngle) < Mathf.PI)
             return cross > 0 ? Direction.ToLeft : Direction.ToRight;
         
         return cross < 0 ? Direction.ToLeft : Direction.ToRight;
@@ -434,9 +446,12 @@ public class Aiming : MonoBehaviour
             return AttackSignal.Swing;
         else if (direction == Direction.ToRight && startAngleRad > 0 && endAngleRad < 0)
             return AttackSignal.Swing;
-        else if (_traversedAngle >= 180)
+        //else if (_traversedAngle >= 180)
+        else if (Mathf.Abs(startAngleRad) + Mathf.Abs(endAngleRad) >= Mathf.PI || _traversedAngle >= 180)
             return AttackSignal.Swing;
 
+        Debug.Log($"storredDirection= {_swingDirection}");
+        //Debug.Log($"end: {_refAimingInput.variable.value} angle= {endAngleRad * Mathf.Rad2Deg}, start: {_vec2Start} angle= {startAngleRad * Mathf.Rad2Deg}");
         return AttackSignal.Feint;
     }
 

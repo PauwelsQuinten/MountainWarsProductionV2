@@ -52,12 +52,20 @@ public class Attacking : MonoBehaviour
         AimingOutputArgs args = obj as AimingOutputArgs;
         if (args == null) return;
 
-        //if (args.AttackSignal != AttackSignal.Idle)
-        //    PrintInput(args);
+        if (args.AttackState == AttackState.ShieldDefence 
+            || args.AttackState == AttackState.SwordDefence
+            || args.AttackState == AttackState.Stun) return;
+
+        if (args.AttackSignal != AttackSignal.Idle)
+            PrintInput(args);
 
         CalculateChargePower(args);
 
-        if (DidFeint(args.AttackSignal)) return;
+        if (DidFeint(args.AttackSignal))
+        {
+            Debug.Log("---------------------------Feint-----------------------");
+            return;
+        }
 
         if (args.AttackSignal != AttackSignal.Stab && args.AttackSignal != AttackSignal.Swing) return;
 
@@ -77,7 +85,7 @@ public class Attacking : MonoBehaviour
         if (!IsEnemyInRange()) return;
         _doAttack.Raise(this, new AttackEventArgs { AttackType = _attackType, AttackHeight = args.AttackHeight, AttackPower = _attackPower});
 
-        PrintInput2(args);
+        //PrintInput2(args);
         //Signal to blackboard
         if (gameObject.CompareTag(PLAYER))
             _blackboardRef.variable.TargetCurrentAttack = _attackType;

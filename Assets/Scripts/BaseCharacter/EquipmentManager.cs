@@ -114,7 +114,7 @@ public class EquipmentManager : MonoBehaviour
             attackIndex = FISTS;
 
         //Reduce durability
-        HeldEquipment[attackIndex].Damage(args.AttackPower, args.BlockResult);
+        HeldEquipment[attackIndex].Damage(args.AttackPower, args.BlockResult, false);
         _onEquipmentDamage.Raise(this, new EquipmentEventArgs
         {
             ShieldDurability = GetDurabilityPercentage(LEFT_HAND),
@@ -140,7 +140,7 @@ public class EquipmentManager : MonoBehaviour
                 index = FISTS;
                 break;
         }
-        HeldEquipment[index].Damage(args.AttackPower, args.BlockResult);
+        HeldEquipment[index].Damage(args.AttackPower, args.BlockResult, true);
         _onEquipmentDamage.Raise(this, new EquipmentEventArgs
         {
             ShieldDurability = GetDurabilityPercentage(LEFT_HAND),
@@ -244,7 +244,7 @@ public class EquipmentManager : MonoBehaviour
         return HeldEquipment[FISTS].Power;
     }
 
-    private float GetAttackRange()
+    public float GetAttackRange()
     {
         if (HeldEquipment[RIGHT_HAND])
             return HeldEquipment[RIGHT_HAND].Range;

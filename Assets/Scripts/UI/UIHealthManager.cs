@@ -144,7 +144,7 @@ public class UIHealthManager : MonoBehaviour
         }
 
         float barFill = args.CurrentStamina / args.MaxStamina;
-        _bloodBar.fillAmount = barFill;
+        _staminaBar.fillAmount = barFill;
     }
 
 

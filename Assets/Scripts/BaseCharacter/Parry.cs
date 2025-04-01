@@ -44,6 +44,7 @@ public class Parry : MonoBehaviour
         else
             return;
 
+        //Debug.Log($"ParryInput :{args.Direction}, {args.AngleTravelled}, {_parryMedium}");
 
         if (_attackEventValues != null && _tryDisarm && _parryMedium == BlockMedium.Sword)
         {

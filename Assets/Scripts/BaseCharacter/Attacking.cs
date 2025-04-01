@@ -52,11 +52,20 @@ public class Attacking : MonoBehaviour
         AimingOutputArgs args = obj as AimingOutputArgs;
         if (args == null) return;
 
-        //PrintInput(args);
+        if (args.AttackState == AttackState.ShieldDefence 
+            || args.AttackState == AttackState.SwordDefence
+            || args.AttackState == AttackState.Stun) return;
+
+        //if (args.AttackSignal != AttackSignal.Idle)
+        //    PrintInput(args);
 
         CalculateChargePower(args);
 
-        if (DidFeint(args.AttackSignal)) return;
+        if (DidFeint(args.AttackSignal))
+        {
+            Debug.Log("---------------------------Feint-----------------------");
+            return;
+        }
 
         if (args.AttackSignal != AttackSignal.Stab && args.AttackSignal != AttackSignal.Swing) return;
 
@@ -67,6 +76,7 @@ public class Attacking : MonoBehaviour
             if (DidOverCommit(args.AngleTravelled)) return;
         }
 
+        _attackRange = GetAttackMediumRange(args);
         _attackPower = CalculatePower(args);
         _attackType = DetermineAttack(args);
 
@@ -76,7 +86,6 @@ public class Attacking : MonoBehaviour
         if (!IsEnemyInRange()) return;
         _doAttack.Raise(this, new AttackEventArgs { AttackType = _attackType, AttackHeight = args.AttackHeight, AttackPower = _attackPower});
 
-        Debug.Log("AttackCalculate");
         PrintInput2(args);
         //Signal to blackboard
         if (gameObject.CompareTag(PLAYER))
@@ -124,7 +133,13 @@ public class Attacking : MonoBehaviour
         float power = aimOutput.EquipmentManager.GetEquipmentPower();
         if (aimOutput.Speed != 0) power += _basePower * aimOutput.Speed + _chargePower;
         else power += _basePower + _chargePower;
+        _chargePower = 0f;
         return swingAngle + power;
+    }
+
+    private float GetAttackMediumRange(AimingOutputArgs aimOutput)
+    {
+        return aimOutput.EquipmentManager.GetAttackRange();        
     }
 
     private AttackType DetermineAttack(AimingOutputArgs aimOutput)
@@ -143,7 +158,7 @@ public class Attacking : MonoBehaviour
             if (((1 << c.gameObject.layer) & _characterLayer) != 0)
             {
                 if (c.gameObject == gameObject) continue;
-                if(Vector2.Distance(transform.position, c.transform.position) < _attackRange) return true;
+                if(Vector3.Distance(transform.position, c.transform.position) < _attackRange) return true;
             }
         }
             return false;
@@ -156,6 +171,6 @@ public class Attacking : MonoBehaviour
     
     private void PrintInput2(AimingOutputArgs args)
     {
-        Debug.Log($"attack input after checking : {args.AttackSignal}, state: {args.AttackState}, {args.Direction}, {args.AngleTravelled}. owner: {gameObject}");
+        Debug.Log($"attack input after checking : {args.AttackSignal}, state: {args.AttackState}, {args.Direction}, {args.AngleTravelled}. owner: {gameObject}, power = {_attackPower},{args.AttackHeight}");
     }
 }

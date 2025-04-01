@@ -46,12 +46,22 @@ public class CharacterMovement : MonoBehaviour
 
         if (_moveInput.Value != Vector2.zero)
         {
-            if(_moveInput.variable.SpeedMultiplier > 1) _changeAnimation.Raise(this, AnimationState.Run);
-            else _changeAnimation.Raise(this, AnimationState.Walk);
+            if (_moveInput.variable.SpeedMultiplier > 1)
+            {
+                _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Run, AnimLayer = 2, DoResetIdle = false });
+            }
+            else
+            {
+                _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Walk, AnimLayer = 2, DoResetIdle = false });
+            }
         }
-        else _changeAnimation.Raise(this, AnimationState.Idle);
+        else
+        {
+            _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Idle, AnimLayer = 1, DoResetIdle = false });
+            _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Empty, AnimLayer = 2, DoResetIdle = false });
+        }
 
-        if (_stateManager.Target == null)
+            if (_stateManager.Target == null)
             UpdateOrientation();
     }
 

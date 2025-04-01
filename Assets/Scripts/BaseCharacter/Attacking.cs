@@ -64,14 +64,19 @@ public class Attacking : MonoBehaviour
 
         _attackType = DetermineAttack(args);
 
+
         if (_attackType == AttackType.HorizontalSlashToLeft)
-            _changeAnimation.Raise(this, AnimationState.SlashLeft);
+        {
+            _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.SlashLeft, AnimLayer = 3, DoResetIdle = true });
+        }
         else if (_attackType == AttackType.HorizontalSlashToRight)
-            _changeAnimation.Raise(this, AnimationState.SlashRight);
+        {
+            _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.SlashRight, AnimLayer = 3, DoResetIdle = true });
+        }
 
 
 
-        if(args.AttackSignal != AttackSignal.Stab)
+        if (args.AttackSignal != AttackSignal.Stab)
         {
             if (!IsAngleBigEnough(args.AngleTravelled)) return;
             if (DidOverCommit(args.AngleTravelled)) return;

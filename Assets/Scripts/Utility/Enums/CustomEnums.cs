@@ -192,11 +192,12 @@ namespace UnityEngine
 
     public enum AnimationState 
     {
+        Empty,
         Idle,
         Walk,
         Run,
         SlashLeft,
         SlashRight,
-        Defend
+        ShieldEquip,
     }
 }

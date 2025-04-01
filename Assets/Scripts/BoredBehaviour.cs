@@ -12,15 +12,19 @@ public class BoredBehaviour : StateMachineBehaviour
     private float _idleTime;
     private int _boredAnimation;
 
+    private bool _canRun;
+
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+        _canRun = true;
         ResetIdle();
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+        if (!_canRun) return;
         if (_isBored == false)
         {
             _idleTime += Time.deltaTime;
@@ -40,6 +44,13 @@ public class BoredBehaviour : StateMachineBehaviour
         }
 
         animator.SetFloat("BoredAnimation", _boredAnimation, 0.2f, Time.deltaTime);
+    }
+
+    public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    {
+        _canRun = false;
+        ResetIdle();
+        animator.SetFloat("BoredAnimation", _boredAnimation);
     }
 
     private void ResetIdle()

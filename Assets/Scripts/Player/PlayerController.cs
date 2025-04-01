@@ -50,6 +50,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private GameEvent _shieldGrabEvent;
 
+    [Header("Animations")]
+    [SerializeField]
+    private GameEvent _changeAnimation;
+
     private Vector2 _moveInput;
 
     private Coroutine _resetAttackheight;
@@ -127,14 +131,15 @@ public class PlayerController : MonoBehaviour
         {
             if (ctx.action.WasPressedThisFrame())
             {
-
                 _storredAttackState = AttackState.ShieldDefence;
+                _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.ShieldEquip, AnimLayer = 3, DoResetIdle = false });
             }
 
             if (ctx.action.WasReleasedThisFrame())
             {
-
                 _storredAttackState = AttackState.Idle;
+                _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Idle, AnimLayer = 1, DoResetIdle = false });
+
             }
             return;
         }
@@ -145,16 +150,20 @@ public class PlayerController : MonoBehaviour
             if (ctx.action.WasPressedThisFrame())
             {
                 _stateManager.AttackState = AttackState.ShieldDefence;
+                _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.ShieldEquip, AnimLayer = 3, DoResetIdle = false });
             }
 
             if (ctx.action.WasReleasedThisFrame())
             {
                 _stateManager.AttackState = AttackState.Idle;
+                _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Idle, AnimLayer = 1, DoResetIdle = false });
+                _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Empty, AnimLayer = 3, DoResetIdle = false });
             }
         }
         else if (ctx.performed)
         {
             _stateManager.AttackState = AttackState.ShieldDefence;
+            _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.ShieldEquip, AnimLayer = 3, DoResetIdle = false });
             _isHoldingShield = false;
             _stateManager.IsHoldingShield = _isHoldingShield;
         }

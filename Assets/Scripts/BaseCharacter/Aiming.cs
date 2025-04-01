@@ -98,7 +98,6 @@ public class Aiming : MonoBehaviour
                 _enmAttackSignal = IsFeintMovement(_swingDirection);
                 _enmAimingInput = AimingInputState.Idle;
                 SendPackage();
-                Debug.Log($"storredDirection= {_swingDirection}");
 
             }
 

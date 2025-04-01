@@ -244,7 +244,7 @@ public class EquipmentManager : MonoBehaviour
         return HeldEquipment[FISTS].Power;
     }
 
-    private float GetAttackRange()
+    public float GetAttackRange()
     {
         if (HeldEquipment[RIGHT_HAND])
             return HeldEquipment[RIGHT_HAND].Range;

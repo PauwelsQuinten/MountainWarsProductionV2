@@ -180,7 +180,7 @@ namespace UnityEngine
        InRange,
        OutOfRange,
        FarAway,
-        Default
+       Default
     }
      
     public enum CharacterMentality
@@ -195,8 +195,8 @@ namespace UnityEngine
         Idle,
         Walk,
         Run,
-        LeftSwing,
-        RightSwing,
+        SlashLeft,
+        SlashRight,
         Defend
     }
 }

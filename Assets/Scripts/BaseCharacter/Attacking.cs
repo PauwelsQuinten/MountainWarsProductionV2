@@ -56,12 +56,19 @@ public class Attacking : MonoBehaviour
         AimingOutputArgs args = obj as AimingOutputArgs;
         if (args == null) return;
 
-
         CalculateChargePower(args);
 
         if (DidFeint(args.AttackSignal)) return;
 
         if (args.AttackSignal != AttackSignal.Stab && args.AttackSignal != AttackSignal.Swing) return;
+
+        _attackType = DetermineAttack(args);
+
+        if (_attackType == AttackType.HorizontalSlashToLeft)
+            _changeAnimation.Raise(this, AnimationState.SlashLeft);
+        else if (_attackType == AttackType.HorizontalSlashToRight)
+            _changeAnimation.Raise(this, AnimationState.SlashRight);
+
 
 
         if(args.AttackSignal != AttackSignal.Stab)
@@ -71,7 +78,6 @@ public class Attacking : MonoBehaviour
         }
 
         _attackPower = CalculatePower(args);
-        _attackType = DetermineAttack(args);
 
         if (_attackType == AttackType.Stab) _loseStamina.Raise(this, new StaminaEventArgs { StaminaCost = _staminaCost.value * 0.75f });
         else _loseStamina.Raise(this, new StaminaEventArgs { StaminaCost = _staminaCost.value });

@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class ViewManager : MonoBehaviour
 {
@@ -20,6 +19,10 @@ public class ViewManager : MonoBehaviour
     private Camera _cam;
     private GameObject _player;
 
+    private TriggerUpdatedEventArgs _currentArgs;
+
+    private bool _isNearhidingSpot;
+
     private void Start()
     {
         _cam = Camera.main;
@@ -31,9 +34,27 @@ public class ViewManager : MonoBehaviour
         TriggerUpdatedEventArgs args = obj as TriggerUpdatedEventArgs;
         if (args == null) return;
 
-        if (args.ExitedTrigger) return;
-        if(!args.IsHidingSpot)
+        if (args.ExitedTrigger)
+        {
+            if(args.IsHidingSpot) _isNearhidingSpot = false;
+            return;
+        }
+
+        _currentArgs = args;
+        if (!args.IsHidingSpot)
             StartCoroutine(DoSwitchPanel(_panels[args.NewPanelIndex].transform.position + (_cam.transform.forward * _offsetZ)));
+        else
+        {
+            if (args.IsHidingSpot) _isNearhidingSpot = true;
+        }
+
+    }
+
+    public void EnterHiding(Component sender, object obj)
+    {
+        if (!_isNearhidingSpot) return;
+        if(_panels[_currentArgs.NewPanelIndex].active) StartCoroutine(ShowHidingSpot(true));
+        else StartCoroutine(ShowHidingSpot(false));
     }
 
     private IEnumerator DoSwitchPanel(Vector3 newCamPos)
@@ -62,5 +83,48 @@ public class ViewManager : MonoBehaviour
             yield return null;
         }
         _cam.orthographicSize = camSize;
+    }
+
+    private IEnumerator ShowHidingSpot(bool isAvtive)
+    {
+        Vector3 startPos = Vector3.zero;
+        Vector3 originPos = Vector3.zero;
+        if (!isAvtive)
+        {
+            _panels[_currentArgs.NewPanelIndex].SetActive(true);
+            originPos = _panels[_currentArgs.NewPanelIndex].transform.position;
+
+            _panels[_currentArgs.NewPanelIndex].transform.position += Vector3.left * 10;
+
+            startPos = _panels[_currentArgs.NewPanelIndex].transform.position;
+            float time = 0;
+            while (Vector3.Distance(_panels[_currentArgs.NewPanelIndex].transform.position, originPos) > 0.2f)
+            {
+                time += Time.deltaTime;
+                _panels[_currentArgs.NewPanelIndex].transform.position = Vector3.Lerp(startPos, originPos, _camMoveSpeed * time);
+                yield return null;
+            }
+
+            _panels[_currentArgs.NewPanelIndex].transform.position = originPos;
+        }
+        else
+        {
+            startPos = _panels[_currentArgs.NewPanelIndex].transform.position;
+
+
+            originPos = _panels[_currentArgs.NewPanelIndex].transform.position + Vector3.left * 10;
+
+
+            float time = 0;
+            while (Vector3.Distance(_panels[_currentArgs.NewPanelIndex].transform.position, startPos) < 9.8f)
+            {
+                Debug.Log(Vector3.Distance(_panels[_currentArgs.NewPanelIndex].transform.position, startPos));
+                time += Time.deltaTime;
+                _panels[_currentArgs.NewPanelIndex].transform.position = Vector3.Lerp(startPos, originPos, _camMoveSpeed * time);
+                yield return null;
+            }
+            _panels[_currentArgs.NewPanelIndex].transform.position = startPos;
+            _panels[_currentArgs.NewPanelIndex].SetActive(false);
+        }
     }
 }

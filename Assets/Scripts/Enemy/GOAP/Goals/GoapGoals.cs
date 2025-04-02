@@ -1,12 +1,13 @@
 using System.Collections;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public interface IGoals
 {
-    bool IsVallid(WorldState currentWorldState);
+    bool IsVallid(WorldState currentWorldState, BlackboardReference blackboard);
     void SetInvallid();
-    float GoalScore(CharacterMentality menatlity, WorldState currentWorldState);
-    bool InteruptGoal(WorldState currentWorldState);
+    float GoalScore(CharacterMentality menatlity, WorldState currentWorldState, BlackboardReference blackboard);
+    bool InteruptGoal(WorldState currentWorldState, BlackboardReference blackboard);
 }
 
 public class GoapGoal : MonoBehaviour, IGoals
@@ -21,18 +22,18 @@ public class GoapGoal : MonoBehaviour, IGoals
         DesiredWorldState = GetComponent<WorldState>();
     }
 
-    public virtual bool IsVallid(WorldState currentWorldState)
+    public virtual bool IsVallid(WorldState currentWorldState, BlackboardReference blackboard)
     {
 
         return _isVallid;
     }
 
-    public virtual float GoalScore(CharacterMentality menatlity, WorldState currentWorldState)
+    public virtual float GoalScore(CharacterMentality menatlity, WorldState currentWorldState, BlackboardReference blackboard)
     {
         return 0.75f;
     }
 
-    public virtual bool InteruptGoal(WorldState currentWorldState)
+    public virtual bool InteruptGoal(WorldState currentWorldState, BlackboardReference blackboard)
     {
         return false;
     }

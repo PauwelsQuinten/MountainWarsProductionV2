@@ -467,7 +467,7 @@ public class WorldState : MonoBehaviour
         get { return _attackRange; }
         set
         {
-            _targetAttackRange = value;
+            _attackRange = value;
             WorldStateRanges[EWorldState.AttackRange] = _attackRange;
         }
     }

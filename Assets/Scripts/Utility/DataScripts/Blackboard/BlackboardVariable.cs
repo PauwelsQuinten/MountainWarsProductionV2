@@ -329,5 +329,17 @@ public class BlackboardVariable : ScriptableObject
         }
     }
 
+    private bool _isPlayerAgressive = false;
+    public bool IsPlayerAgressive
+    {
+        get => _isPlayerAgressive;
+        set
+        {
+            if (_isPlayerAgressive != value)
+            {
+                _isPlayerAgressive = value;
+            }
+        }
+    }
 
 }

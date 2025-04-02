@@ -13,10 +13,8 @@ public class StayAliveGoal : GoapGoal
             return 1f;
         if (blackboard.variable.Stamina < 0.3f)
             return 0.8f;
-       /* if (currentWorldState._isPlayerToAggressive)
-            return 0.8f;
-        if (!currentWorldState.IsBlockInCorrectDirection())
-            return 0.9f;*/
+        if (blackboard.variable.IsPlayerAgressive)
+            return 0.8f;        
 
         return 0.5f;
     }

@@ -106,24 +106,26 @@ public class Blocking : MonoBehaviour
         }
         else
         {
-
             switch (blockResult)
             {
                 case BlockResult.FullyBlocked:
                     _loseStamina.Raise(this, new StaminaEventArgs { StaminaCost = _staminaCost.value});
+                    _succesfullBlockevent.Raise(this, new StunEventArgs { StunDuration = 2f, ComesFromEnemy = true });
                     break;
                 case BlockResult.HalfBlocked:
                     _loseStamina.Raise(this, new StaminaEventArgs { StaminaCost = _staminaCost.value * 1.5f});
+                    _succesfullBlockevent.Raise(this, new StunEventArgs { StunDuration = 1f, ComesFromEnemy = true });
                     break;
                 case BlockResult.SwordBlock:
                     _loseStamina.Raise(this, new StaminaEventArgs { StaminaCost = _staminaCost.value * 0.5f });
+                    _succesfullBlockevent.Raise(this, new StunEventArgs { StunDuration = 0.75f, ComesFromEnemy = true });
                     break;
                 case BlockResult.SwordHalfBlock:
                     _loseStamina.Raise(this, new StaminaEventArgs { StaminaCost = _staminaCost.value * 0.75f });
+                    _succesfullBlockevent.Raise(this, new StunEventArgs { StunDuration = 0.5f, ComesFromEnemy = true });
                     break;
             }
-            
-            _succesfullBlockevent.Raise(this, new StunEventArgs { StunDuration = 2, ComesFromEnemy = true});
+                       
             _equipmentUpdate.Raise(this, defenceEventArgs);
         }
 

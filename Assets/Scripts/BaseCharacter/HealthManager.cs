@@ -92,9 +92,13 @@ public class HealthManager : MonoBehaviour
     {
         //Update blackboard
         if (gameObject.CompareTag(PLAYER))
+        {
             _blackboard.variable.TargetHealth = _currentHealth / _maxHealth;
+        }
         else
+        {
             _blackboard.variable.Health = _currentHealth / _maxHealth;
+        }
     }
 
     private void SetHealth()

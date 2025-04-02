@@ -64,13 +64,22 @@ public class Attacking : MonoBehaviour
         if (DidFeint(args.AttackSignal))
         {
             Debug.Log("---------------------------Feint-----------------------");
+            //Signal to blackboard
+            if (gameObject.CompareTag(PLAYER))
+                _blackboardRef.variable.TargetCurrentAttack = AttackType.None;
             return;
         }
 
-        if (args.AttackSignal != AttackSignal.Stab && args.AttackSignal != AttackSignal.Swing) return;
+        if (args.AttackSignal != AttackSignal.Stab && args.AttackSignal != AttackSignal.Swing)
+        {
+            //Signal to blackboard
+            if (gameObject.CompareTag(PLAYER))
+                _blackboardRef.variable.TargetCurrentAttack = AttackType.None;
+            return;
+        }
 
 
-        if(args.AttackSignal != AttackSignal.Stab)
+        if (args.AttackSignal != AttackSignal.Stab)
         {
             if (!IsAngleBigEnough(args.AngleTravelled)) return;
             if (DidOverCommit(args.AngleTravelled)) return;

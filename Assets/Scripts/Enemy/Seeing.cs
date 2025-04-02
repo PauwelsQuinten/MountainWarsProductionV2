@@ -27,12 +27,12 @@ public class Seeing : MonoBehaviour
         return null;
     }
 
-    void OnDrawGizmos()
-    {
-        // Set the color for the debug sphere
-        Gizmos.color = Color.cyan;
-    
-        // Draw the debug sphere at the object's position with the specified radius
-        Gizmos.DrawSphere(debugPos, _eyesightRange);
-    }
+    //void OnDrawGizmos()
+    //{
+    //    // Set the color for the debug sphere
+    //    Gizmos.color = Color.cyan;
+    //
+    //    // Draw the debug sphere at the object's position with the specified radius
+    //    Gizmos.DrawSphere(debugPos, _eyesightRange);
+    //}
 }

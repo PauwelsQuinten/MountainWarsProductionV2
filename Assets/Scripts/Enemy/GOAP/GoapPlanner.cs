@@ -42,7 +42,7 @@ public class GoapPlanner : MonoBehaviour
         _currentWorldState.UpdateWorldState();
         _recursionCounter = 0;
 
-        if (_activeGoal && _activeGoal.InteruptGoal(_currentWorldState)) //Placed for when getting a knockback
+        if (_activeGoal && _activeGoal.InteruptGoal(_currentWorldState, _blackboard)) //Placed for when getting a knockback
             ResetPlan(true);
 
         if (_activeGoal == null || _actionPlan.Count == 0)
@@ -65,10 +65,10 @@ public class GoapPlanner : MonoBehaviour
 
         foreach (var goal in _allGoals)
         {
-            if (!goal.IsVallid(_currentWorldState))
+            if (!goal.IsVallid(_currentWorldState, _blackboard))
                 continue;
 
-            float score = goal.GoalScore(_characterMentality, _currentWorldState);
+            float score = goal.GoalScore(_characterMentality, _currentWorldState, _blackboard);
             if (score > highstScore)
             {
                 highstScore = score;

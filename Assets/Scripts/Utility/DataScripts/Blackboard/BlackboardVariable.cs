@@ -38,6 +38,7 @@ public class BlackboardVariable : ScriptableObject
             }
         }
     }
+
     private float _health;
     public float Health
     {
@@ -51,6 +52,21 @@ public class BlackboardVariable : ScriptableObject
             //}
         }
     }
+
+    private bool _isBleeding;
+    public bool IsBleeding
+    {
+        get => _isBleeding;
+        set
+        {
+            if (_isBleeding != value)
+            {
+                _isBleeding = value;
+            }
+        }
+    }
+
+
     private float _rHEquipmentHealth;
     public float RHEquipmentHealth
     {
@@ -64,6 +80,7 @@ public class BlackboardVariable : ScriptableObject
             }
         }
     }
+
     private float _lHEquipmentHealth;
     public float LHEquipmentHealth
     {
@@ -133,6 +150,19 @@ public class BlackboardVariable : ScriptableObject
             }
         }
     }
+    
+    private bool _targetIsBleeding;
+    public bool TargetIsBleeding
+    {
+        get => _targetIsBleeding;
+        set
+        {
+            if (_targetIsBleeding != value)
+            {
+                _targetIsBleeding = value;
+            }
+        }
+    }
 
     private float _targetRHEquipmentHealth;
     public float TargetRHEquipmentHealth
@@ -191,7 +221,11 @@ public class BlackboardVariable : ScriptableObject
     }
 
     //Holds the attacks the opponent throw at him, this is used for as the opponent uses 1 move to much. it needs to be parried/Disarmed.
-    private Dictionary<AttackType, int> _storredAttacks = new Dictionary<AttackType, int> { { AttackType.Stab, 0 }, { AttackType.HorizontalSlashToRight, 0 }, { AttackType.HorizontalSlashToLeft, 0 }};
+    private Dictionary<AttackType, int> _storredAttacks = 
+        new Dictionary<AttackType, int> 
+        { 
+            { AttackType.Stab, 0 }, { AttackType.HorizontalSlashToRight, 0 }, { AttackType.HorizontalSlashToLeft, 0 }
+        };
     public Dictionary<AttackType, int> StorredAttacks
     {
         get => _storredAttacks;
@@ -200,9 +234,7 @@ public class BlackboardVariable : ScriptableObject
             if (_storredAttacks != value)
             {
                 _storredAttacks = value;
-                _observedAttack = EvaluateAttackCount();
-                ValueChanged?.Invoke(this, new BlackboardEventArgs { ThisChanged = BlackboardEventArgs.WhatChanged.TargetObservedAttack });
-
+                
             }
         }
     }
@@ -234,6 +266,14 @@ public class BlackboardVariable : ScriptableObject
             }
             highestCount -= lowestCount;
         }
+        else if (highestCount > 5)
+        {
+            foreach (var key in StorredAttacks.Keys.ToList())
+            {
+                StorredAttacks[key] -= StorredAttacks[key] > 0? 1 : 0;
+            }
+            highestCount -= 1;
+        }
         return highestCount >= 5? attackType : AttackType.None;
     }
 
@@ -248,7 +288,14 @@ public class BlackboardVariable : ScriptableObject
                 _targetCurrentAttack = value;
                 ValueChanged?.Invoke(this, new BlackboardEventArgs { ThisChanged = BlackboardEventArgs.WhatChanged.TargetCurrentAttack });
 
-                StorredAttacks[_targetCurrentAttack] += 1;
+                if (_targetCurrentAttack != AttackType.None)
+                {
+                    StorredAttacks[_targetCurrentAttack] += 1;
+
+                    _observedAttack = EvaluateAttackCount();
+                    ValueChanged?.Invoke(this, new BlackboardEventArgs { ThisChanged = BlackboardEventArgs.WhatChanged.TargetObservedAttack });
+                }
+                
 
             }
         }

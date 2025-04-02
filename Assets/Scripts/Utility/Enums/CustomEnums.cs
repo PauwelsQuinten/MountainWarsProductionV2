@@ -41,7 +41,7 @@ namespace UnityEngine
         Idle, 
         Moving, 
         Hold, 
-        Reset
+        Cooldown
     }
 
     public enum Direction
@@ -180,7 +180,7 @@ namespace UnityEngine
        InRange,
        OutOfRange,
        FarAway,
-        Default
+       Default
     }
      
     public enum CharacterMentality
@@ -188,5 +188,16 @@ namespace UnityEngine
        Basic,
        Agressive,
        Coward
+    }
+
+    public enum AnimationState 
+    {
+        Empty,
+        Idle,
+        Walk,
+        Run,
+        SlashLeft,
+        SlashRight,
+        ShieldEquip,
     }
 }

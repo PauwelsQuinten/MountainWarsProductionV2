@@ -152,6 +152,10 @@ public class WorldState : MonoBehaviour
                 break;
             case BlackboardEventArgs.WhatChanged.Target:
                 HasTarget = SetInPossesion(_blackboard.variable.Target);
+                if (HasTarget == EWorldStatePossesion.InPossesion)
+                    SetTargetValues();
+                else
+                    ResetTargetValues();
                 break;
             case BlackboardEventArgs.WhatChanged.TargetStamina:
                 TargetStamina = CalculateValue(_blackboard.variable.TargetStamina);
@@ -169,6 +173,12 @@ public class WorldState : MonoBehaviour
         }
     }
 
+
+    //------------------------------------------------------------------------------
+    //HELPER FUNCTIONS
+    //------------------------------------------------------------------------------
+
+
     private void SetStartValues()
     {
         Stamina = CalculateValue(_blackboard.variable.Stamina);
@@ -178,10 +188,24 @@ public class WorldState : MonoBehaviour
 
     }
 
+    private void SetTargetValues()
+    {
+        TargetStamina = CalculateValue(_blackboard.variable.TargetStamina);
+        TargetHealth = CalculateValue(_blackboard.variable.TargetHealth);
+        TargetRHEquipment = CalculateValue(_blackboard.variable.TargetRHEquipmentHealth);
+        TargetLHEquipment = CalculateValue(_blackboard.variable.TargetLHEquipmentHealth);
 
-    //------------------------------------------------------------------------------
-    //HELPER FUNCTIONS
-    //------------------------------------------------------------------------------
+    }
+
+    private void ResetTargetValues()
+    {
+        TargetStamina = EWorldStateValue.Default;
+        TargetHealth = EWorldStateValue.Default;
+        TargetRHEquipment = EWorldStateValue.Default;
+        TargetLHEquipment = EWorldStateValue.Default;
+
+    }
+
 
     private EWorldStateValue CalculateValue(float fValue)
     {

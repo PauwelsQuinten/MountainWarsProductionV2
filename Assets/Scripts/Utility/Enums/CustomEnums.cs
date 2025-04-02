@@ -212,4 +212,17 @@ namespace UnityEngine
         SlashRight,
         ShieldEquip,
     }
+
+    public enum ObjectTarget
+    {
+        Player,
+        Weapon,
+        Shield,
+        Forward,
+        Backward,
+        Side,
+    }
+
+
+
 }

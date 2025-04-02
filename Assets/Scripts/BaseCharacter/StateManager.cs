@@ -24,7 +24,12 @@ public class StateManager : MonoBehaviour
         if (EquipmentManager == null)
             EquipmentManager = GetComponent<EquipmentManager>();
         if (!gameObject.CompareTag(PLAYER))
+        {
             _blackboardRef.variable.State = AttackState;
+            _blackboardRef.variable.Self = gameObject;
+            _blackboardRef.variable.Orientation = Orientation;
+        }
+
     }
     
     public void GetStunned(Component sender, object obj)
@@ -67,6 +72,11 @@ public class StateManager : MonoBehaviour
         if (args == null) return;
 
         Orientation = args.NewOrientation;
+
+        if (!gameObject.CompareTag(PLAYER))
+        {
+            _blackboardRef.variable.Orientation = Orientation;
+        }
     }
     
     private IEnumerator RecoverStun(float stunDuration)

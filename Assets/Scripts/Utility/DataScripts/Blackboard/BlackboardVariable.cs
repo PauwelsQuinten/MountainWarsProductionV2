@@ -95,6 +95,32 @@ public class BlackboardVariable : ScriptableObject
         }
     }
 
+    private GameObject _self;
+    public GameObject Self
+    {
+        get => _self;
+        set
+        {
+            if (_self != value)
+            {
+                _self = value;
+            }
+        }
+    }
+
+    private Orientation _orientation = Orientation.East;
+    public Orientation Orientation
+    {
+        get => _orientation;
+        set
+        {
+            if (value != _orientation)
+            {
+                _orientation = value;
+            }
+        }
+    }
+    
     private GameObject _target;
     public GameObject Target
     {

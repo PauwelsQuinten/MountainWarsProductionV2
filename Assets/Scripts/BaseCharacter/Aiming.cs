@@ -489,5 +489,4 @@ public class Aiming : MonoBehaviour
         _previousLength = 0f;
         _fMovingTime = 0f;
     }
-
 }

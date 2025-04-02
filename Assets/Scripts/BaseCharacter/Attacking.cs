@@ -36,6 +36,10 @@ public class Attacking : MonoBehaviour
     private LayerMask _characterLayer;
     [SerializeField] BlackboardReference _blackboardRef;
 
+    [Header("Animation")]
+    [SerializeField]
+    private GameEvent _changeAnimation;
+
 
     private float _chargePower;
     private float _attackPower;
@@ -69,8 +73,21 @@ public class Attacking : MonoBehaviour
 
         if (args.AttackSignal != AttackSignal.Stab && args.AttackSignal != AttackSignal.Swing) return;
 
+        _attackType = DetermineAttack(args);
 
-        if(args.AttackSignal != AttackSignal.Stab)
+
+        if (_attackType == AttackType.HorizontalSlashToLeft)
+        {
+            _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.SlashLeft, AnimLayer = 3, DoResetIdle = true });
+        }
+        else if (_attackType == AttackType.HorizontalSlashToRight)
+        {
+            _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.SlashRight, AnimLayer = 3, DoResetIdle = true });
+        }
+
+
+
+        if (args.AttackSignal != AttackSignal.Stab)
         {
             if (!IsAngleBigEnough(args.AngleTravelled)) return;
             if (DidOverCommit(args.AngleTravelled)) return;
@@ -78,7 +95,6 @@ public class Attacking : MonoBehaviour
 
         _attackRange = GetAttackMediumRange(args);
         _attackPower = CalculatePower(args);
-        _attackType = DetermineAttack(args);
 
         if (_attackType == AttackType.Stab) _loseStamina.Raise(this, new StaminaEventArgs { StaminaCost = _staminaCost.value * 0.75f });
         else _loseStamina.Raise(this, new StaminaEventArgs { StaminaCost = _staminaCost.value });

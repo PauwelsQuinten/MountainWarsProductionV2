@@ -135,6 +135,7 @@ namespace UnityEngine
         Stamina,
         RHEquipment,
         LHEquipment,
+        ShieldState,
         HasTarget,
 
         TargetBehaviour,
@@ -142,6 +143,7 @@ namespace UnityEngine
         TargetStamina,
         TargetRHEquipment,
         TargetLHEquipment,
+        TargetShieldState,
 
         TargetOpening,
         TargetAttackRange,
@@ -172,7 +174,8 @@ namespace UnityEngine
         Attacking,
         Defending,
         Knock,
-        Default
+        Default,
+        Idle
     }
     
     public enum EWorldStateRange
@@ -180,6 +183,15 @@ namespace UnityEngine
        InRange,
        OutOfRange,
        FarAway,
+       Default
+    }
+      
+    public enum EWorldStateShield
+    {
+       Centered,
+       Right,
+       Left,
+       AttackDirection,
        Default
     }
      

@@ -1762,6 +1762,10 @@ PrefabInstance:
       propertyPath: _attackSpeed
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3010198703536331037, guid: e9651b4801f36d14e86c1cb82aa75d59, type: 3}
+      propertyPath: _blackboard.variable
+      value: 
+      objectReference: {fileID: 11400000, guid: 2a061d8ac2119774a93990abdf59c3ae, type: 2}
     - target: {fileID: 3363722153122832148, guid: e9651b4801f36d14e86c1cb82aa75d59, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -1776,7 +1780,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8761888366074066331, guid: e9651b4801f36d14e86c1cb82aa75d59, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

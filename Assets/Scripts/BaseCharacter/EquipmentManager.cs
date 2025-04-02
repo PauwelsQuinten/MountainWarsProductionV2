@@ -13,6 +13,9 @@ public class EquipmentManager : MonoBehaviour
     [Header("Events")]
     [SerializeField] private GameEvent _onEquipmentBreak;
     [SerializeField] private GameEvent _onEquipmentDamage;
+    [Header("Sockets")]
+    [SerializeField] private Transform _leftHandSocket;
+    [SerializeField] private Transform _rightHandSocket;
     [Header("Item")]
     [SerializeField] private LayerMask _itemMask;
     [Header("Blackboard")]
@@ -34,7 +37,11 @@ public class EquipmentManager : MonoBehaviour
         if (_leftHand && !_leftHand.IsRightHandEquipment)
         {
             var leftEquipment = Instantiate(_leftHand);
-            leftEquipment.transform.parent = transform;
+            if (_leftHandSocket)
+                leftEquipment.transform.parent = _leftHandSocket;
+            else
+                leftEquipment.transform.parent = transform;
+
             leftEquipment.transform.localPosition = Vector3.zero;
             HeldEquipment[LEFT_HAND] = leftEquipment;
         }
@@ -43,7 +50,10 @@ public class EquipmentManager : MonoBehaviour
         if (_rightHand && _rightHand.IsRightHandEquipment)
         {
             var rightEquipment = Instantiate(_rightHand);
-            rightEquipment.transform.parent = transform;
+            if (_rightHandSocket)
+                rightEquipment.transform.parent = _rightHandSocket;
+            else
+                rightEquipment.transform.parent = transform; 
             rightEquipment.transform.localPosition = Vector3.zero;
             HeldEquipment[RIGHT_HAND] = rightEquipment;
         }

@@ -300,6 +300,34 @@ public class BlackboardVariable : ScriptableObject
             }
         }
     }
+    
+    private Direction _targetShieldState;
+    public Direction TargetShieldState
+    {
+        get => _targetShieldState;
+        set
+        {
+            if (_targetShieldState != value)
+            {
+                _targetShieldState = value;
+                ValueChanged?.Invoke(this, new BlackboardEventArgs { ThisChanged = BlackboardEventArgs.WhatChanged.TargetShieldState });
+            }
+        }
+    }
+    
+    private Direction _shieldState;
+    public Direction ShieldState
+    {
+        get => _shieldState;
+        set
+        {
+            if (_shieldState != value)
+            {
+                _shieldState = value;
+                ValueChanged?.Invoke(this, new BlackboardEventArgs { ThisChanged = BlackboardEventArgs.WhatChanged.ShieldState });
+            }
+        }
+    }
 
 
 }

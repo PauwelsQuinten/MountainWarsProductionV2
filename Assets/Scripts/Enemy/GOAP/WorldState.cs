@@ -46,10 +46,17 @@ public class WorldState : MonoBehaviour
     [SerializeField]
     private EWorldStateRange _attackRange = EWorldStateRange.Default;
     
+    [Header("Shield")]
+    [SerializeField]
+    private Direction _targetShieldState = Direction.Idle;
+    [SerializeField]
+    private Direction _shieldState = Direction.Idle;
+    
     public Dictionary<EWorldState, EWorldStateValue> WorldStateValues = new Dictionary<EWorldState, EWorldStateValue>();
     public Dictionary<EWorldState, EWorldStatePossesion> WorldStatePossesions = new Dictionary<EWorldState, EWorldStatePossesion>();
     public Dictionary<EWorldState, EBehaviourValue> WorldStateBehaviours = new Dictionary<EWorldState, EBehaviourValue>();
     public Dictionary<EWorldState, EWorldStateRange> WorldStateRanges = new Dictionary<EWorldState, EWorldStateRange>();
+    public Dictionary<EWorldState, Direction> WorldStateShields = new Dictionary<EWorldState, Direction>();
 
 
     private void Start()
@@ -150,6 +157,9 @@ public class WorldState : MonoBehaviour
             case BlackboardEventArgs.WhatChanged.LHEquipment:
                 LHEquipment = CalculateValue(_blackboard.variable.LHEquipmentHealth);
                 break;
+            case BlackboardEventArgs.WhatChanged.ShieldState:
+                ShieldState = _blackboard.variable.ShieldState;
+                break;
             case BlackboardEventArgs.WhatChanged.Target:
                 HasTarget = SetInPossesion(_blackboard.variable.Target);
                 if (HasTarget == EWorldStatePossesion.InPossesion)
@@ -158,16 +168,24 @@ public class WorldState : MonoBehaviour
                     ResetTargetValues();
                 break;
             case BlackboardEventArgs.WhatChanged.TargetStamina:
-                TargetStamina = CalculateValue(_blackboard.variable.TargetStamina);
+                if (HasTarget == EWorldStatePossesion.InPossesion)
+                    TargetStamina = CalculateValue(_blackboard.variable.TargetStamina);
                 break;
             case BlackboardEventArgs.WhatChanged.TargetHealth:
-                TargetHealth = CalculateValue(_blackboard.variable.TargetHealth);
+                if (HasTarget == EWorldStatePossesion.InPossesion)
+                    TargetHealth = CalculateValue(_blackboard.variable.TargetHealth);
                 break;
             case BlackboardEventArgs.WhatChanged.TargetRHEquipment:
-                TargetRHEquipment = CalculateValue(_blackboard.variable.TargetRHEquipmentHealth);
+                if (HasTarget == EWorldStatePossesion.InPossesion)
+                    TargetRHEquipment = CalculateValue(_blackboard.variable.TargetRHEquipmentHealth);
                 break;
             case BlackboardEventArgs.WhatChanged.TargetLHEquipment:
-                TargetLHEquipment = CalculateValue(_blackboard.variable.TargetLHEquipmentHealth);
+                if (HasTarget == EWorldStatePossesion.InPossesion)
+                    TargetLHEquipment = CalculateValue(_blackboard.variable.TargetLHEquipmentHealth);
+                break;
+            case BlackboardEventArgs.WhatChanged.TargetShieldState:
+                if (HasTarget == EWorldStatePossesion.InPossesion)
+                    TargetShieldState = _blackboard.variable.TargetShieldState;
                 break;
            
         }
@@ -239,7 +257,7 @@ public class WorldState : MonoBehaviour
         switch (attackState)
         {
             case AttackState.Idle:
-                return EBehaviourValue.Recovering;
+                return EBehaviourValue.Idle;
 
             case AttackState.Attack:
                 return EBehaviourValue.Attacking;
@@ -321,6 +339,10 @@ public class WorldState : MonoBehaviour
         //Ranges
         WorldStateRanges.Add(EWorldState.AttackRange, AttackRange);
         WorldStateRanges.Add(EWorldState.TargetAttackRange, TargetAttackRange);
+
+        //Shields
+        WorldStateShields.Add(EWorldState.ShieldState, ShieldState);
+        WorldStateShields.Add(EWorldState.TargetShieldState, TargetShieldState);
 
     }
 
@@ -469,6 +491,26 @@ public class WorldState : MonoBehaviour
         {
             _attackRange = value;
             WorldStateRanges[EWorldState.AttackRange] = _attackRange;
+        }
+    }
+    
+    public Direction TargetShieldState
+    {
+        get { return _targetShieldState; }
+        set
+        {
+            _targetShieldState = value;
+            WorldStateShields[EWorldState.TargetShieldState] = _targetShieldState;
+        }
+    }
+    
+    public Direction ShieldState
+    {
+        get { return _shieldState; }
+        set
+        {
+            _shieldState = value;
+            WorldStateShields[EWorldState.ShieldState] = _shieldState;
         }
     }
 

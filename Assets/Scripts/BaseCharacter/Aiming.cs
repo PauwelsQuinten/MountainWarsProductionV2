@@ -318,8 +318,8 @@ public class Aiming : MonoBehaviour
 
     private void SendPackage()
     {
-        float distance = _traversedAngle;
-        Direction direction = CalculateSwingDirection(distance);
+        //float distance = _traversedAngle;
+        //Direction direction = CalculateSwingDirection(distance);
         var package = new AimingOutputArgs
         {
             AimingInputState = _enmAimingInput
@@ -333,7 +333,7 @@ public class Aiming : MonoBehaviour
                 ,
             BlockDirection = CalculateBlockDirection(_refAimingInput.variable.StateManager.Orientation)
                 ,
-            Speed = CalculateSwingSpeed(distance)
+            Speed = CalculateSwingSpeed(_traversedAngle)
                 ,
             AttackSignal = _enmAttackSignal
                 ,
@@ -399,7 +399,10 @@ public class Aiming : MonoBehaviour
 
     private Direction CalculateBlockDirection(Orientation orientation)
     {
-        
+        float length = _refAimingInput.variable.value.magnitude;
+        if (length < 0.5f)
+            return Direction.Idle;
+
         int orient = (int)orientation;
         float input = CalculateAngleRadOfInput(_refAimingInput.variable.value) * Mathf.Rad2Deg;
         int diff = (int)input - orient;

@@ -14,6 +14,7 @@ namespace UnityEngine
             RHEquipment,//set in EquipmentManager
             LHEquipment,//set in EquipmentManager
             WeaponRange,//set in EquipmentManager
+            ShieldState,
 
             TargetBehaviour,// Set refrence when found -> check on update
             Target,//Set in statemanager
@@ -22,6 +23,7 @@ namespace UnityEngine
             TargetRHEquipment,//set in EquipmentManager
             TargetLHEquipment,//set in EquipmentManager
             TargetWeaponRange,//set in EquipmentManager -> not in use. checked on update
+            TargetShieldState,
             TargetCurrentAttack,//Set in Attacking script
             TargetObservedAttack, //Calculated in Blackboard when target attacks
         }

@@ -52,7 +52,7 @@ public class LockOn : MonoBehaviour
     private Orientation CalculateOrientation()
     {
         var direction = _lockonTarget.transform.position - transform.position;
-        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        float angle = Mathf.Atan2(direction.z, direction.x) * Mathf.Rad2Deg;
 
         int clampedAngle = (Mathf.RoundToInt(angle / 45)) * 45;
         clampedAngle = (clampedAngle == -180 )? 180 : clampedAngle;

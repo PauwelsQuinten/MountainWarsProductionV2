@@ -41,7 +41,7 @@ namespace UnityEngine
         Idle, 
         Moving, 
         Hold, 
-        Reset
+        Cooldown
     }
 
     public enum Direction

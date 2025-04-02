@@ -29,7 +29,6 @@ public class CharacterMovement : MonoBehaviour
     private void Start()
     {
         _rb = GetComponent<Rigidbody>();
-        _stateManager = _moveInput.variable.StateManager;
         _moveInput.variable.ValueChanged += MoveInput_ValueChanged;
     }
 
@@ -62,6 +61,7 @@ public class CharacterMovement : MonoBehaviour
         }
 
             if (_stateManager.Target == null)
+        if (_moveInput.variable.StateManager.Target == null)
             UpdateOrientation();
     }
 

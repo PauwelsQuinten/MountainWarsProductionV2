@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
@@ -11,6 +12,7 @@ public class EquipmentManager : MonoBehaviour
     [SerializeField] private Equipment _fists;
     [Header("Events")]
     [SerializeField] private GameEvent _onEquipmentBreak;
+    [SerializeField] private GameEvent _onEquipmentDamage;
     [Header("Item")]
     [SerializeField] private LayerMask _itemMask;
     [Header("Blackboard")]
@@ -32,6 +34,8 @@ public class EquipmentManager : MonoBehaviour
         if (_leftHand && !_leftHand.IsRightHandEquipment)
         {
             var leftEquipment = Instantiate(_leftHand);
+            leftEquipment.transform.parent = transform;
+            leftEquipment.transform.localPosition = Vector3.zero;
             HeldEquipment[LEFT_HAND] = leftEquipment;
         }
 
@@ -39,6 +43,8 @@ public class EquipmentManager : MonoBehaviour
         if (_rightHand && _rightHand.IsRightHandEquipment)
         {
             var rightEquipment = Instantiate(_rightHand);
+            rightEquipment.transform.parent = transform;
+            rightEquipment.transform.localPosition = Vector3.zero;
             HeldEquipment[RIGHT_HAND] = rightEquipment;
         }
 
@@ -46,9 +52,12 @@ public class EquipmentManager : MonoBehaviour
         if (_fists && _fists.Type == EquipmentType.Fist)
         {
             var fist = Instantiate(_fists);
+            fist.transform.parent = transform;
+            fist.transform.localPosition = Vector3.zero;
             HeldEquipment[FISTS] = fist;
         }
 
+        UpdateBlackboard();
 
     }
 
@@ -82,10 +91,41 @@ public class EquipmentManager : MonoBehaviour
     public void CheckDurability(Component sender, object obj)
     {
         //Check for vallid signal
-        if (sender.gameObject != gameObject) return;
         DefenceEventArgs args = obj as DefenceEventArgs;
         if (args == null) return;
 
+        if (sender.gameObject == gameObject)
+            BlockMediumReduction(args);
+        else
+            AttackMediumReduction(args);
+
+        UpdateBlackboard();
+    }
+
+    private void AttackMediumReduction(DefenceEventArgs args)
+    {
+        //Attackmedium
+        int attackIndex = 2;
+        if (HeldEquipment[RIGHT_HAND])
+            attackIndex = RIGHT_HAND;
+        else if (!HeldEquipment[RIGHT_HAND] && HeldEquipment[LEFT_HAND])
+            attackIndex = LEFT_HAND;
+        else
+            attackIndex = FISTS;
+
+        //Reduce durability
+        HeldEquipment[attackIndex].Damage(args.AttackPower, args.BlockResult, false);
+        _onEquipmentDamage.Raise(this, new EquipmentEventArgs
+        {
+            ShieldDurability = GetDurabilityPercentage(LEFT_HAND),
+            WeaponDurability = GetDurabilityPercentage(RIGHT_HAND)
+        });
+
+        CheckIfBroken(args, attackIndex);
+    }
+
+    private void BlockMediumReduction(DefenceEventArgs args)
+    {
         //Reduce durability
         int index = 2;
         switch (args.BlockMedium)
@@ -100,12 +140,22 @@ public class EquipmentManager : MonoBehaviour
                 index = FISTS;
                 break;
         }
-        HeldEquipment[index].Damage(args.AttackPower, args.BlockResult);
+        HeldEquipment[index].Damage(args.AttackPower, args.BlockResult, true);
+        _onEquipmentDamage.Raise(this, new EquipmentEventArgs
+        {
+            ShieldDurability = GetDurabilityPercentage(LEFT_HAND),
+            WeaponDurability = GetDurabilityPercentage(RIGHT_HAND)
+        });
 
+        CheckIfBroken(args, index);
+    }
+
+    private void CheckIfBroken(DefenceEventArgs args, int index)
+    {
         //Check if broken
         if (HeldEquipment[index].Durability < 0f)
         {
-            Debug.Log($"!!!!!!!!!!!!!!!!!!!!! breaks {args.BlockMedium} !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            Debug.Log($"!!!!!!!!!!!!!!!!!!!!! breaks {HeldEquipment[index]} !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
             Destroy(HeldEquipment[index].gameObject);
             HeldEquipment[index] = null;
 
@@ -116,8 +166,6 @@ public class EquipmentManager : MonoBehaviour
             };
             _onEquipmentBreak.Raise(this, send);
         }
-
-        UpdateBlackboard();
     }
 
     private void UpdateBlackboard()
@@ -178,15 +226,6 @@ public class EquipmentManager : MonoBehaviour
         return HeldEquipment[index] != null;
     }
     
-    public float GetEquipmentPower()
-    {
-        if (HeldEquipment[RIGHT_HAND])
-            return HeldEquipment[RIGHT_HAND].Power;
-        else if (HeldEquipment[LEFT_HAND])
-            return HeldEquipment[RIGHT_HAND].Power;
-        return HeldEquipment[FISTS].Power;
-    }
-
     private void DropEquipment(bool isRightHand)
     {
         int index = isRightHand ? 1 : 0;
@@ -196,12 +235,21 @@ public class EquipmentManager : MonoBehaviour
         HeldEquipment[index] = null; 
     }
 
-    private float GetAttackRange()
+    public float GetEquipmentPower()
+    {
+        if (HeldEquipment[RIGHT_HAND])
+            return HeldEquipment[RIGHT_HAND].Power;
+        else if (!HeldEquipment[RIGHT_HAND] && HeldEquipment[LEFT_HAND])
+            return HeldEquipment[LEFT_HAND].Power;
+        return HeldEquipment[FISTS].Power;
+    }
+
+    public float GetAttackRange()
     {
         if (HeldEquipment[RIGHT_HAND])
             return HeldEquipment[RIGHT_HAND].Range;
-        else if (HeldEquipment[LEFT_HAND])
-            return HeldEquipment[RIGHT_HAND].Range;
+        else if (!HeldEquipment[RIGHT_HAND] && HeldEquipment[LEFT_HAND])
+            return HeldEquipment[LEFT_HAND].Range;
         return HeldEquipment[FISTS].Range;
     }
 

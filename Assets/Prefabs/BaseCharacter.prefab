@@ -24,8 +24,11 @@ GameObject:
   - component: {fileID: 3485612452898370163}
   - component: {fileID: 8294375085882615592}
   - component: {fileID: 8895177009908340797}
+  - component: {fileID: 8862123918941551532}
+  - component: {fileID: 7219521345600688927}
+  - component: {fileID: 8284157178089308381}
   - component: {fileID: 3805331497090860965}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: BaseCharacter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -191,7 +194,7 @@ MonoBehaviour:
   _loseStamina: {fileID: 11400000, guid: 0b82292daaabdcb4e964a69a69667662, type: 2}
   _characterLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8
   _blackboardRef:
     useConstant: 0
     constantValue: {x: 0, y: 0}
@@ -209,6 +212,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _succesfullBlockevent: {fileID: 11400000, guid: 2cc625b4ec016e14899ad658a28da4c8, type: 2}
+  _equipmentUpdate: {fileID: 11400000, guid: 1fa0ac8c24365fa4fa43f0ccc057a02a, type: 2}
   _succesfullHitEvent: {fileID: 11400000, guid: 0bab4ec7dd547c941b5209c87202a055, type: 2}
   _staminaCost:
     useConstant: 0
@@ -245,8 +249,8 @@ MonoBehaviour:
   _onDisarmEvent: {fileID: 11400000, guid: 80230798183380d4d9daccd349bb9632, type: 2}
   _minParrySwingAngle: 100
   _minParryStabAngle: 60
-  _timeForParryingSwing: 1
-  _timeForParryingStab: 0.4
+  _timeForParryingSwing: 1.2
+  _timeForParryingStab: 0.6
   _staminaCost:
     useConstant: 0
     constantValue: 0
@@ -314,10 +318,11 @@ MonoBehaviour:
   _leftHand: {fileID: 6464342419627203891, guid: 3f5fe7f426ca66e469ff79b95b61b74a, type: 3}
   _rightHand: {fileID: 6464342419627203891, guid: e07e17f7199209b49ab3de04485be0b6, type: 3}
   _fists: {fileID: 6464342419627203891, guid: a2d74654fef498746aa20509befcd693, type: 3}
-  _onEquipmentBreak: {fileID: 0}
+  _onEquipmentBreak: {fileID: 11400000, guid: b339da683b285f6418bc7b64f180c581, type: 2}
+  _onEquipmentDamage: {fileID: 11400000, guid: c914e9c28dde5604d9c103f474e083b2, type: 2}
   _itemMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   _blackboard:
     useConstant: 0
     constantValue: {x: 0, y: 0}
@@ -335,7 +340,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lockonTarget: {fileID: 0}
-  _lockonEvent: {fileID: 11400000, guid: 3bcbf57665777d1489ff9e53220b0be4, type: 2}
+  _lockonEvent: {fileID: 11400000, guid: d92c25f84e9ed4c4f9490fccdf017560, type: 2}
 --- !u!114 &8294375085882615592
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -386,6 +391,51 @@ MonoBehaviour:
   _cooldown: 0.1
   _checkBlock: {fileID: 11400000, guid: e4d2257f33828fe45a8ba3c1de9a6a8c, type: 2}
   _damage: 25
+--- !u!114 &8862123918941551532
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 691636631868949397}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48624789eb8ff58498f0ebe5bd4e695f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _foundTargetEvent: {fileID: 11400000, guid: 3bcbf57665777d1489ff9e53220b0be4, type: 2}
+--- !u!114 &7219521345600688927
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 691636631868949397}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 340899f120d64f544959a3c51f298ddd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _hearingRange: 2
+  _characterMask:
+    serializedVersion: 2
+    m_Bits: 8
+--- !u!114 &8284157178089308381
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 691636631868949397}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 101bf5520eee2b24cb11f7b11a55184c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _eyesightRange: 5
+  _characterMask:
+    serializedVersion: 2
+    m_Bits: 8
 --- !u!114 &3805331497090860965
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -412,6 +462,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 0b82292daaabdcb4e964a69a69667662, type: 2}
   - {fileID: 11400000, guid: 2cc625b4ec016e14899ad658a28da4c8, type: 2}
   - {fileID: 11400000, guid: 1fa0ac8c24365fa4fa43f0ccc057a02a, type: 2}
+  - {fileID: 11400000, guid: 7da4419bca02ab342bac3950bdec894c, type: 2}
+  - {fileID: 11400000, guid: 3bcbf57665777d1489ff9e53220b0be4, type: 2}
+  - {fileID: 11400000, guid: d92c25f84e9ed4c4f9490fccdf017560, type: 2}
   Responses:
   - m_PersistentCalls:
       m_Calls:
@@ -619,6 +672,60 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8862123918941551532}
+        m_TargetAssemblyTypeName: AIPerception, Assembly-CSharp
+        m_MethodName: CheckSurrounding
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4165634575879343316}
+        m_TargetAssemblyTypeName: StateManager, Assembly-CSharp
+        m_MethodName: SetTarget
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 3485612452898370163}
+        m_TargetAssemblyTypeName: LockOn, Assembly-CSharp
+        m_MethodName: FoundTarget
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4165634575879343316}
+        m_TargetAssemblyTypeName: StateManager, Assembly-CSharp
+        m_MethodName: ChangeOrientation
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &6617748585025692743
 GameObject:
   m_ObjectHideFlags: 0
@@ -630,7 +737,7 @@ GameObject:
   - component: {fileID: 2625224716375930798}
   - component: {fileID: 2245346002279572276}
   - component: {fileID: 4492310189885468914}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}

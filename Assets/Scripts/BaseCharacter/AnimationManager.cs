@@ -5,12 +5,8 @@ public class AnimationManager : MonoBehaviour
 {
     private Animator _animator;
     private AnimationState _currentState;
-    private int _currentAnimLayer;
 
-    // Define clear layer constants
-    private const int BASE_LAYER = 1;
-    private const int UPPER_BODY_LAYER = 3;
-    private const int LOWER_BODY_LAYER = 2;
+    private bool _canResetIdle = true;
 
     private void Start()
     {
@@ -24,6 +20,21 @@ public class AnimationManager : MonoBehaviour
         if (args == null) return;
         if (_currentState == args.AnimState && args.AnimState != AnimationState.Idle) return;
 
+        if(args.AnimState != AnimationState.Idle)
+        {
+            if (_canResetIdle)
+            {
+                _animator.GetBehaviour<BoredBehaviour>().IdleExit();
+                _canResetIdle = false;
+            }
+        }
+        else
+        {
+            if (!_canResetIdle)
+            {
+                _canResetIdle = true;
+            }
+        }
         //switch (args.AnimLayer)
         //{
         //    case BASE_LAYER:

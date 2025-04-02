@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class BoredBehaviour : StateMachineBehaviour
@@ -13,10 +14,12 @@ public class BoredBehaviour : StateMachineBehaviour
     private int _boredAnimation;
 
     private bool _canRun;
+    private Animator _animator;
 
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+        _animator = animator;
         _canRun = true;
         ResetIdle();
     }
@@ -32,10 +35,24 @@ public class BoredBehaviour : StateMachineBehaviour
             if (_idleTime > _timeUntilBored && stateInfo.normalizedTime % 1 < 0.02f)
             {
                 _isBored = true;
-                _boredAnimation = Random.Range(1, _numberOfBoredAnimations + 1);
-                _boredAnimation = _boredAnimation * 2 - 1;
 
-                animator.SetFloat("BoredAnimation", _boredAnimation - 1);
+                int tempInt = Random.Range(1, 4);
+
+                switch (tempInt)
+                {
+                    case 1:
+                        _boredAnimation = 2;
+                        break;
+                    case 2:
+                        _boredAnimation = 4;
+                        break;
+                    case 3:
+                        _boredAnimation = 6;
+                        break;
+                }
+
+
+                _animator.SetFloat("BoredAnimation", _boredAnimation - 1);
             }
         }
         else if (stateInfo.normalizedTime % 1 > 0.98)
@@ -46,11 +63,11 @@ public class BoredBehaviour : StateMachineBehaviour
         animator.SetFloat("BoredAnimation", _boredAnimation, 0.2f, Time.deltaTime);
     }
 
-    public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    public void IdleExit()
     {
         _canRun = false;
         ResetIdle();
-        animator.SetFloat("BoredAnimation", _boredAnimation);
+        _animator.SetFloat("BoredAnimation", _boredAnimation);
     }
 
     private void ResetIdle()

@@ -60,7 +60,6 @@ public class CharacterMovement : MonoBehaviour
             _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Empty, AnimLayer = 2, DoResetIdle = false });
         }
 
-            if (_stateManager.Target == null)
         if (_moveInput.variable.StateManager.Target == null)
             UpdateOrientation();
     }

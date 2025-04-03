@@ -54,7 +54,7 @@ public class LockOn : MonoBehaviour
 
         if (_changePanel == null) return;
         if (_previousTarget == _lockonTarget) return;
-        _changePanel.Raise(this, new TriggerUpdatedEventArgs { NewViewIndex = 0, ExitedTrigger = false, DoShowdown = true, IsHidingSpot = false });
+        _changePanel.Raise(this, new TriggerEnterEventArgs { NewViewIndex = 0,IsShowDown = true});
         _previousTarget = _lockonTarget;
     }
 

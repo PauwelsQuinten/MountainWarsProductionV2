@@ -23,10 +23,10 @@ public class ViewManager : MonoBehaviour
     private Camera _cam;
     private GameObject _player;
 
-    private TriggerUpdatedEventArgs _currentArgs;
-    private TriggerUpdatedEventArgs _PreviousArgs;
+    private TriggerEnterEventArgs _currentArgs;
+    private TriggerEnterEventArgs _previousArgs;
 
-    private bool _isNearhidingSpot;
+    private bool _isNearHidingSpot;
 
     private void Start()
     {
@@ -34,38 +34,36 @@ public class ViewManager : MonoBehaviour
         _cam.transform.position = _panels[0].transform.position + (_cam.transform.forward * _offsetZ);
     }
 
-    public void ChangePanel(Component sender, object obj)
+    public void EnterNewPanel(Component sender, object obj)
     {
-        TriggerUpdatedEventArgs args = obj as TriggerUpdatedEventArgs;
+        TriggerEnterEventArgs args = obj as TriggerEnterEventArgs;
         if (args == null) return;
 
-        if (args.ExitedTrigger)
-        {
-            if(args.IsHidingSpot) _isNearhidingSpot = false;
-            return;
-        }
+        if(args.IsHidingSpot) _isNearHidingSpot = true;
 
-        if (_currentArgs != null) _PreviousArgs = _currentArgs;
-        else _PreviousArgs = args;
         _currentArgs = args;
 
-        if (!args.IsHidingSpot && !args.DoShowdown)
+        if (!args.IsHidingSpot && !args.IsShowDown)
             StartCoroutine(DoSwitchPanel(_panels[args.NewViewIndex].transform.position + (_cam.transform.forward * _offsetZ)));
         else
         {
-            if (args.IsHidingSpot) _isNearhidingSpot = true;
-            else if(args.DoShowdown) StartCoroutine(DoShowDown());
+            if (args.IsHidingSpot) _isNearHidingSpot = true;
+            else if (args.IsShowDown) StartCoroutine(DoShowDown());
         }
+        _previousArgs = _currentArgs;
+    }
 
+    public void ExitTrigger(Component sender, object obj)
+    {
+        if(_isNearHidingSpot)_isNearHidingSpot = false;
     }
 
     public void EnterHiding(Component sender, object obj)
     {
-        if (!_isNearhidingSpot) return;
+        if (!_isNearHidingSpot) return;
         if (_panels[_currentArgs.NewViewIndex].active) StartCoroutine(ShowHidingSpot(true));
         else
         {
-            _currentArgs = _PreviousArgs;
             StartCoroutine(ShowHidingSpot(false));
         }
     }
@@ -144,7 +142,7 @@ public class ViewManager : MonoBehaviour
     {
         float time = 0;
         int index = 0;
-        if(_PreviousArgs != null) index = _PreviousArgs.NewViewIndex;
+        if(_previousArgs != null) index = _previousArgs.NewViewIndex;
         else index = _currentArgs.NewViewIndex;
         index++;
         int newIndex = index;

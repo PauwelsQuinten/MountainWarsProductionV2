@@ -1,25 +1,36 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PanelTrigger : MonoBehaviour
 {
     [SerializeField]
-    private GameEvent _triggerUpdate;
+    private GameEvent _triggerEnter;
+    [SerializeField]
+    private GameEvent _triggerExit;
     [SerializeField]
     private bool _hidingSpot;
+    [SerializeField]
+    private LayerMask _layerMask;
 
     [Header("Indexes")]
     [SerializeField]
     private int _nextViewIndex;
     [SerializeField]
     private int _nextSceneIndex;
+    [SerializeField]
+    private int _currentSceneIndex;
+    [SerializeField]
+    private int _currentViewIndex;
 
     private void OnTriggerEnter(Collider other)
     {
-        _triggerUpdate.Raise(this, new TriggerUpdatedEventArgs { NewViewIndex = _nextViewIndex, NewSceneIndex = _nextSceneIndex, ExitedTrigger = false, IsHidingSpot = _hidingSpot });
+        if (((1 << other.gameObject.layer) & _layerMask) != 0)
+            _triggerEnter.Raise(this, new TriggerEnterEventArgs { CurrentSceneIndex = _currentSceneIndex, newSceneIndex = _nextSceneIndex, CurrentViewIndex = _currentViewIndex, IsHidingSpot = _hidingSpot, IsShowDown = false, NewViewIndex = _nextViewIndex });
     }
 
     private void OnTriggerExit(Collider other)
     {
-        _triggerUpdate.Raise(this, new TriggerUpdatedEventArgs { NewViewIndex = _nextViewIndex, NewSceneIndex = _nextSceneIndex, ExitedTrigger = true, IsHidingSpot = _hidingSpot });
+        if (((1 << other.gameObject.layer) & _layerMask) != 0)
+            _triggerEnter.Raise(this, new TriggerEnterEventArgs { CurrentSceneIndex = _currentSceneIndex, newSceneIndex = _nextSceneIndex, CurrentViewIndex = _currentViewIndex, IsHidingSpot = _hidingSpot, IsShowDown = false, NewViewIndex = _nextViewIndex });
     }
 }

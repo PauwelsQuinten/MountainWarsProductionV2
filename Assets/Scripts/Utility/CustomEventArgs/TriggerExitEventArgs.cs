@@ -2,9 +2,10 @@ using System;
 
 namespace UnityEngine
 {
-    public class TriggerUpdatedEventArgs : EventArgs
+    public class TriggerExitEventArgs : EventArgs
     {
-        public int NewSceneIndex;
+        public int NewSpawnIndex;
+        public int CurrentIndex;
         public int NewViewIndex;
         public bool ExitedTrigger;
         public bool IsHidingSpot;

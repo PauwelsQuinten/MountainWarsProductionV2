@@ -43,6 +43,7 @@ public class StateManager : MonoBehaviour
         }
         else if (sender.gameObject != gameObject) return;
 
+        Debug.Log($"Stuned {gameObject}");
         AttackState = AttackState.Stun;
         StartCoroutine(RecoverStun(args.StunDuration));
     }

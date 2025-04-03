@@ -61,9 +61,13 @@ public class WorldState : MonoBehaviour
 
     private void Start()
     {
-        _blackboard.variable.ValueChanged += Blackboard_ValueChanged;
         FillLists();
-        SetStartValues();
+
+        if (WorldStateType == WorldStateType.Current)
+        {
+            _blackboard.variable.ValueChanged += Blackboard_ValueChanged;
+            SetStartValues();
+        }
     }
 
 
@@ -314,35 +318,90 @@ public class WorldState : MonoBehaviour
 
     private void FillLists()
     {
-        //Values
-        WorldStateValues.Add(EWorldState.TargetHealth, TargetHealth);
-        WorldStateValues.Add(EWorldState.TargetStamina, TargetStamina);
-        WorldStateValues.Add(EWorldState.TargetRHEquipment, TargetRHEquipment);
-        WorldStateValues.Add(EWorldState.TargetLHEquipment, TargetLHEquipment);
+        if (WorldStateType == WorldStateType.Current)
+        {
+            //Values
+            WorldStateValues.Add(EWorldState.TargetHealth, TargetHealth);
+            WorldStateValues.Add(EWorldState.TargetStamina, TargetStamina);
+            WorldStateValues.Add(EWorldState.TargetRHEquipment, TargetRHEquipment);
+            WorldStateValues.Add(EWorldState.TargetLHEquipment, TargetLHEquipment);
 
-        WorldStateValues.Add(EWorldState.Health, Health);
-        WorldStateValues.Add(EWorldState.Stamina, Stamina);
-        WorldStateValues.Add(EWorldState.RHEquipment, RHEquipment);
-        WorldStateValues.Add(EWorldState.LHEquipment, LHEquipment);
-
-
-        //Possesions
-        WorldStatePossesions.Add(EWorldState.HasTarget, HasTarget);
-        WorldStatePossesions.Add(EWorldState.TargetOpening, HasOpening);
+            WorldStateValues.Add(EWorldState.Health, Health);
+            WorldStateValues.Add(EWorldState.Stamina, Stamina);
+            WorldStateValues.Add(EWorldState.RHEquipment, RHEquipment);
+            WorldStateValues.Add(EWorldState.LHEquipment, LHEquipment);
 
 
-        //Behaviours
-        WorldStateBehaviours.Add(EWorldState.Behaviour, Behaviour);
-        WorldStateBehaviours.Add(EWorldState.TargetBehaviour, TargetBehaviour);
+            //Possesions
+            WorldStatePossesions.Add(EWorldState.HasTarget, HasTarget);
+            WorldStatePossesions.Add(EWorldState.TargetOpening, HasOpening);
 
 
-        //Ranges
-        WorldStateRanges.Add(EWorldState.AttackRange, AttackRange);
-        WorldStateRanges.Add(EWorldState.TargetAttackRange, TargetAttackRange);
+            //Behaviours
+            WorldStateBehaviours.Add(EWorldState.Behaviour, Behaviour);
+            WorldStateBehaviours.Add(EWorldState.TargetBehaviour, TargetBehaviour);
 
-        //Shields
-        WorldStateShields.Add(EWorldState.ShieldState, ShieldState);
-        WorldStateShields.Add(EWorldState.TargetShieldState, TargetShieldState);
+
+            //Ranges
+            WorldStateRanges.Add(EWorldState.AttackRange, AttackRange);
+            WorldStateRanges.Add(EWorldState.TargetAttackRange, TargetAttackRange);
+
+            //Shields
+            WorldStateShields.Add(EWorldState.ShieldState, ShieldState);
+            WorldStateShields.Add(EWorldState.TargetShieldState, TargetShieldState);
+
+        }
+
+        //If the Worldstate is not of Current Type, it is not used to compare all values but only the not default ones
+        else
+        {
+            //Values
+            if (TargetHealth != EWorldStateValue.Default)
+                WorldStateValues.Add(EWorldState.TargetHealth, TargetHealth);
+            if (TargetStamina != EWorldStateValue.Default)
+                WorldStateValues.Add(EWorldState.TargetStamina, TargetStamina);
+            if (TargetRHEquipment != EWorldStateValue.Default)
+                WorldStateValues.Add(EWorldState.TargetRHEquipment, TargetRHEquipment);
+            if (TargetLHEquipment != EWorldStateValue.Default)
+                WorldStateValues.Add(EWorldState.TargetLHEquipment, TargetLHEquipment);
+
+            if (Health != EWorldStateValue.Default)
+                WorldStateValues.Add(EWorldState.Health, Health);
+            if (Stamina != EWorldStateValue.Default)
+                WorldStateValues.Add(EWorldState.Stamina, Stamina);
+            if (RHEquipment != EWorldStateValue.Default)
+                WorldStateValues.Add(EWorldState.RHEquipment, RHEquipment);
+            if (LHEquipment != EWorldStateValue.Default)
+                WorldStateValues.Add(EWorldState.LHEquipment, LHEquipment);
+
+
+            //Possesions
+            if (HasTarget != EWorldStatePossesion.Default)
+                WorldStatePossesions.Add(EWorldState.HasTarget, HasTarget);
+            if (HasOpening != EWorldStatePossesion.Default)
+                WorldStatePossesions.Add(EWorldState.TargetOpening, HasOpening);
+
+
+            //Behaviours
+            if (Behaviour != EBehaviourValue.Default)
+                WorldStateBehaviours.Add(EWorldState.Behaviour, Behaviour);
+            if (TargetBehaviour != EBehaviourValue.Default)
+                WorldStateBehaviours.Add(EWorldState.TargetBehaviour, TargetBehaviour);
+
+
+            //Ranges
+            if (AttackRange != EWorldStateRange.Default)
+                WorldStateRanges.Add(EWorldState.AttackRange, AttackRange);
+            if (TargetAttackRange != EWorldStateRange.Default)
+                WorldStateRanges.Add(EWorldState.TargetAttackRange, TargetAttackRange);
+
+            //Shields
+            if (ShieldState != Direction.Idle)
+                WorldStateShields.Add(EWorldState.ShieldState, ShieldState);
+            if (TargetShieldState != Direction.Idle)
+                WorldStateShields.Add(EWorldState.TargetShieldState, TargetShieldState);
+
+        }
 
     }
 

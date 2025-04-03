@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
 
@@ -24,6 +23,7 @@ public class GoapAction : MonoBehaviour, IActions
     [SerializeField] protected float _actionMaxRunTime = 3f;
     protected bool _isActivated = false;
     protected Coroutine _actionCoroutine;
+    protected GameObject npc;
 
     virtual protected void Start()
     {
@@ -35,6 +35,7 @@ public class GoapAction : MonoBehaviour, IActions
             else
                 SatisfyingWorldState = item;
         }
+
     }
     public virtual void StartAction(WorldState currentWorldState, BlackboardReference blackboard)
     {
@@ -42,6 +43,8 @@ public class GoapAction : MonoBehaviour, IActions
             return;
         _isActivated = true;
         _actionCoroutine = StartCoroutine(StartTimer(_actionMaxRunTime));
+
+        npc = blackboard.variable.Self;
         //Debug.Log("Start action coroutine");
     }
 

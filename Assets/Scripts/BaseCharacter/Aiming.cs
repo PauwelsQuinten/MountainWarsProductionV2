@@ -47,8 +47,8 @@ public class Aiming : MonoBehaviour
 
         if (_textMeshPro && _textMeshPro2 && _textMeshPro3 && _textMeshPro4)
         {
-            _textMeshPro2.text = $"{_refAimingInput.variable.value}";
-            _textMeshPro.text = $"{_enmAimingInput}";
+            _textMeshPro2.text = $"{_enmAttackSignal}";
+            _textMeshPro.text = $"{_enmCurrentState}";
             _textMeshPro3.text = $"storedVec : {_vec2Start}";
             _textMeshPro4.text = $"traversed angle : {_traversedAngle}";
         }

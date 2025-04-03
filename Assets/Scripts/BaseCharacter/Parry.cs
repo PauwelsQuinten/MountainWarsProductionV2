@@ -33,10 +33,10 @@ public class Parry : MonoBehaviour
 
     public void ParryMovement(Component sender, object obj)
     {
-        if (sender.gameObject != gameObject)
-            return;
         AimingOutputArgs args = obj as AimingOutputArgs;
         if (args == null) return;
+        if (sender.gameObject != gameObject && args.Sender != gameObject)
+            return;
 
 
         if (args.AttackState == AttackState.BlockAttack || args.AttackState == AttackState.ShieldDefence || args.AttackState == AttackState.SwordDefence)
@@ -44,7 +44,7 @@ public class Parry : MonoBehaviour
         else
             return;
 
-        //Debug.Log($"ParryInput :{args.Direction}, {args.AngleTravelled}, {_parryMedium}");
+        Debug.Log($"ParryInput :{args.Direction}, {args.AngleTravelled}, {_parryMedium}");
 
         if (_attackEventValues != null && _tryDisarm && _parryMedium == BlockMedium.Sword)
         {
@@ -164,7 +164,7 @@ public class Parry : MonoBehaviour
     {
         _loseStamina.Raise(this, new StaminaEventArgs { StaminaCost = _staminaCost.value });
         _succesfullParryEvent.Raise(this, new StunEventArgs {StunDuration = 3, ComesFromEnemy = true});
-
+        Debug.Log("succesfullParry");
         _tryDisarm = true;
         float time = attackValues.AttackType == AttackType.Stab ? _timeForParryingStab : _timeForParryingSwing;
         StartCoroutine(DisarmAction(time));

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.Rendering;
 
 
@@ -7,9 +8,8 @@ public class MoveToAction : GoapAction
 {
     [SerializeField] private ObjectTarget _MoveTo = ObjectTarget.Player;
     [Header("Input")]
-    [SerializeField] private MovingInputReference _moveInput;
+    [SerializeField] private GameEvent _moveInput;
 
-    GameObject npc;
     private List<Equipment> _foundEquipment = new List<Equipment>();
     private Equipment _foundSpecificEquipment;
     private int _direction = 0;
@@ -18,7 +18,6 @@ public class MoveToAction : GoapAction
     {
         base.StartAction(currentWorldState, blackboard);
 
-        npc = blackboard.variable.Self;
         
         switch (_MoveTo)
         {
@@ -48,7 +47,7 @@ public class MoveToAction : GoapAction
         Vector3 targetDir = Vector3.zero;
         Vector3 npcPos = currentWorldState.transform.position;
         Vector3 targetPos = Vector3.zero;
-        float angleRad = (float)blackboard.variable.Orientation;
+        float angleRad = (float)blackboard.variable.Orientation * Mathf.Deg2Rad;
 
         switch (_MoveTo)
         {
@@ -92,7 +91,7 @@ public class MoveToAction : GoapAction
                 break;
 
         }
-        _moveInput.variable.value = targetDir;
+        _moveInput.Raise(this, new DirectionEventArgs{ MoveDirection = targetDir, SpeedMultiplier = 1f, Sender = npc });
         
     }
 
@@ -100,7 +99,7 @@ public class MoveToAction : GoapAction
     {
         if (base.IsCompleted(currentWorldState))
         {
-            _moveInput.variable.value = Vector2.zero;
+            _moveInput.Raise(this, new DirectionEventArgs { MoveDirection = Vector2.zero, SpeedMultiplier = 1f, Sender = npc });
 
             return true;
         }
@@ -109,9 +108,9 @@ public class MoveToAction : GoapAction
 
     public override bool IsInterupted(WorldState currentWorldState, BlackboardReference blackboard)
     {
-        //return AboutToBeHit(currentWorldState) || blackboard.variable.ObservedAttack == ;
-        return (blackboard.variable.TargetState == AttackState.Attack || blackboard.variable.TargetState == AttackState.BlockAttack)
-            && currentWorldState.TargetAttackRange == EWorldStateRange.InRange;
+        /*return (blackboard.variable.TargetState == AttackState.Attack || blackboard.variable.TargetState == AttackState.BlockAttack)
+            && currentWorldState.TargetAttackRange == EWorldStateRange.InRange;*/
+        return false;
     }
 
     public override bool IsVallid(WorldState currentWorldState, BlackboardReference blackboard)
@@ -123,7 +122,7 @@ public class MoveToAction : GoapAction
 
     public override void CancelAction()
     {
-        _moveInput.variable.value = Vector2.zero;
+        _moveInput.Raise(this, new DirectionEventArgs { MoveDirection = Vector2.zero, SpeedMultiplier = 1f, Sender = npc });
     }
 
 

@@ -6,7 +6,7 @@ public class IdleAction : GoapAction
     
     public override void StartAction(WorldState currentWorldState, BlackboardReference blackboard)
     {
-        //base.StartAction(currentWorldState);
+        base.StartAction(currentWorldState, blackboard);
     }
 
     public override void UpdateAction(WorldState currentWorldState, BlackboardReference blackboard)
@@ -16,16 +16,14 @@ public class IdleAction : GoapAction
 
     public override bool IsCompleted(WorldState currentWorldState)
     {
-        return true;
-        //return base.IsCompleted(currentWorldState, activeActionDesiredState);
+        return base.IsCompleted(currentWorldState);
     }
 
     public override bool IsInterupted(WorldState currentWorldState, BlackboardReference blackboard)
     {
-        /*return (currentWorldState._worldStateValues[EWorldState.TargetSwingSpeed] > 50f
-            && currentWorldState._worldStateValues2[EWorldState.TargetDistance] == WorldStateValue.OutOfRange);
-       */
-        return false;
+
+        return (blackboard.variable.TargetState == AttackState.Attack || blackboard.variable.TargetState == AttackState.BlockAttack)
+             && currentWorldState.TargetAttackRange == EWorldStateRange.InRange;
     }
 
 }

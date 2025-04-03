@@ -7,7 +7,7 @@ public class PlayerAgressiveness : MonoBehaviour
     [SerializeField]
     private BlackboardReference _blackboard;
     [SerializeField]
-    private int _maxAttackTime = 5;
+    private int _maxAttackTime = 4;
 
     void Update()
     {

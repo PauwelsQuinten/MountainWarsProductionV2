@@ -114,7 +114,11 @@ public class Attacking : MonoBehaviour
         PrintInput2(args);
         //Signal to blackboard
         if (gameObject.CompareTag(PLAYER))
+        {
             _blackboardRef.variable.TargetCurrentAttack = _attackType;
+            _blackboardRef.variable.TargetState = args.AttackState;
+        }
+
     }
 
     private bool DidFeint(AttackSignal signal)
@@ -131,7 +135,11 @@ public class Attacking : MonoBehaviour
 
     private bool DidOverCommit(float currentAngle)
     {
-        if (currentAngle > _overCommitAngle) return true;
+        if (currentAngle > _overCommitAngle)
+        {
+            Debug.Log("overcomiited");
+            return true;
+        }
         return false;
     }
 

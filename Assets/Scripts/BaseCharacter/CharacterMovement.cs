@@ -21,8 +21,11 @@ public class CharacterMovement : MonoBehaviour
     [SerializeField]
     private GameEvent _changeAnimation;
 
-    private Rigidbody _rb;
+    [Header("StateManager")]
+    [SerializeField]
     private StateManager _stateManager;
+
+    private Rigidbody _rb;
     private Vector3 _movedirection;
     private float _angleInterval = 22.5f;
 
@@ -39,13 +42,41 @@ public class CharacterMovement : MonoBehaviour
 
     private void MoveInput_ValueChanged(object sender, EventArgs e)
     {
-        if (_moveInput.variable.SpeedMultiplier > 1)
-            _removeStamina.Raise(this, new StaminaEventArgs { StaminaCost = _staminaCost.value * Time.deltaTime });
-        _movedirection = new Vector3(_moveInput.Value.x, 0, _moveInput.Value.y);
+        UpdateMoveVector(null);
+    }
 
-        if (_moveInput.Value != Vector2.zero)
+    public void MoveInput(Component sender, object obj)
+    {
+        var args = obj as DirectionEventArgs;
+        if (args == null) return;
+        if (args.Sender != gameObject) return;
+        
+        UpdateMoveVector(args);
+    }
+
+    private void UpdateMoveVector(DirectionEventArgs args )
+    {
+        float speedMultiplier = 0f;
+        Vector2 input = Vector2.zero;
+
+        if (args == null)
         {
-            if (_moveInput.variable.SpeedMultiplier > 1)
+            speedMultiplier = _moveInput.variable.SpeedMultiplier;
+            input = _moveInput.Value;
+        }
+        else
+        {
+            speedMultiplier = args.SpeedMultiplier;
+            input = args.MoveDirection;
+        }
+
+        if (speedMultiplier > 1)
+            _removeStamina.Raise(this, new StaminaEventArgs { StaminaCost = _staminaCost.value * Time.deltaTime });
+        _movedirection = new Vector3(input.x, 0,input.y);
+
+        if (input != Vector2.zero)
+        {
+            if (speedMultiplier > 1)
             {
                 _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Run, AnimLayer = 2, DoResetIdle = false });
             }
@@ -60,10 +91,9 @@ public class CharacterMovement : MonoBehaviour
             _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Empty, AnimLayer = 2, DoResetIdle = false });
         }
 
-        if (_moveInput.variable.StateManager.Target == null)
+        if (_stateManager.Target == null)
             UpdateOrientation();
     }
-
     private void UpdateOrientation()
     {
         if (_movedirection == Vector3.zero) return;
@@ -72,42 +102,42 @@ public class CharacterMovement : MonoBehaviour
 
         if (moveInputAngle > 0 - _angleInterval && moveInputAngle < 0 + _angleInterval)
         {
-            _moveInput.variable.StateManager.Orientation = Orientation.East;
+            _stateManager.Orientation = Orientation.East;
             transform.rotation = Quaternion.Euler(new Vector3(0, 90, 0));
         }
         else if (moveInputAngle > 45 - _angleInterval && moveInputAngle < 45 + _angleInterval)
         {
-            _moveInput.variable.StateManager.Orientation = Orientation.NorthEast;
+            _stateManager.Orientation = Orientation.NorthEast;
             transform.rotation = Quaternion.Euler(new Vector3(0, 45, 0));
         }
         else if (moveInputAngle > 90 - _angleInterval && moveInputAngle < 90 + _angleInterval)
         {
-            _moveInput.variable.StateManager.Orientation = Orientation.North;
+            _stateManager.Orientation = Orientation.North;
             transform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
         }
         else if (moveInputAngle > 135 - _angleInterval && moveInputAngle < 135 + _angleInterval)
         {
-            _moveInput.variable.StateManager.Orientation = Orientation.NorthWest;
+            _stateManager.Orientation = Orientation.NorthWest;
             transform.rotation = Quaternion.Euler(new Vector3(0, -45, 0));
         }
         else if (moveInputAngle > 180 - _angleInterval && moveInputAngle < 180 || moveInputAngle < -180 + _angleInterval && moveInputAngle > -180)
         {
-            _moveInput.variable.StateManager.Orientation = Orientation.West;
+            _stateManager.Orientation = Orientation.West;
             transform.rotation = Quaternion.Euler(new Vector3(0, -90, 0));
         }
         else if (moveInputAngle > -135 - _angleInterval && moveInputAngle < -135 + _angleInterval)
         {
-            _moveInput.variable.StateManager.Orientation = Orientation.SouthWest;
+            _stateManager.Orientation = Orientation.SouthWest;
             transform.rotation = Quaternion.Euler(new Vector3(0, -135, 0));
         }
         else if (moveInputAngle > -90 - _angleInterval && moveInputAngle < -90 + _angleInterval)
         {
-            _moveInput.variable.StateManager.Orientation = Orientation.South;
+            _stateManager.Orientation = Orientation.South;
             transform.rotation = Quaternion.Euler(new Vector3(0, 180, 0));
         }
         else if (moveInputAngle > -45 - _angleInterval && moveInputAngle < -45 + _angleInterval)
         {
-            _moveInput.variable.StateManager.Orientation = Orientation.SouthEast;
+            _stateManager.Orientation = Orientation.SouthEast;
             transform.rotation = Quaternion.Euler(new Vector3(0, 135, 0));
         }
     }

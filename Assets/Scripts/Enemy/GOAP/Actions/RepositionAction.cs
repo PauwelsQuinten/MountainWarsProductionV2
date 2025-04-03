@@ -29,8 +29,9 @@ public class RepositionAction : GoapAction
     }
     public override bool IsInterupted(WorldState currentWorldState, BlackboardReference blackboard)
     {
-       /* return !currentWorldState.IsBlockInCorrectDirection()
-          && currentWorldState._worldStateValues2[EWorldState.TargetDistance] == WorldStateValue.InRange;*/
-        return false;
+        /* return !currentWorldState.IsBlockInCorrectDirection()
+           && currentWorldState._worldStateValues2[EWorldState.TargetDistance] == WorldStateValue.InRange;*/
+        return (blackboard.variable.TargetState == AttackState.Attack || blackboard.variable.TargetState == AttackState.BlockAttack)
+            && currentWorldState.TargetAttackRange == EWorldStateRange.InRange;
     }
 }

@@ -9,7 +9,35 @@ using static UnityEngine.Rendering.DebugUI;
 public class BlackboardVariable : ScriptableObject
 {
     public event EventHandler<BlackboardEventArgs> ValueChanged;
-
+    public void ResetAtStart()
+    {
+        _state = 0f;
+        _stamina = 0f;
+        _health = 0f;
+        _isBleeding = false;
+        _rHEquipmentHealth = 0f;
+        _lHEquipmentHealth = 0f;
+        _self = null;
+        _orientation = 0f;
+        _target = null;
+        _targetState = 0f;
+        _targetStamina = 0f;
+        _targetHealth = 0f;
+        _targetIsBleeding = false;
+        _targetRHEquipmentHealth = 0f;
+        _targetLHEquipmentHealth = 0f;
+        _targetWeaponRange = 0f;
+        _weaponRange = 0f;
+        _storredAttacks = new Dictionary<AttackType, int>
+        {
+            { AttackType.Stab, 0 }, { AttackType.HorizontalSlashToRight, 0 }, { AttackType.HorizontalSlashToLeft, 0 }
+        };
+        _observedAttack = AttackType.None;
+        _targetCurrentAttack = AttackType.None;
+        _targetShieldState = Direction.Idle;
+        _shieldState = Direction.Idle;
+        _isPlayerAgressive = false;
+    }
 
     private AttackState _state;
     public AttackState State
@@ -310,18 +338,23 @@ public class BlackboardVariable : ScriptableObject
         set
         {
             if (_targetCurrentAttack != value)
+            //if (_targetCurrentAttack != value)
+            if (value != AttackType.None)
             {
                 _targetCurrentAttack = value;
+                Debug.Log($"new currentAttack{_targetCurrentAttack}");
                 ValueChanged?.Invoke(this, new BlackboardEventArgs { ThisChanged = BlackboardEventArgs.WhatChanged.TargetCurrentAttack });
 
-                if (_targetCurrentAttack != AttackType.None)
-                {
-                    StorredAttacks[_targetCurrentAttack] += 1;
-
-                    _observedAttack = EvaluateAttackCount();
-                    ValueChanged?.Invoke(this, new BlackboardEventArgs { ThisChanged = BlackboardEventArgs.WhatChanged.TargetObservedAttack });
-                }
                 
+                StorredAttacks[_targetCurrentAttack] += 1;
+
+                _observedAttack = EvaluateAttackCount();
+                ValueChanged?.Invoke(this, new BlackboardEventArgs { ThisChanged = BlackboardEventArgs.WhatChanged.TargetObservedAttack });
+                
+                
+                _observedAttack = EvaluateAttackCount();
+                ValueChanged?.Invoke(this, new BlackboardEventArgs { ThisChanged = BlackboardEventArgs.WhatChanged.TargetObservedAttack });
+
 
             }
         }

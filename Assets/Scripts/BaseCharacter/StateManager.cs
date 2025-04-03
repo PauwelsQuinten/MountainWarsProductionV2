@@ -46,6 +46,9 @@ public class StateManager : MonoBehaviour
         Debug.Log($"Stuned {gameObject}");
         AttackState = AttackState.Stun;
         StartCoroutine(RecoverStun(args.StunDuration));
+
+        if (gameObject.CompareTag(PLAYER))
+            _blackboardRef.variable.ResetCurrentAttack();
     }
 
     public void SetTarget(Component sender, object obj)

@@ -49,6 +49,7 @@ public class Parry : MonoBehaviour
         if (_attackEventValues != null && _tryDisarm && _parryMedium == BlockMedium.Sword)
         {
             AttemptDisarm(args);
+            
         }
         else if (_attackEventValues != null && (_parryMedium == BlockMedium.Sword || _parryMedium == BlockMedium.Shield))
         {
@@ -182,6 +183,7 @@ public class Parry : MonoBehaviour
     private void OnFaildedParry(AttackEventArgs attackValues)
     {
        
+        Debug.Log("Failed Parry");
         //signal to Block
         _onFailedParryEvent.Raise(this, attackValues);
     }

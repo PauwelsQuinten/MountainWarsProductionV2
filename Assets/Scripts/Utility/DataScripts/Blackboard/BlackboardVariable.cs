@@ -337,7 +337,6 @@ public class BlackboardVariable : ScriptableObject
         get => _targetCurrentAttack;
         set
         {
-            if (_targetCurrentAttack != value)
             //if (_targetCurrentAttack != value)
             if (value != AttackType.None)
             {
@@ -359,7 +358,12 @@ public class BlackboardVariable : ScriptableObject
             }
         }
     }
-    
+    public void ResetCurrentAttack()
+    {
+        _targetCurrentAttack = AttackType.None;
+    }
+
+
     private Direction _targetShieldState;
     public Direction TargetShieldState
     {

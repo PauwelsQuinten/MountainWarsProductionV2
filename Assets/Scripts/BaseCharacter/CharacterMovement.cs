@@ -34,12 +34,17 @@ public class CharacterMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        _rb.MovePosition(new Vector3(transform.position.x, transform.position.y,transform.position.z) + (_movedirection * (_speed * _moveInput.variable.SpeedMultiplier)) * Time.deltaTime);
+        _rb.Move(new Vector3(transform.position.x, transform.position.y,transform.position.z) + (_movedirection * (_speed * _moveInput.variable.SpeedMultiplier)) * Time.deltaTime, Quaternion.identity);
     }
 
     private void MoveInput_ValueChanged(object sender, EventArgs e)
     {
-        if (_moveInput.variable.SpeedMultiplier > 1)
+        if (!this.enabled)
+        {
+            _movedirection = Vector3.zero;
+            return;
+        }
+            if (_moveInput.variable.SpeedMultiplier > 1)
             _removeStamina.Raise(this, new StaminaEventArgs { StaminaCost = _staminaCost.value * Time.deltaTime });
         _movedirection = new Vector3(_moveInput.Value.x, 0, _moveInput.Value.y);
 
@@ -110,5 +115,12 @@ public class CharacterMovement : MonoBehaviour
             _moveInput.variable.StateManager.Orientation = Orientation.SouthEast;
             transform.rotation = Quaternion.Euler(new Vector3(0, 135, 0));
         }
+    }
+
+    private void OnDisable()
+    {
+        if(_changeAnimation == null) return;
+        _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Idle, AnimLayer = 1, DoResetIdle = false });
+        _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Empty, AnimLayer = 2, DoResetIdle = false });
     }
 }

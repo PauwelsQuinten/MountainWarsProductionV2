@@ -31,6 +31,6 @@ public class PanelTrigger : MonoBehaviour
     private void OnTriggerExit(Collider other)
     {
         if (((1 << other.gameObject.layer) & _layerMask) != 0)
-            _triggerEnter.Raise(this, new TriggerEnterEventArgs { CurrentSceneIndex = _currentSceneIndex, newSceneIndex = _nextSceneIndex, CurrentViewIndex = _currentViewIndex, IsHidingSpot = _hidingSpot, IsShowDown = false, NewViewIndex = _nextViewIndex });
+            _triggerExit.Raise(this, new TriggerExitEventArgs { CurrentSceneIndex = _currentSceneIndex, newSceneIndex = _nextSceneIndex, CurrentViewIndex = _currentViewIndex, NewViewIndex = _nextViewIndex });
     }
 }

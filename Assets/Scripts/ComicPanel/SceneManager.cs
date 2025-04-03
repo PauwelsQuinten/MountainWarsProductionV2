@@ -17,7 +17,7 @@ public class SceneManager : MonoBehaviour
         if (args == null) return;
         if (args.CurrentSceneIndex == args.newSceneIndex) return;
 
-        if (args.IsHidingSpot) return;
+        if (args.IsHidingSpot || args.IsShowDown) return;
 
         if (!_canTeleport) return;
         _canTeleport = false;
@@ -35,7 +35,7 @@ public class SceneManager : MonoBehaviour
 
     public void ExitTrigger(Component sender, object obj)
     {
-        TriggerEnterEventArgs args = obj as TriggerEnterEventArgs;
+        TriggerExitEventArgs args = obj as TriggerExitEventArgs;
         if (args == null) return;
         if (sender.gameObject != _spawnPoints[args.CurrentSceneIndex].gameObject) _canTeleport = true;
     }

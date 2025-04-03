@@ -4,11 +4,9 @@ namespace UnityEngine
 {
     public class TriggerExitEventArgs : EventArgs
     {
-        public int NewSpawnIndex;
-        public int CurrentIndex;
+        public int newSceneIndex;
+        public int CurrentSceneIndex;
         public int NewViewIndex;
-        public bool ExitedTrigger;
-        public bool IsHidingSpot;
-        public bool DoShowdown;
+        public int CurrentViewIndex;
     }
 }

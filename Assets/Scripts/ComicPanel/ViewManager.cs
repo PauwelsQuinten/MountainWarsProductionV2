@@ -56,6 +56,9 @@ public class ViewManager : MonoBehaviour
     public void ExitTrigger(Component sender, object obj)
     {
         if(_isNearHidingSpot)_isNearHidingSpot = false;
+
+        TriggerEnterEventArgs args = obj as TriggerEnterEventArgs;
+        if (args == null) return;
     }
 
     public void EnterHiding(Component sender, object obj)

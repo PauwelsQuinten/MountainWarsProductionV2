@@ -1,16 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
 
 public interface IActions
 {
-    void StartAction(WorldState currentWorldState);
-    void UpdateAction(WorldState currentWorldState);
-    bool IsVallid(WorldState currentWorldState);
-    bool IsCompleted(WorldState current, WorldState activeActionDesiredState);
-    bool IsInterupted(WorldState currentWorldState);
+    void StartAction(WorldState currentWorldState, BlackboardReference blackboard);
+    void UpdateAction(WorldState currentWorldState, BlackboardReference blackboard);
+    bool IsVallid(WorldState currentWorldState, BlackboardReference blackboard);
+    bool IsCompleted(WorldState current);
+    bool IsInterupted(WorldState currentWorldState, BlackboardReference blackboard);
     void CancelAction();
 }
 
@@ -24,6 +23,7 @@ public class GoapAction : MonoBehaviour, IActions
     [SerializeField] protected float _actionMaxRunTime = 3f;
     protected bool _isActivated = false;
     protected Coroutine _actionCoroutine;
+    protected GameObject npc;
 
     virtual protected void Start()
     {
@@ -35,28 +35,31 @@ public class GoapAction : MonoBehaviour, IActions
             else
                 SatisfyingWorldState = item;
         }
+
     }
-    public virtual void StartAction(WorldState currentWorldState)
+    public virtual void StartAction(WorldState currentWorldState, BlackboardReference blackboard)
     {
         if (_isActivated)
             return;
         _isActivated = true;
         _actionCoroutine = StartCoroutine(StartTimer(_actionMaxRunTime));
+
+        npc = blackboard.variable.Self;
         //Debug.Log("Start action coroutine");
     }
 
 
-    public virtual void UpdateAction(WorldState currentWorldState)
+    public virtual void UpdateAction(WorldState currentWorldState, BlackboardReference blackboard)
     {
 
     }
 
-    virtual public bool IsVallid(WorldState currentWorldState)
+    virtual public bool IsVallid(WorldState currentWorldState, BlackboardReference blackboard)
     {
         return true;
     }
 
-    public virtual bool IsInterupted(WorldState currentWorldState)
+    public virtual bool IsInterupted(WorldState currentWorldState, BlackboardReference blackboard)
     {
         return false;
     }
@@ -67,7 +70,7 @@ public class GoapAction : MonoBehaviour, IActions
     }
 
 
-    virtual public bool IsCompleted(WorldState currentWorldState, WorldState activeActionDesiredState)
+    virtual public bool IsCompleted(WorldState currentWorldState)
     {
         //set to complete if runtime runs out, done by coroutine started at startAction()
         //set to complete by UpdateAction()
@@ -80,13 +83,47 @@ public class GoapAction : MonoBehaviour, IActions
         {
             foreach (KeyValuePair<EWorldState, EWorldStateValue> updatingState in SatisfyingWorldState.WorldStateValues)
             {
-                if (/*_comparedWorldState.ContainsKey(updatingState.Key) && */Mathf.Abs(updatingState.Value - currentWorldState.WorldStateValues[updatingState.Key]) != 0)
+                if (updatingState.Value - currentWorldState.WorldStateValues[updatingState.Key] != 0)
                     return false;
             }
         }
        
-        //TODO : FILL IN FOR THE OTHER WORLDSTATE VALUES AS WELL
-
+        if (SatisfyingWorldState.WorldStateBehaviours.Count != 0)
+        {
+            foreach (KeyValuePair<EWorldState, EBehaviourValue> updatingState in SatisfyingWorldState.WorldStateBehaviours)
+            {
+                if (updatingState.Value - currentWorldState.WorldStateBehaviours[updatingState.Key] != 0)
+                    return false;
+            }
+        }
+       
+        if (SatisfyingWorldState.WorldStatePossesions.Count != 0)
+        {
+            foreach (KeyValuePair<EWorldState, EWorldStatePossesion> updatingState in SatisfyingWorldState.WorldStatePossesions)
+            {
+                if (updatingState.Value - currentWorldState.WorldStatePossesions[updatingState.Key] != 0)
+                    return false;
+            }
+        }
+       
+        if (SatisfyingWorldState.WorldStateRanges.Count != 0)
+        {
+            foreach (KeyValuePair<EWorldState, EWorldStateRange> updatingState in SatisfyingWorldState.WorldStateRanges)
+            {
+                if (updatingState.Value - currentWorldState.WorldStateRanges[updatingState.Key] != 0)
+                    return false;
+            }
+        }
+       
+        if (SatisfyingWorldState.WorldStateShields.Count != 0)
+        {
+            foreach (KeyValuePair<EWorldState, Direction> updatingState in SatisfyingWorldState.WorldStateShields)
+            {
+                if (updatingState.Value - currentWorldState.WorldStateShields[updatingState.Key] != 0)
+                    return false;
+            }
+        }
+       
         //Action finished
         StopCoroutine(_actionCoroutine);
         _isActivated = false;
@@ -112,24 +149,10 @@ public class GoapAction : MonoBehaviour, IActions
 
     //HELP FUNCTIONS
     //-----------------------------------------------------------------------------------
-    //protected bool AboutToBeHit(WorldState currentWorldState)
-    //{
-    //    return !currentWorldState.IsBlockInCorrectDirection()
-    //       && (currentWorldState._worldStateValues2[EWorldState.TargetAttackRange] == WorldStateValue.OutOfRange
-    //       || currentWorldState._worldStateValues2[EWorldState.TargetAttackRange] == WorldStateValue.InRange);
-    //}
-    //
-    //protected bool FamiliarAttack(WorldState currentWorldState)
-    //{
-    //    bool parryMoveFound = false;
-    //    foreach (KeyValuePair<AttackType, int> att in currentWorldState._attackCountList)
-    //    {
-    //        if (att.Value >= 5 && currentWorldState.TargetCurrentAttack == att.Key)
-    //            parryMoveFound = true;
-    //    }
-    //    return parryMoveFound && (currentWorldState._worldStateValues2[EWorldState.TargetAttackRange] == WorldStateValue.OutOfRange
-    //       || currentWorldState._worldStateValues2[EWorldState.TargetAttackRange] == WorldStateValue.InRange);
-    //}
+    protected bool AboutToBeHit(WorldState currentWorldState, BlackboardReference blackboard)
+    {
+        return currentWorldState.WorldStateRanges[EWorldState.TargetAttackRange] == EWorldStateRange.InRange;
+    }
 
 }
 

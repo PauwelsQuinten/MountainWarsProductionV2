@@ -25,7 +25,8 @@ public class Parry : MonoBehaviour
 
     private Direction _swingDirection = Direction.Idle;
     private float _swingAngle = 0f;
-    private Coroutine _parryroutine;
+    private Coroutine _parryRoutine;
+    private Coroutine _disarmRoutine;
     private AttackEventArgs _attackEventValues;
     private bool _tryDisarm = false;
     private BlockMedium _parryMedium;
@@ -33,10 +34,10 @@ public class Parry : MonoBehaviour
 
     public void ParryMovement(Component sender, object obj)
     {
-        if (sender.gameObject != gameObject)
-            return;
         AimingOutputArgs args = obj as AimingOutputArgs;
         if (args == null) return;
+        if (sender.gameObject != gameObject && args.Sender != gameObject)
+            return;
 
 
         if (args.AttackState == AttackState.BlockAttack || args.AttackState == AttackState.ShieldDefence || args.AttackState == AttackState.SwordDefence)
@@ -49,6 +50,7 @@ public class Parry : MonoBehaviour
         if (_attackEventValues != null && _tryDisarm && _parryMedium == BlockMedium.Sword)
         {
             AttemptDisarm(args);
+            
         }
         else if (_attackEventValues != null && (_parryMedium == BlockMedium.Sword || _parryMedium == BlockMedium.Shield))
         {
@@ -72,7 +74,7 @@ public class Parry : MonoBehaviour
 
         if (_attackEventValues == null)
         {
-            _parryroutine = StartCoroutine(ParryAction(time));
+            _parryRoutine = StartCoroutine(ParryAction(time));
             _attackEventValues = args;
         }
     }
@@ -164,10 +166,12 @@ public class Parry : MonoBehaviour
     {
         _loseStamina.Raise(this, new StaminaEventArgs { StaminaCost = _staminaCost.value });
         _succesfullParryEvent.Raise(this, new StunEventArgs {StunDuration = 3, ComesFromEnemy = true});
+        Debug.Log("succesfullParry");
 
         _tryDisarm = true;
         float time = attackValues.AttackType == AttackType.Stab ? _timeForParryingStab : _timeForParryingSwing;
-        StartCoroutine(DisarmAction(time));
+        StopCoroutine(_parryRoutine);
+        _disarmRoutine = StartCoroutine(DisarmAction(time));
         
     }
     private void OnSuccesfullDisarm()
@@ -176,12 +180,16 @@ public class Parry : MonoBehaviour
         _onDisarmEvent.Raise(this, new LoseEquipmentEventArgs{EquipmentType = EquipmentType.Melee, ToSelf = false});
         _tryDisarm = false;
         _attackEventValues = null;
+
         Debug.Log("Disarmed");
+        StopCoroutine(_disarmRoutine);
+       
     }
     
     private void OnFaildedParry(AttackEventArgs attackValues)
     {
        
+        Debug.Log("Failed Parry");
         //signal to Block
         _onFailedParryEvent.Raise(this, attackValues);
     }
@@ -202,6 +210,7 @@ public class Parry : MonoBehaviour
     {
         yield return new WaitForSeconds(timeForParrying);
 
+        Debug.Log("Failed Disarm");
         _tryDisarm = false;
         _attackEventValues = null;
 

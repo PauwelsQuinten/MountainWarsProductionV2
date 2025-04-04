@@ -18,13 +18,19 @@ public class StateManager : MonoBehaviour
     public EquipmentManager EquipmentManager;
 
     public bool IsBleeding;
+    public bool InAnimiation = false;
 
     private void Start()
     {
         if (EquipmentManager == null)
             EquipmentManager = GetComponent<EquipmentManager>();
         if (!gameObject.CompareTag(PLAYER))
+        {
             _blackboardRef.variable.State = AttackState;
+            _blackboardRef.variable.Self = gameObject;
+            _blackboardRef.variable.Orientation = Orientation;
+        }
+
     }
     
     public void GetStunned(Component sender, object obj)
@@ -38,8 +44,12 @@ public class StateManager : MonoBehaviour
         }
         else if (sender.gameObject != gameObject) return;
 
+        Debug.Log($"Stuned {gameObject.name}");
         AttackState = AttackState.Stun;
         StartCoroutine(RecoverStun(args.StunDuration));
+
+        if (gameObject.CompareTag(PLAYER))
+            _blackboardRef.variable.ResetCurrentAttack();
     }
 
     public void SetTarget(Component sender, object obj)
@@ -67,8 +77,29 @@ public class StateManager : MonoBehaviour
         if (args == null) return;
 
         Orientation = args.NewOrientation;
+        transform.rotation = Quaternion.Euler(new Vector3(0, -(int)Orientation +90, 0));
+
+
+        if (!gameObject.CompareTag(PLAYER))
+        {
+            _blackboardRef.variable.Orientation = Orientation;
+        }
+    }
+
+    public void OAnimationStart(Component sender, object obj)
+    {
+        if (sender.gameObject != gameObject) return;
+
+        InAnimiation = true;
     }
     
+    public void OAnimationEnd(Component sender, object obj)
+    {
+        if (sender.gameObject != gameObject) return;
+
+        InAnimiation = false;
+    }
+
     private IEnumerator RecoverStun(float stunDuration)
 
     {

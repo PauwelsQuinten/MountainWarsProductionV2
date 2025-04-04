@@ -2197,7 +2197,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 749679949557989253, guid: e9651b4801f36d14e86c1cb82aa75d59, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 4.2399983
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 749679949557989253, guid: e9651b4801f36d14e86c1cb82aa75d59, type: 3}
       propertyPath: m_LocalPosition.y
@@ -2205,7 +2205,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 749679949557989253, guid: e9651b4801f36d14e86c1cb82aa75d59, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -5.9432793
+      value: -7.01
       objectReference: {fileID: 0}
     - target: {fileID: 749679949557989253, guid: e9651b4801f36d14e86c1cb82aa75d59, type: 3}
       propertyPath: m_LocalRotation.w
@@ -2247,6 +2247,10 @@ PrefabInstance:
       propertyPath: _attackSpeed
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3010198703536331037, guid: e9651b4801f36d14e86c1cb82aa75d59, type: 3}
+      propertyPath: _blackboard.variable
+      value: 
+      objectReference: {fileID: 11400000, guid: 2a061d8ac2119774a93990abdf59c3ae, type: 2}
     - target: {fileID: 3363722153122832148, guid: e9651b4801f36d14e86c1cb82aa75d59, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -2255,13 +2259,57 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5245217995566118396, guid: e9651b4801f36d14e86c1cb82aa75d59, type: 3}
+      propertyPath: _allGoalPrefabs.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5245217995566118396, guid: e9651b4801f36d14e86c1cb82aa75d59, type: 3}
+      propertyPath: _allActionPrefabs.Array.size
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 5245217995566118396, guid: e9651b4801f36d14e86c1cb82aa75d59, type: 3}
+      propertyPath: '_allGoalPrefabs.Array.data[0]'
+      value: 
+      objectReference: {fileID: 3699231227375087124, guid: 0efe03a9ba895124d9f24ff615c18a24, type: 3}
+    - target: {fileID: 5245217995566118396, guid: e9651b4801f36d14e86c1cb82aa75d59, type: 3}
+      propertyPath: '_allActionPrefabs.Array.data[0]'
+      value: 
+      objectReference: {fileID: 4283732040248783324, guid: a0146d1c9719f1246b9dabb6413a7fb0, type: 3}
+    - target: {fileID: 5245217995566118396, guid: e9651b4801f36d14e86c1cb82aa75d59, type: 3}
+      propertyPath: '_allActionPrefabs.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2607340641265211982, guid: 3026721e7dafb4245aeef2a687127e7f, type: 3}
+    - target: {fileID: 5245217995566118396, guid: e9651b4801f36d14e86c1cb82aa75d59, type: 3}
+      propertyPath: '_allActionPrefabs.Array.data[2]'
+      value: 
+      objectReference: {fileID: 8447165077177768023, guid: f21049b79aa703a429099dc888107c90, type: 3}
+    - target: {fileID: 5245217995566118396, guid: e9651b4801f36d14e86c1cb82aa75d59, type: 3}
+      propertyPath: '_allActionPrefabs.Array.data[3]'
+      value: 
+      objectReference: {fileID: 8447165077177768023, guid: 62be5af58fff71d469cd038cae131afd, type: 3}
+    - target: {fileID: 5245217995566118396, guid: e9651b4801f36d14e86c1cb82aa75d59, type: 3}
+      propertyPath: '_allActionPrefabs.Array.data[4]'
+      value: 
+      objectReference: {fileID: 8447165077177768023, guid: 8625b09d3a59a184881ac2c5349bdcfd, type: 3}
+    - target: {fileID: 5245217995566118396, guid: e9651b4801f36d14e86c1cb82aa75d59, type: 3}
+      propertyPath: '_allActionPrefabs.Array.data[5]'
+      value: 
+      objectReference: {fileID: 8447165077177768023, guid: f64d1e9a00240ae40845a20f9ad0e0f1, type: 3}
+    - target: {fileID: 5245217995566118396, guid: e9651b4801f36d14e86c1cb82aa75d59, type: 3}
+      propertyPath: '_allActionPrefabs.Array.data[6]'
+      value: 
+      objectReference: {fileID: 8447165077177768023, guid: d326099b2fe47f249a8dbb1308371bc7, type: 3}
+    - target: {fileID: 5245217995566118396, guid: e9651b4801f36d14e86c1cb82aa75d59, type: 3}
+      propertyPath: '_allActionPrefabs.Array.data[7]'
+      value: 
+      objectReference: {fileID: 2825537844067042917, guid: 827c5341e3600b7459b5434966c7ab4a, type: 3}
     - target: {fileID: 8761888366074066331, guid: e9651b4801f36d14e86c1cb82aa75d59, type: 3}
       propertyPath: m_Name
       value: Enemy
       objectReference: {fileID: 0}
     - target: {fileID: 8761888366074066331, guid: e9651b4801f36d14e86c1cb82aa75d59, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -42,7 +42,7 @@ public class Attacker : MonoBehaviour
         //           ,
         //    AttackPower = _attackPower
         //};
-        //_attackEvent.Raise(this, attackPackage);
+        //_deffendEvent.Raise(this, attackPackage);
         //    Debug.Log("Attack send");
 
         switch (_attackType)

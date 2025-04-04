@@ -3,6 +3,10 @@ using UnityEngine;
 
 public class Blocking : MonoBehaviour
 {
+    private const string PLAYER = "Player";
+
+    [SerializeField] private BlackboardReference _blackboard;
+
     [Header("Events")]
     [SerializeField] private GameEvent _succesfullBlockevent;
     [SerializeField] private GameEvent _equipmentUpdate;
@@ -36,6 +40,9 @@ public class Blocking : MonoBehaviour
         else
         {
             _aimingInputState = AimingInputState.Idle;
+            _blockDirection = Direction.Idle;
+
+            UpdateBlackboard(null);
             //Debug.Log($"package to Block State = {args.AttackState}, hold: {args.AimingInputState}, {_blockMedium}, {args.BlockDirection}");
             return;
         }
@@ -50,7 +57,27 @@ public class Blocking : MonoBehaviour
         //Store Blocking values
         _blockDirection = args.BlockDirection;
         _aimingInputState = args.AimingInputState;
+        UpdateBlackboard(args);
 
+    }
+
+    private void UpdateBlackboard(AimingOutputArgs args)
+    {
+        if (args == null)
+        {
+            if (gameObject.CompareTag(PLAYER))
+                _blackboard.variable.TargetShieldState = Direction.Idle;
+            else
+                _blackboard.variable.ShieldState = Direction.Idle;
+        }
+        else
+        {
+            if (gameObject.CompareTag(PLAYER))
+                _blackboard.variable.TargetShieldState = args.BlockDirection;
+            else
+                _blackboard.variable.ShieldState = args.BlockDirection;
+        }
+       
     }
 
     public void CheckBlock(Component sender, object obj)

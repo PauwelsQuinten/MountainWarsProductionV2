@@ -25,6 +25,7 @@ public class GoapPlanner : MonoBehaviour
     {
         _currentWorldState = gameObject.AddComponent<WorldState>();
         _currentWorldState.WorldStateType = WorldStateType.Current;
+        _blackboard.variable.ResetAtStart();
         _currentWorldState.AsignBlackboard(_blackboard);
 
         foreach (var action in _allActionPrefabs)
@@ -83,23 +84,23 @@ public class GoapPlanner : MonoBehaviour
     private void ExecutePlan()
     {
         if (_activeAction)
-            _activeAction.UpdateAction(_currentWorldState);
+            _activeAction.UpdateAction(_currentWorldState, _blackboard);
         else if (_actionPlan.Count > 0)
         {
             _activeAction = _actionPlan[_actionPlan.Count - 1];
-            _activeAction.StartAction(_currentWorldState);
+            _activeAction.StartAction(_currentWorldState, _blackboard);
         }
         else
             return;
 
-        if (_activeAction.IsCompleted(_currentWorldState, _activeAction.DesiredWorldState))
+        if (_activeAction.IsCompleted(_currentWorldState))
         {
             _actionPlan.RemoveAt(_actionPlan.Count - 1);
             _activeAction = null;
             return;
         }
 
-        if (_activeAction.IsInterupted(_currentWorldState))
+        if (_activeAction.IsInterupted(_currentWorldState, _blackboard))
         {
             //_activeAction.ActionCompleted();
             ResetPlan(false);
@@ -119,7 +120,7 @@ public class GoapPlanner : MonoBehaviour
 
             foreach (var action in _allActions)
             {
-                if (!action.IsVallid(_currentWorldState))
+                if (!action.IsVallid(_currentWorldState, _blackboard))
                     continue;
 
                 //Compare Values

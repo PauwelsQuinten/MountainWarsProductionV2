@@ -6,6 +6,8 @@ namespace UnityEngine
     {
         public AnimationState AnimState;
         public bool DoResetIdle;
+        public bool Interupt;
         public int AnimLayer;
+        public float Speed = 1f;
     }
 }

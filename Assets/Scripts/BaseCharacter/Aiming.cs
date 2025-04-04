@@ -1,14 +1,14 @@
 using TMPro;
-using System;
 using UnityEngine;
 using System.Collections;
-using UnityEngine.UIElements;
-using Unity.VisualScripting;
 
 public class Aiming : MonoBehaviour
 {
+    [Header("InputVariable")]
     [SerializeField] private AimingInputReference _refAimingInput;
+    [Header("Event")]
     [SerializeField] private GameEvent _AimOutputEvent;
+
     [Header("Visual")]
     [SerializeField] private TextMeshProUGUI _textMeshPro;
     [SerializeField] private TextMeshProUGUI _textMeshPro2;
@@ -27,6 +27,7 @@ public class Aiming : MonoBehaviour
     private const float F_TIME_BETWEEN_STAB = 0.20f;
     private const float F_MAX_ALLOWED_ANGLE_ON_ORIENTATION = 17f;
     private const float F_MIN_ACCEPTED_MOVEMENT_ANGLE = 30f;
+    private const float F_ACCEPTED_MIN_ANGLE = 10f;
 
     private float _fNotMovingTime = 0f;
     private float _fMovingTime = 0f;
@@ -149,8 +150,19 @@ public class Aiming : MonoBehaviour
                     break;
             }
 
-            if (_traversedAngle >= F_MIN_ACCEPTED_MOVEMENT_ANGLE && _swingDirection == Direction.Idle)
+            if (_traversedAngle >= F_ACCEPTED_MIN_ANGLE && _swingDirection == Direction.Idle)
+            {
                 _swingDirection = CalculateSwingDirection(_traversedAngle);
+
+                _AimOutputEvent.Raise(this, new AimingOutputArgs
+                {
+                    AttackState = _refAimingInput.variable.State,
+                    AnimationStart = true,
+                    Direction = _swingDirection,
+                    Speed = CalculateSwingSpeed(_traversedAngle)
+                });
+            }
+
         }
             
 
@@ -190,6 +202,8 @@ public class Aiming : MonoBehaviour
             _fNotMovingTime += Time.deltaTime;
             if (_fNotMovingTime >= F_MAX_TIME_NOT_MOVING)
             {
+                //HoldEvents are for Holding block or charging
+                //Can also be used to throw an aatck by stop moving instead of releasing the analog stick
                 OnHoldevents();
                 _fNotMovingTime = 0f;
                 _traversedAngle = 0f;
@@ -204,7 +218,6 @@ public class Aiming : MonoBehaviour
 
     private void OnHoldevents()
     {
-        var dir = CalculateSwingDirection(_traversedAngle);
         Vector2 orient = CalculateVectorFromOrientation(_refAimingInput.variable.StateManager.Orientation);
 
         switch (_refAimingInput.variable.State)
@@ -232,7 +245,7 @@ public class Aiming : MonoBehaviour
                 //When the angle is big enough, you are feinting or throw your swing attack
                 else
                 {
-                    _enmAttackSignal = IsFeintMovement(dir);
+                    _enmAttackSignal = IsFeintMovement(_swingDirection);
                     SendPackage();
                 }
 
@@ -343,6 +356,9 @@ public class Aiming : MonoBehaviour
             EquipmentManager = _refAimingInput.variable.StateManager.EquipmentManager
                 ,
             IsHoldingBlock = _refAimingInput.variable.StateManager.IsHoldingShield
+                ,
+            AnimationStart = false
+
         };
         _AimOutputEvent.Raise(this, package);
     }
@@ -444,17 +460,17 @@ public class Aiming : MonoBehaviour
         endAngleRad = ClampAngle(endAngleRad);
 
 
+        //Debug.Log($"storredDirection= {_swingDirection}");
+        //Debug.Log($"end: {_refAimingInput.variable.value} angle= {endAngleRad * Mathf.Rad2Deg}, start: {_vec2Start} angle= {startAngleRad * Mathf.Rad2Deg}");
 
         if (direction == Direction.ToLeft && startAngleRad < 0 && endAngleRad > 0)
             return AttackSignal.Swing;
         else if (direction == Direction.ToRight && startAngleRad > 0 && endAngleRad < 0)
             return AttackSignal.Swing;
-        //else if (_traversedAngle >= 180)
-        else if (Mathf.Abs(startAngleRad) + Mathf.Abs(endAngleRad) >= Mathf.PI || _traversedAngle >= 180)
+        //else if (Mathf.Abs(startAngleRad) + Mathf.Abs(endAngleRad) >= Mathf.PI || _traversedAngle >= 180)
+        else if (_traversedAngle >= 180)
             return AttackSignal.Swing;
 
-        Debug.Log($"storredDirection= {_swingDirection}");
-        //Debug.Log($"end: {_refAimingInput.variable.value} angle= {endAngleRad * Mathf.Rad2Deg}, start: {_vec2Start} angle= {startAngleRad * Mathf.Rad2Deg}");
         return AttackSignal.Feint;
     }
 

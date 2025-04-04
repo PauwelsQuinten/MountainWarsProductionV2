@@ -20,7 +20,7 @@ public class ParryAttackAction : GoapAction
     {
         base.StartAction(currentWorldState, blackboard);
 
-        Debug.Log("start parrying action");
+        //Debug.Log("start parrying action");
         _isMovementSet = false;
         _isMovementEnded = false;
 
@@ -43,7 +43,7 @@ public class ParryAttackAction : GoapAction
             else
                 _direction = Direction.ToRight;
 
-            Debug.Log("send parry value");
+            //Debug.Log("send parry value");
             _defendCoroutine = StartCoroutine(DefendRoutine(_timeInterval));
             _isMovementSet = true;
         }

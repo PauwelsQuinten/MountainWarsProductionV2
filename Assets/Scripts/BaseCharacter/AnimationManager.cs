@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using static UnityEngine.Rendering.GPUSort;
 
 public class AnimationManager : MonoBehaviour
 {
@@ -22,6 +23,12 @@ public class AnimationManager : MonoBehaviour
         AnimationEventArgs args = obj as AnimationEventArgs;
         if (args == null) return;
         if (_currentState == args.AnimState && args.AnimState != AnimationState.Idle) return;
+
+        if (args.Interupt)
+        {
+            InteruptAnimation(args);
+            return;
+        }
 
         if(args.AnimState != AnimationState.Idle)
         {
@@ -66,6 +73,7 @@ public class AnimationManager : MonoBehaviour
         //}
 
         // Crossfade with normalized transition offset
+        _animator.speed = args.Speed;
         _animator.CrossFade(args.AnimState.ToString(), 0.2f, args.AnimLayer, 0f);
 
         _currentState = args.AnimState;
@@ -92,6 +100,17 @@ public class AnimationManager : MonoBehaviour
         //_animator.Play("Empty", BASE_LAYER);
         //_animator.Play("Empty", UPPER_BODY_LAYER);
         //_animator.Play("Empty", LOWER_BODY_LAYER);
+    }
+
+    private void InteruptAnimation(AnimationEventArgs args)
+    {
+        _animator.CrossFade(AnimationState.Empty.ToString(), 0.3f, 3, 0.3f);
+        _animator.CrossFade(args.AnimState.ToString(), 0.3f, args.AnimLayer, 0.2f);
+        _currentState = AnimationState.Idle;
+        _animator.GetBehaviour<BoredBehaviour>().IdleExit();
+
+
+        _endAnimation.Raise(this, null);
     }
 
     private IEnumerator ResetToIdle(float time, int layer)

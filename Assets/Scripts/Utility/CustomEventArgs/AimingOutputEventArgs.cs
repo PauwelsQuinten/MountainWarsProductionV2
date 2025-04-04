@@ -14,6 +14,7 @@ namespace UnityEngine
         public EquipmentManager EquipmentManager;
         public bool IsHoldingBlock;
         public GameObject Sender;
+        public bool AnimationStart;
     }
     
 

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using static UnityEngine.Rendering.GPUSort;
 
 public class Attacking : MonoBehaviour
 {
@@ -56,18 +57,29 @@ public class Attacking : MonoBehaviour
         AimingOutputArgs args = obj as AimingOutputArgs;
         if (args == null) return;
 
-        if (args.AttackState == AttackState.ShieldDefence 
+        if (args.AttackState == AttackState.ShieldDefence
             || args.AttackState == AttackState.SwordDefence
             || args.AttackState == AttackState.Stun) return;
 
         //if (args.AttackSignal != AttackSignal.Idle)
         //    PrintInput(args);
 
+        _attackType = DetermineAttack(args);
+
+        if (args.AnimationStart)
+        {
+            //Debug.Log($"speed: {args.Speed}");
+            StartAnimation(args.Speed);
+            return;
+        }
+
         CalculateChargePower(args);
 
         if (DidFeint(args.AttackSignal))
         {
             Debug.Log("---------------------------Feint-----------------------");
+            InteruptAnimation();
+
             //Signal to blackboard
             if (gameObject.CompareTag(PLAYER))
                 _blackboardRef.variable.TargetCurrentAttack = AttackType.None;
@@ -81,19 +93,6 @@ public class Attacking : MonoBehaviour
                 _blackboardRef.variable.TargetCurrentAttack = AttackType.None;
             return;
         }
-
-        _attackType = DetermineAttack(args);
-
-
-        if (_attackType == AttackType.HorizontalSlashToLeft)
-        {
-            _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.SlashLeft, AnimLayer = 3, DoResetIdle = true });
-        }
-        else if (_attackType == AttackType.HorizontalSlashToRight)
-        {
-            _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.SlashRight, AnimLayer = 3, DoResetIdle = true });
-        }
-
 
 
         if (args.AttackSignal != AttackSignal.Stab)
@@ -109,7 +108,7 @@ public class Attacking : MonoBehaviour
         else _loseStamina.Raise(this, new StaminaEventArgs { StaminaCost = _staminaCost.value });
 
         if (!IsEnemyInRange()) return;
-        _doAttack.Raise(this, new AttackEventArgs { AttackType = _attackType, AttackHeight = args.AttackHeight, AttackPower = _attackPower});
+        _doAttack.Raise(this, new AttackEventArgs { AttackType = _attackType, AttackHeight = args.AttackHeight, AttackPower = _attackPower });
 
         PrintInput2(args);
         //Signal to blackboard
@@ -120,6 +119,24 @@ public class Attacking : MonoBehaviour
         }
 
     }
+
+    private void StartAnimation(float speed)
+    {
+        if (_attackType == AttackType.HorizontalSlashToLeft)
+        {
+            _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.SlashLeft, AnimLayer = 3, DoResetIdle = true, Interupt = false, Speed = speed });
+        }
+        else if (_attackType == AttackType.HorizontalSlashToRight)
+        {
+            _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.SlashRight, AnimLayer = 3, DoResetIdle = true, Interupt = false, Speed = speed });
+        }
+    }
+    
+    private void InteruptAnimation()
+    {
+         _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Idle, AnimLayer = 1, DoResetIdle = false, Interupt = true });
+    }
+        
 
     private bool DidFeint(AttackSignal signal)
     {
@@ -195,11 +212,6 @@ public class Attacking : MonoBehaviour
             }
         }
             return false;
-    }
-
-    private void ResetTargetCurrentAttack()
-    {
-
     }
 
     private void PrintInput(AimingOutputArgs args)

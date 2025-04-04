@@ -341,7 +341,7 @@ public class BlackboardVariable : ScriptableObject
             if (value != AttackType.None)
             {
                 _targetCurrentAttack = value;
-                Debug.Log($"new currentAttack{_targetCurrentAttack}");
+                //Debug.Log($"new currentAttack{_targetCurrentAttack}");
                 ValueChanged?.Invoke(this, new BlackboardEventArgs { ThisChanged = BlackboardEventArgs.WhatChanged.TargetCurrentAttack });
 
                 

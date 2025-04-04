@@ -45,7 +45,7 @@ public class UIMainMenu : MonoBehaviour
         _eventSystem.SetSelectedGameObject(_settingsButton);
     }
 
-    public void MutePressed(bool isPressed)
+    public void MasterVolumeChanged(float value)
     {
 
     }

@@ -45,6 +45,7 @@ public class Attacking : MonoBehaviour
     private float _chargePower;
     private float _attackPower;
     private AttackType _attackType;
+    private AttackHeight _attackHeight;
 
     private bool _wasCharging;
     private float _startChargeTime;
@@ -61,8 +62,8 @@ public class Attacking : MonoBehaviour
             || args.AttackState == AttackState.SwordDefence
             || args.AttackState == AttackState.Stun) return;
 
-        //if (args.AttackSignal != AttackSignal.Idle)
-        //    PrintInput(args);
+        if (args.AttackSignal != AttackSignal.Idle)
+            PrintInput(args);
 
         _attackType = DetermineAttack(args);
 
@@ -103,22 +104,30 @@ public class Attacking : MonoBehaviour
 
         _attackRange = GetAttackMediumRange(args);
         _attackPower = CalculatePower(args);
+        _attackHeight = args.AttackHeight;
 
         if (_attackType == AttackType.Stab) _loseStamina.Raise(this, new StaminaEventArgs { StaminaCost = _staminaCost.value * 0.75f });
         else _loseStamina.Raise(this, new StaminaEventArgs { StaminaCost = _staminaCost.value });
 
-        if (!IsEnemyInRange()) return;
-        _doAttack.Raise(this, new AttackEventArgs { AttackType = _attackType, AttackHeight = args.AttackHeight, AttackPower = _attackPower });
-
-        PrintInput2(args);
+       
+        //PrintInput2(args);
         //Signal to blackboard
         if (gameObject.CompareTag(PLAYER))
         {
             _blackboardRef.variable.TargetCurrentAttack = _attackType;
             _blackboardRef.variable.TargetState = args.AttackState;
         }
+    }
+
+    public void SwordHit(Component sender, object obj)
+    {
+        if (sender.gameObject != gameObject) return;
+
+        if (!IsEnemyInRange()) return;
+        _doAttack.Raise(this, new AttackEventArgs { AttackType = _attackType, AttackHeight = _attackHeight, AttackPower = _attackPower });
 
     }
+
 
     private void StartAnimation(float speed)
     {

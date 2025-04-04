@@ -28,6 +28,10 @@ PrefabInstance:
       propertyPath: _blackboard.variable
       value: 
       objectReference: {fileID: 11400000, guid: 2a061d8ac2119774a93990abdf59c3ae, type: 2}
+    - target: {fileID: 3485612452898370163, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
+      propertyPath: _changePanel
+      value: 
+      objectReference: {fileID: 11400000, guid: e623b1e33f49d4446a5c2cf37d13aaac, type: 2}
     - target: {fileID: 3755031848856493801, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
       propertyPath: _refAimingInput.variable
       value: 
@@ -108,6 +112,10 @@ PrefabInstance:
       propertyPath: _moveInput.variable
       value: 
       objectReference: {fileID: 11400000, guid: c55f2ba539c90fe47aa63c8b3747c837, type: 2}
+    - target: {fileID: 5687449145564820169, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
+      propertyPath: m_Mass
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 5687449145564820169, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
       propertyPath: m_UseGravity
       value: 1
@@ -457,6 +465,7 @@ MonoBehaviour:
   _pickupEvent: {fileID: 11400000, guid: 6ae7cf8fbff13b34baa83d4c5c01a86f, type: 2}
   _LookForTarget: {fileID: 0}
   _changeAnimation: {fileID: 11400000, guid: f56e344763da3c34d9b3e5d48d24a9e4, type: 2}
+  _hide: {fileID: 11400000, guid: bdb3b880576f6914488590a651187ea9, type: 2}
 --- !u!114 &2641484102057671430 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3036795874959978044, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}

@@ -86,14 +86,14 @@ public class StateManager : MonoBehaviour
         }
     }
 
-    public void OAnimationStart(Component sender, object obj)
+    public void OnAnimationStart(Component sender, object obj)
     {
         if (sender.gameObject != gameObject) return;
 
         InAnimiation = true;
     }
     
-    public void OAnimationEnd(Component sender, object obj)
+    public void OnAnimationEnd(Component sender, object obj)
     {
         if (sender.gameObject != gameObject) return;
 

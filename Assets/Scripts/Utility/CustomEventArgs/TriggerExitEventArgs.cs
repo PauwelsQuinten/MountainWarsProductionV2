@@ -8,5 +8,7 @@ namespace UnityEngine
         public int CurrentSceneIndex;
         public int NewViewIndex;
         public int CurrentViewIndex;
+
+        public bool IsTeleportTrigger;
     }
 }

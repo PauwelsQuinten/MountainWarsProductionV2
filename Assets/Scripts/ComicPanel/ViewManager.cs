@@ -28,6 +28,8 @@ public class ViewManager : MonoBehaviour
 
     private bool _isNearHidingSpot;
 
+    private bool _isSwitchingPanel;
+
     private void Start()
     {
         _cam = Camera.main;
@@ -44,7 +46,10 @@ public class ViewManager : MonoBehaviour
         _currentArgs = args;
 
         if (!args.IsHidingSpot && !args.IsShowDown)
-            StartCoroutine(DoSwitchPanel(_panels[args.NewViewIndex].transform.position + (_cam.transform.forward * _offsetZ)));
+        {
+            if(!_isSwitchingPanel)
+                StartCoroutine(DoSwitchPanel(_panels[args.NewViewIndex].transform.position + (_cam.transform.forward * _offsetZ)));
+        }
         else
         {
             if (args.IsHidingSpot) _isNearHidingSpot = true;
@@ -73,6 +78,7 @@ public class ViewManager : MonoBehaviour
 
     private IEnumerator DoSwitchPanel(Vector3 newCamPos)
     {
+        _isSwitchingPanel = true;
         float camSize = _cam.orthographicSize;
         float time = 0;
         Vector3 startpos = _cam.transform.position;
@@ -97,6 +103,7 @@ public class ViewManager : MonoBehaviour
             yield return null;
         }
         _cam.orthographicSize = camSize;
+        _isSwitchingPanel = false;
     }
 
     private IEnumerator ShowHidingSpot(bool isAvtive)

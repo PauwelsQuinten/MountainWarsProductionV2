@@ -11,6 +11,8 @@ public class SceneManager : MonoBehaviour
     private bool _canTeleport = true;
     private GameObject _player;
 
+    private TriggerExitEventArgs _previousArgs;
+
     public void EnterPanels(Component sender, object obj)
     {
         TriggerEnterEventArgs args = obj as TriggerEnterEventArgs;
@@ -37,6 +39,14 @@ public class SceneManager : MonoBehaviour
     {
         TriggerExitEventArgs args = obj as TriggerExitEventArgs;
         if (args == null) return;
-        if (sender.gameObject != _spawnPoints[args.CurrentSceneIndex].gameObject) _canTeleport = true;
+        if(!args.IsTeleportTrigger) return;
+        if (_previousArgs == null)
+        {
+            _previousArgs = args;
+            return;
+        }
+        else if (sender.gameObject.transform.parent != _spawnPoints[_previousArgs.CurrentSceneIndex].gameObject.transform.parent)
+            _canTeleport = true;
+        _previousArgs = args;
     }
 }

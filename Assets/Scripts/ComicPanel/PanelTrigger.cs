@@ -9,6 +9,8 @@ public class PanelTrigger : MonoBehaviour
     private GameEvent _triggerExit;
     [SerializeField]
     private bool _hidingSpot;
+    [SerializeField] 
+    private bool _isTeleportTrigger;
     [SerializeField]
     private LayerMask _layerMask;
 
@@ -31,6 +33,6 @@ public class PanelTrigger : MonoBehaviour
     private void OnTriggerExit(Collider other)
     {
         if (((1 << other.gameObject.layer) & _layerMask) != 0)
-            _triggerExit.Raise(this, new TriggerExitEventArgs { CurrentSceneIndex = _currentSceneIndex, newSceneIndex = _nextSceneIndex, CurrentViewIndex = _currentViewIndex, NewViewIndex = _nextViewIndex });
+            _triggerExit.Raise(this, new TriggerExitEventArgs { CurrentSceneIndex = _currentSceneIndex, newSceneIndex = _nextSceneIndex, CurrentViewIndex = _currentViewIndex, NewViewIndex = _nextViewIndex, IsTeleportTrigger = _isTeleportTrigger });
     }
 }

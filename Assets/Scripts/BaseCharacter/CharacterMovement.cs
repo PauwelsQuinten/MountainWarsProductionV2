@@ -94,6 +94,7 @@ public class CharacterMovement : MonoBehaviour
         if (_stateManager.Target == null)
             UpdateOrientation();
     }
+
     private void UpdateOrientation()
     {
         if (_movedirection == Vector3.zero) return;

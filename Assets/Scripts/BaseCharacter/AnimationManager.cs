@@ -84,7 +84,7 @@ public class AnimationManager : MonoBehaviour
 
         if (args.DoResetIdle)
         {
-            StartCoroutine(ResetToIdle(_animator.GetCurrentAnimatorStateInfo(args.AnimLayer).length, args.AnimLayer));
+            StartCoroutine(ResetToIdle(_animator.GetCurrentAnimatorStateInfo(args.AnimLayer).length/_animator.speed, args.AnimLayer));
         }
     }
 

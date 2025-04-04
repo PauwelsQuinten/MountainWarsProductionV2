@@ -102,8 +102,7 @@ public class AnimationManager : MonoBehaviour
         _animator.CrossFade(AnimationState.Idle.ToString(), 0.2f, 1);
         ChangeAnimationState(this, new AnimationEventArgs { AnimState = AnimationState.Empty, AnimLayer = layer, DoResetIdle = false });
 
-        if ((int)_currentState > 3)
-            _endAnimation.Raise(this, null);
+        _endAnimation.Raise(this, null);
 
         _currentState = AnimationState.Idle;
     }

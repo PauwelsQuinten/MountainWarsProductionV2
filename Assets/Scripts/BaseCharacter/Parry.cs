@@ -25,7 +25,8 @@ public class Parry : MonoBehaviour
 
     private Direction _swingDirection = Direction.Idle;
     private float _swingAngle = 0f;
-    private Coroutine _parryroutine;
+    private Coroutine _parryRoutine;
+    private Coroutine _disarmRoutine;
     private AttackEventArgs _attackEventValues;
     private bool _tryDisarm = false;
     private BlockMedium _parryMedium;
@@ -73,7 +74,7 @@ public class Parry : MonoBehaviour
 
         if (_attackEventValues == null)
         {
-            _parryroutine = StartCoroutine(ParryAction(time));
+            _parryRoutine = StartCoroutine(ParryAction(time));
             _attackEventValues = args;
         }
     }
@@ -166,9 +167,11 @@ public class Parry : MonoBehaviour
         _loseStamina.Raise(this, new StaminaEventArgs { StaminaCost = _staminaCost.value });
         _succesfullParryEvent.Raise(this, new StunEventArgs {StunDuration = 3, ComesFromEnemy = true});
         Debug.Log("succesfullParry");
+
         _tryDisarm = true;
         float time = attackValues.AttackType == AttackType.Stab ? _timeForParryingStab : _timeForParryingSwing;
-        StartCoroutine(DisarmAction(time));
+        StopCoroutine(_parryRoutine);
+        _disarmRoutine = StartCoroutine(DisarmAction(time));
         
     }
     private void OnSuccesfullDisarm()
@@ -177,7 +180,10 @@ public class Parry : MonoBehaviour
         _onDisarmEvent.Raise(this, new LoseEquipmentEventArgs{EquipmentType = EquipmentType.Melee, ToSelf = false});
         _tryDisarm = false;
         _attackEventValues = null;
+
         Debug.Log("Disarmed");
+        StopCoroutine(_disarmRoutine);
+       
     }
     
     private void OnFaildedParry(AttackEventArgs attackValues)

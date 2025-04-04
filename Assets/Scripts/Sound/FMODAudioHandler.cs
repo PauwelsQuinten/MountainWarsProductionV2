@@ -43,6 +43,12 @@ public class FMODAudioHandler : MonoBehaviour
     [SerializeField] private EventReference _ambience;
     private EventInstance _ambienceInstance;
 
+    [Header("Music")] 
+    [SerializeField] private EventReference _mainThemeMusic;
+    private EventInstance _mainThemeMusicInstance;
+    [SerializeField] private EventReference _forestMusic;
+    private EventInstance _forestMusicInstance;
+    
     [Header("SFX/Character")] 
     [SerializeField] private EventReference _footstepsSFX;
     private EventInstance _footstepsSFXInstance;
@@ -59,11 +65,12 @@ public class FMODAudioHandler : MonoBehaviour
     [SerializeField] private EventReference _comicPanelSwapSFX;
     private EventInstance _comicPanelSwapSFXInstance;
     [SerializeField] private EventReference _showdownSFX;
-    private EventInstance _showdownpSFXInstance;
+    private EventInstance _showdownSFXInstance;
     private void Start()
     {
         _attributes = RuntimeUtils.To3DAttributes(transform);
         _ambienceInstance = RuntimeManager.CreateInstance(_ambience);
+        _forestMusicInstance = RuntimeManager.CreateInstance(_forestMusic);
         GetParameterID(_ambienceInstance, "Biome", out _biomeID);
         GetParameterID(_ambienceInstance, "WindIntensity", out _windIntensityID);
         GetParameterID(_ambienceInstance, "RainIntensity", out _rainIntensityID);
@@ -72,6 +79,7 @@ public class FMODAudioHandler : MonoBehaviour
         SetParameterID(_ambienceInstance, _rainIntensityID, 0.0f);
         _ambienceInstance.set3DAttributes(_attributes);
         _ambienceInstance.start();
+        _forestMusicInstance.start();
     }
 
     private void GetParameterID(EventInstance eventInstance, string parameterName, out PARAMETER_ID parameterID)
@@ -200,8 +208,8 @@ public class FMODAudioHandler : MonoBehaviour
     
     public void PlayShowdownSFX(Component sender, object obj)
     {
-        _showdownpSFXInstance = RuntimeManager.CreateInstance(_showdownSFX);
-        _showdownpSFXInstance.start();
-        _showdownpSFXInstance.release();
+        _showdownSFXInstance = RuntimeManager.CreateInstance(_showdownSFX);
+        _showdownSFXInstance.start();
+        _showdownSFXInstance.release();
     }
 }

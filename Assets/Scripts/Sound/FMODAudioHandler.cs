@@ -39,23 +39,27 @@ public class FMODAudioHandler : MonoBehaviour
     private float _currentWeaponIDValue;
 
     // Events
-    [Header("Ambience")] [SerializeField] private EventReference _ambience;
+    [Header("Ambience")] 
+    [SerializeField] private EventReference _ambience;
     private EventInstance _ambienceInstance;
 
-    [Header("SFX/Character")] [SerializeField]
-    private EventReference _footstepsSFX;
-
+    [Header("SFX/Character")] 
+    [SerializeField] private EventReference _footstepsSFX;
     private EventInstance _footstepsSFXInstance;
 
-    [Header("SFX/Combat")] [SerializeField]
-    private EventReference _attackChargeSFX;
-
+    [Header("SFX/Combat")] 
+    [SerializeField] private EventReference _attackChargeSFX;
     private EventInstance _attackChargeSFXInstance;
     [SerializeField] private EventReference _weaponWhooshSFX;
     private EventInstance _weaponWhooshSFXInstance;
     [SerializeField] private EventReference _weaponHitSFX;
     private EventInstance _weaponHitSFXInstance;
 
+    [Header("SFX/CameraMovements")] 
+    [SerializeField] private EventReference _comicPanelSwapSFX;
+    private EventInstance _comicPanelSwapSFXInstance;
+    [SerializeField] private EventReference _showdownSFX;
+    private EventInstance _showdownpSFXInstance;
     private void Start()
     {
         _attributes = RuntimeUtils.To3DAttributes(transform);
@@ -185,5 +189,19 @@ public class FMODAudioHandler : MonoBehaviour
         _weaponWhooshSFXInstance = RuntimeManager.CreateInstance(_weaponWhooshSFX);
             _weaponWhooshSFXInstance.start();
             _weaponWhooshSFXInstance.release();
+    }
+    
+    public void PlayComicSwapSFX(Component sender, object obj)
+    {
+        _comicPanelSwapSFXInstance = RuntimeManager.CreateInstance(_comicPanelSwapSFX);
+        _comicPanelSwapSFXInstance.start();
+        _comicPanelSwapSFXInstance.release();
+    }
+    
+    public void PlayShowdownSFX(Component sender, object obj)
+    {
+        _showdownpSFXInstance = RuntimeManager.CreateInstance(_showdownSFX);
+        _showdownpSFXInstance.start();
+        _showdownpSFXInstance.release();
     }
 }

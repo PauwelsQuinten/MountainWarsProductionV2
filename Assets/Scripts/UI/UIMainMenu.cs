@@ -68,7 +68,6 @@ public class UIMainMenu : MonoBehaviour
 
         _masterVCA.setVolume(value);
         _masterVCA.getVolume(out _masterVCAVolume);
-        
     }
 
     public void SFXSliderChanged(float value)

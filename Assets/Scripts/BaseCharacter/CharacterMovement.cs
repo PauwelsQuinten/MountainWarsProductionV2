@@ -27,8 +27,6 @@ public class CharacterMovement : MonoBehaviour
     private StateManager _stateManager;
     
     private Rigidbody _rb;
-
-    private Rigidbody _rb;
     private Vector3 _movedirection;
     private float _angleInterval = 22.5f;
 

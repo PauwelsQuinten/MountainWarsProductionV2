@@ -919,6 +919,11 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 1976125397813164708, guid: 612450168a7df0444a258ec2be0a03ee, type: 3}
   m_PrefabInstance: {fileID: 198328955}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1249156939 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 510487665369618095, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
+  m_PrefabInstance: {fileID: 1438861116}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1249156962 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8424690266699013297, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
@@ -1069,7 +1074,7 @@ PrefabInstance:
     - target: {fileID: -9064225466436632881, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
       propertyPath: _player
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1249156939}
     - target: {fileID: -9064225466436632881, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
       propertyPath: _showdownSFX.Path
       value: event:/VersusPanel
@@ -2300,8 +2305,8 @@ SceneRoots:
   - {fileID: 2043834948}
   - {fileID: 1438861116}
   - {fileID: 6859557347973466864}
-  - {fileID: 1555181172}
   - {fileID: 1712281839}
   - {fileID: 992576427}
   - {fileID: 198328955}
   - {fileID: 409920478}
+  - {fileID: 1555181172}

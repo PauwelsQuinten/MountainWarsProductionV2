@@ -5,6 +5,9 @@ public class AnimationManager : MonoBehaviour
 {
     private Animator _animator;
     private AnimationState _currentState;
+    [Header("Events")]
+    [SerializeField] private GameEvent _endAnimation;
+    [SerializeField] private GameEvent _startAnimation;
 
     private bool _canResetIdle = true;
 
@@ -67,6 +70,10 @@ public class AnimationManager : MonoBehaviour
 
         _currentState = args.AnimState;
 
+        if ((int)_currentState > 3)
+            _startAnimation.Raise(this, null);
+
+
         if (args.DoResetIdle)
         {
             StartCoroutine(ResetToIdle(_animator.GetCurrentAnimatorStateInfo(args.AnimLayer).length, args.AnimLayer));
@@ -94,6 +101,10 @@ public class AnimationManager : MonoBehaviour
         // Reset only the active layer to idle
         _animator.CrossFade(AnimationState.Idle.ToString(), 0.2f, 1);
         ChangeAnimationState(this, new AnimationEventArgs { AnimState = AnimationState.Empty, AnimLayer = layer, DoResetIdle = false });
+
+        if ((int)_currentState > 3)
+            _endAnimation.Raise(this, null);
+
         _currentState = AnimationState.Idle;
     }
 }

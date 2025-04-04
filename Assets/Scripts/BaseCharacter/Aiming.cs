@@ -318,6 +318,7 @@ public class Aiming : MonoBehaviour
 
     private void SendPackage()
     {
+        
         //float distance = _traversedAngle;
         //Direction direction = CalculateSwingDirection(distance);
         var package = new AimingOutputArgs

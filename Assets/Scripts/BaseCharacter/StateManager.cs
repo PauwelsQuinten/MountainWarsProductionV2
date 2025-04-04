@@ -18,6 +18,7 @@ public class StateManager : MonoBehaviour
     public EquipmentManager EquipmentManager;
 
     public bool IsBleeding;
+    public bool InAnimiation = false;
 
     private void Start()
     {
@@ -43,7 +44,7 @@ public class StateManager : MonoBehaviour
         }
         else if (sender.gameObject != gameObject) return;
 
-        Debug.Log($"Stuned {gameObject}");
+        Debug.Log($"Stuned {gameObject.name}");
         AttackState = AttackState.Stun;
         StartCoroutine(RecoverStun(args.StunDuration));
 
@@ -82,7 +83,21 @@ public class StateManager : MonoBehaviour
             _blackboardRef.variable.Orientation = Orientation;
         }
     }
+
+    public void OAnimationStart(Component sender, object obj)
+    {
+        if (sender.gameObject != gameObject) return;
+
+        InAnimiation = true;
+    }
     
+    public void OAnimationEnd(Component sender, object obj)
+    {
+        if (sender.gameObject != gameObject) return;
+
+        InAnimiation = false;
+    }
+
     private IEnumerator RecoverStun(float stunDuration)
 
     {

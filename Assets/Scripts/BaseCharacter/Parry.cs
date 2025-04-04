@@ -204,6 +204,7 @@ public class Parry : MonoBehaviour
     {
         yield return new WaitForSeconds(timeForParrying);
 
+        Debug.Log("Failed Disarm");
         _tryDisarm = false;
         _attackEventValues = null;
 

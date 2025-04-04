@@ -10,6 +10,7 @@ public class ParryAttackAction : GoapAction
     [SerializeField] BlockMedium _blockMediume = BlockMedium.Shield;
     [SerializeField] Direction _direction = Direction.Idle;
     [SerializeField] float _swingAngle = 180f;
+    [SerializeField] bool _disarmOpponent =false;
     
     private Coroutine _defendCoroutine;
     private bool _isMovementSet = false;
@@ -75,15 +76,21 @@ public class ParryAttackAction : GoapAction
 
     private IEnumerator DefendRoutine(float time)
     {
-        DefendMovement();
+        DefendMovement(false);
         yield return new WaitForEndOfFrame();
         StopMovement();
+        if (_disarmOpponent)
+        {
+            yield return new WaitForSeconds(0.2f);
+            DefendMovement(true);
+
+        }
         yield return new WaitForSeconds(time);
         _isMovementEnded = true;
         _isMovementSet = false;
     }
 
-    private void DefendMovement()
+    private void DefendMovement(bool reverse)
     {
         AttackState state = AttackState.Idle;
 
@@ -101,16 +108,31 @@ public class ParryAttackAction : GoapAction
         }
 
 
-        SwingPackage(state);
+        SwingPackage(state, reverse);
     }
 
     private void StopMovement()
     {
-        SwingPackage(AttackState.Idle);
+        SwingPackage(AttackState.Idle, false);
     }
 
-    private void SwingPackage(AttackState state)
-    {       
+    private void SwingPackage(AttackState state, bool reverse)
+    {
+        if (reverse)
+        {
+            switch (_direction)
+            {
+               
+                case Direction.ToRight:
+                    _direction = Direction.ToLeft;
+                    break;
+                case Direction.ToLeft:
+                    _direction = Direction.ToRight;
+                    break;
+               
+            }
+        }
+
         var package = new AimingOutputArgs
         {
             AimingInputState = AimingInputState.Idle

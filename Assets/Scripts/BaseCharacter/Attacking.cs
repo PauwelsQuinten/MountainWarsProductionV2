@@ -197,6 +197,11 @@ public class Attacking : MonoBehaviour
             return false;
     }
 
+    private void ResetTargetCurrentAttack()
+    {
+
+    }
+
     private void PrintInput(AimingOutputArgs args)
     {
         Debug.Log($"attack input : {args.AttackSignal}, state: {args.AttackState}, {args.Direction}, {args.AngleTravelled}. owner: {gameObject}");

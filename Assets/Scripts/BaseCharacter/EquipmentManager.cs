@@ -198,28 +198,33 @@ public class EquipmentManager : MonoBehaviour
 
     public void PickupEquipment(Component sender, object obj)
     {
-        float radius = 1f;
+        if (sender.gameObject != gameObject) return;
+
+        float radius = 2f;
 
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, radius, _itemMask);
         foreach (var hitCollider in hitColliders)
         {
             var newEquip = hitCollider.gameObject.GetComponent<Equipment>();
-            if (newEquip)
+            if (newEquip && newEquip.transform.parent == null)
             {
                 if (newEquip.IsRightHandEquipment)
                 {
                     DropEquipment(true);
                     HeldEquipment[RIGHT_HAND] = newEquip;
+                    newEquip.transform.parent = _rightHandSocket;
+                    newEquip.transform.localPosition = Vector3.zero;
                 }
 
-               else if (!newEquip.IsRightHandEquipment)
+                else if (!newEquip.IsRightHandEquipment)
                {
                     DropEquipment(false);
                     HeldEquipment[LEFT_HAND] = newEquip;
+                    newEquip.transform.parent = _leftHandSocket;
+                    newEquip.transform.localPosition = Vector3.zero;
                }
 
 
-                hitCollider.gameObject.transform.parent = transform;
             }
         }
     }

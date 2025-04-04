@@ -394,7 +394,9 @@ public class Aiming : MonoBehaviour
 
     private float CalculateSwingSpeed(float length)
     {
-        return (length *1/ _fMovingTime) * 0.01f;
+        float speed = (length * 1 / _fMovingTime) * 0.01f;
+        speed = speed > 0 ? speed : 1f;
+        return speed < 2.5f? speed : 2.5f;
     }
     
      private float CalculateAngleRadOfInput(Vector2 direction)

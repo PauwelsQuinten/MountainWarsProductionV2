@@ -34,7 +34,9 @@ public class AnimationManager : MonoBehaviour
         {
             if (_canResetIdle)
             {
-                _animator.GetBehaviour<BoredBehaviour>().IdleExit();
+                BoredBehaviour bored = _animator.GetBehaviour<BoredBehaviour>();
+                if (bored != null) bored.IdleExit();
+                else Debug.Log("Bored is null");
                 _canResetIdle = false;
             }
         }

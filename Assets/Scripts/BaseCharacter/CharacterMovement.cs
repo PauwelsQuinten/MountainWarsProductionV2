@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 public class CharacterMovement : MonoBehaviour
 {
@@ -24,6 +25,8 @@ public class CharacterMovement : MonoBehaviour
     [Header("StateManager")]
     [SerializeField]
     private StateManager _stateManager;
+    
+    private Rigidbody _rb;
 
     private Rigidbody _rb;
     private Vector3 _movedirection;
@@ -37,7 +40,7 @@ public class CharacterMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        _rb.MovePosition(new Vector3(transform.position.x, transform.position.y,transform.position.z) + (_movedirection * (_speed * _moveInput.variable.SpeedMultiplier)) * Time.deltaTime);
+        _rb.Move(new Vector3(transform.position.x, transform.position.y,transform.position.z) + (_movedirection * (_speed * _moveInput.variable.SpeedMultiplier)) * Time.deltaTime, Quaternion.identity);
     }
 
     private void MoveInput_ValueChanged(object sender, EventArgs e)
@@ -70,6 +73,12 @@ public class CharacterMovement : MonoBehaviour
             input = args.MoveDirection;
         }
 
+        if (!this.enabled)
+        {
+            _movedirection = Vector3.zero;
+            return;
+        }
+        
         if (speedMultiplier > 1)
             _removeStamina.Raise(this, new StaminaEventArgs { StaminaCost = _staminaCost.value * Time.deltaTime });
         _movedirection = new Vector3(input.x, 0,input.y);
@@ -141,5 +150,12 @@ public class CharacterMovement : MonoBehaviour
             _stateManager.Orientation = Orientation.SouthEast;
             transform.rotation = Quaternion.Euler(new Vector3(0, 135, 0));
         }
+    }
+
+    private void OnDisable()
+    {
+        if(_changeAnimation == null) return;
+        _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Idle, AnimLayer = 1, DoResetIdle = false });
+        _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Empty, AnimLayer = 2, DoResetIdle = false });
     }
 }

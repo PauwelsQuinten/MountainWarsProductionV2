@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 public class CharacterMovement : MonoBehaviour
 {
@@ -20,7 +21,7 @@ public class CharacterMovement : MonoBehaviour
     [Header("Animation")]
     [SerializeField]
     private GameEvent _changeAnimation;
-
+    
     private Rigidbody _rb;
     private StateManager _stateManager;
     private Vector3 _movedirection;

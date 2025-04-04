@@ -70,8 +70,16 @@ public class PlayerController : MonoBehaviour
     private float _patchEndTime;
 
     private bool _wasSprinting;
+    
+    public Vector3 CharacterPosition
+    {
+        get => transform.position;
+        set => transform.position = value;
+    }
+   
     private void Start()
     {
+        
         _aimInputRef.variable.ValueChanged += AimInputRef_ValueChanged;
         _aimInputRef.variable.StateManager = _stateManager;
         _moveInputRef.variable.StateManager = _stateManager;
@@ -82,6 +90,7 @@ public class PlayerController : MonoBehaviour
 
     public void GetStun(Component sender, object obj)
     {
+        
         if (sender.gameObject != gameObject) return;
 
         _storredAttackState = _stateManager.AttackState;

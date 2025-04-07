@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -39,6 +40,9 @@ public class UIHealthManager : MonoBehaviour
     [SerializeField]
     private Image _weapon;
 
+    [SerializeField]
+    private GameEvent _gameLost;
+
 
 
     public void UpdateHealth(Component sender, object obj)
@@ -59,6 +63,9 @@ public class UIHealthManager : MonoBehaviour
         _healthBar.fillAmount = fillAmount;
         
         UpdateBodyPartColor(sender, args);
+
+        if (args.CurrentHealth > 0) return;
+        _gameLost.Raise(this, EventArgs.Empty);
     }
 
     private void UpdateBodyPartColor(Component sender, HealthEventArgs args)
@@ -104,6 +111,9 @@ public class UIHealthManager : MonoBehaviour
         }
         float barFill = args.CurrentBlood / args.MaxBlood;
         _bloodBar.fillAmount = barFill;
+
+        if (args.CurrentBlood > 0) return;
+        _gameLost.Raise(this, EventArgs.Empty);
     }
 
     public void UpdatePatchUp(Component sender, object obj)
@@ -180,8 +190,6 @@ public class UIHealthManager : MonoBehaviour
         }
         else
             _weapon.color = newColor;
-
-
     }
 
 

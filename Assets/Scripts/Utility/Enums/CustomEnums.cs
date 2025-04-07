@@ -211,6 +211,10 @@ namespace UnityEngine
         SlashLeft,
         SlashRight,
         ShieldEquip,
+        ParryShieldLeft,
+        ParryShieldRight,
+        ParrySwordLeft,
+        ParrySwordRight,
     }
 
     public enum ObjectTarget

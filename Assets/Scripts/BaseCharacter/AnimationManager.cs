@@ -69,7 +69,9 @@ public class AnimationManager : MonoBehaviour
 
         _currentState = args.AnimState;
 
-        if (_currentState == AnimationState.SlashLeft || _currentState == AnimationState.SlashRight)
+        if (_currentState == AnimationState.SlashLeft || _currentState == AnimationState.SlashRight 
+            || _currentState == AnimationState.ParryShieldRight || _currentState == AnimationState.ParryShieldLeft 
+            || _currentState == AnimationState.ParrySwordRight || _currentState == AnimationState.ParrySwordLeft)
             _startAnimation.Raise(this, null);
 
 

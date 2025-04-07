@@ -968,6 +968,10 @@ PrefabInstance:
       propertyPath: 'Events.Array.data[19]'
       value: 
       objectReference: {fileID: 11400000, guid: e6bca7c795a56ff49994ff5ebb32ace4, type: 2}
+    - target: {fileID: 4198466305689752223, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
+      propertyPath: Responses.Array.data[18].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnAnimationEnd
+      objectReference: {fileID: 0}
     - target: {fileID: 4219942789422500819, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
       propertyPath: _textMeshPro
       value: 
@@ -996,6 +1000,10 @@ PrefabInstance:
       propertyPath: _LookForTarget
       value: 
       objectReference: {fileID: 11400000, guid: 7da4419bca02ab342bac3950bdec894c, type: 2}
+    - target: {fileID: 8421172182924108262, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
+      propertyPath: _changeAnimation
+      value: 
+      objectReference: {fileID: 11400000, guid: f56e344763da3c34d9b3e5d48d24a9e4, type: 2}
     - target: {fileID: 8421172182924108262, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
       propertyPath: _timeForParryingStab
       value: 0.6
@@ -1047,10 +1055,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 8354270925015880610, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1958369966}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
 --- !u!114 &1476468157 stripped
 MonoBehaviour:
@@ -1642,6 +1647,46 @@ PrefabInstance:
       propertyPath: _player
       value: 
       objectReference: {fileID: 710279085}
+    - target: {fileID: -9064225466436632881, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
+      propertyPath: _forestMusic.Path
+      value: event:/Music/Forest
+      objectReference: {fileID: 0}
+    - target: {fileID: -9064225466436632881, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
+      propertyPath: _mainThemeMusic.Path
+      value: event:/Music/Main
+      objectReference: {fileID: 0}
+    - target: {fileID: -9064225466436632881, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
+      propertyPath: _forestMusic.Guid.Data1
+      value: 630949937
+      objectReference: {fileID: 0}
+    - target: {fileID: -9064225466436632881, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
+      propertyPath: _forestMusic.Guid.Data2
+      value: 1129881989
+      objectReference: {fileID: 0}
+    - target: {fileID: -9064225466436632881, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
+      propertyPath: _forestMusic.Guid.Data3
+      value: 292515723
+      objectReference: {fileID: 0}
+    - target: {fileID: -9064225466436632881, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
+      propertyPath: _forestMusic.Guid.Data4
+      value: 1745741427
+      objectReference: {fileID: 0}
+    - target: {fileID: -9064225466436632881, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
+      propertyPath: _mainThemeMusic.Guid.Data1
+      value: -462302020
+      objectReference: {fileID: 0}
+    - target: {fileID: -9064225466436632881, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
+      propertyPath: _mainThemeMusic.Guid.Data2
+      value: 1209973555
+      objectReference: {fileID: 0}
+    - target: {fileID: -9064225466436632881, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
+      propertyPath: _mainThemeMusic.Guid.Data3
+      value: -827850064
+      objectReference: {fileID: 0}
+    - target: {fileID: -9064225466436632881, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
+      propertyPath: _mainThemeMusic.Guid.Data4
+      value: 48110958
+      objectReference: {fileID: 0}
     - target: {fileID: 3779732516173593837, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
       propertyPath: m_Name
       value: AudioManager
@@ -1702,25 +1747,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &1958369963 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8354270925015880610, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
-  m_PrefabInstance: {fileID: 1438861116}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1958369966
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1958369963}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 39f937a9b4700804eab307c59e3ace12, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _footstep: {fileID: 11400000, guid: 19cd27c4b0a001d4fa296d77cbb75b16, type: 2}
-  _whoosh: {fileID: 0}
 --- !u!114 &1984524624 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5585742224209065236, guid: 9d4495409a27e5c449d7b5cd2051c85a, type: 3}
@@ -2249,5 +2275,5 @@ SceneRoots:
   - {fileID: 992576427}
   - {fileID: 198328955}
   - {fileID: 409920478}
-  - {fileID: 1555181172}
   - {fileID: 1692182175}
+  - {fileID: 1866386150}

@@ -28,7 +28,7 @@ public class BoredBehaviour : StateMachineBehaviour
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         if (!_canRun) return;
-        Debug.Log("IsRunning");
+        //Debug.Log("IsRunning");
         if (_isBored == false)
         {
             _idleTime += Time.deltaTime;

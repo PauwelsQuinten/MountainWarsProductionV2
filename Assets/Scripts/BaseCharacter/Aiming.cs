@@ -97,10 +97,6 @@ public class Aiming : MonoBehaviour
             //Attack/feint
             if (_traversedAngle > F_MIN_ACCEPTED_MOVEMENT_ANGLE)
             {
-                //update final movement to the traverseAngle
-                _traversedAngle += Vector2.Angle(_vec2previousDirection, _refAimingInput.variable.value);
-
-                //var dir = CalculateSwingDirection(_traversedAngle);
                 _enmAttackSignal = IsFeintMovement(_swingDirection);
                 if (_enmAttackSignal == AttackSignal.Feint)
                     SendPackage();

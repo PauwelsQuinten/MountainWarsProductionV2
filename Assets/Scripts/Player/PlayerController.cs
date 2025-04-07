@@ -148,13 +148,13 @@ public class PlayerController : MonoBehaviour
             if (ctx.action.WasPressedThisFrame())
             {
                 _storredAttackState = AttackState.ShieldDefence;
-                _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.ShieldEquip, AnimLayer = 3, DoResetIdle = false, Interupt = false });
+                //_changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.ShieldEquip, AnimLayer = 3, DoResetIdle = false, Interupt = false });
             }
 
             if (ctx.action.WasReleasedThisFrame())
             {
                 _storredAttackState = AttackState.Idle;
-                _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Idle, AnimLayer = 1, DoResetIdle = false, Interupt = false });
+                //_changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Idle, AnimLayer = 1, DoResetIdle = false, Interupt = false });
 
             }
             return;

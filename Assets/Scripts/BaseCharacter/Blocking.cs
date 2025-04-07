@@ -56,17 +56,25 @@ public class Blocking : MonoBehaviour
 
             UpdateBlackboard(args);
         }
-        else if ( (int)_previousState >= 3 
-            && (int)args.AttackState < 3 )
+        else if ( ((int)_previousState >= 3 && (int)args.AttackState < 3 )
+            || ((int)args.AttackState >= 3 && args.AimingInputState != AimingInputState.Hold))
         {
             _aimingInputState = AimingInputState.Idle;
             _blockDirection = Direction.Idle;
+            _previousState = args.AttackState;
             UpdateBlackboard(null);
 
             _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Idle, AnimLayer = 1, DoResetIdle = false, Interupt = false });
             _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Empty, AnimLayer = 3, DoResetIdle = false, Interupt = false });
 
-            return;
+        }
+
+        else
+        {
+            _aimingInputState = AimingInputState.Idle;
+            _blockDirection = Direction.Idle;
+            _previousState = args.AttackState;
+
         }
 
         Debug.Log($"package to Block State = {args.AttackState}, hold: {args.AimingInputState}, {_blockMedium}, {args.BlockDirection}");

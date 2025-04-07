@@ -88,7 +88,7 @@ public class CharacterMovement : MonoBehaviour
             {
                 Animator animator = GetComponentInChildren<Animator>();
                 var clipInfo = animator.GetCurrentAnimatorClipInfo(2);
-                Debug.Log(clipInfo.Length);
+               // Debug.Log(clipInfo.Length);
                 if (clipInfo.Length > 0)
                 {
                     if (clipInfo[clipInfo.Length - 1].clip.name != "Run")
@@ -99,20 +99,20 @@ public class CharacterMovement : MonoBehaviour
             {
                 Animator animator = GetComponentInChildren<Animator>();
                 var clipInfo = animator.GetCurrentAnimatorClipInfo(2);
-                Debug.Log(clipInfo.Length);
+               // Debug.Log(clipInfo.Length);
                 if (clipInfo.Length > 0)
                 {
                     if (clipInfo[clipInfo.Length - 1].clip.name != "Walk")
                     {
 
                         _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Walk, AnimLayer = 2, DoResetIdle = false, Interupt = false });
-                        Debug.Log("SetWalk");
+                        //Debug.Log("SetWalk");
                     }
                 }
                 else
                 {
                     _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Walk, AnimLayer = 2, DoResetIdle = false, Interupt = false });
-                    Debug.Log("SetWalk");
+                    //Debug.Log("SetWalk");
                 }
             }
         }

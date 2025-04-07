@@ -144,6 +144,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 691636631868949397, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3046997352433744507, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
       propertyPath: m_Color.b
       value: 0.60188675
@@ -219,6 +223,10 @@ PrefabInstance:
     - target: {fileID: 5687449145564820169, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
       propertyPath: m_UseGravity
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6822675981429713178, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8294375085882615592, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
       propertyPath: _moveInput.variable
@@ -339,10 +347,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _attackEvent: {fileID: 11400000, guid: 3ce36d1a0cee9b64db3b05b01a8aece3, type: 2}
   _timeInterval: 2
-  _attackType: 0
+  _attackType: 1
   _attackHeight: 1
-  _attackAngle: 180
-  _attackSpeed: 5
+  _attackAngle: 120
+  _attackSpeed: 1
 --- !u!114 &2724192922246951129
 MonoBehaviour:
   m_ObjectHideFlags: 0

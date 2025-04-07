@@ -30,10 +30,10 @@ namespace UnityEngine
     {
         Idle,
         Attack,
+        Stun,
         ShieldDefence,
         SwordDefence,
         BlockAttack,
-        Stun
     }
 
     public enum AimingInputState
@@ -211,6 +211,7 @@ namespace UnityEngine
         SlashLeft,
         SlashRight,
         ShieldEquip,
+        SwordEquip,
         ParryShieldLeft,
         ParryShieldRight,
         ParrySwordLeft,

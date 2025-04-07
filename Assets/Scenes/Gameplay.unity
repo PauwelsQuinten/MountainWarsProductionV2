@@ -1364,17 +1364,6 @@ MonoBehaviour:
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
   m_SoftShadowQuality: 0
---- !u!114 &1711362820 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7044637763604957616, guid: 354d33079198c404da349382719f82b2, type: 3}
-  m_PrefabInstance: {fileID: 2043834948}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b9f25bc4821d5014f8a92aed065707c9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &1712281839
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1391,14 +1380,6 @@ PrefabInstance:
       propertyPath: target
       value: 
       objectReference: {fileID: 710279108}
-    - target: {fileID: 5759894466012469615, guid: 84920d53d85a0284d9f8ee2f567dcd6b, type: 3}
-      propertyPath: 'm_Materials.Array.data[0]'
-      value: 
-      objectReference: {fileID: 2100000, guid: c1c24ae17cf40ed44b00555c450d0829, type: 2}
-    - target: {fileID: 6312115486857351666, guid: 84920d53d85a0284d9f8ee2f567dcd6b, type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 7897611400581910368, guid: 84920d53d85a0284d9f8ee2f567dcd6b, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

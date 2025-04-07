@@ -134,10 +134,14 @@ public class FMODAudioHandler : MonoBehaviour
             case "Sand":
                 _surfaceTypeIDValue = 5.0f;
                 break;
+            case "Wood":
+                _surfaceTypeIDValue = 6.0f;
+                break;
             default:
                 _surfaceTypeIDValue = 0.0f;
                 break;
         }
+        Debug.Log(surfaceType);
         if (_player.GetComponentInChildren<Animator>().GetCurrentAnimatorStateInfo(2).IsName("Walk"))
         {
             _TypeOfWalkingIDValue = 1.0f;
@@ -164,11 +168,9 @@ public class FMODAudioHandler : MonoBehaviour
         if (Physics.Raycast(rayOrigin, rayDirection, out hit, rayDistance))
         {
             string layerName = LayerMask.LayerToName(hit.collider.gameObject.layer);
-            Debug.Log("Hit layer: " + layerName);
             return layerName;
         }
 
-        Debug.Log("No surface detected, returning Default");
         return "Default";// Default surface type if no specific surface is detected
     }
 

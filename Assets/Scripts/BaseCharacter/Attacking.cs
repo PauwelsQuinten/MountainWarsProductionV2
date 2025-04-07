@@ -62,8 +62,8 @@ public class Attacking : MonoBehaviour
             || args.AttackState == AttackState.SwordDefence
             || args.AttackState == AttackState.Stun) return;
 
-        if (args.AttackSignal != AttackSignal.Idle)
-            PrintInput(args);
+        //if (args.AttackSignal != AttackSignal.Idle)
+        //    PrintInput(args);
 
         _attackType = DetermineAttack(args);
 
@@ -72,7 +72,6 @@ public class Attacking : MonoBehaviour
             //Debug.Log($"speed: {args.Speed}");
             StartAnimation(args.Speed);
             PrintInput(args);
-            return;
         }
 
         CalculateChargePower(args);
@@ -85,6 +84,7 @@ public class Attacking : MonoBehaviour
             //Signal to blackboard
             if (gameObject.CompareTag(PLAYER))
                 _blackboardRef.variable.TargetCurrentAttack = AttackType.None;
+            return;
         }
 
         if (args.AttackSignal != AttackSignal.Stab && args.AttackSignal != AttackSignal.Swing)

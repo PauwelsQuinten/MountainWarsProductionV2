@@ -38,7 +38,7 @@ public class CharacterMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        _rb.Move(new Vector3(transform.position.x, transform.position.y,transform.position.z) + (_movedirection * (_speed * _moveInput.variable.SpeedMultiplier)) * Time.deltaTime, Quaternion.identity);
+        _rb.Move(new Vector3(transform.position.x, transform.position.y,transform.position.z) + (_movedirection * (_speed * _moveInput.variable.SpeedMultiplier)) * Time.deltaTime, transform.rotation);
     }
 
     private void MoveInput_ValueChanged(object sender, EventArgs e)

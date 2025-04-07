@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using static UnityEditor.Experimental.GraphView.GraphView;
 using static UnityEngine.Rendering.GPUSort;
 
 public class AnimationManager : MonoBehaviour
@@ -11,6 +12,7 @@ public class AnimationManager : MonoBehaviour
     [SerializeField] private GameEvent _startAnimation;
 
     private bool _canResetIdle = true;
+    private Coroutine _animCoroutine;
 
     private void Start()
     {
@@ -27,6 +29,7 @@ public class AnimationManager : MonoBehaviour
         if (args.Interupt)
         {
             InteruptAnimation(args);
+            Debug.Log("Disrupt");
             return;
         }
 
@@ -36,33 +39,8 @@ public class AnimationManager : MonoBehaviour
                 if (bored != null) bored.IdleExit();
                 else Debug.Log("Bored is null");
         }
-        //switch (args.AnimLayer)
-        //{
-        //    case BASE_LAYER:
-        //        if (args.AnimState == AnimationState.Empty) break;
-        //        _animator.SetLayerWeight(BASE_LAYER, 1);
-        //        _animator.SetLayerWeight(LOWER_BODY_LAYER, 1);
-        //        _animator.SetLayerWeight(UPPER_BODY_LAYER, 1);
-        //        Debug.Log("Enable full body");
-        //        break;
 
-        //    case UPPER_BODY_LAYER:
-        //        if (args.AnimState == AnimationState.Empty) break;
-        //        _animator.SetLayerWeight(BASE_LAYER, 1);
-        //        _animator.SetLayerWeight(LOWER_BODY_LAYER, 1);
-        //        _animator.SetLayerWeight(UPPER_BODY_LAYER, 1);
-        //        Debug.Log("Enable upper body");
-        //        break;
-
-        //    case LOWER_BODY_LAYER:
-        //        if (args.AnimState == AnimationState.Empty) break;
-        //        _animator.SetLayerWeight(BASE_LAYER, 1);
-        //        _animator.SetLayerWeight(LOWER_BODY_LAYER, 1);
-        //        _animator.SetLayerWeight(UPPER_BODY_LAYER, 1);
-        //        Debug.Log("Enable lower body");
-        //        break;
-        //}
-
+         Debug.Log($"anim call: {args.AnimState.ToString()}");
         // Crossfade with normalized transition offset
         _animator.speed = args.Speed;
         _animator.CrossFade(args.AnimState.ToString(), 0.2f, args.AnimLayer, 0f);
@@ -75,10 +53,11 @@ public class AnimationManager : MonoBehaviour
             _startAnimation.Raise(this, null);
 
 
-        if (args.DoResetIdle)
-        {
-            StartCoroutine(ResetToIdle(_animator.GetCurrentAnimatorStateInfo(args.AnimLayer).length/_animator.speed, args.AnimLayer));
-        }
+        //if (args.DoResetIdle)
+        //{
+        //    //_animCoroutine = StartCoroutine(ResetToIdle(_animator.GetCurrentAnimatorStateInfo(args.AnimLayer).length/_animator.speed, args.AnimLayer));
+        //    _animCoroutine = StartCoroutine(ResetToIdle(_animator.GetCurrentAnimatorStateInfo(args.AnimLayer).length, args.AnimLayer));
+        //}
     }
 
     private void ResetAllLayers()
@@ -101,7 +80,8 @@ public class AnimationManager : MonoBehaviour
         _animator.CrossFade(args.AnimState.ToString(), 0.3f, args.AnimLayer, 0.2f);
         _currentState = AnimationState.Idle;
         _animator.GetBehaviour<BoredBehaviour>().IdleExit();
-
+        if (_animCoroutine != null) 
+            StopCoroutine(_animCoroutine);
 
         _endAnimation.Raise(this, null);
     }
@@ -111,11 +91,21 @@ public class AnimationManager : MonoBehaviour
         yield return new WaitForSeconds(time);
 
         // Reset only the active layer to idle
+        Debug.Log($"end coroutine");
         _animator.CrossFade(AnimationState.Idle.ToString(), 0.2f, 1);
         ChangeAnimationState(this, new AnimationEventArgs { AnimState = AnimationState.Empty, AnimLayer = layer, DoResetIdle = false });
-
         _endAnimation.Raise(this, null);
 
         _currentState = AnimationState.Idle;
     }
+
+    public void LastAnimFrameCalled(Component Sender, object obj)
+    {
+        _animator.CrossFade(AnimationState.Idle.ToString(), 0.2f, 1);
+        ChangeAnimationState(this, new AnimationEventArgs { AnimState = AnimationState.Empty, AnimLayer = 2, DoResetIdle = false });
+        _currentState = AnimationState.Idle;
+
+        //_endAnimation.Raise(this, null);
+    }
 }
+        

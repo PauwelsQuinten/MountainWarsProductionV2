@@ -370,7 +370,7 @@ public class Aiming : MonoBehaviour
             if (package.AttackState != AttackState.Idle )
             {
                 _inputQueue.Enqueue(package);
-                Debug.Log($"Enqueue: {package.AttackState}, {package.AttackSignal}, early start: {package.AnimationStart}");
+                Debug.Log($"Enqueue: {package.AttackState}, {package.AttackSignal}, angle : {_traversedAngle}, early start: {package.AnimationStart}");
             }
                 
         }

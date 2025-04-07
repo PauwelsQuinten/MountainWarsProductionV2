@@ -6,19 +6,37 @@ using UnityEngine.EventSystems;
 
 public class UIMainMenu : MonoBehaviour
 {
-    [Header("Settings")]
-    [SerializeField]
-    private GameObject _SettingsMenu;
-    [SerializeField]
-    private GameObject _firstSettingsItem;
-    [SerializeField]
-    private GameObject _backButton;
+    [Header("Settings")] 
+    [SerializeField] private GameObject _SettingsMenu;
+    [SerializeField] private GameObject _firstSettingsItem;
+    [SerializeField] private GameObject _backButton;
 
-    [SerializeField]
-    private GameObject _settingsButton;
-    [SerializeField]
-    private EventSystem _eventSystem;
+    [SerializeField] private GameObject _settingsButton;
+    [SerializeField] private EventSystem _eventSystem;
 
+    [Header("VCA")] 
+
+    private FMOD.Studio.VCA _masterVCA;
+    private FMOD.Studio.VCA _sfxVCA;
+    private FMOD.Studio.VCA _musicVCA;
+    [SerializeField] private string _masterVCAName;
+    [SerializeField] private string _sfxVCAName;
+    [SerializeField] private string _musicVCAName;
+    [SerializeField] private float _masterVCAVolume;
+    [SerializeField] private float _sfxVCAVolume;
+    [SerializeField] private float _musicVCAVolume;
+
+    private void Start()
+    {
+        _masterVCA = FMODUnity.RuntimeManager.GetVCA("vca:/" + _masterVCAName);
+        _masterVCA.getVolume(out _masterVCAVolume);
+        
+        _sfxVCA = FMODUnity.RuntimeManager.GetVCA("vca:/" + _sfxVCAName);
+        _sfxVCA.getVolume(out _sfxVCAVolume);
+        
+        _musicVCA = FMODUnity.RuntimeManager.GetVCA("vca:/" + _musicVCAName);
+        _musicVCA.getVolume(out _musicVCAVolume);
+    }
 
     public void NewGamePressed()
     {
@@ -48,15 +66,19 @@ public class UIMainMenu : MonoBehaviour
     public void MasterVolumeChanged(float value)
     {
 
+        _masterVCA.setVolume(value);
+        _masterVCA.getVolume(out _masterVCAVolume);
     }
 
     public void SFXSliderChanged(float value)
     {
-
+        _sfxVCA.setVolume(value);
+        _sfxVCA.getVolume(out _sfxVCAVolume);
     }
 
     public void MusicSliderChanged(float value)
     {
-
+        _musicVCA.setVolume(value);
+        _musicVCA.getVolume(out _sfxVCAVolume);
     }
 }

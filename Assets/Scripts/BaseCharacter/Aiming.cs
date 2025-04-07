@@ -123,13 +123,13 @@ public class Aiming : MonoBehaviour
         else if (IsStabMovement(inputLength))
         {
             _enmAttackSignal = AttackSignal.Stab;
-            SendPackage();
+            SendPackage(true);
 
             _vec2Start = Vector2.zero;
             _traversedAngle = 0f;
             _enmAimingInput = AimingInputState.Cooldown;
             StartCoroutine(ResetAttack(F_TIME_BETWEEN_STAB));
-            //Debug.Log($"Stab owner: {gameObject}");
+            Debug.Log($"Stab owner: {gameObject}");
         }
 
 

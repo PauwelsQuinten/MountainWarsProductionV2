@@ -210,6 +210,7 @@ namespace UnityEngine
         Run,
         SlashLeft,
         SlashRight,
+        Stab,
         ShieldEquip,
         SwordEquip,
         ParryShieldLeft,

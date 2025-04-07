@@ -141,6 +141,11 @@ public class Attacking : MonoBehaviour
         {
             _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.SlashRight, AnimLayer = 3, DoResetIdle = true, Interupt = false, Speed = speed });
         }
+        else if (_attackType == AttackType.Stab)
+        {
+            _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Stab, AnimLayer = 3, DoResetIdle = true, Interupt = false, Speed = speed *2f });
+        }
+
     }
     
     private void InteruptAnimation()

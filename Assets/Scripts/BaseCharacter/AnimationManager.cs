@@ -47,17 +47,17 @@ public class AnimationManager : MonoBehaviour
 
         _currentState = args.AnimState;
 
-        if (_currentState == AnimationState.SlashLeft || _currentState == AnimationState.SlashRight 
-            || _currentState == AnimationState.ParryShieldRight || _currentState == AnimationState.ParryShieldLeft 
-            || _currentState == AnimationState.ParrySwordRight || _currentState == AnimationState.ParrySwordLeft)
+        //if (_currentState == AnimationState.SlashLeft || _currentState == AnimationState.SlashRight 
+        //    || _currentState == AnimationState.ParryShieldRight || _currentState == AnimationState.ParryShieldLeft 
+        //    || _currentState == AnimationState.ParrySwordRight || _currentState == AnimationState.ParrySwordLeft)
+        //    _startAnimation.Raise(this, null);
+
+
+        if (args.DoResetIdle)
+        {
             _startAnimation.Raise(this, null);
-
-
-        //if (args.DoResetIdle)
-        //{
-        //    //_animCoroutine = StartCoroutine(ResetToIdle(_animator.GetCurrentAnimatorStateInfo(args.AnimLayer).length/_animator.speed, args.AnimLayer));
-        //    _animCoroutine = StartCoroutine(ResetToIdle(_animator.GetCurrentAnimatorStateInfo(args.AnimLayer).length, args.AnimLayer));
-        //}
+            //_animCoroutine = StartCoroutine(ResetToIdle(_animator.GetCurrentAnimatorStateInfo(args.AnimLayer).length/_animator.speed, args.AnimLayer));
+        }
     }
 
     private void ResetAllLayers()

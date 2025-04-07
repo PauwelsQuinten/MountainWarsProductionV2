@@ -522,7 +522,7 @@ public class Aiming : MonoBehaviour
         {
             var package = _inputQueue.Peek();
             _AimOutputEvent.Raise(this, _inputQueue.Dequeue());
-            Debug.Log($"Enqueue: {package.AttackState}, {package.AttackSignal}, early start: {package.AnimationStart}");
+            //Debug.Log($"Enqueue: {package.AttackState}, {package.AttackSignal}, early start: {package.AnimationStart}");
         }
     }
 

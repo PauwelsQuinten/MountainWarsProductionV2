@@ -77,7 +77,7 @@ public class StateManager : MonoBehaviour
         if (args == null) return;
 
         Orientation = args.NewOrientation;
-        transform.rotation = Quaternion.Euler(new Vector3(0, -(int)Orientation +90, 0));
+        transform.rotation = Quaternion.Euler(new Vector3(0, -(int)Orientation + 90, 0));
 
 
         if (!gameObject.CompareTag(PLAYER))

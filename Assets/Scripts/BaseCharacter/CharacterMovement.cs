@@ -103,6 +103,7 @@ public class CharacterMovement : MonoBehaviour
                 {
                     if (clipInfo[clipInfo.Length - 1].clip.name != "Walk")
                         _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Walk, AnimLayer = 2, DoResetIdle = false, Interupt = false });
+                    }
                 }
                 else _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Walk, AnimLayer = 2, DoResetIdle = false, Interupt = false });
             }

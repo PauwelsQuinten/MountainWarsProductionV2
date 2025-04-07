@@ -1,3 +1,4 @@
+using System;
 using FMOD;
 using FMOD.Studio;
 using UnityEngine;
@@ -137,7 +138,6 @@ public class FMODAudioHandler : MonoBehaviour
                 _surfaceTypeIDValue = 0.0f;
                 break;
         }
-
         if (_player.GetComponentInChildren<Animator>().GetCurrentAnimatorStateInfo(2).IsName("Walk"))
         {
             _TypeOfWalkingIDValue = 1.0f;
@@ -146,27 +146,30 @@ public class FMODAudioHandler : MonoBehaviour
         {
             _TypeOfWalkingIDValue = 2.0f;
         }
-        
+        _footstepsSFXInstance.start();
         SetParameterID(_footstepsSFXInstance, _surfaceTypeID, _surfaceTypeIDValue);
         SetParameterID(_footstepsSFXInstance, _TypeOfWalkingID, _TypeOfWalkingIDValue);
 
-        _footstepsSFXInstance.start();
-        _footstepsSFXInstance.release();
+        
+       // _footstepsSFXInstance.release();
     }
 
     private string DetectSurfaceType()
     {
         RaycastHit hit;
-        Vector3 rayOrigin = _player.transform.position;
+        Vector3 offset = new Vector3(0, 1,0);
+        Vector3 rayOrigin = _player.transform.position - offset;
         Vector3 rayDirection = Vector3.down;
-        float rayDistance = 3f;
-
+        float rayDistance = 5f;
         if (Physics.Raycast(rayOrigin, rayDirection, out hit, rayDistance))
         {
-            return LayerMask.LayerToName(hit.collider.gameObject.layer);
+            string layerName = LayerMask.LayerToName(hit.collider.gameObject.layer);
+            Debug.Log("Hit layer: " + layerName);
+            return layerName;
         }
 
-        return "Default"; // Default surface type if no specific surface is detected
+        Debug.Log("No surface detected, returning Default");
+        return "Default";// Default surface type if no specific surface is detected
     }
 
     public void PlayWeaponHitSFX(Component sender, object obj)
@@ -189,27 +192,40 @@ public class FMODAudioHandler : MonoBehaviour
         SetGlobalParameterID(_currentWeaponID, 2.0f);
         SetParameterID(_weaponHitSFXInstance, _weaponHitSurfaceID, _weaponHitSurfaceIDValue);
         _weaponHitSFXInstance.start();
-        _weaponWhooshSFXInstance.release();
+       // _weaponWhooshSFXInstance.release();
     }
 
     public void PlayWhooshSFX(Component sender, object obj)
     {
         _weaponWhooshSFXInstance = RuntimeManager.CreateInstance(_weaponWhooshSFX);
             _weaponWhooshSFXInstance.start();
-            _weaponWhooshSFXInstance.release();
+           // _weaponWhooshSFXInstance.release();
     }
     
     public void PlayComicSwapSFX(Component sender, object obj)
     {
         _comicPanelSwapSFXInstance = RuntimeManager.CreateInstance(_comicPanelSwapSFX);
         _comicPanelSwapSFXInstance.start();
-        _comicPanelSwapSFXInstance.release();
+        //_comicPanelSwapSFXInstance.release();
     }
     
     public void PlayShowdownSFX(Component sender, object obj)
     {
         _showdownSFXInstance = RuntimeManager.CreateInstance(_showdownSFX);
         _showdownSFXInstance.start();
+       // _showdownSFXInstance.release();
+    }
+
+    private void OnDestroy()
+    {
+        _ambienceInstance.release();
+        _footstepsSFXInstance.release();
+        _attackChargeSFXInstance.release();
+        _forestMusicInstance.release();
+        _mainThemeMusicInstance.release();
         _showdownSFXInstance.release();
+        _weaponWhooshSFXInstance.release();
+        _comicPanelSwapSFXInstance.release();
+        _weaponHitSFXInstance.release();
     }
 }

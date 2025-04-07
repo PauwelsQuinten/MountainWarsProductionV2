@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 456cca042f9c8e84784ab6ab13a0da2a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _player: {fileID: 510487665369618095, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
+  _player: {fileID: 0}
   _ambience:
     Guid:
       Data1: -540254834
@@ -53,6 +53,20 @@ MonoBehaviour:
       Data3: -707616365
       Data4: 142493585
     Path: event:/Ambience
+  _mainThemeMusic:
+    Guid:
+      Data1: -462302020
+      Data2: 1209973555
+      Data3: -827850064
+      Data4: 48110958
+    Path: event:/Music/Main
+  _forestMusic:
+    Guid:
+      Data1: 630949937
+      Data2: 1129881989
+      Data3: 292515723
+      Data4: 1745741427
+    Path: event:/Music/Forest
   _footstepsSFX:
     Guid:
       Data1: 494737061
@@ -87,14 +101,14 @@ MonoBehaviour:
       Data2: 1329038927
       Data3: 898455968
       Data4: 889073772
-    Path: event:/ComicPanelSwap
+    Path: event:/Misc/ComicPanelSwap
   _showdownSFX:
     Guid:
       Data1: -1741793410
       Data2: 1216220472
       Data3: 1394432164
       Data4: 1462721587
-    Path: event:/VersusPanel
+    Path: event:/Misc/VersusPanel
 --- !u!114 &-7891369219080097047
 MonoBehaviour:
   m_ObjectHideFlags: 0

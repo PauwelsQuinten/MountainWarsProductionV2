@@ -5,7 +5,11 @@ public class LockOn : MonoBehaviour
     [SerializeField] private GameObject _lockonTarget;
     [SerializeField] private GameEvent _lockonEvent;
 
+    [Header("Animation")]
+    [SerializeField] private GameEvent _changePanel;
+
     private Orientation _storedOrientation = Orientation.East;
+    private GameObject _previousTarget;
 
     private void Start()
     {
@@ -47,6 +51,11 @@ public class LockOn : MonoBehaviour
         var newOrientation = CalculateOrientation();
         _storedOrientation = newOrientation;
         _lockonEvent.Raise(this, new OrientationEventArgs { NewOrientation = _storedOrientation });
+
+        if (_changePanel == null) return;
+        if (_previousTarget == _lockonTarget) return;
+        _changePanel.Raise(this, new TriggerEnterEventArgs { NewViewIndex = 0,IsShowDown = true});
+        _previousTarget = _lockonTarget;
     }
 
     private Orientation CalculateOrientation()
@@ -65,5 +74,4 @@ public class LockOn : MonoBehaviour
     {
         return newOrientation != _storedOrientation;
     }
-
 }

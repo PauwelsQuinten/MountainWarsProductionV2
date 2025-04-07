@@ -54,6 +54,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private GameEvent _changeAnimation;
 
+    [Header("Hiding")]
+    [SerializeField]
+    private GameEvent _hide;
+
     private Vector2 _moveInput;
 
     private Coroutine _resetAttackheight;
@@ -66,8 +70,16 @@ public class PlayerController : MonoBehaviour
     private float _patchEndTime;
 
     private bool _wasSprinting;
+    
+    public Vector3 CharacterPosition
+    {
+        get => transform.position;
+        set => transform.position = value;
+    }
+   
     private void Start()
     {
+        
         _aimInputRef.variable.ValueChanged += AimInputRef_ValueChanged;
         _aimInputRef.variable.StateManager = _stateManager;
         _moveInputRef.variable.StateManager = _stateManager;
@@ -78,6 +90,7 @@ public class PlayerController : MonoBehaviour
 
     public void GetStun(Component sender, object obj)
     {
+        
         if (sender.gameObject != gameObject) return;
 
         _storredAttackState = _stateManager.AttackState;
@@ -243,8 +256,9 @@ public class PlayerController : MonoBehaviour
 
     public void ProccesInteractInput(InputAction.CallbackContext ctx)
     {
-        if (ctx.performed)
-            _pickupEvent.Raise(this);
+        if (!ctx.performed) return;
+        _pickupEvent.Raise(this);
+        _hide.Raise(this, EventArgs.Empty);
         //TODO add intract event
     }
 

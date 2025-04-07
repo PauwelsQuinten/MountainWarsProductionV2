@@ -1,36 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &516018571889238644
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 3972792669413987188}
-  m_Layer: 0
-  m_Name: AudioManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &3972792669413987188
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 516018571889238644}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 3780531940537309555}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3779732516173593837
 GameObject:
   m_ObjectHideFlags: 0
@@ -43,7 +12,7 @@ GameObject:
   - component: {fileID: -9064225466436632881}
   - component: {fileID: -7891369219080097047}
   m_Layer: 0
-  m_Name: Manager
+  m_Name: AudioManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -61,8 +30,7 @@ Transform:
   m_LocalPosition: {x: -0.76170695, y: 0.17195114, z: -0.004500015}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 3972792669413987188}
+  m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &-9064225466436632881
@@ -77,6 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 456cca042f9c8e84784ab6ab13a0da2a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _player: {fileID: 510487665369618095, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
   _ambience:
     Guid:
       Data1: -540254834
@@ -112,6 +81,20 @@ MonoBehaviour:
       Data3: -1785866621
       Data4: 784401017
     Path: event:/Combat/WeaponHit
+  _comicPanelSwapSFX:
+    Guid:
+      Data1: -1367207633
+      Data2: 1329038927
+      Data3: 898455968
+      Data4: 889073772
+    Path: event:/ComicPanelSwap
+  _showdownSFX:
+    Guid:
+      Data1: -1741793410
+      Data2: 1216220472
+      Data3: 1394432164
+      Data4: 1462721587
+    Path: event:/VersusPanel
 --- !u!114 &-7891369219080097047
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -125,9 +108,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Events:
-  - {fileID: 11400000, guid: 3ce36d1a0cee9b64db3b05b01a8aece3, type: 2}
-  - {fileID: 11400000, guid: d9f26e2d81ed1fe40933eaca01e8ff59, type: 2}
+  - {fileID: 11400000, guid: 19cd27c4b0a001d4fa296d77cbb75b16, type: 2}
+  - {fileID: 11400000, guid: 4ff1ee20671edb8458011d18de4685a0, type: 2}
+  - {fileID: 11400000, guid: 9f1ebbc13b5bcd943b34426bdded2528, type: 2}
+  - {fileID: 11400000, guid: 3c342a7b87a6ed947b049977017f3b74, type: 2}
   Responses:
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: -9064225466436632881}
+        m_TargetAssemblyTypeName: FMODAudioHandler, Assembly-CSharp
+        m_MethodName: PlayFootstepsSFX
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: -9064225466436632881}
@@ -146,7 +145,21 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: -9064225466436632881}
         m_TargetAssemblyTypeName: FMODAudioHandler, Assembly-CSharp
-        m_MethodName: PlayWeaponHitSFX
+        m_MethodName: PlayComicSwapSFX
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: -9064225466436632881}
+        m_TargetAssemblyTypeName: FMODAudioHandler, Assembly-CSharp
+        m_MethodName: PlayShowdownSFX
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

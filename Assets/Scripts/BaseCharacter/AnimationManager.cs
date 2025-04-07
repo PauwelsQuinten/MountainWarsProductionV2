@@ -69,7 +69,7 @@ public class AnimationManager : MonoBehaviour
 
         _currentState = args.AnimState;
 
-        if ((int)_currentState > 3)
+        if (_currentState == AnimationState.SlashLeft || _currentState == AnimationState.SlashRight)
             _startAnimation.Raise(this, null);
 
 

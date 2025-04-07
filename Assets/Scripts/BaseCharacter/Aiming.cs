@@ -1,6 +1,8 @@
 using TMPro;
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+using static UnityEngine.Rendering.ReloadAttribute;
 
 public class Aiming : MonoBehaviour
 {
@@ -14,6 +16,8 @@ public class Aiming : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _textMeshPro2;
     [SerializeField] private TextMeshProUGUI _textMeshPro3;
     [SerializeField] private TextMeshProUGUI _textMeshPro4;
+
+    private Queue<AimingOutputArgs> _inputQueue = new Queue<AimingOutputArgs>();
     private Vector2 _vec2previousDirection = Vector2.zero;
     private Vector2 _vec2Start = Vector2.zero;
     private AttackState _enmCurrentState = AttackState.Idle;
@@ -45,6 +49,7 @@ public class Aiming : MonoBehaviour
     {
         CheckIfHoldingPosition();
         UpdateMovingTime();
+        UpdateActionQueue();
 
         if (_textMeshPro && _textMeshPro2 && _textMeshPro3 && _textMeshPro4)
         {
@@ -97,8 +102,9 @@ public class Aiming : MonoBehaviour
 
                 //var dir = CalculateSwingDirection(_traversedAngle);
                 _enmAttackSignal = IsFeintMovement(_swingDirection);
+                if (_enmAttackSignal == AttackSignal.Feint)
+                    SendPackage();
                 _enmAimingInput = AimingInputState.Idle;
-                SendPackage();
 
             }
 
@@ -154,13 +160,14 @@ public class Aiming : MonoBehaviour
             {
                 _swingDirection = CalculateSwingDirection(_traversedAngle);
 
-                _AimOutputEvent.Raise(this, new AimingOutputArgs
-                {
-                    AttackState = _refAimingInput.variable.State,
-                    AnimationStart = true,
-                    Direction = _swingDirection,
-                    Speed = CalculateSwingSpeed(_traversedAngle)
-                });
+                SendPackage(true);
+                //_AimOutputEvent.Raise(this, new AimingOutputArgs
+                //{
+                //    AttackState = _refAimingInput.variable.State,
+                //    AnimationStart = true,
+                //    Direction = _swingDirection,
+                //    Speed = CalculateSwingSpeed(_traversedAngle)
+                //});
             }
 
         }
@@ -246,7 +253,8 @@ public class Aiming : MonoBehaviour
                 else
                 {
                     _enmAttackSignal = IsFeintMovement(_swingDirection);
-                    SendPackage();
+                    if (_enmAttackSignal == AttackSignal.Feint)
+                        SendPackage();
                 }
 
                 _previousLength = 1.1f;
@@ -329,11 +337,9 @@ public class Aiming : MonoBehaviour
     }
 
 
-    private void SendPackage()
+    private void SendPackage(bool earlyMessage = false)
     {
-        
-        //float distance = _traversedAngle;
-        //Direction direction = CalculateSwingDirection(distance);
+
         var package = new AimingOutputArgs
         {
             AimingInputState = _enmAimingInput
@@ -357,10 +363,23 @@ public class Aiming : MonoBehaviour
                 ,
             IsHoldingBlock = _refAimingInput.variable.StateManager.IsHoldingShield
                 ,
-            AnimationStart = false
+            AnimationStart = earlyMessage
 
         };
-        _AimOutputEvent.Raise(this, package);
+
+        if (_enmAttackSignal == AttackSignal.Feint)
+            _AimOutputEvent.Raise(this, package);
+        else if (_refAimingInput.variable.StateManager.InAnimiation )
+        {
+            if (package.AttackState != AttackState.Idle )
+            {
+                _inputQueue.Enqueue(package);
+                Debug.Log($"Enqueue: {package.AttackState}, {package.AttackSignal}, early start: {package.AnimationStart}");
+            }
+                
+        }
+        else
+            _AimOutputEvent.Raise(this, package);
     }
     
     private Direction CalculateSwingDirection(float angleDegree)
@@ -499,6 +518,16 @@ public class Aiming : MonoBehaviour
 
 
         return Mathf.Acos(dot) < angleDegree * Mathf.Deg2Rad;
+    }
+
+    private void UpdateActionQueue()
+    {
+        if (!_refAimingInput.variable.StateManager.InAnimiation && _inputQueue.Count > 0)
+        {
+            var package = _inputQueue.Peek();
+            _AimOutputEvent.Raise(this, _inputQueue.Dequeue());
+            Debug.Log($"Enqueue: {package.AttackState}, {package.AttackSignal}, early start: {package.AnimationStart}");
+        }
     }
 
     private void ResetValues()

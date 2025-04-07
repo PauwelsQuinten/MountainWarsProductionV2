@@ -71,6 +71,7 @@ public class Attacking : MonoBehaviour
         {
             //Debug.Log($"speed: {args.Speed}");
             StartAnimation(args.Speed);
+            PrintInput(args);
             return;
         }
 
@@ -84,7 +85,6 @@ public class Attacking : MonoBehaviour
             //Signal to blackboard
             if (gameObject.CompareTag(PLAYER))
                 _blackboardRef.variable.TargetCurrentAttack = AttackType.None;
-            return;
         }
 
         if (args.AttackSignal != AttackSignal.Stab && args.AttackSignal != AttackSignal.Swing)
@@ -95,19 +95,16 @@ public class Attacking : MonoBehaviour
             return;
         }
 
-
-        if (args.AttackSignal != AttackSignal.Stab)
-        {
-            if (!IsAngleBigEnough(args.AngleTravelled)) return;
-            if (DidOverCommit(args.AngleTravelled)) return;
-        }
+        //
+        //if (args.AttackSignal != AttackSignal.Stab)
+        //{
+        //    if (!IsAngleBigEnough(args.AngleTravelled)) return;
+        //    if (DidOverCommit(args.AngleTravelled)) return;
+        //}
 
         _attackRange = GetAttackMediumRange(args);
         _attackPower = CalculatePower(args);
         _attackHeight = args.AttackHeight;
-
-        if (_attackType == AttackType.Stab) _loseStamina.Raise(this, new StaminaEventArgs { StaminaCost = _staminaCost.value * 0.75f });
-        else _loseStamina.Raise(this, new StaminaEventArgs { StaminaCost = _staminaCost.value });
 
        
         //PrintInput2(args);
@@ -122,6 +119,11 @@ public class Attacking : MonoBehaviour
     public void SwordHit(Component sender, object obj)
     {
         if (sender.gameObject != gameObject) return;
+
+
+        if (_attackType == AttackType.Stab) _loseStamina.Raise(this, new StaminaEventArgs { StaminaCost = _staminaCost.value * 0.75f });
+        else _loseStamina.Raise(this, new StaminaEventArgs { StaminaCost = _staminaCost.value });
+
 
         if (!IsEnemyInRange()) return;
         _doAttack.Raise(this, new AttackEventArgs { AttackType = _attackType, AttackHeight = _attackHeight, AttackPower = _attackPower });

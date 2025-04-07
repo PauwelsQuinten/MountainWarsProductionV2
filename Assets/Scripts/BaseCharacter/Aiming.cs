@@ -102,8 +102,9 @@ public class Aiming : MonoBehaviour
 
                 //var dir = CalculateSwingDirection(_traversedAngle);
                 _enmAttackSignal = IsFeintMovement(_swingDirection);
+                if (_enmAttackSignal == AttackSignal.Feint)
+                    SendPackage();
                 _enmAimingInput = AimingInputState.Idle;
-                SendPackage();
 
             }
 
@@ -252,7 +253,8 @@ public class Aiming : MonoBehaviour
                 else
                 {
                     _enmAttackSignal = IsFeintMovement(_swingDirection);
-                    SendPackage();
+                    if (_enmAttackSignal == AttackSignal.Feint)
+                        SendPackage();
                 }
 
                 _previousLength = 1.1f;
@@ -365,10 +367,16 @@ public class Aiming : MonoBehaviour
 
         };
 
-        if (_refAimingInput.variable.StateManager.InAnimiation && _inputQueue.Count == 0)
+        if (_enmAttackSignal == AttackSignal.Feint)
+            _AimOutputEvent.Raise(this, package);
+        else if (_refAimingInput.variable.StateManager.InAnimiation )
         {
-            _inputQueue.Enqueue(package);
-            Debug.Log($"Enqueue: {package.AttackState}, early start: {package.AnimationStart}");
+            if (package.AttackState != AttackState.Idle )
+            {
+                _inputQueue.Enqueue(package);
+                Debug.Log($"Enqueue: {package.AttackState}, {package.AttackSignal}, early start: {package.AnimationStart}");
+            }
+                
         }
         else
             _AimOutputEvent.Raise(this, package);
@@ -518,7 +526,7 @@ public class Aiming : MonoBehaviour
         {
             var package = _inputQueue.Peek();
             _AimOutputEvent.Raise(this, _inputQueue.Dequeue());
-            Debug.Log($"Dequeue: {package.AttackState}, early start: {package.AnimationStart}");
+            Debug.Log($"Enqueue: {package.AttackState}, {package.AttackSignal}, early start: {package.AnimationStart}");
         }
     }
 

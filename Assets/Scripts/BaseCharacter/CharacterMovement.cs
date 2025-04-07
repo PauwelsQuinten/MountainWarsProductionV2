@@ -88,32 +88,24 @@ public class CharacterMovement : MonoBehaviour
             {
                 Animator animator = GetComponentInChildren<Animator>();
                 var clipInfo = animator.GetCurrentAnimatorClipInfo(2);
-               // Debug.Log(clipInfo.Length);
                 if (clipInfo.Length > 0)
                 {
                     if (clipInfo[clipInfo.Length - 1].clip.name != "Run")
                         _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Run, AnimLayer = 2, DoResetIdle = false, Interupt = false });
                 }
+                else _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Run, AnimLayer = 2, DoResetIdle = false, Interupt = false });
             }
             else
             {
                 Animator animator = GetComponentInChildren<Animator>();
                 var clipInfo = animator.GetCurrentAnimatorClipInfo(2);
-               // Debug.Log(clipInfo.Length);
                 if (clipInfo.Length > 0)
                 {
                     if (clipInfo[clipInfo.Length - 1].clip.name != "Walk")
-                    {
-
                         _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Walk, AnimLayer = 2, DoResetIdle = false, Interupt = false });
-                        //Debug.Log("SetWalk");
                     }
                 }
-                else
-                {
-                    _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Walk, AnimLayer = 2, DoResetIdle = false, Interupt = false });
-                    //Debug.Log("SetWalk");
-                }
+                else _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Walk, AnimLayer = 2, DoResetIdle = false, Interupt = false });
             }
         }
         else
@@ -188,5 +180,10 @@ public class CharacterMovement : MonoBehaviour
         if(_changeAnimation == null) return;
         _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Idle, AnimLayer = 1, DoResetIdle = false });
         _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Empty, AnimLayer = 2, DoResetIdle = false });
+    }
+
+    private void OnDestroy()
+    {
+        _moveInput.variable.ValueChanged -= MoveInput_ValueChanged;
     }
 }

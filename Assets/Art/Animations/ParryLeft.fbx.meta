@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 13f0b5f2dc4ea064fb93ce06c89cde91
+guid: 9c727765a94d43148846b7864f067fd3
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -51,7 +51,7 @@ ModelImporter:
       keepOriginalPositionY: 1
       keepOriginalPositionXZ: 0
       heightFromFeet: 0
-      mirror: 0
+      mirror: 1
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
@@ -59,13 +59,6 @@ ModelImporter:
         functionName: Whoosh
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: 39f937a9b4700804eab307c59e3ace12, type: 3}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
-      - time: 0.47341007
-        functionName: SwordHit
-        data: 
-        objectReferenceParameter: {fileID: 11500000, guid: b0af618da38cf9c40840c6524817b757, type: 3}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0

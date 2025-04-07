@@ -11,6 +11,7 @@ public class Blocking : MonoBehaviour
     [SerializeField] private GameEvent _succesfullBlockevent;
     [SerializeField] private GameEvent _equipmentUpdate;
     [SerializeField] private GameEvent _succesfullHitEvent;
+    [SerializeField] private GameEvent _changeAnimation;
 
     [Header("Stamina")]
     [SerializeField]
@@ -21,6 +22,7 @@ public class Blocking : MonoBehaviour
     private Direction _blockDirection;
     private AimingInputState _aimingInputState;
     private BlockMedium _blockMedium = BlockMedium.Shield;
+    private AttackState _previousState = AttackState.Idle;
 
     public void BlockMovement(Component sender, object obj)
     {
@@ -29,57 +31,56 @@ public class Blocking : MonoBehaviour
         AimingOutputArgs args = obj as AimingOutputArgs;
         if (args == null) return;
 
+        //When Shield is locked and state hasnt changed, keep previous values
+        if (args.IsHoldingBlock && args.AttackState == AttackState.BlockAttack)
+            return;
 
-        //only set movement when using a Blocking input
-        if (args.AttackState == AttackState.BlockAttack || 
-            args.AttackState == AttackState.ShieldDefence || 
-            args.AttackState == AttackState.SwordDefence || 
-            args.AttackState == AttackState.Stun 
+        //only set movement when using a valid Blocking input
+        if ((args.AttackState == AttackState.ShieldDefence || 
+            args.AttackState == AttackState.SwordDefence )
+            && args.AimingInputState == AimingInputState.Hold
             )
+        {
+            //Store Blocking values
             _blockMedium = Blocking.GetBlockMedium(args);
+            _aimingInputState = args.AimingInputState;
+            _blockDirection = args.BlockDirection;
+            _previousState = args.AttackState;
+
+            //send event for animation
+            if (_blockMedium == BlockMedium.Shield)
+                _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.ShieldEquip, AnimLayer = 3, DoResetIdle = false, Interupt = false });
+            else if (_blockMedium == BlockMedium.Sword)
+                _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.SwordEquip, AnimLayer = 3, DoResetIdle = false, Interupt = false });            
+
+
+            UpdateBlackboard(args);
+        }
+        else if ( ((int)_previousState >= 3 && (int)args.AttackState < 3 )
+            || ((int)args.AttackState >= 3 && args.AimingInputState != AimingInputState.Hold))
+        {
+            _aimingInputState = AimingInputState.Idle;
+            _blockDirection = Direction.Idle;
+            _previousState = args.AttackState;
+            UpdateBlackboard(null);
+
+            _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Idle, AnimLayer = 1, DoResetIdle = false, Interupt = false });
+            _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Empty, AnimLayer = 3, DoResetIdle = false, Interupt = false });
+
+        }
+
         else
         {
             _aimingInputState = AimingInputState.Idle;
             _blockDirection = Direction.Idle;
+            _previousState = args.AttackState;
 
-            UpdateBlackboard(null);
-            //Debug.Log($"package to Block State = {args.AttackState}, hold: {args.AimingInputState}, {_blockMedium}, {args.BlockDirection}");
-            return;
         }
 
         Debug.Log($"package to Block State = {args.AttackState}, hold: {args.AimingInputState}, {_blockMedium}, {args.BlockDirection}");
-
-        //When Shield is locked and state hasnt changed, keep previous values
-        if (args.IsHoldingBlock && args.AttackState == AttackState.BlockAttack)
-            return;
-       
-
-        //Store Blocking values
-        _blockDirection = args.BlockDirection;
-        _aimingInputState = args.AimingInputState;
-        UpdateBlackboard(args);
-
+     
     }
-
-    private void UpdateBlackboard(AimingOutputArgs args)
-    {
-        if (args == null)
-        {
-            if (gameObject.CompareTag(PLAYER))
-                _blackboard.variable.TargetShieldState = Direction.Idle;
-            else
-                _blackboard.variable.ShieldState = Direction.Idle;
-        }
-        else
-        {
-            if (gameObject.CompareTag(PLAYER))
-                _blackboard.variable.TargetShieldState = args.BlockDirection;
-            else
-                _blackboard.variable.ShieldState = args.BlockDirection;
-        }
-       
-    }
-
+               
     public void CheckBlock(Component sender, object obj)
     {
         //Check for vallid signal
@@ -114,7 +115,7 @@ public class Blocking : MonoBehaviour
                 break;
 
         }
-               
+
 
         //Send the result as a gameEvent
         DefenceEventArgs defenceEventArgs = new DefenceEventArgs
@@ -158,6 +159,25 @@ public class Blocking : MonoBehaviour
 
     }
 
+
+    private void UpdateBlackboard(AimingOutputArgs args)
+    {
+        if (args == null)
+        {
+            if (gameObject.CompareTag(PLAYER))
+                _blackboard.variable.TargetShieldState = Direction.Idle;
+            else
+                _blackboard.variable.ShieldState = Direction.Idle;
+        }
+        else
+        {
+            if (gameObject.CompareTag(PLAYER))
+                _blackboard.variable.TargetShieldState = args.BlockDirection;
+            else
+                _blackboard.variable.ShieldState = args.BlockDirection;
+        }
+       
+    }
 
     static public BlockMedium GetBlockMedium(AimingOutputArgs args)
     {

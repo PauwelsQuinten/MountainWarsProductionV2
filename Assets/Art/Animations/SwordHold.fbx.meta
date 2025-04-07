@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 13f0b5f2dc4ea064fb93ce06c89cde91
+guid: b1d62f5c8dd1311498332a38c40e3df3
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -31,51 +31,30 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: SlashRight
+      name: ShieldHold
       takeName: mixamo.com
       internalID: -203655887218126122
       firstFrame: 0
-      lastFrame: 50
+      lastFrame: 42
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 0
+      loopTime: 1
       loopBlend: 0
       loopBlendOrientation: 1
       loopBlendPositionY: 1
       loopBlendPositionXZ: 1
-      keepOriginalOrientation: 0
+      keepOriginalOrientation: 1
       keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 0
+      keepOriginalPositionXZ: 1
       heightFromFeet: 0
-      mirror: 0
+      mirror: 1
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events:
-      - time: 0.4722222
-        functionName: Whoosh
-        data: 
-        objectReferenceParameter: {fileID: 11500000, guid: 39f937a9b4700804eab307c59e3ace12, type: 3}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
-      - time: 0.47546136
-        functionName: SwordHit
-        data: 
-        objectReferenceParameter: {fileID: 11500000, guid: 39f937a9b4700804eab307c59e3ace12, type: 3}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
-      - time: 1
-        functionName: EndAnimation
-        data: 
-        objectReferenceParameter: {fileID: 11500000, guid: 39f937a9b4700804eab307c59e3ace12, type: 3}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
+      events: []
       transformMask: []
       maskType: 3
       maskSource: {instanceID: 0}
@@ -329,7 +308,7 @@ ModelImporter:
       scale: {x: 1, y: 1, z: 1}
     - name: mixamorig:Spine
       parentName: mixamorig:Hips
-      position: {x: -0, y: 0.045327146, z: -0.01101699}
+      position: {x: -0, y: 0.045327142, z: -0.01101699}
       rotation: {x: -0.11893355, y: -0.000000007566563, z: 0.0000000019918625, w: 0.9929022}
       scale: {x: 0.99999994, y: 1, z: 1}
     - name: mixamorig:Spine1
@@ -344,7 +323,7 @@ ModelImporter:
       scale: {x: 1, y: 0.9999999, z: 1}
     - name: mixamorig:LeftShoulder
       parentName: mixamorig:Spine2
-      position: {x: -0.039594825, y: 0.057548482, z: -0.0026852372}
+      position: {x: -0.039594825, y: 0.057548482, z: -0.002685237}
       rotation: {x: 0.5501601, y: -0.43266198, z: 0.5886853, w: 0.4044467}
       scale: {x: 1, y: 1.0000004, z: 1.0000004}
     - name: mixamorig:LeftArm
@@ -354,7 +333,7 @@ ModelImporter:
       scale: {x: 1.0000004, y: 1.0000006, z: 1.0000004}
     - name: mixamorig:LeftForeArm
       parentName: mixamorig:LeftArm
-      position: {x: -0, y: 0.144409, z: 0}
+      position: {x: -0, y: 0.14440899, z: 0}
       rotation: {x: -0.037046067, y: 0.008479251, z: -0.02989542, w: 0.9988303}
       scale: {x: 1.0000006, y: 0.9999998, z: 1.0000002}
     - name: mixamorig:LeftHand
@@ -384,12 +363,12 @@ ModelImporter:
       scale: {x: 1, y: 1, z: 1}
     - name: mixamorig:Neck
       parentName: mixamorig:Spine2
-      position: {x: -0, y: 0.069970205, z: 0.0000000050196025}
+      position: {x: -0, y: 0.0699702, z: 0.0000000050196025}
       rotation: {x: 0.11893357, y: -0.00000001523846, z: 0.000000001926602, w: 0.9929022}
       scale: {x: 1, y: 1.0000001, z: 1}
     - name: mixamorig:Head
       parentName: mixamorig:Neck
-      position: {x: -0, y: 0.039132766, z: 0.012818565}
+      position: {x: -0, y: 0.039132766, z: 0.012818564}
       rotation: {x: 0.00000004470349, y: 0.000000007508789, z: 4.947641e-10, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: mixamorig:HeadTop_End
@@ -404,7 +383,7 @@ ModelImporter:
       scale: {x: 1, y: 1, z: 1.0000001}
     - name: mixamorig:LeftLeg
       parentName: mixamorig:LeftUpLeg
-      position: {x: -0, y: 0.13703154, z: 4.440892e-18}
+      position: {x: -0, y: 0.13703153, z: 4.440892e-18}
       rotation: {x: -0.08436323, y: 0.0043955995, z: -0.051846392, w: 0.99507564}
       scale: {x: 1.0000004, y: 1.0000005, z: 1}
     - name: mixamorig:LeftFoot
@@ -414,7 +393,7 @@ ModelImporter:
       scale: {x: 1.0000004, y: 1.0000004, z: 1.0000001}
     - name: mixamorig:LeftToeBase
       parentName: mixamorig:LeftFoot
-      position: {x: -1.7763568e-17, y: 0.11343818, z: 8.881784e-18}
+      position: {x: -1.7763568e-17, y: 0.113438174, z: 8.881784e-18}
       rotation: {x: 0.32323757, y: 0.17820553, z: -0.062118135, w: 0.92730886}
       scale: {x: 1.0000004, y: 1.0000001, z: 1.0000004}
     - name: mixamorig:LeftToe_End
@@ -429,7 +408,7 @@ ModelImporter:
       scale: {x: 1, y: 0.99999994, z: 1}
     - name: mixamorig:RightLeg
       parentName: mixamorig:RightUpLeg
-      position: {x: -1.7763568e-17, y: 0.13710882, z: 0}
+      position: {x: -1.7763568e-17, y: 0.1371088, z: 0}
       rotation: {x: -0.06908143, y: -0.0036127046, z: 0.052099876, w: 0.9962431}
       scale: {x: 1.0000005, y: 1.0000005, z: 1}
     - name: mixamorig:RightFoot

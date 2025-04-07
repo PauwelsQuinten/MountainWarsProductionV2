@@ -32,20 +32,9 @@ public class AnimationManager : MonoBehaviour
 
         if(args.AnimState != AnimationState.Idle)
         {
-            if (_canResetIdle)
-            {
                 BoredBehaviour bored = _animator.GetBehaviour<BoredBehaviour>();
                 if (bored != null) bored.IdleExit();
                 else Debug.Log("Bored is null");
-                _canResetIdle = false;
-            }
-        }
-        else
-        {
-            if (!_canResetIdle)
-            {
-                _canResetIdle = true;
-            }
         }
         //switch (args.AnimLayer)
         //{

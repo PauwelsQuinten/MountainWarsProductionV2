@@ -123,21 +123,31 @@ public class FMODAudioHandler : MonoBehaviour
                 _surfaceTypeIDValue = 0.0f;
                 break;
             case "Stone":
-                _surfaceTypeIDValue = 2.0f;
+                _surfaceTypeIDValue = 1.0f;
                 break;
             case "Gravel":
-                _surfaceTypeIDValue = 3.0f;
+                _surfaceTypeIDValue = 2.0f;
                 break;
             case "Grass":
-                _surfaceTypeIDValue = 4.0f;
+                _surfaceTypeIDValue = 3.0f;
                 break;
             case "Sand":
+                _surfaceTypeIDValue = 4.0f;
+                break;
+            case "Wood":
                 _surfaceTypeIDValue = 5.0f;
+                break;
+            case "Water":
+                _surfaceTypeIDValue = 6.0f;
+                break;
+            case "Tall Grass":
+                _surfaceTypeIDValue = 7.0f;
                 break;
             default:
                 _surfaceTypeIDValue = 0.0f;
                 break;
         }
+        Debug.Log(surfaceType);
         if (_player.GetComponentInChildren<Animator>().GetCurrentAnimatorStateInfo(2).IsName("Walk"))
         {
             _TypeOfWalkingIDValue = 1.0f;
@@ -149,26 +159,22 @@ public class FMODAudioHandler : MonoBehaviour
         _footstepsSFXInstance.start();
         SetParameterID(_footstepsSFXInstance, _surfaceTypeID, _surfaceTypeIDValue);
         SetParameterID(_footstepsSFXInstance, _TypeOfWalkingID, _TypeOfWalkingIDValue);
-
-        
-       // _footstepsSFXInstance.release();
+       _footstepsSFXInstance.release();
     }
 
     private string DetectSurfaceType()
     {
         RaycastHit hit;
-        Vector3 offset = new Vector3(0, 1,0);
+        Vector3 offset = new Vector3(0, 0.5f,0);
         Vector3 rayOrigin = _player.transform.position - offset;
         Vector3 rayDirection = Vector3.down;
         float rayDistance = 5f;
         if (Physics.Raycast(rayOrigin, rayDirection, out hit, rayDistance))
         {
             string layerName = LayerMask.LayerToName(hit.collider.gameObject.layer);
-            //Debug.Log("Hit layer: " + layerName);
             return layerName;
         }
 
-        Debug.Log("No surface detected, returning Default");
         return "Default";// Default surface type if no specific surface is detected
     }
 
@@ -199,7 +205,7 @@ public class FMODAudioHandler : MonoBehaviour
     {
         _weaponWhooshSFXInstance = RuntimeManager.CreateInstance(_weaponWhooshSFX);
             _weaponWhooshSFXInstance.start();
-           // _weaponWhooshSFXInstance.release();
+            _weaponWhooshSFXInstance.release();
     }
     
     public void PlayComicSwapSFX(Component sender, object obj)

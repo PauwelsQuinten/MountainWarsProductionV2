@@ -58,15 +58,12 @@ public class WorldState : MonoBehaviour
     public Dictionary<EWorldState, Direction> WorldStateShields = new Dictionary<EWorldState, Direction>();
 
 
-    private void Start()
+    public void Init()
     {
         FillLists();
-
-        if (WorldStateType == WorldStateType.Current)
-        {
-            _blackboard.variable.ValueChanged += Blackboard_ValueChanged;
-            SetStartValues();
-        }
+        
+        _blackboard.variable.ValueChanged += Blackboard_ValueChanged;
+        SetStartValues();      
     }
 
 

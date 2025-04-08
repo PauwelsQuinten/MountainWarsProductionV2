@@ -156,6 +156,8 @@ public class ParryAttackAction : GoapAction
             IsHoldingBlock = false
                 ,
             Sender = npc
+            ,
+            AnimationStart = true
         };
         _defendEvent.Raise(this, package);
     }

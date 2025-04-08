@@ -23,10 +23,11 @@ public class GoapPlanner : MonoBehaviour
 
     void Start()
     {
+        _blackboard.variable.ResetAtStart();
         _currentWorldState = gameObject.AddComponent<WorldState>();
         _currentWorldState.WorldStateType = WorldStateType.Current;
-        _blackboard.variable.ResetAtStart();
         _currentWorldState.AsignBlackboard(_blackboard);
+        _currentWorldState.Init();
 
         foreach (var action in _allActionPrefabs)
         {

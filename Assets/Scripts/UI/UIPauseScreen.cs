@@ -1,22 +1,19 @@
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
-using System.Collections;
-using UnityEngine;
-using UnityEngine.EventSystems;
 using FMOD.Studio;
 using FMODUnity;
-public class UIMainMenu : MonoBehaviour
+using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
+
+public class UIPauseScreen : MonoBehaviour
 {
-    [Header("Settings")] 
-    [SerializeField] private GameObject _SettingsMenu;
-    [SerializeField] private GameObject _firstSettingsItem;
-    [SerializeField] private GameObject _backButton;
+    [SerializeField]
+    private GameObject _pauseMenu;
+    [SerializeField]
+    private EventSystem _eventSystem;
+    [SerializeField]
+    private GameObject _firstSelected;
 
-    [SerializeField] private GameObject _settingsButton;
-    [SerializeField] private EventSystem _eventSystem;
-
-    [Header("VCA")] 
+    [Header("VCA")]
     private FMOD.Studio.VCA _masterVCA;
     private FMOD.Studio.VCA _sfxVCA;
     private FMOD.Studio.VCA _musicVCA;
@@ -27,7 +24,7 @@ public class UIMainMenu : MonoBehaviour
     [SerializeField] private float _sfxVCAVolume;
     [SerializeField] private float _musicVCAVolume;
 
-    
+
     [Header("Audio")]
     [SerializeField] private EventReference _UIConfirmSFX;
     private EventInstance _UIConfirmSFXInstance;
@@ -37,58 +34,30 @@ public class UIMainMenu : MonoBehaviour
     {
         _masterVCA = FMODUnity.RuntimeManager.GetVCA("vca:/" + _masterVCAName);
         _masterVCA.getVolume(out _masterVCAVolume);
-        
+
         _sfxVCA = FMODUnity.RuntimeManager.GetVCA("vca:/" + _sfxVCAName);
         _sfxVCA.getVolume(out _sfxVCAVolume);
-        
+
         _musicVCA = FMODUnity.RuntimeManager.GetVCA("vca:/" + _musicVCAName);
         _musicVCA.getVolume(out _musicVCAVolume);
-        
+
         _UIConfirmSFXInstance = RuntimeManager.CreateInstance(_UIConfirmSFX);
         _UIBackSFXInstance = RuntimeManager.CreateInstance(_UIBackSFX);
 
     }
 
-    public void NewGamePressed()
+    public void OpenPauseMenu(Component sender, object obj)
     {
-        StartCoroutine(PlaySFXWithDelay(_UIConfirmSFXInstance,0.2f));
-        _UIConfirmSFXInstance.release();
-        _UIBackSFXInstance.release();
+        Time.timeScale = 0f;
+        _pauseMenu.SetActive(true);
+        _eventSystem.SetSelectedGameObject(_firstSelected);
     }
 
-    private IEnumerator PlaySFXWithDelay(EventInstance eventInstance, float delayInSeconds)
+    public void ClosePauseMenu()
     {
-        eventInstance.start();
-        yield return new WaitForSeconds(delayInSeconds);
-        UnityEngine.SceneManagement.SceneManager.LoadScene("Gameplay");
-    }
-
-    public void SettingsPressed()
-    {
-        _UIConfirmSFXInstance.start();
-        _SettingsMenu.SetActive(true);
-        _eventSystem.SetSelectedGameObject(_firstSettingsItem);
-
-    }
-
-    public void QuitGamePressed()
-    {
+        Time.timeScale = 1f;
+        _pauseMenu.SetActive(false);
         _UIBackSFXInstance.start();
-
-        #if UNITY_EDITOR
-        EditorApplication.ExitPlaymode();
-        #endif
-
-        _UIConfirmSFXInstance.release();
-        _UIBackSFXInstance.release();
-        Application.Quit();
-    }
-
-    public void BackButtonPressed()
-    {
-        _UIBackSFXInstance.start();
-        _SettingsMenu.SetActive(false);
-        _eventSystem.SetSelectedGameObject(_settingsButton);
     }
 
     public void MasterVolumeChanged(float value)
@@ -108,7 +77,13 @@ public class UIMainMenu : MonoBehaviour
         _musicVCA.setVolume(value);
         _musicVCA.getVolume(out _sfxVCAVolume);
     }
-    
+
+    public void MainMenuPressed()
+    {
+        _UIBackSFXInstance.start();
+        UnityEngine.SceneManagement.SceneManager.LoadScene("MainMenu");
+    }
+
     private void OnDestroy()
     {
         _UIConfirmSFXInstance.release();

@@ -58,6 +58,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private GameEvent _hide;
 
+    [Header("Pause")]
+    [SerializeField]
+    private GameEvent _pauseGame;
+
     private Vector2 _moveInput;
 
     private Coroutine _resetAttackheight;
@@ -304,6 +308,12 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public void ProccesPauseInput(InputAction.CallbackContext ctx)
+    {
+        if (!ctx.performed) return;
+        _pauseGame.Raise(this, EventArgs.Empty);
+    }
+
     private IEnumerator ResetAttackHeight()
     {
         yield return new WaitForSeconds(1);
@@ -318,8 +328,5 @@ public class PlayerController : MonoBehaviour
             yield return new WaitForSeconds(0.5f);
             _LookForTarget.Raise(this, new OrientationEventArgs { NewOrientation = _stateManager.Orientation });
         }
-
     }
-
-
 }

@@ -123,18 +123,21 @@ public class FMODAudioHandler : MonoBehaviour
                 _surfaceTypeIDValue = 0.0f;
                 break;
             case "Stone":
-                _surfaceTypeIDValue = 2.0f;
+                _surfaceTypeIDValue = 1.0f;
                 break;
             case "Gravel":
-                _surfaceTypeIDValue = 3.0f;
+                _surfaceTypeIDValue = 2.0f;
                 break;
             case "Grass":
-                _surfaceTypeIDValue = 4.0f;
+                _surfaceTypeIDValue = 3.0f;
                 break;
             case "Sand":
-                _surfaceTypeIDValue = 5.0f;
+                _surfaceTypeIDValue = 4.0f;
                 break;
             case "Wood":
+                _surfaceTypeIDValue = 5.0f;
+                break;
+            case "Water":
                 _surfaceTypeIDValue = 6.0f;
                 break;
             default:
@@ -153,15 +156,13 @@ public class FMODAudioHandler : MonoBehaviour
         _footstepsSFXInstance.start();
         SetParameterID(_footstepsSFXInstance, _surfaceTypeID, _surfaceTypeIDValue);
         SetParameterID(_footstepsSFXInstance, _TypeOfWalkingID, _TypeOfWalkingIDValue);
-
-        
-       // _footstepsSFXInstance.release();
+       _footstepsSFXInstance.release();
     }
 
     private string DetectSurfaceType()
     {
         RaycastHit hit;
-        Vector3 offset = new Vector3(0, 1,0);
+        Vector3 offset = new Vector3(0, 0.5f,0);
         Vector3 rayOrigin = _player.transform.position - offset;
         Vector3 rayDirection = Vector3.down;
         float rayDistance = 5f;
@@ -201,7 +202,7 @@ public class FMODAudioHandler : MonoBehaviour
     {
         _weaponWhooshSFXInstance = RuntimeManager.CreateInstance(_weaponWhooshSFX);
             _weaponWhooshSFXInstance.start();
-           // _weaponWhooshSFXInstance.release();
+            _weaponWhooshSFXInstance.release();
     }
     
     public void PlayComicSwapSFX(Component sender, object obj)

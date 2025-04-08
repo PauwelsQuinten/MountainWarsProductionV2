@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &7541507132325860394
+--- !u!1 &3379749102720681334
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,24 +8,24 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1831494060506736589}
-  - component: {fileID: 7804431625154130722}
-  - component: {fileID: 4125726761027900036}
-  - component: {fileID: -7963046082872021543}
+  - component: {fileID: 291827269588670359}
+  - component: {fileID: 3250447219865308202}
+  - component: {fileID: -5583447613549028956}
+  - component: {fileID: 1086266624753057273}
   m_Layer: 0
-  m_Name: PatchUp
+  m_Name: StartSprint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &1831494060506736589
+--- !u!4 &291827269588670359
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7541507132325860394}
+  m_GameObject: {fileID: 3379749102720681334}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.1512434, y: -1.4231012, z: 0.35149533}
@@ -34,13 +34,13 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7804431625154130722
+--- !u!114 &3250447219865308202
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7541507132325860394}
+  m_GameObject: {fileID: 3379749102720681334}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7307df49848989943b66d25a9ce5b831, type: 3}
@@ -51,16 +51,16 @@ MonoBehaviour:
   Cost: 1
   _actionMaxRunTime: 3
   _aiInputEvent: {fileID: 11400000, guid: 08c91237b3eb8604cbb626b34a29c05a, type: 2}
-  _swingDirection: 0
-  _actionActivationTime: 1
+  _swingDirection: 1
+  _actionActivationTime: 0
   _actionDuration: 0.25
---- !u!114 &4125726761027900036
+--- !u!114 &-5583447613549028956
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7541507132325860394}
+  m_GameObject: {fileID: 3379749102720681334}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a1fcdc11113c2e641aa608cf6a850dda, type: 3}
@@ -79,18 +79,18 @@ MonoBehaviour:
   _hasTarget: 2
   _hasOpening: 2
   _targetBehaviour: 4
-  _behaviour: 0
-  _targetAttackRange: 3
+  _behaviour: 4
+  _targetAttackRange: 2
   _attackRange: 3
   _targetShieldState: 0
   _shieldState: 0
---- !u!114 &-7963046082872021543
+--- !u!114 &1086266624753057273
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7541507132325860394}
+  m_GameObject: {fileID: 3379749102720681334}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a1fcdc11113c2e641aa608cf6a850dda, type: 3}
@@ -110,7 +110,7 @@ MonoBehaviour:
   _hasOpening: 2
   _targetBehaviour: 4
   _behaviour: 4
-  _targetAttackRange: 2
+  _targetAttackRange: 3
   _attackRange: 3
   _targetShieldState: 0
   _shieldState: 0

@@ -228,6 +228,13 @@ namespace UnityEngine
         Backward,
         Side,
     }
+    public enum AIInputAction
+    {
+        PatchUp,
+        Dash,
+        StopDash,
+        Interact
+    }
 
 
 

@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEditor.PlayerSettings;
 
 public class WorldState : MonoBehaviour
 {
@@ -46,17 +45,28 @@ public class WorldState : MonoBehaviour
     [SerializeField]
     private EWorldStateRange _attackRange = EWorldStateRange.Default;
     
+    [Header("Shield")]
+    [SerializeField]
+    private Direction _targetShieldState = Direction.Idle;
+    [SerializeField]
+    private Direction _shieldState = Direction.Idle;
+    
     public Dictionary<EWorldState, EWorldStateValue> WorldStateValues = new Dictionary<EWorldState, EWorldStateValue>();
     public Dictionary<EWorldState, EWorldStatePossesion> WorldStatePossesions = new Dictionary<EWorldState, EWorldStatePossesion>();
     public Dictionary<EWorldState, EBehaviourValue> WorldStateBehaviours = new Dictionary<EWorldState, EBehaviourValue>();
     public Dictionary<EWorldState, EWorldStateRange> WorldStateRanges = new Dictionary<EWorldState, EWorldStateRange>();
+    public Dictionary<EWorldState, Direction> WorldStateShields = new Dictionary<EWorldState, Direction>();
 
 
     private void Start()
     {
-        _blackboard.variable.ValueChanged += Blackboard_ValueChanged;
         FillLists();
-        SetStartValues();
+
+        if (WorldStateType == WorldStateType.Current)
+        {
+            _blackboard.variable.ValueChanged += Blackboard_ValueChanged;
+            SetStartValues();
+        }
     }
 
 
@@ -150,24 +160,45 @@ public class WorldState : MonoBehaviour
             case BlackboardEventArgs.WhatChanged.LHEquipment:
                 LHEquipment = CalculateValue(_blackboard.variable.LHEquipmentHealth);
                 break;
+            case BlackboardEventArgs.WhatChanged.ShieldState:
+                ShieldState = _blackboard.variable.ShieldState;
+                break;
             case BlackboardEventArgs.WhatChanged.Target:
                 HasTarget = SetInPossesion(_blackboard.variable.Target);
+                if (HasTarget == EWorldStatePossesion.InPossesion)
+                    SetTargetValues();
+                else
+                    ResetTargetValues();
                 break;
             case BlackboardEventArgs.WhatChanged.TargetStamina:
-                TargetStamina = CalculateValue(_blackboard.variable.TargetStamina);
+                if (HasTarget == EWorldStatePossesion.InPossesion)
+                    TargetStamina = CalculateValue(_blackboard.variable.TargetStamina);
                 break;
             case BlackboardEventArgs.WhatChanged.TargetHealth:
-                TargetHealth = CalculateValue(_blackboard.variable.TargetHealth);
+                if (HasTarget == EWorldStatePossesion.InPossesion)
+                    TargetHealth = CalculateValue(_blackboard.variable.TargetHealth);
                 break;
             case BlackboardEventArgs.WhatChanged.TargetRHEquipment:
-                TargetRHEquipment = CalculateValue(_blackboard.variable.TargetRHEquipmentHealth);
+                if (HasTarget == EWorldStatePossesion.InPossesion)
+                    TargetRHEquipment = CalculateValue(_blackboard.variable.TargetRHEquipmentHealth);
                 break;
             case BlackboardEventArgs.WhatChanged.TargetLHEquipment:
-                TargetLHEquipment = CalculateValue(_blackboard.variable.TargetLHEquipmentHealth);
+                if (HasTarget == EWorldStatePossesion.InPossesion)
+                    TargetLHEquipment = CalculateValue(_blackboard.variable.TargetLHEquipmentHealth);
+                break;
+            case BlackboardEventArgs.WhatChanged.TargetShieldState:
+                if (HasTarget == EWorldStatePossesion.InPossesion)
+                    TargetShieldState = _blackboard.variable.TargetShieldState;
                 break;
            
         }
     }
+
+
+    //------------------------------------------------------------------------------
+    //HELPER FUNCTIONS
+    //------------------------------------------------------------------------------
+
 
     private void SetStartValues()
     {
@@ -178,10 +209,24 @@ public class WorldState : MonoBehaviour
 
     }
 
+    private void SetTargetValues()
+    {
+        TargetStamina = CalculateValue(_blackboard.variable.TargetStamina);
+        TargetHealth = CalculateValue(_blackboard.variable.TargetHealth);
+        TargetRHEquipment = CalculateValue(_blackboard.variable.TargetRHEquipmentHealth);
+        TargetLHEquipment = CalculateValue(_blackboard.variable.TargetLHEquipmentHealth);
 
-    //------------------------------------------------------------------------------
-    //HELPER FUNCTIONS
-    //------------------------------------------------------------------------------
+    }
+
+    private void ResetTargetValues()
+    {
+        TargetStamina = EWorldStateValue.Default;
+        TargetHealth = EWorldStateValue.Default;
+        TargetRHEquipment = EWorldStateValue.Default;
+        TargetLHEquipment = EWorldStateValue.Default;
+
+    }
+
 
     private EWorldStateValue CalculateValue(float fValue)
     {
@@ -215,7 +260,7 @@ public class WorldState : MonoBehaviour
         switch (attackState)
         {
             case AttackState.Idle:
-                return EBehaviourValue.Recovering;
+                return EBehaviourValue.Idle;
 
             case AttackState.Attack:
                 return EBehaviourValue.Attacking;
@@ -272,31 +317,90 @@ public class WorldState : MonoBehaviour
 
     private void FillLists()
     {
-        //Values
-        WorldStateValues.Add(EWorldState.TargetHealth, TargetHealth);
-        WorldStateValues.Add(EWorldState.TargetStamina, TargetStamina);
-        WorldStateValues.Add(EWorldState.TargetRHEquipment, TargetRHEquipment);
-        WorldStateValues.Add(EWorldState.TargetLHEquipment, TargetLHEquipment);
+        if (WorldStateType == WorldStateType.Current)
+        {
+            //Values
+            WorldStateValues.Add(EWorldState.TargetHealth, TargetHealth);
+            WorldStateValues.Add(EWorldState.TargetStamina, TargetStamina);
+            WorldStateValues.Add(EWorldState.TargetRHEquipment, TargetRHEquipment);
+            WorldStateValues.Add(EWorldState.TargetLHEquipment, TargetLHEquipment);
 
-        WorldStateValues.Add(EWorldState.Health, Health);
-        WorldStateValues.Add(EWorldState.Stamina, Stamina);
-        WorldStateValues.Add(EWorldState.RHEquipment, RHEquipment);
-        WorldStateValues.Add(EWorldState.LHEquipment, LHEquipment);
-
-
-        //Possesions
-        WorldStatePossesions.Add(EWorldState.HasTarget, HasTarget);
-        WorldStatePossesions.Add(EWorldState.TargetOpening, HasOpening);
+            WorldStateValues.Add(EWorldState.Health, Health);
+            WorldStateValues.Add(EWorldState.Stamina, Stamina);
+            WorldStateValues.Add(EWorldState.RHEquipment, RHEquipment);
+            WorldStateValues.Add(EWorldState.LHEquipment, LHEquipment);
 
 
-        //Behaviours
-        WorldStateBehaviours.Add(EWorldState.Behaviour, Behaviour);
-        WorldStateBehaviours.Add(EWorldState.TargetBehaviour, TargetBehaviour);
+            //Possesions
+            WorldStatePossesions.Add(EWorldState.HasTarget, HasTarget);
+            WorldStatePossesions.Add(EWorldState.TargetOpening, HasOpening);
 
 
-        //Ranges
-        WorldStateRanges.Add(EWorldState.AttackRange, AttackRange);
-        WorldStateRanges.Add(EWorldState.TargetAttackRange, TargetAttackRange);
+            //Behaviours
+            WorldStateBehaviours.Add(EWorldState.Behaviour, Behaviour);
+            WorldStateBehaviours.Add(EWorldState.TargetBehaviour, TargetBehaviour);
+
+
+            //Ranges
+            WorldStateRanges.Add(EWorldState.AttackRange, AttackRange);
+            WorldStateRanges.Add(EWorldState.TargetAttackRange, TargetAttackRange);
+
+            //Shields
+            WorldStateShields.Add(EWorldState.ShieldState, ShieldState);
+            WorldStateShields.Add(EWorldState.TargetShieldState, TargetShieldState);
+
+        }
+
+        //If the Worldstate is not of Current Type, it is not used to compare all values but only the not default ones
+        else
+        {
+            //Values
+            if (TargetHealth != EWorldStateValue.Default)
+                WorldStateValues.Add(EWorldState.TargetHealth, TargetHealth);
+            if (TargetStamina != EWorldStateValue.Default)
+                WorldStateValues.Add(EWorldState.TargetStamina, TargetStamina);
+            if (TargetRHEquipment != EWorldStateValue.Default)
+                WorldStateValues.Add(EWorldState.TargetRHEquipment, TargetRHEquipment);
+            if (TargetLHEquipment != EWorldStateValue.Default)
+                WorldStateValues.Add(EWorldState.TargetLHEquipment, TargetLHEquipment);
+
+            if (Health != EWorldStateValue.Default)
+                WorldStateValues.Add(EWorldState.Health, Health);
+            if (Stamina != EWorldStateValue.Default)
+                WorldStateValues.Add(EWorldState.Stamina, Stamina);
+            if (RHEquipment != EWorldStateValue.Default)
+                WorldStateValues.Add(EWorldState.RHEquipment, RHEquipment);
+            if (LHEquipment != EWorldStateValue.Default)
+                WorldStateValues.Add(EWorldState.LHEquipment, LHEquipment);
+
+
+            //Possesions
+            if (HasTarget != EWorldStatePossesion.Default)
+                WorldStatePossesions.Add(EWorldState.HasTarget, HasTarget);
+            if (HasOpening != EWorldStatePossesion.Default)
+                WorldStatePossesions.Add(EWorldState.TargetOpening, HasOpening);
+
+
+            //Behaviours
+            if (Behaviour != EBehaviourValue.Default)
+                WorldStateBehaviours.Add(EWorldState.Behaviour, Behaviour);
+            if (TargetBehaviour != EBehaviourValue.Default)
+                WorldStateBehaviours.Add(EWorldState.TargetBehaviour, TargetBehaviour);
+
+
+            //Ranges
+            if (AttackRange != EWorldStateRange.Default)
+                WorldStateRanges.Add(EWorldState.AttackRange, AttackRange);
+            if (TargetAttackRange != EWorldStateRange.Default)
+                WorldStateRanges.Add(EWorldState.TargetAttackRange, TargetAttackRange);
+
+            //Shields
+            if (ShieldState != Direction.Idle)
+                WorldStateShields.Add(EWorldState.ShieldState, ShieldState);
+            if (TargetShieldState != Direction.Idle)
+                WorldStateShields.Add(EWorldState.TargetShieldState, TargetShieldState);
+
+        }
 
     }
 
@@ -443,8 +547,28 @@ public class WorldState : MonoBehaviour
         get { return _attackRange; }
         set
         {
-            _targetAttackRange = value;
+            _attackRange = value;
             WorldStateRanges[EWorldState.AttackRange] = _attackRange;
+        }
+    }
+    
+    public Direction TargetShieldState
+    {
+        get { return _targetShieldState; }
+        set
+        {
+            _targetShieldState = value;
+            WorldStateShields[EWorldState.TargetShieldState] = _targetShieldState;
+        }
+    }
+    
+    public Direction ShieldState
+    {
+        get { return _shieldState; }
+        set
+        {
+            _shieldState = value;
+            WorldStateShields[EWorldState.ShieldState] = _shieldState;
         }
     }
 

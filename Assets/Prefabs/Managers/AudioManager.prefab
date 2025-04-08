@@ -1,0 +1,185 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3779732516173593837
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3780531940537309555}
+  - component: {fileID: -9064225466436632881}
+  - component: {fileID: -7891369219080097047}
+  m_Layer: 0
+  m_Name: AudioManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3780531940537309555
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3779732516173593837}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.76170695, y: 0.17195114, z: -0.004500015}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &-9064225466436632881
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3779732516173593837}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 456cca042f9c8e84784ab6ab13a0da2a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _player: {fileID: 0}
+  _ambience:
+    Guid:
+      Data1: -540254834
+      Data2: 1088211205
+      Data3: -707616365
+      Data4: 142493585
+    Path: event:/Ambience
+  _mainThemeMusic:
+    Guid:
+      Data1: -462302020
+      Data2: 1209973555
+      Data3: -827850064
+      Data4: 48110958
+    Path: event:/Music/Main
+  _forestMusic:
+    Guid:
+      Data1: 630949937
+      Data2: 1129881989
+      Data3: 292515723
+      Data4: 1745741427
+    Path: event:/Music/Forest
+  _footstepsSFX:
+    Guid:
+      Data1: 494737061
+      Data2: 1273258428
+      Data3: -1338453336
+      Data4: -369907754
+    Path: event:/Character/CharacterFootsteps
+  _attackChargeSFX:
+    Guid:
+      Data1: 1169967744
+      Data2: 1223163470
+      Data3: -1959305851
+      Data4: -1014027786
+    Path: event:/Combat/WeaponWhoosh
+  _weaponWhooshSFX:
+    Guid:
+      Data1: 1169967744
+      Data2: 1223163470
+      Data3: -1959305851
+      Data4: -1014027786
+    Path: event:/Combat/WeaponWhoosh
+  _weaponHitSFX:
+    Guid:
+      Data1: 1363284282
+      Data2: 1246693075
+      Data3: -1785866621
+      Data4: 784401017
+    Path: event:/Combat/WeaponHit
+  _comicPanelSwapSFX:
+    Guid:
+      Data1: -1367207633
+      Data2: 1329038927
+      Data3: 898455968
+      Data4: 889073772
+    Path: event:/Misc/ComicPanelSwap
+  _showdownSFX:
+    Guid:
+      Data1: -1741793410
+      Data2: 1216220472
+      Data3: 1394432164
+      Data4: 1462721587
+    Path: event:/Misc/VersusPanel
+--- !u!114 &-7891369219080097047
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3779732516173593837}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: beea91935ee6d2746a0a632c4f077ee0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Events:
+  - {fileID: 11400000, guid: 19cd27c4b0a001d4fa296d77cbb75b16, type: 2}
+  - {fileID: 11400000, guid: 4ff1ee20671edb8458011d18de4685a0, type: 2}
+  - {fileID: 11400000, guid: 9f1ebbc13b5bcd943b34426bdded2528, type: 2}
+  - {fileID: 11400000, guid: 3c342a7b87a6ed947b049977017f3b74, type: 2}
+  Responses:
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: -9064225466436632881}
+        m_TargetAssemblyTypeName: FMODAudioHandler, Assembly-CSharp
+        m_MethodName: PlayFootstepsSFX
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: -9064225466436632881}
+        m_TargetAssemblyTypeName: FMODAudioHandler, Assembly-CSharp
+        m_MethodName: PlayWhooshSFX
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: -9064225466436632881}
+        m_TargetAssemblyTypeName: FMODAudioHandler, Assembly-CSharp
+        m_MethodName: PlayComicSwapSFX
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: -9064225466436632881}
+        m_TargetAssemblyTypeName: FMODAudioHandler, Assembly-CSharp
+        m_MethodName: PlayShowdownSFX
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2

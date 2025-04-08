@@ -7,11 +7,14 @@ namespace UnityEngine
         public Direction BlockDirection;
         public AimingInputState AimingInputState;
         public AttackHeight AttackHeight;
-        public float Speed;
+        public float Speed ;
         public float AngleTravelled;
         public AttackSignal AttackSignal;
         public AttackState AttackState;
         public EquipmentManager EquipmentManager;
+        public bool IsHoldingBlock;
+        public GameObject Sender;
+        public bool AnimationStart;
     }
     
 

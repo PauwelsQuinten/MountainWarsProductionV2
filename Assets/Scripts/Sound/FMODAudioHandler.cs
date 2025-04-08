@@ -164,7 +164,7 @@ public class FMODAudioHandler : MonoBehaviour
         if (Physics.Raycast(rayOrigin, rayDirection, out hit, rayDistance))
         {
             string layerName = LayerMask.LayerToName(hit.collider.gameObject.layer);
-            Debug.Log("Hit layer: " + layerName);
+            //Debug.Log("Hit layer: " + layerName);
             return layerName;
         }
 

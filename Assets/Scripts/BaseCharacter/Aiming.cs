@@ -144,11 +144,7 @@ public class Aiming : MonoBehaviour
                     _enmAimingInput = AimingInputState.Moving;
                     _vec2previousDirection = Vector2.zero;
                     _fMovingTime = 0f;
-                    //if (_refAimingInput.variable.State == AttackState.ShieldDefence)
-                    //{
-                    //    SendPackage();
-                    //}
-
+                    
                     break;
             }
 
@@ -157,13 +153,7 @@ public class Aiming : MonoBehaviour
                 _swingDirection = CalculateSwingDirection(_traversedAngle);
 
                 SendPackage(true);
-                //_AimOutputEvent.Raise(this, new AimingOutputArgs
-                //{
-                //    AttackState = _refAimingInput.variable.State,
-                //    AnimationStart = true,
-                //    Direction = _swingDirection,
-                //    Speed = CalculateSwingSpeed(_traversedAngle)
-                //});
+                
             }
 
         }
@@ -261,6 +251,7 @@ public class Aiming : MonoBehaviour
             case AttackState.ShieldDefence:
             case AttackState.SwordDefence:
                 _enmAimingInput = AimingInputState.Hold;
+                _swingDirection = Direction.Wrong;//Put to wrong so the inputChanged function wont call a parry movement when switching block sides
                 SendPackage();
                 break;
 
@@ -362,6 +353,7 @@ public class Aiming : MonoBehaviour
             AnimationStart = earlyMessage
 
         };
+        Debug.Log($"Send package: {package.AttackState}, {package.AttackSignal}, {_enmAimingInput}, angle : {_traversedAngle}, early start: {package.AnimationStart}");
 
         if (_enmAttackSignal == AttackSignal.Feint)
             _AimOutputEvent.Raise(this, package);
@@ -376,8 +368,10 @@ public class Aiming : MonoBehaviour
         }
         else
             _AimOutputEvent.Raise(this, package);
+
+
     }
-    
+
     private Direction CalculateSwingDirection(float angleDegree)
     {
         Vector2 inputVec = Vector2.zero;

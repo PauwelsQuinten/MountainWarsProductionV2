@@ -40,7 +40,7 @@ public class AnimationManager : MonoBehaviour
                 else Debug.Log("Bored is null");
         }
 
-         Debug.Log($"anim call: {args.AnimState.ToString()}");
+        //Debug.Log($"anim call: {args.AnimState.ToString()}");
         // Crossfade with normalized transition offset
         _animator.speed = args.Speed;
         _animator.CrossFade(args.AnimState.ToString(), 0.2f, args.AnimLayer, 0f);
@@ -56,7 +56,7 @@ public class AnimationManager : MonoBehaviour
         if (args.DoResetIdle)
         {
             _startAnimation.Raise(this, null);
-            //_animCoroutine = StartCoroutine(ResetToIdle(_animator.GetCurrentAnimatorStateInfo(args.AnimLayer).length/_animator.speed, args.AnimLayer));
+            _animCoroutine = StartCoroutine(ResetToIdle(_animator.GetCurrentAnimatorStateInfo(args.AnimLayer).length/_animator.speed, args.AnimLayer));
         }
     }
 
@@ -105,6 +105,8 @@ public class AnimationManager : MonoBehaviour
         ChangeAnimationState(this, new AnimationEventArgs { AnimState = AnimationState.Empty, AnimLayer = 2, DoResetIdle = false });
         _currentState = AnimationState.Idle;
 
+        if (_animCoroutine != null)
+            StopCoroutine(_animCoroutine);
         //_endAnimation.Raise(this, null);
     }
 }

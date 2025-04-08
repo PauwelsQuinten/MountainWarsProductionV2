@@ -137,6 +137,9 @@ public class FMODAudioHandler : MonoBehaviour
             case "Wood":
                 _surfaceTypeIDValue = 6.0f;
                 break;
+            case "Tall Grass":
+                _surfaceTypeIDValue = 7.0f;
+                break;
             default:
                 _surfaceTypeIDValue = 0.0f;
                 break;

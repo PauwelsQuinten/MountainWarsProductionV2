@@ -33,6 +33,8 @@ public class UIMainMenu : MonoBehaviour
     private EventInstance _UIConfirmSFXInstance;
     [SerializeField] private EventReference _UIBackSFX;
     private EventInstance _UIBackSFXInstance;
+
+    private Coroutine _playSFX;
     private void Start()
     {
         _masterVCA = FMODUnity.RuntimeManager.GetVCA("vca:/" + _masterVCAName);
@@ -51,7 +53,8 @@ public class UIMainMenu : MonoBehaviour
 
     public void NewGamePressed()
     {
-        StartCoroutine(PlaySFXWithDelay(_UIConfirmSFXInstance,0.2f));
+        if (_playSFX != null) StopCoroutine(_playSFX);
+        _playSFX = StartCoroutine(PlaySFXWithDelay(_UIConfirmSFXInstance,0.2f));
         _UIConfirmSFXInstance.release();
         _UIBackSFXInstance.release();
     }

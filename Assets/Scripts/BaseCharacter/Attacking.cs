@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using static UnityEngine.Rendering.GPUSort;
 
 public class Attacking : MonoBehaviour
 {
@@ -37,15 +36,10 @@ public class Attacking : MonoBehaviour
     private LayerMask _characterLayer;
     [SerializeField] BlackboardReference _blackboardRef;
 
-    [Header("Animation")]
-    [SerializeField]
-    private GameEvent _changeAnimation;
-
 
     private float _chargePower;
     private float _attackPower;
     private AttackType _attackType;
-    private AttackHeight _attackHeight;
 
     private bool _wasCharging;
     private float _startChargeTime;
@@ -58,96 +52,34 @@ public class Attacking : MonoBehaviour
         AimingOutputArgs args = obj as AimingOutputArgs;
         if (args == null) return;
 
-        if (args.AttackState == AttackState.ShieldDefence
-            || args.AttackState == AttackState.SwordDefence
-            || args.AttackState == AttackState.Stun) return;
-
-        //if (args.AttackSignal != AttackSignal.Idle)
-        //    PrintInput(args);
-
-        _attackType = DetermineAttack(args);
-
-        if (args.AnimationStart)
-        {
-            //Debug.Log($"speed: {args.Speed}");
-            StartAnimation(args.Speed);
-            PrintInput(args);
-        }
 
         CalculateChargePower(args);
 
-        if (DidFeint(args.AttackSignal))
-        {
-            Debug.Log("---------------------------Feint-----------------------");
-            InteruptAnimation();
+        if (DidFeint(args.AttackSignal)) return;
 
-            //Signal to blackboard
-            if (gameObject.CompareTag(PLAYER))
-                _blackboardRef.variable.TargetCurrentAttack = AttackType.None;
-            return;
+        if (args.AttackSignal != AttackSignal.Stab && args.AttackSignal != AttackSignal.Swing) return;
+
+
+        if(args.AttackSignal != AttackSignal.Stab)
+        {
+            if (!IsAngleBigEnough(args.AngleTravelled)) return;
+            if (DidOverCommit(args.AngleTravelled)) return;
         }
 
-        if (args.AttackSignal != AttackSignal.Stab && args.AttackSignal != AttackSignal.Swing)
-        {
-            //Signal to blackboard
-            if (gameObject.CompareTag(PLAYER))
-                _blackboardRef.variable.TargetCurrentAttack = AttackType.None;
-            return;
-        }
-
-        //
-        //if (args.AttackSignal != AttackSignal.Stab)
-        //{
-        //    if (!IsAngleBigEnough(args.AngleTravelled)) return;
-        //    if (DidOverCommit(args.AngleTravelled)) return;
-        //}
-
-        _attackRange = GetAttackMediumRange(args);
         _attackPower = CalculatePower(args);
-        _attackHeight = args.AttackHeight;
-
-       
-        //PrintInput2(args);
-        //Signal to blackboard
-        if (gameObject.CompareTag(PLAYER))
-        {
-            _blackboardRef.variable.TargetCurrentAttack = _attackType;
-            _blackboardRef.variable.TargetState = args.AttackState;
-        }
-    }
-
-    public void SwordHit(Component sender, object obj)
-    {
-        if (sender.gameObject != gameObject) return;
-
+        _attackType = DetermineAttack(args);
 
         if (_attackType == AttackType.Stab) _loseStamina.Raise(this, new StaminaEventArgs { StaminaCost = _staminaCost.value * 0.75f });
         else _loseStamina.Raise(this, new StaminaEventArgs { StaminaCost = _staminaCost.value });
 
-
         if (!IsEnemyInRange()) return;
-        _doAttack.Raise(this, new AttackEventArgs { AttackType = _attackType, AttackHeight = _attackHeight, AttackPower = _attackPower });
+        _doAttack.Raise(this, new AttackEventArgs { AttackType = _attackType, AttackHeight = args.AttackHeight, AttackPower = _attackPower});
 
+        PrintInput(args);
+        //Signal to blackboard
+        if (gameObject.CompareTag(PLAYER))
+            _blackboardRef.variable.TargetCurrentAttack = _attackType;
     }
-
-
-    private void StartAnimation(float speed)
-    {
-        if (_attackType == AttackType.HorizontalSlashToLeft)
-        {
-            _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.SlashLeft, AnimLayer = 3, DoResetIdle = true, Interupt = false, Speed = speed });
-        }
-        else if (_attackType == AttackType.HorizontalSlashToRight)
-        {
-            _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.SlashRight, AnimLayer = 3, DoResetIdle = true, Interupt = false, Speed = speed });
-        }
-    }
-    
-    private void InteruptAnimation()
-    {
-         _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Idle, AnimLayer = 1, DoResetIdle = false, Interupt = true });
-    }
-        
 
     private bool DidFeint(AttackSignal signal)
     {
@@ -163,11 +95,7 @@ public class Attacking : MonoBehaviour
 
     private bool DidOverCommit(float currentAngle)
     {
-        if (currentAngle > _overCommitAngle)
-        {
-            Debug.Log("overcomiited");
-            return true;
-        }
+        if (currentAngle > _overCommitAngle) return true;
         return false;
     }
 
@@ -194,13 +122,7 @@ public class Attacking : MonoBehaviour
         float power = aimOutput.EquipmentManager.GetEquipmentPower();
         if (aimOutput.Speed != 0) power += _basePower * aimOutput.Speed + _chargePower;
         else power += _basePower + _chargePower;
-        _chargePower = 0f;
         return swingAngle + power;
-    }
-
-    private float GetAttackMediumRange(AimingOutputArgs aimOutput)
-    {
-        return aimOutput.EquipmentManager.GetAttackRange();        
     }
 
     private AttackType DetermineAttack(AimingOutputArgs aimOutput)
@@ -219,7 +141,7 @@ public class Attacking : MonoBehaviour
             if (((1 << c.gameObject.layer) & _characterLayer) != 0)
             {
                 if (c.gameObject == gameObject) continue;
-                if(Vector3.Distance(transform.position, c.transform.position) < _attackRange) return true;
+                if(Vector2.Distance(transform.position, c.transform.position) < _attackRange) return true;
             }
         }
             return false;
@@ -228,10 +150,5 @@ public class Attacking : MonoBehaviour
     private void PrintInput(AimingOutputArgs args)
     {
         Debug.Log($"attack input : {args.AttackSignal}, state: {args.AttackState}, {args.Direction}, {args.AngleTravelled}. owner: {gameObject}");
-    }
-    
-    private void PrintInput2(AimingOutputArgs args)
-    {
-        Debug.Log($"attack input after checking : {args.AttackSignal}, state: {args.AttackState}, {args.Direction}, {args.AngleTravelled}. owner: {gameObject}, power = {_attackPower},{args.AttackHeight}");
     }
 }

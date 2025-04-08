@@ -25,7 +25,6 @@ public class GoapPlanner : MonoBehaviour
     {
         _currentWorldState = gameObject.AddComponent<WorldState>();
         _currentWorldState.WorldStateType = WorldStateType.Current;
-        _blackboard.variable.ResetAtStart();
         _currentWorldState.AsignBlackboard(_blackboard);
 
         foreach (var action in _allActionPrefabs)
@@ -43,7 +42,7 @@ public class GoapPlanner : MonoBehaviour
         _currentWorldState.UpdateWorldState();
         _recursionCounter = 0;
 
-        if (_activeGoal && _activeGoal.InteruptGoal(_currentWorldState, _blackboard)) //Placed for when getting a knockback
+        if (_activeGoal && _activeGoal.InteruptGoal(_currentWorldState)) //Placed for when getting a knockback
             ResetPlan(true);
 
         if (_activeGoal == null || _actionPlan.Count == 0)
@@ -66,10 +65,10 @@ public class GoapPlanner : MonoBehaviour
 
         foreach (var goal in _allGoals)
         {
-            if (!goal.IsVallid(_currentWorldState, _blackboard))
+            if (!goal.IsVallid(_currentWorldState))
                 continue;
 
-            float score = goal.GoalScore(_characterMentality, _currentWorldState, _blackboard);
+            float score = goal.GoalScore(_characterMentality, _currentWorldState);
             if (score > highstScore)
             {
                 highstScore = score;
@@ -84,23 +83,23 @@ public class GoapPlanner : MonoBehaviour
     private void ExecutePlan()
     {
         if (_activeAction)
-            _activeAction.UpdateAction(_currentWorldState, _blackboard);
+            _activeAction.UpdateAction(_currentWorldState);
         else if (_actionPlan.Count > 0)
         {
             _activeAction = _actionPlan[_actionPlan.Count - 1];
-            _activeAction.StartAction(_currentWorldState, _blackboard);
+            _activeAction.StartAction(_currentWorldState);
         }
         else
             return;
 
-        if (_activeAction.IsCompleted(_currentWorldState))
+        if (_activeAction.IsCompleted(_currentWorldState, _activeAction.DesiredWorldState))
         {
             _actionPlan.RemoveAt(_actionPlan.Count - 1);
             _activeAction = null;
             return;
         }
 
-        if (_activeAction.IsInterupted(_currentWorldState, _blackboard))
+        if (_activeAction.IsInterupted(_currentWorldState))
         {
             //_activeAction.ActionCompleted();
             ResetPlan(false);
@@ -120,7 +119,7 @@ public class GoapPlanner : MonoBehaviour
 
             foreach (var action in _allActions)
             {
-                if (!action.IsVallid(_currentWorldState, _blackboard))
+                if (!action.IsVallid(_currentWorldState))
                     continue;
 
                 //Compare Values

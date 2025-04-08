@@ -9,35 +9,7 @@ using static UnityEngine.Rendering.DebugUI;
 public class BlackboardVariable : ScriptableObject
 {
     public event EventHandler<BlackboardEventArgs> ValueChanged;
-    public void ResetAtStart()
-    {
-        _state = 0f;
-        _stamina = 0f;
-        _health = 0f;
-        _isBleeding = false;
-        _rHEquipmentHealth = 0f;
-        _lHEquipmentHealth = 0f;
-        _self = null;
-        _orientation = 0f;
-        _target = null;
-        _targetState = 0f;
-        _targetStamina = 0f;
-        _targetHealth = 0f;
-        _targetIsBleeding = false;
-        _targetRHEquipmentHealth = 0f;
-        _targetLHEquipmentHealth = 0f;
-        _targetWeaponRange = 0f;
-        _weaponRange = 0f;
-        _storredAttacks = new Dictionary<AttackType, int>
-        {
-            { AttackType.Stab, 0 }, { AttackType.HorizontalSlashToRight, 0 }, { AttackType.HorizontalSlashToLeft, 0 }
-        };
-        _observedAttack = AttackType.None;
-        _targetCurrentAttack = AttackType.None;
-        _targetShieldState = Direction.Idle;
-        _shieldState = Direction.Idle;
-        _isPlayerAgressive = false;
-    }
+
 
     private AttackState _state;
     public AttackState State
@@ -66,7 +38,6 @@ public class BlackboardVariable : ScriptableObject
             }
         }
     }
-
     private float _health;
     public float Health
     {
@@ -80,21 +51,6 @@ public class BlackboardVariable : ScriptableObject
             //}
         }
     }
-
-    private bool _isBleeding;
-    public bool IsBleeding
-    {
-        get => _isBleeding;
-        set
-        {
-            if (_isBleeding != value)
-            {
-                _isBleeding = value;
-            }
-        }
-    }
-
-
     private float _rHEquipmentHealth;
     public float RHEquipmentHealth
     {
@@ -108,7 +64,6 @@ public class BlackboardVariable : ScriptableObject
             }
         }
     }
-
     private float _lHEquipmentHealth;
     public float LHEquipmentHealth
     {
@@ -123,32 +78,6 @@ public class BlackboardVariable : ScriptableObject
         }
     }
 
-    private GameObject _self;
-    public GameObject Self
-    {
-        get => _self;
-        set
-        {
-            if (_self != value)
-            {
-                _self = value;
-            }
-        }
-    }
-
-    private Orientation _orientation = Orientation.East;
-    public Orientation Orientation
-    {
-        get => _orientation;
-        set
-        {
-            if (value != _orientation)
-            {
-                _orientation = value;
-            }
-        }
-    }
-    
     private GameObject _target;
     public GameObject Target
     {
@@ -201,19 +130,6 @@ public class BlackboardVariable : ScriptableObject
             {
                 _targetHealth = value;
                 ValueChanged?.Invoke(this, new BlackboardEventArgs { ThisChanged = BlackboardEventArgs.WhatChanged.TargetHealth });
-            }
-        }
-    }
-    
-    private bool _targetIsBleeding;
-    public bool TargetIsBleeding
-    {
-        get => _targetIsBleeding;
-        set
-        {
-            if (_targetIsBleeding != value)
-            {
-                _targetIsBleeding = value;
             }
         }
     }
@@ -275,11 +191,7 @@ public class BlackboardVariable : ScriptableObject
     }
 
     //Holds the attacks the opponent throw at him, this is used for as the opponent uses 1 move to much. it needs to be parried/Disarmed.
-    private Dictionary<AttackType, int> _storredAttacks = 
-        new Dictionary<AttackType, int> 
-        { 
-            { AttackType.Stab, 0 }, { AttackType.HorizontalSlashToRight, 0 }, { AttackType.HorizontalSlashToLeft, 0 }
-        };
+    private Dictionary<AttackType, int> _storredAttacks = new Dictionary<AttackType, int> { { AttackType.Stab, 0 }, { AttackType.HorizontalSlashToRight, 0 }, { AttackType.HorizontalSlashToLeft, 0 }};
     public Dictionary<AttackType, int> StorredAttacks
     {
         get => _storredAttacks;
@@ -288,7 +200,9 @@ public class BlackboardVariable : ScriptableObject
             if (_storredAttacks != value)
             {
                 _storredAttacks = value;
-                
+                _observedAttack = EvaluateAttackCount();
+                ValueChanged?.Invoke(this, new BlackboardEventArgs { ThisChanged = BlackboardEventArgs.WhatChanged.TargetObservedAttack });
+
             }
         }
     }
@@ -320,14 +234,6 @@ public class BlackboardVariable : ScriptableObject
             }
             highestCount -= lowestCount;
         }
-        else if (highestCount > 5)
-        {
-            foreach (var key in StorredAttacks.Keys.ToList())
-            {
-                StorredAttacks[key] -= StorredAttacks[key] > 0? 1 : 0;
-            }
-            highestCount -= 1;
-        }
         return highestCount >= 5? attackType : AttackType.None;
     }
 
@@ -337,72 +243,16 @@ public class BlackboardVariable : ScriptableObject
         get => _targetCurrentAttack;
         set
         {
-            //if (_targetCurrentAttack != value)
-            if (value != AttackType.None)
+            if (_targetCurrentAttack != value)
             {
                 _targetCurrentAttack = value;
-                //Debug.Log($"new currentAttack{_targetCurrentAttack}");
                 ValueChanged?.Invoke(this, new BlackboardEventArgs { ThisChanged = BlackboardEventArgs.WhatChanged.TargetCurrentAttack });
 
-                
                 StorredAttacks[_targetCurrentAttack] += 1;
 
-                _observedAttack = EvaluateAttackCount();
-                ValueChanged?.Invoke(this, new BlackboardEventArgs { ThisChanged = BlackboardEventArgs.WhatChanged.TargetObservedAttack });
-                
-                
-                _observedAttack = EvaluateAttackCount();
-                ValueChanged?.Invoke(this, new BlackboardEventArgs { ThisChanged = BlackboardEventArgs.WhatChanged.TargetObservedAttack });
-
-
-            }
-        }
-    }
-    public void ResetCurrentAttack()
-    {
-        _targetCurrentAttack = AttackType.None;
-    }
-
-
-    private Direction _targetShieldState;
-    public Direction TargetShieldState
-    {
-        get => _targetShieldState;
-        set
-        {
-            if (_targetShieldState != value)
-            {
-                _targetShieldState = value;
-                ValueChanged?.Invoke(this, new BlackboardEventArgs { ThisChanged = BlackboardEventArgs.WhatChanged.TargetShieldState });
-            }
-        }
-    }
-    
-    private Direction _shieldState;
-    public Direction ShieldState
-    {
-        get => _shieldState;
-        set
-        {
-            if (_shieldState != value)
-            {
-                _shieldState = value;
-                ValueChanged?.Invoke(this, new BlackboardEventArgs { ThisChanged = BlackboardEventArgs.WhatChanged.ShieldState });
             }
         }
     }
 
-    private bool _isPlayerAgressive = false;
-    public bool IsPlayerAgressive
-    {
-        get => _isPlayerAgressive;
-        set
-        {
-            if (_isPlayerAgressive != value)
-            {
-                _isPlayerAgressive = value;
-            }
-        }
-    }
 
 }

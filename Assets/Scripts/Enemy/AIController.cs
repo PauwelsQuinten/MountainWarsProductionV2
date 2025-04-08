@@ -35,7 +35,7 @@ public class AIController : MonoBehaviour
         StartCoroutine(CheckSurrounding());
     }
 
-    //Send Package to Block/ParryAction/Attack instead of going through aiming.
+    //Send Package to Block/Parry/Attack instead of going through aiming.
     //
 
    

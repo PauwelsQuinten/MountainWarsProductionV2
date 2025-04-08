@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -33,18 +32,7 @@ public class UIHealthManager : MonoBehaviour
     private Coroutine _patchUp;
     private bool _completedPatchUp;
 
-
-    [Header("Equipment")]
-    [SerializeField]
-    private Image _shield;
-    [SerializeField]
-    private Image _weapon;
-
-    [SerializeField]
-    private GameEvent _gameLost;
-
-
-
+   
     public void UpdateHealth(Component sender, object obj)
     {
         HealthEventArgs args = obj as HealthEventArgs;
@@ -63,9 +51,6 @@ public class UIHealthManager : MonoBehaviour
         _healthBar.fillAmount = fillAmount;
         
         UpdateBodyPartColor(sender, args);
-
-        if (args.CurrentHealth > 0) return;
-        _gameLost.Raise(this, EventArgs.Empty);
     }
 
     private void UpdateBodyPartColor(Component sender, HealthEventArgs args)
@@ -111,9 +96,6 @@ public class UIHealthManager : MonoBehaviour
         }
         float barFill = args.CurrentBlood / args.MaxBlood;
         _bloodBar.fillAmount = barFill;
-
-        if (args.CurrentBlood > 0) return;
-        _gameLost.Raise(this, EventArgs.Empty);
     }
 
     public void UpdatePatchUp(Component sender, object obj)
@@ -154,44 +136,8 @@ public class UIHealthManager : MonoBehaviour
         }
 
         float barFill = args.CurrentStamina / args.MaxStamina;
-        _staminaBar.fillAmount = barFill;
+        _bloodBar.fillAmount = barFill;
     }
-
-
-    public void UpdateEquipment(Component sender, object obj)
-    {
-        EquipmentEventArgs args = obj as EquipmentEventArgs;
-        if (args == null) return;
-
-        if (sender.gameObject.GetComponent<PlayerController>() == null)
-        {
-            if (sender.gameObject != gameObject) return;
-        }
-        else
-        {
-            if (gameObject.GetComponent<AIController>() != null) return;
-        }
-
-
-        float progress = args.ShieldDurability;
-        Color newColor = Color.Lerp(_noHealthColor, _fullHealthColor, progress);
-        if (progress <= 0f)
-        {
-            _shield.enabled = false;
-        }
-        else
-            _shield.color = newColor;
-
-        progress = args.WeaponDurability;
-        newColor = Color.Lerp(_noHealthColor, _fullHealthColor, progress);
-        if (progress <= 0f)
-        {
-            _weapon.enabled = false;
-        }
-        else
-            _weapon.color = newColor;
-    }
-
 
     private IEnumerator PathUpBar()
     {

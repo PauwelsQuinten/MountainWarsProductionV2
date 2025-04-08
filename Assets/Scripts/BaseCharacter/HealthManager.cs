@@ -92,15 +92,9 @@ public class HealthManager : MonoBehaviour
     {
         //Update blackboard
         if (gameObject.CompareTag(PLAYER))
-        {
             _blackboard.variable.TargetHealth = _currentHealth / _maxHealth;
-            _blackboard.variable.TargetIsBleeding = _isBleeding;
-        }
         else
-        {
             _blackboard.variable.Health = _currentHealth / _maxHealth;
-            _blackboard.variable.IsBleeding = _isBleeding;
-        }
     }
 
     private void SetHealth()

@@ -4,17 +4,17 @@ using UnityEngine;
 
 public class KillPlayerGoal : GoapGoal
 {
-    public override bool IsVallid(WorldState currentWorldState, BlackboardReference blackboard)
+    public override bool IsVallid(WorldState currentWorldState)
     {
         return _isVallid && currentWorldState.WorldStatePossesions[EWorldState.HasTarget] == EWorldStatePossesion.InPossesion;
     }
 
-    public override float GoalScore(CharacterMentality menatlity, WorldState currentWorldState, BlackboardReference blackboard)
+    public override float GoalScore(CharacterMentality menatlity, WorldState currentWorldState)
     {
         return 0.7f;
     }
 
-    public override bool InteruptGoal(WorldState currentWorldState, BlackboardReference blackboard)
+    public override bool InteruptGoal(WorldState currentWorldState)
     {
         /*bool parryMoveFound = false;
         foreach (KeyValuePair<AttackType, int> att in currentWorldState._attackCountList)

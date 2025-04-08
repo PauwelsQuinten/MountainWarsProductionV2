@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using static UnityEngine.Rendering.GPUSort;
 
 public class Attacker : MonoBehaviour
 {
@@ -9,8 +10,7 @@ public class Attacker : MonoBehaviour
     [Header("State")]
     [SerializeField] AttackType _attackType = AttackType.Stab;
     [SerializeField] AttackHeight _attackHeight = AttackHeight.Torso;
-    [SerializeField] float _attackAngle = 180f;
-    [SerializeField] float _attackSpeed = 5f;
+    [SerializeField] float _attackPower = 1f;
     
     private Coroutine _AttackCoroutine;
 
@@ -31,89 +31,16 @@ public class Attacker : MonoBehaviour
 
     private void Attack()
     {
-        //var attackPackage = new AttackEventArgs
-        //{
-        //    AttackType = _attackType
-        //           ,
-        //    AttackHeight = _attackHeight
-        //           ,
-        //    AttackPower = _attackPower
-        //};
-        //_deffendEvent.Raise(this, attackPackage);
-        //    Debug.Log("Attack send");
-
-        switch (_attackType)
+        var attackPackage = new AttackEventArgs
         {
-            case AttackType.Stab:
-                StabPackage();
-                break;
-            case AttackType.HorizontalSlashToLeft:
-                SwingPackage(true);
-                break;
-            case AttackType.HorizontalSlashToRight:
-                SwingPackage(false);
-                break;
-            case AttackType.ShieldBash:
-                break;
-            case AttackType.None:
-                break;
-        }
-        Debug.Log("Attack send");
-    }
-
-    private void SwingPackage(bool toLeft)
-    {
-        var package = new AimingOutputArgs
-        {
-            AimingInputState = AimingInputState.Idle
-               ,
-            AngleTravelled = _attackAngle
-               ,
+            AttackType = _attackType
+                   ,
             AttackHeight = _attackHeight
-               ,
-            Direction = toLeft? Direction.ToLeft : Direction.ToRight
-               ,
-            BlockDirection = Direction.Idle
-               ,
-            Speed = _attackSpeed
-               ,
-            AttackSignal = AttackSignal.Swing
-               ,
-            AttackState = AttackState.Attack
-               ,
-            EquipmentManager = GetComponent<EquipmentManager>()
-               ,
-            IsHoldingBlock = false
+                   ,
+            AttackPower = _attackPower
         };
-        _attackEvent.Raise(this, package);
-    }
-
-
-    private void StabPackage()
-    {
-        var package = new AimingOutputArgs
-        {
-            AimingInputState = AimingInputState.Idle
-               ,
-            AngleTravelled = 5f
-               ,
-            AttackHeight = _attackHeight
-               ,
-            Direction = Direction.ToCenter
-               ,
-            BlockDirection = Direction.Idle
-               ,
-            Speed = _attackSpeed
-               ,
-            AttackSignal = AttackSignal.Stab
-               ,
-            AttackState = AttackState.Attack
-               ,
-            EquipmentManager = GetComponent<EquipmentManager>()
-               ,
-            IsHoldingBlock = false
-        };
-        _attackEvent.Raise(this, package);
+        _attackEvent.Raise(this, attackPackage);
+            Debug.Log("Attack send");
     }
 
 }

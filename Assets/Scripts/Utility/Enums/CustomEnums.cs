@@ -30,10 +30,10 @@ namespace UnityEngine
     {
         Idle,
         Attack,
-        Stun,
         ShieldDefence,
         SwordDefence,
         BlockAttack,
+        Stun
     }
 
     public enum AimingInputState
@@ -41,7 +41,7 @@ namespace UnityEngine
         Idle, 
         Moving, 
         Hold, 
-        Cooldown
+        Reset
     }
 
     public enum Direction
@@ -135,7 +135,6 @@ namespace UnityEngine
         Stamina,
         RHEquipment,
         LHEquipment,
-        ShieldState,
         HasTarget,
 
         TargetBehaviour,
@@ -143,7 +142,6 @@ namespace UnityEngine
         TargetStamina,
         TargetRHEquipment,
         TargetLHEquipment,
-        TargetShieldState,
 
         TargetOpening,
         TargetAttackRange,
@@ -174,8 +172,7 @@ namespace UnityEngine
         Attacking,
         Defending,
         Knock,
-        Default,
-        Idle
+        Default
     }
     
     public enum EWorldStateRange
@@ -183,16 +180,7 @@ namespace UnityEngine
        InRange,
        OutOfRange,
        FarAway,
-       Default
-    }
-      
-    public enum EWorldStateShield
-    {
-       Centered,
-       Right,
-       Left,
-       AttackDirection,
-       Default
+        Default
     }
      
     public enum CharacterMentality
@@ -201,33 +189,4 @@ namespace UnityEngine
        Agressive,
        Coward
     }
-
-    public enum AnimationState 
-    {
-        Empty,
-        Idle,
-        Walk,
-        Run,
-        SlashLeft,
-        SlashRight,
-        ShieldEquip,
-        SwordEquip,
-        ParryShieldLeft,
-        ParryShieldRight,
-        ParrySwordLeft,
-        ParrySwordRight,
-    }
-
-    public enum ObjectTarget
-    {
-        Player,
-        Weapon,
-        Shield,
-        Forward,
-        Backward,
-        Side,
-    }
-
-
-
 }

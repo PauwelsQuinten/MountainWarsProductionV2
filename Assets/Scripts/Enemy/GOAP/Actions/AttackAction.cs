@@ -42,7 +42,9 @@ public class AttckAction : GoapAction
 
     public override void CancelAction()
     {
-
+        base.CancelAction();
+        if (_attackCoroutine != null) 
+            StopCoroutine(_attackCoroutine);
     }
 
     //-----------------------------------------------------------------------

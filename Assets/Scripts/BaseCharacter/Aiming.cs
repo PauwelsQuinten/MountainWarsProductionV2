@@ -151,6 +151,7 @@ public class Aiming : MonoBehaviour
             if (_traversedAngle >= F_ACCEPTED_MIN_ANGLE && _swingDirection == Direction.Idle)
             {
                 _swingDirection = CalculateSwingDirection(_traversedAngle);
+                _enmAttackSignal = AttackSignal.Swing;
 
                 SendPackage(true);
                 

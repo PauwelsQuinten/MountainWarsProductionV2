@@ -60,7 +60,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   WorldStateType: 0
-  PriorityList: 
+  PriorityList: 00000000
   _targetHealth: 5
   _targetStamina: 5
   _targetRHEquipment: 5
@@ -73,5 +73,7 @@ MonoBehaviour:
   _hasOpening: 2
   _targetBehaviour: 4
   _behaviour: 0
-  _targetAttackRange: 3
+  _targetAttackRange: 0
   _attackRange: 3
+  _targetShieldState: 0
+  _shieldState: 3

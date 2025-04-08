@@ -61,7 +61,9 @@ public class BlockAction : GoapAction
 
     public override void CancelAction()
     {
-
+        base.CancelAction();
+        if (_defendCoroutine != null) 
+            StopCoroutine( _defendCoroutine );
     }
 
     //-----------------------------------------------------------------------

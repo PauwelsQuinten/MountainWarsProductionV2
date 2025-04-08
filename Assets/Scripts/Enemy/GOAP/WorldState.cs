@@ -57,6 +57,10 @@ public class WorldState : MonoBehaviour
     public Dictionary<EWorldState, EWorldStateRange> WorldStateRanges = new Dictionary<EWorldState, EWorldStateRange>();
     public Dictionary<EWorldState, Direction> WorldStateShields = new Dictionary<EWorldState, Direction>();
 
+    private void Start()
+    {
+        FillLists();
+    }
 
     public void Init()
     {
@@ -90,23 +94,23 @@ public class WorldState : MonoBehaviour
         {
             foreach (var item in desiredWorldState.PriorityList)
             {
-                if (WorldStateValues.ContainsKey(item) && WorldStateValues[item] - desiredWorldState.WorldStateValues[item] == 0)
+                if (WorldStateValues.ContainsKey(item) && WorldStateValues[item] - desiredWorldState.WorldStateValues[item] != 0)
                 {
                     listOfDifference.Add(item);
                 }
-                else if (WorldStatePossesions.ContainsKey(item) && WorldStatePossesions[item] - desiredWorldState.WorldStatePossesions[item] == 0)
+                else if (WorldStatePossesions.ContainsKey(item) && WorldStatePossesions[item] - desiredWorldState.WorldStatePossesions[item] != 0)
                 {
                     listOfDifference.Add(item);
                 }
-                else if (WorldStateBehaviours.ContainsKey(item) && WorldStateBehaviours[item] - desiredWorldState.WorldStateBehaviours[item] == 0)
+                else if (WorldStateBehaviours.ContainsKey(item) && WorldStateBehaviours[item] - desiredWorldState.WorldStateBehaviours[item] != 0)
                 {
                     listOfDifference.Add(item);
                 }
-                else if (WorldStateShields.ContainsKey(item) && WorldStateShields[item] - desiredWorldState.WorldStateShields[item] == 0)
+                else if (WorldStateShields.ContainsKey(item) && WorldStateShields[item] - desiredWorldState.WorldStateShields[item] != 0)
                 {
                     listOfDifference.Add(item);
                 }
-                else if (WorldStateRanges.ContainsKey(item) && WorldStateRanges[item] - desiredWorldState.WorldStateRanges[item] == 0)
+                else if (WorldStateRanges.ContainsKey(item) && WorldStateRanges[item] - desiredWorldState.WorldStateRanges[item] != 0)
                 {
                     listOfDifference.Add(item);
                 }
@@ -361,34 +365,50 @@ public class WorldState : MonoBehaviour
         if (WorldStateType == WorldStateType.Current)
         {
             //Values
-            WorldStateValues.Add(EWorldState.TargetHealth, TargetHealth);
-            WorldStateValues.Add(EWorldState.TargetStamina, TargetStamina);
-            WorldStateValues.Add(EWorldState.TargetRHEquipment, TargetRHEquipment);
-            WorldStateValues.Add(EWorldState.TargetLHEquipment, TargetLHEquipment);
+            if (!WorldStateValues.ContainsKey(EWorldState.TargetHealth))
+                WorldStateValues.Add(EWorldState.TargetHealth, TargetHealth);
+            if (!WorldStateValues.ContainsKey(EWorldState.TargetStamina))
+                WorldStateValues.Add(EWorldState.TargetStamina, TargetStamina);
+            if (!WorldStateValues.ContainsKey(EWorldState.TargetRHEquipment))
+                WorldStateValues.Add(EWorldState.TargetRHEquipment, TargetRHEquipment);
+            if (!WorldStateValues.ContainsKey(EWorldState.TargetLHEquipment))
+                WorldStateValues.Add(EWorldState.TargetLHEquipment, TargetLHEquipment);
 
-            WorldStateValues.Add(EWorldState.Health, Health);
-            WorldStateValues.Add(EWorldState.Stamina, Stamina);
-            WorldStateValues.Add(EWorldState.RHEquipment, RHEquipment);
-            WorldStateValues.Add(EWorldState.LHEquipment, LHEquipment);
+            if (!WorldStateValues.ContainsKey(EWorldState.Health))
+                WorldStateValues.Add(EWorldState.Health, Health);
+            if (!WorldStateValues.ContainsKey(EWorldState.Stamina))
+                WorldStateValues.Add(EWorldState.Stamina, Stamina);
+            if (!WorldStateValues.ContainsKey(EWorldState.RHEquipment))
+                WorldStateValues.Add(EWorldState.RHEquipment, RHEquipment);
+            if (!WorldStateValues.ContainsKey(EWorldState.LHEquipment))
+                WorldStateValues.Add(EWorldState.LHEquipment, LHEquipment);
 
 
             //Possesions
-            WorldStatePossesions.Add(EWorldState.HasTarget, HasTarget);
-            WorldStatePossesions.Add(EWorldState.TargetOpening, HasOpening);
+            if (!WorldStatePossesions.ContainsKey(EWorldState.HasTarget))
+                WorldStatePossesions.Add(EWorldState.HasTarget, HasTarget);
+            if (!WorldStatePossesions.ContainsKey(EWorldState.TargetOpening))
+                WorldStatePossesions.Add(EWorldState.TargetOpening, HasOpening);
 
 
             //Behaviours
-            WorldStateBehaviours.Add(EWorldState.Behaviour, Behaviour);
-            WorldStateBehaviours.Add(EWorldState.TargetBehaviour, TargetBehaviour);
+            if (!WorldStateBehaviours.ContainsKey(EWorldState.Behaviour))
+                WorldStateBehaviours.Add(EWorldState.Behaviour, Behaviour);
+            if (!WorldStateBehaviours.ContainsKey(EWorldState.TargetBehaviour))
+                WorldStateBehaviours.Add(EWorldState.TargetBehaviour, TargetBehaviour);
 
 
             //Ranges
-            WorldStateRanges.Add(EWorldState.AttackRange, AttackRange);
-            WorldStateRanges.Add(EWorldState.TargetAttackRange, TargetAttackRange);
+            if (!WorldStateRanges.ContainsKey(EWorldState.AttackRange))
+                WorldStateRanges.Add(EWorldState.AttackRange, AttackRange);
+            if (!WorldStateRanges.ContainsKey(EWorldState.TargetAttackRange))
+                WorldStateRanges.Add(EWorldState.TargetAttackRange, TargetAttackRange);
 
             //Shields
-            WorldStateShields.Add(EWorldState.ShieldState, ShieldState);
-            WorldStateShields.Add(EWorldState.TargetShieldState, TargetShieldState);
+            if (!WorldStateShields.ContainsKey(EWorldState.ShieldState))
+                WorldStateShields.Add(EWorldState.ShieldState, ShieldState);
+            if (!WorldStateShields.ContainsKey(EWorldState.TargetShieldState))
+                WorldStateShields.Add(EWorldState.TargetShieldState, TargetShieldState);
 
         }
 

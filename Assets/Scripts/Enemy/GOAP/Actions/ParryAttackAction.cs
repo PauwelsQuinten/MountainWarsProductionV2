@@ -28,7 +28,6 @@ public class ParryAttackAction : GoapAction
             return;
     }
 
-    
     override public void UpdateAction(WorldState currentWorldState, BlackboardReference blackboard)
     {
         //Debug.Log("update");
@@ -70,9 +69,14 @@ public class ParryAttackAction : GoapAction
 
     override public void CancelAction()
     {
-        StopCoroutine(_actionCoroutine);
+        base.CancelAction();
         StopCoroutine(_defendCoroutine);
     }
+
+
+    //-----------------------------------------------------------------------
+    //Helper functions
+    //-----------------------------------------------------------------------
 
     private IEnumerator DefendRoutine(float time)
     {

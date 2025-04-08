@@ -65,17 +65,6 @@ public class Attacking : MonoBehaviour
         //if (args.AttackSignal != AttackSignal.Idle)
         //    PrintInput(args);
 
-        _attackType = DetermineAttack(args);
-
-        if (args.AnimationStart)
-        {
-            //Debug.Log($"speed: {args.Speed}");
-            StartAnimation(args.Speed);
-            PrintInput(args);
-        }
-
-        CalculateChargePower(args);
-
         if (DidFeint(args.AttackSignal))
         {
             Debug.Log("---------------------------Feint-----------------------");
@@ -95,17 +84,28 @@ public class Attacking : MonoBehaviour
             return;
         }
 
+
+        CalculateChargePower(args);
+
+        _attackType = DetermineAttack(args);
+        _attackRange = GetAttackMediumRange(args);
+        _attackPower = CalculatePower(args);
+        _attackHeight = args.AttackHeight;
+
+        if (args.AnimationStart)
+        {
+            //Debug.Log($"speed: {args.Speed}");
+            StartAnimation(args.Speed);
+            PrintInput(args);
+        }
+
+
         //
         //if (args.AttackSignal != AttackSignal.Stab)
         //{
         //    if (!IsAngleBigEnough(args.AngleTravelled)) return;
         //    if (DidOverCommit(args.AngleTravelled)) return;
         //}
-
-        _attackRange = GetAttackMediumRange(args);
-        _attackPower = CalculatePower(args);
-        _attackHeight = args.AttackHeight;
-
        
         //PrintInput2(args);
         //Signal to blackboard

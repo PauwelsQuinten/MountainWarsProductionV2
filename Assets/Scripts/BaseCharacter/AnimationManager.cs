@@ -37,7 +37,7 @@ public class AnimationManager : MonoBehaviour
         {
                 BoredBehaviour bored = _animator.GetBehaviour<BoredBehaviour>();
                 if (bored != null) bored.IdleExit();
-                else Debug.Log("Bored is null");
+                //else Debug.Log("Bored is null");
         }
 
         //Debug.Log($"anim call: {args.AnimState.ToString()}");

@@ -9,11 +9,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6692189313614282644}
-  - component: {fileID: -7810283385682158347}
-  - component: {fileID: -3160163725728759933}
-  - component: {fileID: 8116822364762693881}
+  - component: {fileID: 4517659878342515072}
+  - component: {fileID: -5060030443542841245}
+  - component: {fileID: 7607232700774041888}
   m_Layer: 0
-  m_Name: LookAround
+  m_Name: SwingLeft
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -34,7 +34,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &-7810283385682158347
+--- !u!114 &4517659878342515072
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -43,15 +43,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 8372948630569132718}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2951e51a5d2eb1742bd35d3b5357e9e7, type: 3}
+  m_Script: {fileID: 11500000, guid: d973f93964ac0d44c91325b5c4178717, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   DesiredWorldState: {fileID: 0}
   SatisfyingWorldState: {fileID: 0}
   Cost: 1
-  _actionMaxRunTime: 2
-  _rotationSpeed: 130
---- !u!114 &-3160163725728759933
+  _actionMaxRunTime: 3
+  _outputEvent: {fileID: 11400000, guid: 3ce36d1a0cee9b64db3b05b01a8aece3, type: 2}
+  _executionTime: 0.5
+  _attackSignal: 3
+  _swingDirection: 2
+--- !u!114 &-5060030443542841245
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -65,7 +68,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   WorldStateType: 1
   PriorityList: 
-  _targetHealth: 5
+  _targetHealth: 4
   _targetStamina: 5
   _targetRHEquipment: 5
   _targetLHEquipment: 5
@@ -81,7 +84,7 @@ MonoBehaviour:
   _attackRange: 3
   _targetShieldState: 0
   _shieldState: 0
---- !u!114 &8116822364762693881
+--- !u!114 &7607232700774041888
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

@@ -11,6 +11,7 @@ public interface IActions
     bool IsCompleted(WorldState current);
     bool IsInterupted(WorldState currentWorldState, BlackboardReference blackboard);
     void CancelAction();
+    float CalculateCost(BlackboardReference blackboard);
 }
 
 public class GoapAction : MonoBehaviour, IActions
@@ -66,7 +67,8 @@ public class GoapAction : MonoBehaviour, IActions
 
     public virtual void CancelAction()
     {
-
+        if (_actionCoroutine != null)
+            StopCoroutine(_actionCoroutine);
     }
 
 
@@ -128,6 +130,11 @@ public class GoapAction : MonoBehaviour, IActions
         StopCoroutine(_actionCoroutine);
         _isActivated = false;
         return true;
+    }
+
+    virtual public float CalculateCost(BlackboardReference blackboard)
+    {
+        return Cost;
     }
 
     protected IEnumerator StartTimer(float runTime)

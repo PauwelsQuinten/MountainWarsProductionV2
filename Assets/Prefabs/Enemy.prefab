@@ -244,16 +244,20 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3805331497090860965, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
       propertyPath: Events.Array.size
-      value: 17
+      value: 18
       objectReference: {fileID: 0}
     - target: {fileID: 3805331497090860965, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
       propertyPath: Responses.Array.size
-      value: 17
+      value: 18
       objectReference: {fileID: 0}
     - target: {fileID: 3805331497090860965, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
       propertyPath: 'Events.Array.data[16]'
       value: 
       objectReference: {fileID: 11400000, guid: c56f6b487803f2447b475d33b2fabd4b, type: 2}
+    - target: {fileID: 3805331497090860965, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
+      propertyPath: 'Events.Array.data[17]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 08c91237b3eb8604cbb626b34a29c05a, type: 2}
     - target: {fileID: 3805331497090860965, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
       propertyPath: Responses.Array.data[16].m_PersistentCalls.m_Calls.Array.size
       value: 1
@@ -267,6 +271,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 4393849674124908581}
     - target: {fileID: 3805331497090860965, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
+      propertyPath: Responses.Array.data[17].m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 2724192922246951129}
+    - target: {fileID: 3805331497090860965, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
       propertyPath: Responses.Array.data[16].m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
       objectReference: {fileID: 0}
@@ -275,8 +283,16 @@ PrefabInstance:
       value: MoveInput
       objectReference: {fileID: 0}
     - target: {fileID: 3805331497090860965, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
+      propertyPath: Responses.Array.data[17].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: AIEvents
+      objectReference: {fileID: 0}
+    - target: {fileID: 3805331497090860965, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
       propertyPath: Responses.Array.data[16].m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: CharacterMovement, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 3805331497090860965, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
+      propertyPath: Responses.Array.data[17].m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: AIController, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 3805331497090860965, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
       propertyPath: Responses.Array.data[16].m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
@@ -446,13 +462,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _stateManager: {fileID: 5318217082051312346}
-  _moveInputRef:
-    useConstant: 0
-    constantValue: {x: 0, y: 0}
-    variable: {fileID: 11400000, guid: 2b7343704690fe44082a39bd90ac5296, type: 2}
-  _pickupEvent: {fileID: 11400000, guid: 6ae7cf8fbff13b34baa83d4c5c01a86f, type: 2}
+  _interactEvent: {fileID: 0}
+  _MoveEvent: {fileID: 0}
   _patchUpDuration: 1
   _patchUpEvent: {fileID: 11400000, guid: b60a265955952bd458a744ff3fa08d58, type: 2}
+  _shieldBash: {fileID: 0}
   _LookForTarget: {fileID: 11400000, guid: 7da4419bca02ab342bac3950bdec894c, type: 2}
 --- !u!114 &5245217995566118396
 MonoBehaviour:
@@ -472,5 +486,19 @@ MonoBehaviour:
     variable: {fileID: 11400000, guid: 2a061d8ac2119774a93990abdf59c3ae, type: 2}
   _characterMentality: 0
   Perception: 0.8
-  _allActionPrefabs: []
-  _allGoalPrefabs: []
+  _allActionPrefabs:
+  - {fileID: -1797275518084691768, guid: 44cf234799c54b64ca6ef818b6279bea, type: 3}
+  - {fileID: -1797275518084691768, guid: 6f1946348ce92134bb94f15d85e28b12, type: 3}
+  - {fileID: 2825537844067042917, guid: 827c5341e3600b7459b5434966c7ab4a, type: 3}
+  - {fileID: -7911762403898415740, guid: 765e6a6591899154a9607a8dcdb10221, type: 3}
+  - {fileID: 3250447219865308202, guid: fabddc8c0c964b040b3438154de89960, type: 3}
+  - {fileID: -7830003728257958352, guid: b49d84c27c9782248b82f6336a37b0f1, type: 3}
+  - {fileID: 8447165077177768023, guid: f21049b79aa703a429099dc888107c90, type: 3}
+  - {fileID: 8447165077177768023, guid: 62be5af58fff71d469cd038cae131afd, type: 3}
+  - {fileID: 8447165077177768023, guid: 8625b09d3a59a184881ac2c5349bdcfd, type: 3}
+  - {fileID: 2607340641265211982, guid: 3026721e7dafb4245aeef2a687127e7f, type: 3}
+  - {fileID: -7810283385682158347, guid: 768864db8fd79434cbdba5c3321ad305, type: 3}
+  - {fileID: 4283732040248783324, guid: a0146d1c9719f1246b9dabb6413a7fb0, type: 3}
+  - {fileID: 7804431625154130722, guid: d3548f442b2085c419c8ee64eef8887a, type: 3}
+  _allGoalPrefabs:
+  - {fileID: 3699231227375087124, guid: 0efe03a9ba895124d9f24ff615c18a24, type: 3}

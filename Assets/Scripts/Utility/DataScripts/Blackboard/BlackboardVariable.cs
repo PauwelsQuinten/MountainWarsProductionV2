@@ -11,23 +11,23 @@ public class BlackboardVariable : ScriptableObject
     public event EventHandler<BlackboardEventArgs> ValueChanged;
     public void ResetAtStart()
     {
-        _state = 0f;
-        _stamina = 0f;
-        _health = 0f;
+        _state = AttackState.Idle;
+        //_stamina = 0f;
+        //_health = 0f;
         _isBleeding = false;
-        _rHEquipmentHealth = 0f;
-        _lHEquipmentHealth = 0f;
+        //_rHEquipmentHealth = 0f;
+        //_lHEquipmentHealth = 0f;
         _self = null;
         _orientation = 0f;
         _target = null;
-        _targetState = 0f;
-        _targetStamina = 0f;
-        _targetHealth = 0f;
+        _targetState = AttackState.Idle;
+        //_targetStamina = 0f;
+        //_targetHealth = 0f;
         _targetIsBleeding = false;
-        _targetRHEquipmentHealth = 0f;
-        _targetLHEquipmentHealth = 0f;
-        _targetWeaponRange = 0f;
-        _weaponRange = 0f;
+        //_targetRHEquipmentHealth = 0f;
+        //_targetLHEquipmentHealth = 0f;
+        //_targetWeaponRange = 0f;
+        //_weaponRange = 0f;
         _storredAttacks = new Dictionary<AttackType, int>
         {
             { AttackType.Stab, 0 }, { AttackType.HorizontalSlashToRight, 0 }, { AttackType.HorizontalSlashToLeft, 0 }
@@ -350,11 +350,6 @@ public class BlackboardVariable : ScriptableObject
                 _observedAttack = EvaluateAttackCount();
                 ValueChanged?.Invoke(this, new BlackboardEventArgs { ThisChanged = BlackboardEventArgs.WhatChanged.TargetObservedAttack });
                 
-                
-                _observedAttack = EvaluateAttackCount();
-                ValueChanged?.Invoke(this, new BlackboardEventArgs { ThisChanged = BlackboardEventArgs.WhatChanged.TargetObservedAttack });
-
-
             }
         }
     }

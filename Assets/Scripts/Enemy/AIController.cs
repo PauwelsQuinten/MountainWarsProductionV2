@@ -10,15 +10,18 @@ public class AIController : MonoBehaviour
 
     [Header("Variables")]
     [SerializeField]
-    private MovingInputReference _moveInputRef;
+    private GameEvent _interactEvent;
     [SerializeField]
-    private GameEvent _pickupEvent;
+    private GameEvent _MoveEvent;
 
     [Header("Healing")]
     [SerializeField]
     private float _patchUpDuration;
     [SerializeField]
     private GameEvent _patchUpEvent;
+
+    [SerializeField]
+    private GameEvent _shieldBash;
 
     [Header("Perception")]
     [SerializeField] private GameEvent _LookForTarget;
@@ -31,34 +34,63 @@ public class AIController : MonoBehaviour
     private float _patchTimer;
     void Start()
     {
-        _moveInputRef.variable.StateManager = _stateManager;
         StartCoroutine(CheckSurrounding());
     }
 
     //Send Package to Block/ParryAction/Attack instead of going through aiming.
     //
 
-   
-    public void Sprint(bool sprint)
+    public void AIEvents(Component sender, object obj)
     {
+        AIInputEventArgs args = obj as AIInputEventArgs;
+        if (obj is null) return;
+        if (args.Sender != gameObject) return;
+
+        switch (args.Input)
+        {
+            case AIInputAction.PatchUp:
+                PatchUp();
+                break;
+            case AIInputAction.Dash:
+                Sprint(true);
+                break;
+             case AIInputAction.StopDash:
+                Sprint(false);
+                break;
+            case AIInputAction.Interact:
+                break;
+        }
+    }
+
+    private void Sprint(bool sprint)
+    {
+        DirectionEventArgs package;
         if (sprint)
         {
             _wasSprinting = true;
-            _moveInputRef.variable.SpeedMultiplier = 1.5f;
+            package = new DirectionEventArgs { SpeedMultiplier = 1.5f };
+            _MoveEvent.Raise(this, package);
         }
-        if (!sprint && _wasSprinting)
+        else if (!sprint && _wasSprinting)
         {
             _wasSprinting = false;
-            _moveInputRef.variable.SpeedMultiplier = 1;
-            return;
+            package = new DirectionEventArgs { SpeedMultiplier = 1f };
+            _MoveEvent.Raise(this, package);
         }
+       
+    }
 
+    private void PatchUp()
+    {
+        _patchUpEvent.Raise(this, true);
     }
 
     public void Interact()
     {
-        _pickupEvent.Raise(this);
+        _interactEvent.Raise(this);
     }
+
+
 
     private IEnumerator CheckSurrounding()
     {

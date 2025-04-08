@@ -37,27 +37,21 @@ public class AnimationManager : MonoBehaviour
         {
                 BoredBehaviour bored = _animator.GetBehaviour<BoredBehaviour>();
                 if (bored != null) bored.IdleExit();
-                else Debug.Log("Bored is null");
+                //else Debug.Log("Bored is null");
         }
 
-         Debug.Log($"anim call: {args.AnimState.ToString()}");
+        //Debug.Log($"anim call: {args.AnimState.ToString()}");
         // Crossfade with normalized transition offset
         _animator.speed = args.Speed;
         _animator.CrossFade(args.AnimState.ToString(), 0.2f, args.AnimLayer, 0f);
 
         _currentState = args.AnimState;
 
-        if (_currentState == AnimationState.SlashLeft || _currentState == AnimationState.SlashRight 
-            || _currentState == AnimationState.ParryShieldRight || _currentState == AnimationState.ParryShieldLeft 
-            || _currentState == AnimationState.ParrySwordRight || _currentState == AnimationState.ParrySwordLeft)
+        if (args.DoResetIdle)
+        {
             _startAnimation.Raise(this, null);
-
-
-        //if (args.DoResetIdle)
-        //{
-        //    //_animCoroutine = StartCoroutine(ResetToIdle(_animator.GetCurrentAnimatorStateInfo(args.AnimLayer).length/_animator.speed, args.AnimLayer));
-        //    _animCoroutine = StartCoroutine(ResetToIdle(_animator.GetCurrentAnimatorStateInfo(args.AnimLayer).length, args.AnimLayer));
-        //}
+            _animCoroutine = StartCoroutine(ResetToIdle(_animator.GetCurrentAnimatorStateInfo(args.AnimLayer).length/_animator.speed, args.AnimLayer));
+        }
     }
 
     private void ResetAllLayers()
@@ -105,6 +99,8 @@ public class AnimationManager : MonoBehaviour
         ChangeAnimationState(this, new AnimationEventArgs { AnimState = AnimationState.Empty, AnimLayer = 2, DoResetIdle = false });
         _currentState = AnimationState.Idle;
 
+        if (_animCoroutine != null)
+            StopCoroutine(_animCoroutine);
         //_endAnimation.Raise(this, null);
     }
 }

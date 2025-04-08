@@ -58,6 +58,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private GameEvent _hide;
 
+    [Header("Pause")]
+    [SerializeField]
+    private GameEvent _pauseGame;
+
     private Vector2 _moveInput;
 
     private Coroutine _resetAttackheight;
@@ -108,12 +112,14 @@ public class PlayerController : MonoBehaviour
 
     public void ProcessAimInput(InputAction.CallbackContext ctx)
     {
+        if (Time.timeScale == 0) return;
         if (_staminaManager.CurrentStamina < _aimCost.value) return;
         _aimInputRef.variable.value = ctx.ReadValue<Vector2>();
     }
 
     private void AimInputRef_ValueChanged(object sender, AimInputEventArgs e)
     {
+        if (Time.timeScale == 0) return;
         if (_stateManager.AttackState == AttackState.Stun)
         {
             return;
@@ -138,11 +144,13 @@ public class PlayerController : MonoBehaviour
 
     public void ProccesMoveInput(InputAction.CallbackContext ctx)
     {
+        if (Time.timeScale == 0) return;
         _moveInputRef.variable.value = ctx.ReadValue<Vector2>();
     }
 
     public void ProccesSetBlockInput(InputAction.CallbackContext ctx)
     {
+        if (Time.timeScale == 0) return;
         if (_stateManager.AttackState == AttackState.Stun)
         {
             if (ctx.action.WasPressedThisFrame())
@@ -189,6 +197,7 @@ public class PlayerController : MonoBehaviour
 
     public void ProccesSetParryInput(InputAction.CallbackContext ctx)
     {
+        if (Time.timeScale == 0) return;
         if (_stateManager.AttackState == AttackState.Stun)
         {
             if (ctx.action.WasPressedThisFrame())
@@ -225,6 +234,7 @@ public class PlayerController : MonoBehaviour
 
     public void ProccesDodgeInput(InputAction.CallbackContext ctx)
     {
+        if (Time.timeScale == 0) return;
         if (ctx.performed)
         {
             _wasSprinting = true;
@@ -256,6 +266,7 @@ public class PlayerController : MonoBehaviour
 
     public void ProccesInteractInput(InputAction.CallbackContext ctx)
     {
+        if (Time.timeScale == 0) return;
         if (!ctx.performed) return;
         _pickupEvent.Raise(this);
         _hide.Raise(this, EventArgs.Empty);
@@ -264,6 +275,7 @@ public class PlayerController : MonoBehaviour
 
     public void ProccesAtackHeightInput(InputAction.CallbackContext ctx)
     {
+        if (Time.timeScale == 0) return;
         if (!ctx.performed) return;
         _stateManager.AttackHeight = AttackHeight.Head;
 
@@ -273,7 +285,8 @@ public class PlayerController : MonoBehaviour
 
     public void ProssesLockShieldInput(InputAction.CallbackContext ctx)
     {
-        if(!ctx.performed) return;
+        if (Time.timeScale == 0) return;
+        if (!ctx.performed) return;
         if (_stateManager.AttackState != AttackState.ShieldDefence) return;
         _isHoldingShield = true;
         _stateManager.IsHoldingShield = _isHoldingShield;
@@ -283,7 +296,8 @@ public class PlayerController : MonoBehaviour
 
     public void ProssesPatchUpInput(InputAction.CallbackContext ctx)
     {
-        if(!_stateManager.IsBleeding) return;
+        if (Time.timeScale == 0) return;
+        if (!_stateManager.IsBleeding) return;
         if (ctx.action.WasPressedThisFrame())
         {
             _patchStartTime = Time.time;
@@ -304,6 +318,12 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public void ProccesPauseInput(InputAction.CallbackContext ctx)
+    {
+        if (!ctx.performed) return;
+        _pauseGame.Raise(this, EventArgs.Empty);
+    }
+
     private IEnumerator ResetAttackHeight()
     {
         yield return new WaitForSeconds(1);
@@ -318,8 +338,5 @@ public class PlayerController : MonoBehaviour
             yield return new WaitForSeconds(0.5f);
             _LookForTarget.Raise(this, new OrientationEventArgs { NewOrientation = _stateManager.Orientation });
         }
-
     }
-
-
 }

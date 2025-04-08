@@ -1,5 +1,6 @@
 using FMOD.Studio;
 using FMODUnity;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
@@ -30,6 +31,8 @@ public class UIPauseScreen : MonoBehaviour
     private EventInstance _UIConfirmSFXInstance;
     [SerializeField] private EventReference _UIBackSFX;
     private EventInstance _UIBackSFXInstance;
+
+    private Coroutine _loadScene;
     private void Start()
     {
         _masterVCA = FMODUnity.RuntimeManager.GetVCA("vca:/" + _masterVCAName);
@@ -80,7 +83,16 @@ public class UIPauseScreen : MonoBehaviour
 
     public void MainMenuPressed()
     {
-        _UIBackSFXInstance.start();
+        if (_loadScene != null) StopCoroutine(_loadScene);
+        _UIConfirmSFXInstance.start();
+        _loadScene = StartCoroutine(LoadSceneWithDelay());
+        _UIConfirmSFXInstance.release();
+        _UIBackSFXInstance.release();
+    }
+
+    private IEnumerator LoadSceneWithDelay()
+    {
+        yield return new WaitForEndOfFrame();
         UnityEngine.SceneManagement.SceneManager.LoadScene("MainMenu");
     }
 

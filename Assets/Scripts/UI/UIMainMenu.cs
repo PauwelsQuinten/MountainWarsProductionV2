@@ -34,7 +34,7 @@ public class UIMainMenu : MonoBehaviour
     [SerializeField] private EventReference _UIBackSFX;
     private EventInstance _UIBackSFXInstance;
 
-    private Coroutine _playSFX;
+    private Coroutine _loadScene;
     private void Start()
     {
         _masterVCA = FMODUnity.RuntimeManager.GetVCA("vca:/" + _masterVCAName);
@@ -53,16 +53,16 @@ public class UIMainMenu : MonoBehaviour
 
     public void NewGamePressed()
     {
-        if (_playSFX != null) StopCoroutine(_playSFX);
-        _playSFX = StartCoroutine(PlaySFXWithDelay(_UIConfirmSFXInstance,0.2f));
+        _UIConfirmSFXInstance.start();
+        if (_loadScene != null) StopCoroutine(_loadScene);
+        _loadScene = StartCoroutine(LoadSceneWithDelay());
         _UIConfirmSFXInstance.release();
         _UIBackSFXInstance.release();
     }
 
-    private IEnumerator PlaySFXWithDelay(EventInstance eventInstance, float delayInSeconds)
+    private IEnumerator LoadSceneWithDelay()
     {
-        eventInstance.start();
-        yield return new WaitForSeconds(delayInSeconds);
+        yield return new WaitForEndOfFrame();
         UnityEngine.SceneManagement.SceneManager.LoadScene("Gameplay");
     }
 
@@ -71,7 +71,6 @@ public class UIMainMenu : MonoBehaviour
         _UIConfirmSFXInstance.start();
         _SettingsMenu.SetActive(true);
         _eventSystem.SetSelectedGameObject(_firstSettingsItem);
-
     }
 
     public void QuitGamePressed()

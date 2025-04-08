@@ -86,6 +86,41 @@ public class WorldState : MonoBehaviour
     {
         List<EWorldState> listOfDifference = new List<EWorldState>();
 
+        if (desiredWorldState.PriorityList != null && desiredWorldState.PriorityList.Count > 0)
+        {
+            foreach (var item in desiredWorldState.PriorityList)
+            {
+                if (WorldStateValues.ContainsKey(item) && WorldStateValues[item] - desiredWorldState.WorldStateValues[item] == 0)
+                {
+                    listOfDifference.Add(item);
+                }
+                else if (WorldStatePossesions.ContainsKey(item) && WorldStatePossesions[item] - desiredWorldState.WorldStatePossesions[item] == 0)
+                {
+                    listOfDifference.Add(item);
+                }
+                else if (WorldStateBehaviours.ContainsKey(item) && WorldStateBehaviours[item] - desiredWorldState.WorldStateBehaviours[item] == 0)
+                {
+                    listOfDifference.Add(item);
+                }
+                else if (WorldStateShields.ContainsKey(item) && WorldStateShields[item] - desiredWorldState.WorldStateShields[item] == 0)
+                {
+                    listOfDifference.Add(item);
+                }
+                else if (WorldStateRanges.ContainsKey(item) && WorldStateRanges[item] - desiredWorldState.WorldStateRanges[item] == 0)
+                {
+                    listOfDifference.Add(item);
+                }
+
+            }
+            return listOfDifference;
+        }
+
+        return CheckOverAllLists(desiredWorldState, listOfDifference);
+    }
+
+    private List<EWorldState> CheckOverAllLists(WorldState desiredWorldState, List<EWorldState> listOfDifference)
+    {
+
         //Values
         foreach (KeyValuePair<EWorldState, EWorldStateValue> worldState in desiredWorldState.WorldStateValues)
         {
@@ -103,7 +138,7 @@ public class WorldState : MonoBehaviour
                 listOfDifference.Add(worldState.Key);
             }
         }
-        
+
         //Check Ranges
         foreach (KeyValuePair<EWorldState, EWorldStateRange> worldState in desiredWorldState.WorldStateRanges)
         {
@@ -112,11 +147,20 @@ public class WorldState : MonoBehaviour
                 listOfDifference.Add(worldState.Key);
             }
         }
-        
+
         //Check behaviour
         foreach (KeyValuePair<EWorldState, EBehaviourValue> worldState in desiredWorldState.WorldStateBehaviours)
         {
             if (worldState.Value - WorldStateBehaviours[worldState.Key] != 0 && worldState.Value != EBehaviourValue.Default)
+            {
+                listOfDifference.Add(worldState.Key);
+            }
+        }
+
+        //Check Shield orientation
+        foreach (KeyValuePair<EWorldState, Direction> worldState in desiredWorldState.WorldStateShields)
+        {
+            if (worldState.Value - WorldStateShields[worldState.Key] != 0 && worldState.Value != Direction.Idle)
             {
                 listOfDifference.Add(worldState.Key);
             }

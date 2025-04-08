@@ -52,7 +52,7 @@ public class ParryAttackAction : GoapAction
 
     override public bool IsVallid(WorldState currentWorldState, BlackboardReference blackboard)
     {
-        if (currentWorldState.TargetBehaviour == EBehaviourValue.Attacking)
+        if (currentWorldState.TargetBehaviour == EBehaviourValue.Attacking && blackboard.variable.RHEquipmentHealth > 0f)
             return true;
         return false;
     }

@@ -248,7 +248,7 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: c07edaff124f1b04e8b8a49de23949a5, type: 2}
     - target: {fileID: 3805331497090860965, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
       propertyPath: Responses.Array.size
-      value: 20
+      value: 21
       objectReference: {fileID: 0}
     - target: {fileID: 3805331497090860965, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
       propertyPath: Responses.Array.data[1].m_PersistentCalls.m_Calls.Array.size
@@ -298,6 +298,10 @@ PrefabInstance:
       propertyPath: Responses.Array.data[19].m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 6282236807900181133}
+    - target: {fileID: 3805331497090860965, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
+      propertyPath: Responses.Array.data[20].m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 8421172182924108262}
     - target: {fileID: 3805331497090860965, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
       propertyPath: Responses.Array.data[1].m_PersistentCalls.m_Calls.Array.data[1].m_CallState
       value: 2
@@ -351,6 +355,10 @@ PrefabInstance:
       value: SwordHit
       objectReference: {fileID: 0}
     - target: {fileID: 3805331497090860965, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
+      propertyPath: Responses.Array.data[20].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: InParryMotion
+      objectReference: {fileID: 0}
+    - target: {fileID: 3805331497090860965, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
       propertyPath: Responses.Array.data[1].m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
       value: PlayerAgressiveness, Assembly-CSharp
       objectReference: {fileID: 0}
@@ -377,6 +385,10 @@ PrefabInstance:
     - target: {fileID: 3805331497090860965, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
       propertyPath: Responses.Array.data[19].m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: Attacking, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 3805331497090860965, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
+      propertyPath: Responses.Array.data[20].m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Parry, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 3805331497090860965, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
       propertyPath: Responses.Array.data[1].m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
@@ -837,6 +849,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 24f52033f6173df4ca5a0f6455d590ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &8421172182924108262 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8814302524761109724, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
+  m_PrefabInstance: {fileID: 1048408567555642682}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 510487665369618095}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04bce5e2f0636204ea52ab229bb447d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!4 &8424690266699013297 stripped

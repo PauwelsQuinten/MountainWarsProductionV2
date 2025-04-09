@@ -27,9 +27,9 @@ public class Blocking : MonoBehaviour
     public void BlockMovement(Component sender, object obj)
     {
         //Check for vallid signal
-        if (sender.gameObject != gameObject) return;
         AimingOutputArgs args = obj as AimingOutputArgs;
         if (args == null) return;
+        if (sender.gameObject != gameObject && args.Sender != gameObject) return;
 
         //When Shield is locked and state hasnt changed, keep previous values
         if (args.IsHoldingBlock && args.AttackState == AttackState.BlockAttack)

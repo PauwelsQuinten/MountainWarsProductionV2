@@ -79,7 +79,7 @@ public class FMODAudioHandler : MonoBehaviour
         SetParameterID(_ambienceInstance, _windIntensityID, 1.0f);
         SetParameterID(_ambienceInstance, _rainIntensityID, 0.0f);
         _ambienceInstance.set3DAttributes(_attributes);
-        _ambienceInstance.start();
+        //_ambienceInstance.start();
         _forestMusicInstance.start();
     }
 

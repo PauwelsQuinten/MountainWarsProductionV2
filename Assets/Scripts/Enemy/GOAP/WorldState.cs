@@ -85,7 +85,6 @@ public class WorldState : MonoBehaviour
         if (HasTarget == EWorldStatePossesion.InPossesion)
         {
             CalculateRange();
-            LookForOpenings();
         }
         
     }
@@ -336,16 +335,6 @@ public class WorldState : MonoBehaviour
         }
         
         return EBehaviourValue.Default;
-    }
-
-    private void LookForOpenings()
-    {
-        if (_blackboard.variable.TargetState == AttackState.Stun)
-            HasOpening = EWorldStatePossesion.InPossesion;
-        if (_blackboard.variable.TargetShieldState == Direction.Idle || _blackboard.variable.TargetShieldState != Direction.Idle)
-            HasOpening = EWorldStatePossesion.InPossesion;
-
-        HasOpening = EWorldStatePossesion.NotInPossesion;
     }
 
     private void UpdateBehaviour()

@@ -760,6 +760,20 @@ MonoBehaviour:
         m_CallState: 2
   - m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 6822675981429713178}
+        m_TargetAssemblyTypeName: AnimationManager, Assembly-CSharp
+        m_MethodName: ChangeAnimationState
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  - m_PersistentCalls:
+      m_Calls:
       - m_Target: {fileID: 4165634575879343316}
         m_TargetAssemblyTypeName: StateManager, Assembly-CSharp
         m_MethodName: OAnimationStart
@@ -777,6 +791,20 @@ MonoBehaviour:
       - m_Target: {fileID: 4165634575879343316}
         m_TargetAssemblyTypeName: StateManager, Assembly-CSharp
         m_MethodName: OAnimationEnd
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6458811806028097463}
+        m_TargetAssemblyTypeName: Attacking, Assembly-CSharp
+        m_MethodName: SwordHit
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

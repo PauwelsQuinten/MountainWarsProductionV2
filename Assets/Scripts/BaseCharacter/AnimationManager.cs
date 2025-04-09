@@ -50,7 +50,10 @@ public class AnimationManager : MonoBehaviour
         if (args.DoResetIdle)
         {
             _startAnimation.Raise(this, null);
-            _animCoroutine = StartCoroutine(ResetToIdle(_animator.GetCurrentAnimatorStateInfo(args.AnimLayer).length/_animator.speed, args.AnimLayer));
+
+            //This is only to be sure it gets cancelled if somehow the end off animition doesnt get called
+            //Dont use the diff on speed because it can give very inconsistent results 
+            _animCoroutine = StartCoroutine(ResetToIdle(_animator.GetCurrentAnimatorStateInfo(args.AnimLayer).length *1.5f, args.AnimLayer));
         }
     }
 
@@ -101,6 +104,7 @@ public class AnimationManager : MonoBehaviour
 
         if (_animCoroutine != null)
             StopCoroutine(_animCoroutine);
+        Debug.Log($"end through anim");
         //_endAnimation.Raise(this, null);
     }
 }

@@ -53,10 +53,10 @@ public class Attacking : MonoBehaviour
 
     public void Attack(Component sender, object obj)
     {
-        if (sender.gameObject != gameObject) return;
-
         AimingOutputArgs args = obj as AimingOutputArgs;
         if (args == null) return;
+        if (sender.gameObject != gameObject && args.Sender != gameObject) return;
+
 
         if (args.AttackState == AttackState.ShieldDefence
             || args.AttackState == AttackState.SwordDefence
@@ -96,7 +96,7 @@ public class Attacking : MonoBehaviour
         {
             //Debug.Log($"speed: {args.Speed}");
             StartAnimation(args.Speed);
-            PrintInput(args);
+            //PrintInput(args);
         }
 
 

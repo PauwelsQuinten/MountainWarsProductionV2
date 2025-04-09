@@ -354,7 +354,7 @@ public class Aiming : MonoBehaviour
             AnimationStart = earlyMessage
 
         };
-        Debug.Log($"Send package: {package.AttackState}, {package.AttackSignal}, {_enmAimingInput}, angle : {_traversedAngle}, early start: {package.AnimationStart}");
+        //Debug.Log($"Send package: {package.AttackState}, {package.AttackSignal}, {_enmAimingInput}, angle : {_traversedAngle}, early start: {package.AnimationStart}");
 
         if (_enmAttackSignal == AttackSignal.Feint)
             _AimOutputEvent.Raise(this, package);

@@ -32,6 +32,10 @@ public class WorldState : MonoBehaviour
     private EWorldStatePossesion _hasTarget = EWorldStatePossesion.Default;
     [SerializeField]
     private EWorldStatePossesion _hasOpening = EWorldStatePossesion.Default;
+    [SerializeField]
+    private EWorldStatePossesion _hasRHEquipment = EWorldStatePossesion.Default;
+    [SerializeField]
+    private EWorldStatePossesion _hasLHEquipment = EWorldStatePossesion.Default;
     
     [Header("Behaviour")]
     [SerializeField]
@@ -204,6 +208,12 @@ public class WorldState : MonoBehaviour
                 break;
             case BlackboardEventArgs.WhatChanged.LHEquipment:
                 LHEquipment = CalculateValue(_blackboard.variable.LHEquipmentHealth);
+                break;
+             case BlackboardEventArgs.WhatChanged.RHEquipmentPossesion:
+                HasRHEquipment = _blackboard.variable.HasRHEquipment? EWorldStatePossesion.InPossesion : EWorldStatePossesion.NotInPossesion ;
+                break;
+            case BlackboardEventArgs.WhatChanged.LHEquipmenPossesion:
+                HasLHEquipment = _blackboard.variable.HasLHEquipment ? EWorldStatePossesion.InPossesion : EWorldStatePossesion.NotInPossesion;
                 break;
             case BlackboardEventArgs.WhatChanged.ShieldState:
                 ShieldState = _blackboard.variable.ShieldState;
@@ -389,6 +399,10 @@ public class WorldState : MonoBehaviour
                 WorldStatePossesions.Add(EWorldState.HasTarget, HasTarget);
             if (!WorldStatePossesions.ContainsKey(EWorldState.TargetOpening))
                 WorldStatePossesions.Add(EWorldState.TargetOpening, HasOpening);
+             if (!WorldStatePossesions.ContainsKey(EWorldState.HasRHEquipment))
+                WorldStatePossesions.Add(EWorldState.HasRHEquipment, HasRHEquipment);
+            if (!WorldStatePossesions.ContainsKey(EWorldState.HasLHEquipment))
+                WorldStatePossesions.Add(EWorldState.HasLHEquipment, HasLHEquipment);
 
 
             //Behaviours
@@ -570,6 +584,26 @@ public class WorldState : MonoBehaviour
         {
             _hasOpening = value;
             WorldStatePossesions[EWorldState.TargetOpening] = _hasOpening;
+        }
+    }
+    
+    public EWorldStatePossesion HasRHEquipment
+    {
+        get { return _hasRHEquipment; }
+        set
+        {
+            _hasRHEquipment = value;
+            WorldStatePossesions[EWorldState.HasRHEquipment] = _hasRHEquipment;
+        }
+    }
+
+    public EWorldStatePossesion HasLHEquipment
+    {
+        get { return _hasLHEquipment; }
+        set
+        {
+            _hasLHEquipment = value;
+            WorldStatePossesions[EWorldState.HasLHEquipment] = _hasLHEquipment;
         }
     }
 

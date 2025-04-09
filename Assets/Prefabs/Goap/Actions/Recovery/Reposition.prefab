@@ -48,7 +48,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DesiredWorldState: {fileID: 0}
   SatisfyingWorldState: {fileID: 0}
-  Cost: 1
+  Cost: 0.2
   _actionMaxRunTime: 0.5
 --- !u!114 &6851733242180532322
 MonoBehaviour:
@@ -74,6 +74,8 @@ MonoBehaviour:
   _lHEquipment: 5
   _hasTarget: 2
   _hasOpening: 2
+  _hasRHEquipment: 2
+  _hasLHEquipment: 2
   _targetBehaviour: 4
   _behaviour: 0
   _targetAttackRange: 3
@@ -93,7 +95,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   WorldStateType: 0
-  PriorityList: 
+  PriorityList: 1000000005000000
   _targetHealth: 5
   _targetStamina: 5
   _targetRHEquipment: 5
@@ -104,9 +106,11 @@ MonoBehaviour:
   _lHEquipment: 5
   _hasTarget: 2
   _hasOpening: 2
+  _hasRHEquipment: 2
+  _hasLHEquipment: 2
   _targetBehaviour: 4
   _behaviour: 4
-  _targetAttackRange: 2
+  _targetAttackRange: 1
   _attackRange: 3
   _targetShieldState: 0
-  _shieldState: 0
+  _shieldState: 3

@@ -11,7 +11,7 @@ public interface IActions
     bool IsCompleted(WorldState current);
     bool IsInterupted(WorldState currentWorldState, BlackboardReference blackboard);
     void CancelAction();
-    float CalculateCost(BlackboardReference blackboard);
+    float CalculateCost(BlackboardReference blackboard, WorldState currentWorldState);
 }
 
 public class GoapAction : MonoBehaviour, IActions
@@ -132,7 +132,7 @@ public class GoapAction : MonoBehaviour, IActions
         return true;
     }
 
-    virtual public float CalculateCost(BlackboardReference blackboard)
+    virtual public float CalculateCost(BlackboardReference blackboard, WorldState currentWorldState)
     {
         return Cost;
     }

@@ -245,7 +245,34 @@ public class BlackboardVariable : ScriptableObject
             }
         }
     }
-    
+
+    private bool _hasRHEquipment;
+    public bool HasRHEquipment
+    {
+        get => _hasRHEquipment;
+        set
+        {
+            if (_hasRHEquipment != value)
+            {
+                _hasRHEquipment = value;
+                ValueChanged?.Invoke(this, new BlackboardEventArgs { ThisChanged = BlackboardEventArgs.WhatChanged.RHEquipmentPossesion });
+            }
+        }
+    }
+    private bool _hasLHEquipment;
+    public bool HasLHEquipment
+    {
+        get => _hasLHEquipment;
+        set
+        {
+            if (_hasLHEquipment != value)
+            {
+                _hasLHEquipment = value;
+                ValueChanged?.Invoke(this, new BlackboardEventArgs { ThisChanged = BlackboardEventArgs.WhatChanged.LHEquipmenPossesion });
+            }
+        }
+    }
+
     private float _targetWeaponRange;
     public float TargetWeaponRange
     {

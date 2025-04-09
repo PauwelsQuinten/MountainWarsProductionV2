@@ -13,6 +13,8 @@ namespace UnityEngine
             Health,//Set in healthManager
             RHEquipment,//set in EquipmentManager
             LHEquipment,//set in EquipmentManager
+            RHEquipmentPossesion,//set in EquipmentManager
+            LHEquipmenPossesion,//set in EquipmentManager
             WeaponRange,//set in EquipmentManager
             ShieldState,
 

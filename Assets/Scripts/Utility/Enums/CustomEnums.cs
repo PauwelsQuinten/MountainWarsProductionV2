@@ -137,6 +137,8 @@ namespace UnityEngine
         LHEquipment,
         ShieldState,
         HasTarget,
+        HasRHEquipment,
+        HasLHEquipment,
 
         TargetBehaviour,
         TargetHealth,

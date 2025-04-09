@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,6 +8,8 @@ public class ViewManager : MonoBehaviour
     [Header("Panels")]
     [SerializeField]
     private List<GameObject> _panels = new List<GameObject>();
+    [SerializeField]
+    private GameEvent _panelSwitchSound;
 
     [Header("Camera")]
     [SerializeField]
@@ -16,9 +19,11 @@ public class ViewManager : MonoBehaviour
     [SerializeField] 
     private float _offsetZ = -2;
 
-    [Header("VS")]
+    [Header("Showdown")]
     [SerializeField]
     private GameObject _vsImage;
+    [SerializeField]
+    private GameEvent _ShowdownSound;
 
     private Camera _cam;
     private GameObject _player;
@@ -47,13 +52,21 @@ public class ViewManager : MonoBehaviour
 
         if (!args.IsHidingSpot && !args.IsShowDown)
         {
-            if(!_isSwitchingPanel)
+            if (!_isSwitchingPanel)
+            {
+                _panelSwitchSound.Raise(this, EventArgs.Empty);
                 StartCoroutine(DoSwitchPanel(_panels[args.NewViewIndex].transform.position + (_cam.transform.forward * _offsetZ)));
+            }
         }
         else
         {
-            if (args.IsHidingSpot) _isNearHidingSpot = true;
-            else if (args.IsShowDown) StartCoroutine(DoShowDown());
+            if (args.IsHidingSpot)
+                _isNearHidingSpot = true;
+            else if (args.IsShowDown)
+            {
+                _ShowdownSound.Raise(this, EventArgs.Empty);
+                StartCoroutine(DoShowDown());
+            }
         }
         _previousArgs = _currentArgs;
     }

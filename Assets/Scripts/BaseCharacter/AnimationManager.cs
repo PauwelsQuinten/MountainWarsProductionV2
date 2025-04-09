@@ -53,7 +53,7 @@ public class AnimationManager : MonoBehaviour
 
             //This is only to be sure it gets cancelled if somehow the end off animition doesnt get called
             //Dont use the diff on speed because it can give very inconsistent results 
-            _animCoroutine = StartCoroutine(ResetToIdle(_animator.GetCurrentAnimatorStateInfo(args.AnimLayer).length *1.5f, args.AnimLayer));
+            _animCoroutine = StartCoroutine(ResetToIdle(_animator.GetCurrentAnimatorStateInfo(args.AnimLayer).length *1.1f, args.AnimLayer));
         }
     }
 

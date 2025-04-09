@@ -238,6 +238,12 @@ namespace UnityEngine
         Interact
     }
 
-
+    public enum Size
+    {
+        None,
+        Small,
+        Medium,
+        Large
+    }
 
 }

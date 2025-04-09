@@ -28,6 +28,7 @@ namespace UnityEngine
             TargetShieldState,
             TargetCurrentAttack,//Set in Attacking script
             TargetObservedAttack, //Calculated in Blackboard when target attacks
+            TargetOpening
         }
 
     }

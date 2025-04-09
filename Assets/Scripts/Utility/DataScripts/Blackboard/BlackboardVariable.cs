@@ -1,9 +1,7 @@
-using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using static UnityEngine.Rendering.DebugUI;
 
 [CreateAssetMenu(fileName = "BlackboardVariable", menuName = "DataScripts / Blackboard Variable")]
 public class BlackboardVariable : ScriptableObject
@@ -173,6 +171,7 @@ public class BlackboardVariable : ScriptableObject
             {
                 _targetState = value;
                 ValueChanged?.Invoke(this, new BlackboardEventArgs { ThisChanged = BlackboardEventArgs.WhatChanged.TargetBehaviour });
+                TargetOpening = FindOpening();
             }
         }
     }
@@ -396,6 +395,7 @@ public class BlackboardVariable : ScriptableObject
             {
                 _targetShieldState = value;
                 ValueChanged?.Invoke(this, new BlackboardEventArgs { ThisChanged = BlackboardEventArgs.WhatChanged.TargetShieldState });
+                TargetOpening = FindOpening();
             }
         }
     }
@@ -425,6 +425,59 @@ public class BlackboardVariable : ScriptableObject
                 _isPlayerAgressive = value;
             }
         }
+    }
+
+    private Opening _targetOpening;
+    public Opening TargetOpening
+    {
+        get => _targetOpening;
+        set
+        {
+            if (_targetOpening != value)
+            {
+                _targetOpening = value;
+                ValueChanged?.Invoke(this, new BlackboardEventArgs { ThisChanged = BlackboardEventArgs.WhatChanged.TargetOpening });
+
+            }
+        }
+    }
+
+    private Opening FindOpening()
+    {
+        Direction direction = Direction.Idle;
+        Size size = Size.Small;
+
+        if (TargetState == AttackState.Stun)
+        {
+            size = Size.Large;
+            direction = Direction.ToLeft;
+        }
+        else if (TargetShieldState == Direction.Idle)
+        {
+            size = Size.Medium;
+            direction = Direction.ToCenter;
+        }
+        else if (TargetShieldState != Direction.ToCenter)
+        {
+            size = Size.Medium;
+            if (TargetShieldState != Direction.ToLeft)
+                direction = Direction.ToRight;
+            else if (TargetShieldState != Direction.ToRight)
+                direction = Direction.ToLeft;
+        }
+        else if (TargetShieldState == Direction.ToCenter)
+        {
+            size = Size.Small;
+            direction = Direction.ToRight;
+        }
+        else
+        {
+            size = Size.None;
+            direction = Direction.Idle;
+        }
+
+
+        return new Opening(direction, size);
     }
 
 }

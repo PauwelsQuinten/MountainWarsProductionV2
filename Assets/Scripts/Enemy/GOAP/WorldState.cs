@@ -245,6 +245,12 @@ public class WorldState : MonoBehaviour
                 if (HasTarget == EWorldStatePossesion.InPossesion)
                     TargetShieldState = _blackboard.variable.TargetShieldState;
                 break;
+           case BlackboardEventArgs.WhatChanged.TargetOpening:
+                Debug.Log($"{_blackboard.variable.TargetOpening.OpeningDirection}, {_blackboard.variable.TargetOpening.OpeningSize}");
+                if (HasTarget == EWorldStatePossesion.InPossesion)
+                    HasOpening = _blackboard.variable.TargetOpening.OpeningSize != Size.Small || _blackboard.variable.TargetOpening.OpeningSize != Size.None ? 
+                        EWorldStatePossesion.InPossesion : EWorldStatePossesion.NotInPossesion;
+                break;
            
         }
     }
@@ -334,7 +340,12 @@ public class WorldState : MonoBehaviour
 
     private void LookForOpenings()
     {
-        HasOpening = EWorldStatePossesion.Default;
+        if (_blackboard.variable.TargetState == AttackState.Stun)
+            HasOpening = EWorldStatePossesion.InPossesion;
+        if (_blackboard.variable.TargetShieldState == Direction.Idle || _blackboard.variable.TargetShieldState != Direction.Idle)
+            HasOpening = EWorldStatePossesion.InPossesion;
+
+        HasOpening = EWorldStatePossesion.NotInPossesion;
     }
 
     private void UpdateBehaviour()

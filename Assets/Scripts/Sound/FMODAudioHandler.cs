@@ -147,7 +147,7 @@ public class FMODAudioHandler : MonoBehaviour
                 _surfaceTypeIDValue = 0.0f;
                 break;
         }
-        Debug.Log(surfaceType);
+        //Debug.Log(surfaceType);
         if (_player.GetComponentInChildren<Animator>().GetCurrentAnimatorStateInfo(2).IsName("Walk"))
         {
             _TypeOfWalkingIDValue = 1.0f;

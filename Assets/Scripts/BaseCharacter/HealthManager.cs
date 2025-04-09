@@ -160,6 +160,7 @@ public class HealthManager : MonoBehaviour
 
                     _canRegenBlood = false;
                     _isBleeding = true;
+                    _stateManager.IsBleeding = _isBleeding;
                 }
             }
             else
@@ -258,6 +259,8 @@ public class HealthManager : MonoBehaviour
         _stateManager.IsBleeding = _isBleeding;
         if (_canRegenCoroutine != null) StopCoroutine(_canRegenCoroutine);
         _canRegenCoroutine = StartCoroutine(ResetCanRegen());
+
+        UpdateBlackboard();
     }
 
     private IEnumerator ResetCanRegen()

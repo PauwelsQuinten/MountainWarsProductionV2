@@ -358,14 +358,15 @@ public class Aiming : MonoBehaviour
 
         if (_enmAttackSignal == AttackSignal.Feint)
             _AimOutputEvent.Raise(this, package);
-        else if (_refAimingInput.variable.StateManager.InAnimiation )
+            //Debug.Log("feint input");
+        else if (_refAimingInput.variable.StateManager.InAnimiation)
         {
-            if (package.AttackState != AttackState.Idle )
+            if (package.AttackState != AttackState.Idle)
             {
                 _inputQueue.Enqueue(package);
                 Debug.Log($"Enqueue: {package.AttackState}, {package.AttackSignal}, angle : {_traversedAngle}, early start: {package.AnimationStart}");
             }
-                
+
         }
         else
             _AimOutputEvent.Raise(this, package);

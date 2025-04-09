@@ -10,6 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 6692189313614282644}
   - component: {fileID: -7810283385682158347}
+  - component: {fileID: -3160163725728759933}
+  - component: {fileID: 8116822364762693881}
   m_Layer: 0
   m_Name: LookAround
   m_TagString: Untagged
@@ -49,3 +51,63 @@ MonoBehaviour:
   Cost: 1
   _actionMaxRunTime: 2
   _rotationSpeed: 130
+--- !u!114 &-3160163725728759933
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8372948630569132718}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1fcdc11113c2e641aa608cf6a850dda, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  WorldStateType: 1
+  PriorityList: 
+  _targetHealth: 5
+  _targetStamina: 5
+  _targetRHEquipment: 5
+  _targetLHEquipment: 5
+  _health: 5
+  _stamina: 5
+  _rHEquipment: 5
+  _lHEquipment: 5
+  _hasTarget: 2
+  _hasOpening: 2
+  _targetBehaviour: 4
+  _behaviour: 4
+  _targetAttackRange: 3
+  _attackRange: 3
+  _targetShieldState: 0
+  _shieldState: 0
+--- !u!114 &8116822364762693881
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8372948630569132718}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1fcdc11113c2e641aa608cf6a850dda, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  WorldStateType: 0
+  PriorityList: 
+  _targetHealth: 5
+  _targetStamina: 5
+  _targetRHEquipment: 5
+  _targetLHEquipment: 5
+  _health: 5
+  _stamina: 5
+  _rHEquipment: 5
+  _lHEquipment: 5
+  _hasTarget: 2
+  _hasOpening: 2
+  _targetBehaviour: 4
+  _behaviour: 4
+  _targetAttackRange: 3
+  _attackRange: 3
+  _targetShieldState: 0
+  _shieldState: 0

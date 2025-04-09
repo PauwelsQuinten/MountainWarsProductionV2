@@ -49,8 +49,8 @@ public class Parry : MonoBehaviour
 
         if (args.AnimationStart)
         {
-            StartAnimation(args, _parryMedium);
             Debug.Log($"ParryInput :{args.Direction}, {args.AngleTravelled}, {_parryMedium}");
+            StartAnimation(args, _parryMedium);
         }
 
         if (_attackEventValues != null && _tryDisarm && _parryMedium == BlockMedium.Sword)

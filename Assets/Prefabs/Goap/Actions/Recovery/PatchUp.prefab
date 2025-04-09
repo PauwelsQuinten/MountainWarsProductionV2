@@ -9,6 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1831494060506736589}
+  - component: {fileID: 7804431625154130722}
+  - component: {fileID: 4125726761027900036}
+  - component: {fileID: -7963046082872021543}
   m_Layer: 0
   m_Name: PatchUp
   m_TagString: Untagged
@@ -31,3 +34,83 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7804431625154130722
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7541507132325860394}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7307df49848989943b66d25a9ce5b831, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DesiredWorldState: {fileID: 0}
+  SatisfyingWorldState: {fileID: 0}
+  Cost: 1
+  _actionMaxRunTime: 3
+  _aiInputEvent: {fileID: 11400000, guid: 08c91237b3eb8604cbb626b34a29c05a, type: 2}
+  _input: 0
+  _actionActivationTime: 1
+  _actionDuration: 0.25
+--- !u!114 &4125726761027900036
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7541507132325860394}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1fcdc11113c2e641aa608cf6a850dda, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  WorldStateType: 1
+  PriorityList: 
+  _targetHealth: 5
+  _targetStamina: 5
+  _targetRHEquipment: 5
+  _targetLHEquipment: 5
+  _health: 5
+  _stamina: 5
+  _rHEquipment: 5
+  _lHEquipment: 5
+  _hasTarget: 2
+  _hasOpening: 2
+  _targetBehaviour: 4
+  _behaviour: 0
+  _targetAttackRange: 3
+  _attackRange: 3
+  _targetShieldState: 0
+  _shieldState: 0
+--- !u!114 &-7963046082872021543
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7541507132325860394}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1fcdc11113c2e641aa608cf6a850dda, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  WorldStateType: 0
+  PriorityList: 
+  _targetHealth: 5
+  _targetStamina: 5
+  _targetRHEquipment: 5
+  _targetLHEquipment: 5
+  _health: 5
+  _stamina: 5
+  _rHEquipment: 5
+  _lHEquipment: 5
+  _hasTarget: 2
+  _hasOpening: 2
+  _targetBehaviour: 4
+  _behaviour: 4
+  _targetAttackRange: 2
+  _attackRange: 3
+  _targetShieldState: 0
+  _shieldState: 0

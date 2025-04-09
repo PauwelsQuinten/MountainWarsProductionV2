@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6692189313614282644}
-  - component: {fileID: 2607340641265211982}
+  - component: {fileID: -7911762403898415740}
   - component: {fileID: -5060030443542841245}
   - component: {fileID: 7607232700774041888}
   m_Layer: 0
@@ -34,7 +34,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2607340641265211982
+--- !u!114 &-7911762403898415740
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -43,13 +43,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 8372948630569132718}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4ef9a422d1b57794eab8bfd561b4ba7b, type: 3}
+  m_Script: {fileID: 11500000, guid: 4620df8b3eabbb444ba8d2b94815f740, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   DesiredWorldState: {fileID: 0}
   SatisfyingWorldState: {fileID: 0}
-  Cost: 0.6
-  _actionMaxRunTime: 1
+  Cost: 1
+  _actionMaxRunTime: 3
+  _defendEvent: {fileID: 11400000, guid: 3ce36d1a0cee9b64db3b05b01a8aece3, type: 2}
+  _timeInterval: 1
+  _blockMediume: 1
+  _direction: 0
+  _swingAngle: 180
+  _disarmOpponent: 1
 --- !u!114 &-5060030443542841245
 MonoBehaviour:
   m_ObjectHideFlags: 0

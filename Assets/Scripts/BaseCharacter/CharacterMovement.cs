@@ -98,8 +98,10 @@ public class CharacterMovement : MonoBehaviour
             else
             {
                 Animator animator = GetComponentInChildren<Animator>();
-                var clipInfo = animator.GetCurrentAnimatorClipInfo(2);
-                if (clipInfo.Length > 0)
+                AnimatorClipInfo[] clipInfo = null;
+                if (animator != null)
+                    clipInfo = animator.GetCurrentAnimatorClipInfo(2);
+                if (clipInfo != null && clipInfo.Length > 0)
                 {
                     if (clipInfo[clipInfo.Length - 1].clip.name != "Walk")
                         _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Walk, AnimLayer = 2, DoResetIdle = false, Interupt = false });

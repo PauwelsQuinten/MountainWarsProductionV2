@@ -210,6 +210,7 @@ namespace UnityEngine
         Run,
         SlashLeft,
         SlashRight,
+        Stab,
         ShieldEquip,
         SwordEquip,
         ParryShieldLeft,
@@ -226,6 +227,13 @@ namespace UnityEngine
         Forward,
         Backward,
         Side,
+    }
+    public enum AIInputAction
+    {
+        PatchUp,
+        Dash,
+        StopDash,
+        Interact
     }
 
 

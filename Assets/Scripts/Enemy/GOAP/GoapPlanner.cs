@@ -23,10 +23,11 @@ public class GoapPlanner : MonoBehaviour
 
     void Start()
     {
+        _blackboard.variable.ResetAtStart();
         _currentWorldState = gameObject.AddComponent<WorldState>();
         _currentWorldState.WorldStateType = WorldStateType.Current;
-        _blackboard.variable.ResetAtStart();
         _currentWorldState.AsignBlackboard(_blackboard);
+        _currentWorldState.Init();
 
         foreach (var action in _allActionPrefabs)
         {
@@ -127,7 +128,7 @@ public class GoapPlanner : MonoBehaviour
                 if (action.SatisfyingWorldState.WorldStateValues.ContainsKey(desiredState) &&
                     action.SatisfyingWorldState.WorldStateValues[desiredState] == desiredWorldState.WorldStateValues[desiredState])
                 {
-                    float score = action.Cost /*+ action.DesiredWorldState._worldStateValues.Count + action.DesiredWorldState._worldStateValues2.Count*/;
+                    float score = action.CalculateCost(_blackboard) /*+ action.DesiredWorldState._worldStateValues.Count + action.DesiredWorldState._worldStateValues2.Count*/;
                     if (score < lowestScore)
                     {
                         lowestScore = score;
@@ -139,7 +140,7 @@ public class GoapPlanner : MonoBehaviour
                 else if (action.SatisfyingWorldState.WorldStateBehaviours.ContainsKey(desiredState) &&
                    action.SatisfyingWorldState.WorldStateBehaviours[desiredState] == desiredWorldState.WorldStateBehaviours[desiredState])
                 {
-                    float score = action.Cost /*+ action.DesiredWorldState._worldStateValues.Count + action.DesiredWorldState._worldStateValues2.Count*/;
+                    float score = action.CalculateCost(_blackboard) /*+ action.DesiredWorldState._worldStateValues.Count + action.DesiredWorldState._worldStateValues2.Count*/;
                     if (score < lowestScore)
                     {
                         lowestScore = score;
@@ -151,7 +152,7 @@ public class GoapPlanner : MonoBehaviour
                 else if (action.SatisfyingWorldState.WorldStatePossesions.ContainsKey(desiredState) &&
                    action.SatisfyingWorldState.WorldStatePossesions[desiredState] == desiredWorldState.WorldStatePossesions[desiredState])
                 {
-                    float score = action.Cost /*+ action.DesiredWorldState._worldStateValues.Count + action.DesiredWorldState._worldStateValues2.Count*/;
+                    float score = action.CalculateCost(_blackboard) /*+ action.DesiredWorldState._worldStateValues.Count + action.DesiredWorldState._worldStateValues2.Count*/;
                     if (score < lowestScore)
                     {
                         lowestScore = score;
@@ -163,7 +164,7 @@ public class GoapPlanner : MonoBehaviour
                 else if (action.SatisfyingWorldState.WorldStateRanges.ContainsKey(desiredState) &&
                    action.SatisfyingWorldState.WorldStateRanges[desiredState] == desiredWorldState.WorldStateRanges[desiredState])
                 {
-                    float score = action.Cost /*+ action.DesiredWorldState._worldStateValues.Count + action.DesiredWorldState._worldStateValues2.Count*/;
+                    float score = action.CalculateCost(_blackboard) /*+ action.DesiredWorldState._worldStateValues.Count + action.DesiredWorldState._worldStateValues2.Count*/;
                     if (score < lowestScore)
                     {
                         lowestScore = score;

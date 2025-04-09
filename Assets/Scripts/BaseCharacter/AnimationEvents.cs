@@ -11,6 +11,8 @@ public class AnimationEvents : MonoBehaviour
     private GameEvent _recieveAttackEvent;
     [SerializeField] 
     private GameEvent _endAnimation;
+    [SerializeField] 
+    private GameEvent _inParryZone;
     private void Start()
     {
         FindObjectOfType<FMODAudioHandler>();
@@ -33,6 +35,11 @@ public class AnimationEvents : MonoBehaviour
     public void EndAnimation()
     {
         _endAnimation.Raise(this.transform.parent, null);
+    }
+    public void SetInParryZone(int InZone)
+    {
+        bool zone = InZone == 0? true : false;
+        _inParryZone.Raise(this.transform.parent, zone);
     }
 
 }

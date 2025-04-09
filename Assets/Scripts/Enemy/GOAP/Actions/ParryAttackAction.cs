@@ -73,6 +73,13 @@ public class ParryAttackAction : GoapAction
         StopCoroutine(_defendCoroutine);
     }
 
+    public override float CalculateCost(BlackboardReference blackboard, WorldState currentWorldState)
+    {
+        if (blackboard.variable.ObservedAttack == blackboard.variable.TargetCurrentAttack)
+            return 0.1f;
+        else
+            return Cost;
+    }
 
     //-----------------------------------------------------------------------
     //Helper functions

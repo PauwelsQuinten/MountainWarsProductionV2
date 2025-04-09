@@ -129,7 +129,7 @@ public class Aiming : MonoBehaviour
             _traversedAngle = 0f;
             _enmAimingInput = AimingInputState.Cooldown;
             StartCoroutine(ResetAttack(F_TIME_BETWEEN_STAB));
-            Debug.Log($"Stab owner: {gameObject}");
+            //Debug.Log($"Stab owner: {gameObject}");
         }
 
 
@@ -354,7 +354,7 @@ public class Aiming : MonoBehaviour
             AnimationStart = earlyMessage
 
         };
-        Debug.Log($"Send package: {package.AttackState}, {package.AttackSignal}, {_enmAimingInput}, angle : {_traversedAngle}, early start: {package.AnimationStart}");
+        //Debug.Log($"Send package: {package.AttackState}, {package.AttackSignal}, {_enmAimingInput}, angle : {_traversedAngle}, early start: {package.AnimationStart}");
 
         if (_enmAttackSignal == AttackSignal.Feint)
             _AimOutputEvent.Raise(this, package);

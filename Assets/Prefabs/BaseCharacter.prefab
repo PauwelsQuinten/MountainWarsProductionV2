@@ -223,6 +223,7 @@ MonoBehaviour:
   _succesfullBlockevent: {fileID: 11400000, guid: 2cc625b4ec016e14899ad658a28da4c8, type: 2}
   _equipmentUpdate: {fileID: 11400000, guid: 1fa0ac8c24365fa4fa43f0ccc057a02a, type: 2}
   _succesfullHitEvent: {fileID: 11400000, guid: 0bab4ec7dd547c941b5209c87202a055, type: 2}
+  _changeAnimation: {fileID: 0}
   _staminaCost:
     useConstant: 0
     constantValue: 0
@@ -256,6 +257,7 @@ MonoBehaviour:
   _succesfullParryEvent: {fileID: 11400000, guid: 2cc625b4ec016e14899ad658a28da4c8, type: 2}
   _onFailedParryEvent: {fileID: 11400000, guid: e4d2257f33828fe45a8ba3c1de9a6a8c, type: 2}
   _onDisarmEvent: {fileID: 11400000, guid: 80230798183380d4d9daccd349bb9632, type: 2}
+  _changeAnimation: {fileID: 0}
   _minParrySwingAngle: 100
   _minParryStabAngle: 60
   _timeForParryingSwing: 1.2
@@ -366,6 +368,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _lockonTarget: {fileID: 0}
   _lockonEvent: {fileID: 11400000, guid: d92c25f84e9ed4c4f9490fccdf017560, type: 2}
+  _changePanel: {fileID: 0}
 --- !u!114 &8294375085882615592
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -490,8 +493,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 7da4419bca02ab342bac3950bdec894c, type: 2}
   - {fileID: 11400000, guid: 3bcbf57665777d1489ff9e53220b0be4, type: 2}
   - {fileID: 11400000, guid: d92c25f84e9ed4c4f9490fccdf017560, type: 2}
+  - {fileID: 11400000, guid: f56e344763da3c34d9b3e5d48d24a9e4, type: 2}
   - {fileID: 11400000, guid: 13e51a7f46de80149bd33e8a6becbe33, type: 2}
   - {fileID: 11400000, guid: 84ee518c278608442b5da03c225a1fc1, type: 2}
+  - {fileID: 11400000, guid: e6bca7c795a56ff49994ff5ebb32ace4, type: 2}
   Responses:
   - m_PersistentCalls:
       m_Calls:
@@ -755,6 +760,20 @@ MonoBehaviour:
         m_CallState: 2
   - m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 6822675981429713178}
+        m_TargetAssemblyTypeName: AnimationManager, Assembly-CSharp
+        m_MethodName: ChangeAnimationState
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  - m_PersistentCalls:
+      m_Calls:
       - m_Target: {fileID: 4165634575879343316}
         m_TargetAssemblyTypeName: StateManager, Assembly-CSharp
         m_MethodName: OAnimationStart
@@ -772,6 +791,20 @@ MonoBehaviour:
       - m_Target: {fileID: 4165634575879343316}
         m_TargetAssemblyTypeName: StateManager, Assembly-CSharp
         m_MethodName: OAnimationEnd
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6458811806028097463}
+        m_TargetAssemblyTypeName: Attacking, Assembly-CSharp
+        m_MethodName: SwordHit
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

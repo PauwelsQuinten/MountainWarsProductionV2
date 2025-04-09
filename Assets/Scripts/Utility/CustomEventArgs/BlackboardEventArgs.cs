@@ -13,6 +13,8 @@ namespace UnityEngine
             Health,//Set in healthManager
             RHEquipment,//set in EquipmentManager
             LHEquipment,//set in EquipmentManager
+            RHEquipmentPossesion,//set in EquipmentManager
+            LHEquipmenPossesion,//set in EquipmentManager
             WeaponRange,//set in EquipmentManager
             ShieldState,
 
@@ -26,6 +28,7 @@ namespace UnityEngine
             TargetShieldState,
             TargetCurrentAttack,//Set in Attacking script
             TargetObservedAttack, //Calculated in Blackboard when target attacks
+            TargetOpening
         }
 
     }

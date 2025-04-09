@@ -258,10 +258,7 @@ MonoBehaviour:
   _onFailedParryEvent: {fileID: 11400000, guid: e4d2257f33828fe45a8ba3c1de9a6a8c, type: 2}
   _onDisarmEvent: {fileID: 11400000, guid: 80230798183380d4d9daccd349bb9632, type: 2}
   _changeAnimation: {fileID: 0}
-  _minParrySwingAngle: 100
-  _minParryStabAngle: 60
-  _timeForParryingSwing: 1.2
-  _timeForParryingStab: 0.6
+  _disarmTime: 1.5
   _staminaCost:
     useConstant: 0
     constantValue: 0
@@ -497,6 +494,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 13e51a7f46de80149bd33e8a6becbe33, type: 2}
   - {fileID: 11400000, guid: 84ee518c278608442b5da03c225a1fc1, type: 2}
   - {fileID: 11400000, guid: e6bca7c795a56ff49994ff5ebb32ace4, type: 2}
+  - {fileID: 11400000, guid: 48b146ca432fdaf4a98acaef1bbf49a6, type: 2}
   Responses:
   - m_PersistentCalls:
       m_Calls:
@@ -805,6 +803,20 @@ MonoBehaviour:
       - m_Target: {fileID: 6458811806028097463}
         m_TargetAssemblyTypeName: Attacking, Assembly-CSharp
         m_MethodName: SwordHit
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8814302524761109724}
+        m_TargetAssemblyTypeName: Parry, Assembly-CSharp
+        m_MethodName: InParryMotion
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

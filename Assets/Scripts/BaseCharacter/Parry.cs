@@ -12,10 +12,11 @@ public class Parry : MonoBehaviour
     [SerializeField] private GameEvent _changeAnimation;
 
     [Header("ParryValues")]
-    [SerializeField] private float _minParrySwingAngle = 100f;
-    [SerializeField] private float _minParryStabAngle = 60f;
-    [SerializeField] private float _timeForParryingSwing = 1f;
-    [SerializeField] private float _timeForParryingStab = 0.4f;
+    [SerializeField] private float _disarmTime = 1.5f;
+    //[SerializeField] private float _minParrySwingAngle = 100f;
+    //[SerializeField] private float _minParryStabAngle = 60f;
+    //[SerializeField] private float _timeForParryingSwing = 1f;
+    //[SerializeField] private float _timeForParryingStab = 0.4f;
 
     [Header("Stamina")]
     [SerializeField]
@@ -25,12 +26,14 @@ public class Parry : MonoBehaviour
 
 
     private Direction _swingDirection = Direction.Idle;
-    private float _swingAngle = 0f;
-    private Coroutine _parryRoutine;
+    //private float _swingAngle = 0f;
+    //private Coroutine _parryRoutine;
+    //private AttackEventArgs _attackEventValues;
     private Coroutine _disarmRoutine;
-    private AttackEventArgs _attackEventValues;
     private bool _tryDisarm = false;
     private BlockMedium _parryMedium;
+
+    private bool _InParryZone = false;
 
 
     public void ParryMovement(Component sender, object obj)
@@ -51,21 +54,11 @@ public class Parry : MonoBehaviour
         {
             Debug.Log($"ParryInput :{args.Direction}, {args.AngleTravelled}, {_parryMedium}");
             StartAnimation(args, _parryMedium);
-        }
-
-        if (_attackEventValues != null && _tryDisarm && _parryMedium == BlockMedium.Sword)
-        {
-            AttemptDisarm(args);
-            //StartAnimation(args, true);
-        }            
-        else if (_attackEventValues != null && (_parryMedium == BlockMedium.Sword || _parryMedium == BlockMedium.Shield))
-        {
-            AttemptParry(args);
+            _swingDirection = args.Direction;
         }
         else
         {
             _swingDirection = Direction.Idle;
-            _swingAngle = 0f;
         }
     }
 
@@ -76,88 +69,80 @@ public class Parry : MonoBehaviour
         AttackEventArgs args = obj as AttackEventArgs;
         if (args == null) return;
 
-        float time = args.AttackType == AttackType.Stab? _timeForParryingStab: _timeForParryingSwing;
-
-        if (_attackEventValues == null)
+       
+        if (_InParryZone )
         {
-            _parryRoutine = StartCoroutine(ParryAction(time));
-            _attackEventValues = args;
+            if (_tryDisarm && IsSuccesfullDisarm(args))
+                OnSuccesfullDisarm();
+            else if (IsSuccesfullParry(args))
+                OnSuccesfullParry(args);
+            else
+                OnFaildedParry(args);
         }
+        else
+            OnFaildedParry(args);
+        
     }
 
-
-    private void AttemptParry(AimingOutputArgs args)
+    public void InParryMotion(Component sender, object obj)
     {
-        _swingDirection = args.Direction;
-        _swingAngle = args.AngleTravelled;
-        if (IsSuccesfullParry(_attackEventValues))
-        {
-            OnSuccesfullParry(_attackEventValues);
-        }
+        if (sender.gameObject != gameObject) return;
+
+        _InParryZone = (bool)obj;
     }
 
-    private void AttemptDisarm(AimingOutputArgs args)
-    {
-        _swingDirection = args.Direction;
-        _swingAngle = args.AngleTravelled;
-        if (IsSuccesfullDisarm(_attackEventValues))
-        {
-            OnSuccesfullDisarm();
-            _attackEventValues = null;
-        }
-    }
+    //---------------------------------------------------------------------------------------------
+    //Helper Functions
+    //---------------------------------------------------------------------------------------------
 
     public bool IsSuccesfullParry(AttackEventArgs args)
     {
+        if (_parryMedium == BlockMedium.Nothing )
+            return false;
+
         //Debug.Log($"ParryAction : {_swingAngle} in {_swingDirection}");
         switch (args.AttackType)
         {
             case AttackType.Stab:
-                if (_swingAngle >= _minParryStabAngle)
-                {
-                    return true;
-                }
-                break;
-
+                return true;
+                
             case AttackType.HorizontalSlashToLeft:
-                if (_swingDirection == Direction.ToLeft && _swingAngle >= _minParrySwingAngle)
+                if (_swingDirection == Direction.ToLeft )
                 {
                     return true;
                 }
                 break;
 
             case AttackType.HorizontalSlashToRight:
-                if (_swingDirection == Direction.ToRight && _swingAngle >= _minParrySwingAngle)
+                if (_swingDirection == Direction.ToRight)
                 {
                     return true;
                 } 
                 break;
         }
-
         return false;
     }
 
     public bool IsSuccesfullDisarm(AttackEventArgs args)
     {
         //Debug.Log($"DisarmAction : {_swingAngle} in {_swingDirection}");
+        if (_parryMedium != BlockMedium.Sword)
+            return false;
+
         switch (args.AttackType)
         {
             case AttackType.Stab:
-                if (_swingAngle >= _minParryStabAngle)
-                {
-                    return true;
-                }
-                break;
+                return true;
 
             case AttackType.HorizontalSlashToLeft:
-                if (_swingDirection == Direction.ToRight && _swingAngle >= _minParrySwingAngle)
+                if (_swingDirection == Direction.ToRight)
                 {
                     return true;
                 }
                 break;
 
             case AttackType.HorizontalSlashToRight:
-                if (_swingDirection == Direction.ToLeft && _swingAngle >= _minParrySwingAngle)
+                if (_swingDirection == Direction.ToLeft)
                 {
                     return true;
                 }
@@ -174,9 +159,7 @@ public class Parry : MonoBehaviour
         Debug.Log("succesfullParry");
 
         _tryDisarm = true;
-        float time = attackValues.AttackType == AttackType.Stab ? _timeForParryingStab : _timeForParryingSwing;
-        StopCoroutine(_parryRoutine);
-        _disarmRoutine = StartCoroutine(DisarmAction(time));
+        _disarmRoutine = StartCoroutine(DisarmAction(_disarmTime));
         
     }
     private void OnSuccesfullDisarm()
@@ -184,7 +167,7 @@ public class Parry : MonoBehaviour
         _loseStamina.Raise(this, new StaminaEventArgs { StaminaCost = _staminaCost.value * 1.5f });
         _onDisarmEvent.Raise(this, new LoseEquipmentEventArgs{EquipmentType = EquipmentType.Melee, ToSelf = false});
         _tryDisarm = false;
-        _attackEventValues = null;
+        //_attackEventValues = null;
 
         Debug.Log("Disarmed");
         StopCoroutine(_disarmRoutine);
@@ -192,8 +175,7 @@ public class Parry : MonoBehaviour
     }
     
     private void OnFaildedParry(AttackEventArgs attackValues)
-    {
-       
+    {       
         Debug.Log("Failed Parry");
         //signal to Block
         _onFailedParryEvent.Raise(this, attackValues);
@@ -219,16 +201,21 @@ public class Parry : MonoBehaviour
         }
     }
 
-    private IEnumerator ParryAction(float timeForParrying)
-    {
-        yield return new WaitForSeconds(timeForParrying);
+    //---------------------------------------------------------------------------------------------
+    //Coroutines Functions
+    //---------------------------------------------------------------------------------------------
 
-        if(!_tryDisarm)
-        {
-            OnFaildedParry(_attackEventValues);
-            _attackEventValues = null;
-        }
-    }
+
+    //private IEnumerator ParryAction(float timeForParrying)
+    //{
+    //    yield return new WaitForSeconds(timeForParrying);
+    //
+    //    if(!_tryDisarm)
+    //    {
+    //        OnFaildedParry(_attackEventValues);
+    //        _attackEventValues = null;
+    //    }
+    //}
     
     private IEnumerator DisarmAction(float timeForParrying)
     {
@@ -236,8 +223,6 @@ public class Parry : MonoBehaviour
 
         Debug.Log("Failed Disarm");
         _tryDisarm = false;
-        _attackEventValues = null;
-
     }
 
 

@@ -45,7 +45,7 @@ public class Attacking : MonoBehaviour
     private float _chargePower;
     private float _attackPower;
     private AttackType _attackType;
-    private AttackHeight _attackHeight;
+    private AttackHeight _attackHeight = AttackHeight.Torso;
 
     private bool _wasCharging;
     private float _startChargeTime;

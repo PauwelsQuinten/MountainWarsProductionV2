@@ -9,7 +9,7 @@ public class StateManager : MonoBehaviour
     [SerializeField] BlackboardReference _blackboardRef;
     [SerializeField] GameEvent _OnStunRecovery;
     public AttackState AttackState;
-    public AttackHeight AttackHeight;
+    public AttackHeight AttackHeight = AttackHeight.Torso;
     public Orientation Orientation;
 
     public GameObject Target;

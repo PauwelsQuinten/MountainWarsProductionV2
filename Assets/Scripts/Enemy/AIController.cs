@@ -82,7 +82,7 @@ public class AIController : MonoBehaviour
 
     private void PatchUp()
     {
-        _patchUpEvent.Raise(this, true);
+        _patchUpEvent.Raise(this, false);
     }
 
     public void Interact()

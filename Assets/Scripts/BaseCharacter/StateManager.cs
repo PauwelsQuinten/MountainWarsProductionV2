@@ -19,6 +19,7 @@ public class StateManager : MonoBehaviour
 
     public bool IsBleeding;
     public bool InAnimiation = false;
+    public bool WeaponIsSheathed;
 
     private void Start()
     {

@@ -328,8 +328,10 @@ MonoBehaviour:
   _fists: {fileID: 6464342419627203891, guid: a2d74654fef498746aa20509befcd693, type: 3}
   _onEquipmentBreak: {fileID: 11400000, guid: b339da683b285f6418bc7b64f180c581, type: 2}
   _onEquipmentDamage: {fileID: 11400000, guid: c914e9c28dde5604d9c103f474e083b2, type: 2}
+  _changeAnimation: {fileID: 0}
   _leftHandSocket: {fileID: 0}
   _rightHandSocket: {fileID: 0}
+  _sheathSocket: {fileID: 0}
   _itemMask:
     serializedVersion: 2
     m_Bits: 64
@@ -365,6 +367,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _lockonTarget: {fileID: 0}
   _lockonEvent: {fileID: 11400000, guid: d92c25f84e9ed4c4f9490fccdf017560, type: 2}
+  _sheathWeapon: {fileID: 11400000, guid: 40551c3801499a64ea4751aa179ac61e, type: 2}
   _changePanel: {fileID: 0}
 --- !u!114 &8294375085882615592
 MonoBehaviour:

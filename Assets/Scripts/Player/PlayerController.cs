@@ -62,6 +62,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private GameEvent _pauseGame;
 
+    [Header("Sheath Weapon")]
+    [SerializeField]
+    private GameEvent _sheathWeapon;
+
     private Vector2 _moveInput;
 
     private Coroutine _resetAttackheight;
@@ -270,6 +274,15 @@ public class PlayerController : MonoBehaviour
         if (!ctx.performed) return;
         _pickupEvent.Raise(this);
         _hide.Raise(this, EventArgs.Empty);
+        if(_stateManager.WeaponIsSheathed)
+        {
+            _sheathWeapon.Raise(this, EventArgs.Empty);
+            _stateManager.WeaponIsSheathed = false;
+        }else if (!_stateManager.WeaponIsSheathed)
+        {
+            _sheathWeapon.Raise(this, EventArgs.Empty);
+            _stateManager.WeaponIsSheathed = true;
+        }
         //TODO add intract event
     }
 

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -41,7 +42,6 @@ public class Attacking : MonoBehaviour
     [SerializeField]
     private GameEvent _changeAnimation;
 
-
     private float _chargePower;
     private float _attackPower;
     private AttackType _attackType;
@@ -51,12 +51,18 @@ public class Attacking : MonoBehaviour
     private float _startChargeTime;
     private float _endChargeTime;
 
+    private StateManager _stateManager;
+
     public void Attack(Component sender, object obj)
     {
         AimingOutputArgs args = obj as AimingOutputArgs;
         if (args == null) return;
         if (sender.gameObject != gameObject && args.Sender != gameObject) return;
 
+
+        if (_stateManager == null) _stateManager = GetComponent<StateManager>();
+
+        if (_stateManager.WeaponIsSheathed) return;
 
         if (args.AttackState == AttackState.ShieldDefence
             || args.AttackState == AttackState.SwordDefence

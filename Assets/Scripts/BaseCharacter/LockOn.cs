@@ -1,15 +1,24 @@
+using System;
+using System.Collections;
 using UnityEngine;
 
 public class LockOn : MonoBehaviour
 {
     [SerializeField] private GameObject _lockonTarget;
     [SerializeField] private GameEvent _lockonEvent;
+    [SerializeField] private GameEvent _sheathWeapon;
 
     [Header("Animation")]
     [SerializeField] private GameEvent _changePanel;
 
     private Orientation _storedOrientation = Orientation.East;
     private GameObject _previousTarget;
+
+    private Coroutine _sheathingCoroutine;
+    private bool _sheathing;
+    private bool _weaponIsSheated;
+
+    private StateManager _stateManager;
 
     private void Start()
     {
@@ -35,16 +44,37 @@ public class LockOn : MonoBehaviour
             _storedOrientation = newOrientation;
             _lockonEvent.Raise(this, new OrientationEventArgs { NewOrientation = _storedOrientation });
         }
-
     }
 
     public void FoundTarget(Component sender, object obj)
     {
+        if (_stateManager == null) _stateManager = GetComponent<StateManager>();
         if (sender.gameObject != gameObject) return;
         var args = obj as NewTargetEventArgs;
         if (args == null) return;
 
         _lockonTarget = args.NewTarget;
+
+        if (_lockonTarget == null)
+        {
+            if (!_stateManager.WeaponIsSheathed)
+            {
+                if (!_sheathing)
+                {
+                    _sheathingCoroutine = StartCoroutine(SheathWeapon(5));
+                }
+            }
+        }
+        else
+        {
+            if (_stateManager.WeaponIsSheathed)
+            {
+                if (!_sheathing)
+                {
+                    _sheathingCoroutine = StartCoroutine(SheathWeapon(0.1f));
+                }
+            }
+        }
 
         if (!_lockonTarget || !_lockonEvent)
             return;
@@ -52,10 +82,17 @@ public class LockOn : MonoBehaviour
         _storedOrientation = newOrientation;
         _lockonEvent.Raise(this, new OrientationEventArgs { NewOrientation = _storedOrientation });
 
-        if (_changePanel == null) return;
         if (_previousTarget == _lockonTarget) return;
-            _changePanel.Raise(this, new TriggerEnterEventArgs { NewViewIndex = 0,IsShowDown = true});
         _previousTarget = _lockonTarget;
+        if (_changePanel == null) return;
+        _changePanel.Raise(this, new TriggerEnterEventArgs { NewViewIndex = 0,IsShowDown = true});
+    }
+
+    public void WeaponSheathed(Component sender, object obj)
+    {
+        if(sender == this) return;
+        StopCoroutine(_sheathingCoroutine);
+        _sheathing = false;
     }
 
     private Orientation CalculateOrientation()
@@ -73,5 +110,13 @@ public class LockOn : MonoBehaviour
     private bool IsOrientationChanged(Orientation newOrientation)
     {
         return newOrientation != _storedOrientation;
+    }
+
+    private IEnumerator SheathWeapon(float duration)
+    {
+        _sheathing = true;
+        yield return new WaitForSeconds(duration);
+        _sheathWeapon.Raise(this, EventArgs.Empty);
+        _sheathing = false;
     }
 }

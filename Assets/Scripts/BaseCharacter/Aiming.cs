@@ -3,13 +3,17 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using static UnityEngine.Rendering.ReloadAttribute;
+using System;
 
 public class Aiming : MonoBehaviour
 {
     [Header("InputVariable")]
     [SerializeField] private AimingInputReference _refAimingInput;
+
     [Header("Event")]
     [SerializeField] private GameEvent _AimOutputEvent;
+    [SerializeField]
+    private GameEvent _sheathWeapon;
 
     [Header("Visual")]
     [SerializeField] private TextMeshProUGUI _textMeshPro;
@@ -154,12 +158,8 @@ public class Aiming : MonoBehaviour
                 _enmAttackSignal = AttackSignal.Swing;
 
                 SendPackage(true);
-                
             }
-
         }
-            
-
         //Store measured length to use as comparision for the IsStabMovement
         _previousLength = inputLength;
     }
@@ -370,8 +370,6 @@ public class Aiming : MonoBehaviour
         }
         else
             _AimOutputEvent.Raise(this, package);
-
-
     }
 
     private Direction CalculateSwingDirection(float angleDegree)

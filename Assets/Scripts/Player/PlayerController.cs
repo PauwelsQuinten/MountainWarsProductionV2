@@ -62,6 +62,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private GameEvent _pauseGame;
 
+    [Header("Sheath Weapon")]
+    [SerializeField]
+    private GameEvent _sheathWeapon;
+
     private Vector2 _moveInput;
 
     private Coroutine _resetAttackheight;
@@ -187,7 +191,7 @@ public class PlayerController : MonoBehaviour
         else if (ctx.performed)
         {
             _stateManager.AttackState = AttackState.ShieldDefence;
-            _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.ShieldEquip, AnimLayer = 3, DoResetIdle = false, Interupt = false });
+            _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.ShieldEquip, AnimLayer = 4, DoResetIdle = false, Interupt = false });
             _isHoldingShield = false;
             _stateManager.IsHoldingShield = _isHoldingShield;
         }
@@ -270,7 +274,15 @@ public class PlayerController : MonoBehaviour
         if (!ctx.performed) return;
         _pickupEvent.Raise(this);
         _hide.Raise(this, EventArgs.Empty);
-        //TODO add intract event
+        if(_stateManager.WeaponIsSheathed)
+        {
+            _sheathWeapon.Raise(this, EventArgs.Empty);
+            _stateManager.WeaponIsSheathed = false;
+        }else if (!_stateManager.WeaponIsSheathed)
+        {
+            _sheathWeapon.Raise(this, EventArgs.Empty);
+            _stateManager.WeaponIsSheathed = true;
+        }
     }
 
     public void ProccesAtackHeightInput(InputAction.CallbackContext ctx)

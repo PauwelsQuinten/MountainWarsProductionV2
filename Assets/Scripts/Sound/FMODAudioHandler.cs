@@ -226,6 +226,9 @@ public class FMODAudioHandler : MonoBehaviour
 
     private void OnDestroy()
     {
+        _forestMusicInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+        _townMusicInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+        _mainThemeMusicInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
         _townMusicInstance.release();
         _ambienceInstance.release();
         _footstepsSFXInstance.release();

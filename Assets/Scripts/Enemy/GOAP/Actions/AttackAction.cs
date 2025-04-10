@@ -15,7 +15,7 @@ public class AttckAction : GoapAction
 
     public override void StartAction(WorldState currentWorldState, BlackboardReference blackboard)
     {
-       
+       base.StartAction(currentWorldState, blackboard);
         _isMovementSet = true;
         _attackCoroutine = StartCoroutine(ExecuteAttack(_executionTime));
     }
@@ -32,7 +32,7 @@ public class AttckAction : GoapAction
 
     public override bool IsCompleted(WorldState current)
     {
-        return _isMovementSet || base.IsCompleted(current);
+        return base.IsCompleted(current);
     }
 
     public override bool IsInterupted(WorldState currentWorldState, BlackboardReference blackboard)
@@ -86,6 +86,7 @@ public class AttckAction : GoapAction
         SendPackage();
         yield return new WaitForSeconds(executionTime);
         _isMovementSet = false;
+        ActionCompleted();
     }
 
 }

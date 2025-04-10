@@ -29,16 +29,14 @@ public class RepositionAction : GoapAction
     {
         if (blackboard.variable.IsPlayerAgressive)
             return 0.5f;
-        else if (currentWorldState.TargetAttackRange == EWorldStateRange.InRange)
-            return 0.25f;
+        
         else
             return Cost;
     }
 
     public override bool IsInterupted(WorldState currentWorldState, BlackboardReference blackboard)
     {
-        /* return !currentWorldState.IsBlockInCorrectDirection()
-           && currentWorldState._worldStateValues2[EWorldState.TargetDistance] == WorldStateValue.InRange;*/
+        //Interupt action to defend if necesary, let him walk back between attacks
         return (blackboard.variable.TargetState == AttackState.Attack || blackboard.variable.TargetState == AttackState.BlockAttack)
             && currentWorldState.TargetAttackRange == EWorldStateRange.InRange;
     }

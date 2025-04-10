@@ -11,6 +11,7 @@ public interface IGoals
 
 public class GoapGoal : MonoBehaviour, IGoals
 {
+    [HideInInspector]
     public WorldState DesiredWorldState;
     protected bool _isVallid = true;
     protected Coroutine _goalCoroutine;

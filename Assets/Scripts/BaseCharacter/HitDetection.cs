@@ -44,7 +44,7 @@ public class HitDetection : MonoBehaviour
                         parts.Add(BodyParts.Head);
                         break;
                     case AttackHeight.Torso:
-                        //TODO shield gets hit animation
+                        parts.Add(BodyParts.LeftArm);
                         break;
                 }
                 break;
@@ -56,7 +56,7 @@ public class HitDetection : MonoBehaviour
                         parts.Add(BodyParts.Head);
                         break;
                     case AttackHeight.Torso:
-                        parts.Add(BodyParts.LeftArm);
+                        //TODO shield gets hit animation
                         break;
                 }
                 break;

@@ -39,7 +39,8 @@ public class CharacterMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        _rb.Move(new Vector3(transform.position.x, transform.position.y,transform.position.z) + (_movedirection * (_speed * _moveInput.variable.SpeedMultiplier)) * Time.deltaTime, transform.rotation);
+        if (gameObject.CompareTag("Player")) ;
+            _rb.Move(new Vector3(transform.position.x, transform.position.y,transform.position.z) + (_movedirection * (_speed * _moveInput.variable.SpeedMultiplier)) * Time.deltaTime, transform.rotation);
     }
 
     private void MoveInput_ValueChanged(object sender, EventArgs e)
@@ -80,7 +81,7 @@ public class CharacterMovement : MonoBehaviour
         
         if (speedMultiplier > 1)
             _removeStamina.Raise(this, new StaminaEventArgs { StaminaCost = _staminaCost.value * Time.deltaTime });
-        _movedirection = new Vector3(input.x, 0,input.y);
+        _movedirection = new Vector3(input.x, 0f, input.y);
 
         if (input != Vector2.zero)
         {

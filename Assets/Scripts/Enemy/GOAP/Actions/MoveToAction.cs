@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.EventSystems;
 using UnityEngine.Rendering;
 
@@ -13,12 +14,17 @@ public class MoveToAction : GoapAction
     private List<Equipment> _foundEquipment = new List<Equipment>();
     private Equipment _foundSpecificEquipment;
     private int _direction = 0;
+    private NavMeshAgent _navMeshAgent= null;
 
     public override void StartAction(WorldState currentWorldState, BlackboardReference blackboard)
     {
         base.StartAction(currentWorldState, blackboard);
 
-        
+        if (!_navMeshAgent)
+            _navMeshAgent = npc.GetComponent<NavMeshAgent>();
+        if (!_navMeshAgent)
+            Debug.LogError("No navMeshagent found on the npc");
+
         switch (_MoveTo)
         {
             case ObjectTarget.Weapon:
@@ -58,6 +64,7 @@ public class MoveToAction : GoapAction
 
                 targetDir = targetPos - npcPos;
                 targetDir.Normalize();
+                targetDir = new Vector2(targetDir.x, targetDir.z);
                 break;
 
             case ObjectTarget.Weapon:
@@ -65,6 +72,7 @@ public class MoveToAction : GoapAction
                     targetPos = _foundSpecificEquipment.transform.position;
 
                 targetDir = targetPos - npcPos;
+                targetDir = new Vector2(targetDir.x, targetDir.z);
                 targetDir.Normalize();
                 break;
 
@@ -73,24 +81,29 @@ public class MoveToAction : GoapAction
                     targetPos = _foundSpecificEquipment.transform.position;
 
                 targetDir = targetPos - npcPos;
+                targetDir = new Vector2(targetDir.x, targetDir.z);
                 targetDir.Normalize();
                 break;
 
             case ObjectTarget.Forward:
-                targetDir = new Vector3(Mathf.Cos(angleRad), Mathf.Sin(angleRad), 0f);
+                targetDir = new Vector2(Mathf.Cos(angleRad), Mathf.Sin(angleRad));
+                targetPos = targetDir + npcPos;
                 break;
 
             case ObjectTarget.Backward:
-                targetDir = -new Vector3(Mathf.Cos(angleRad), Mathf.Sin(angleRad), 0f);
+                targetDir = -new Vector2(Mathf.Cos(angleRad), Mathf.Sin(angleRad));
+                targetPos = targetDir + npcPos;
                 break;
 
             case ObjectTarget.Side:
                 //angleRad *= _direction * 0.5f;
                 angleRad += _direction * Mathf.PI * 0.5f;
-                targetDir = new Vector3(Mathf.Cos(angleRad), Mathf.Sin(angleRad), 0f);
+                targetDir = new Vector2(Mathf.Cos(angleRad), Mathf.Sin(angleRad));
+                targetPos = targetDir + npcPos;
                 break;
 
         }
+        _navMeshAgent.SetDestination(targetPos);
         _moveInput.Raise(this, new DirectionEventArgs{ MoveDirection = targetDir, SpeedMultiplier = 1f, Sender = npc });
         
     }

@@ -9,6 +9,7 @@ public class Aiming : MonoBehaviour
 {
     [Header("InputVariable")]
     [SerializeField] private AimingInputReference _refAimingInput;
+
     [Header("Event")]
     [SerializeField] private GameEvent _AimOutputEvent;
     [SerializeField]

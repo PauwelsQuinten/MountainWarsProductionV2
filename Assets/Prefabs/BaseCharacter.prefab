@@ -223,6 +223,7 @@ MonoBehaviour:
   _succesfullBlockevent: {fileID: 11400000, guid: 2cc625b4ec016e14899ad658a28da4c8, type: 2}
   _equipmentUpdate: {fileID: 11400000, guid: 1fa0ac8c24365fa4fa43f0ccc057a02a, type: 2}
   _succesfullHitEvent: {fileID: 11400000, guid: 0bab4ec7dd547c941b5209c87202a055, type: 2}
+  _changeAnimation: {fileID: 0}
   _staminaCost:
     useConstant: 0
     constantValue: 0
@@ -256,6 +257,7 @@ MonoBehaviour:
   _succesfullParryEvent: {fileID: 11400000, guid: 2cc625b4ec016e14899ad658a28da4c8, type: 2}
   _onFailedParryEvent: {fileID: 11400000, guid: e4d2257f33828fe45a8ba3c1de9a6a8c, type: 2}
   _onDisarmEvent: {fileID: 11400000, guid: 80230798183380d4d9daccd349bb9632, type: 2}
+  _changeAnimation: {fileID: 0}
   _minParrySwingAngle: 100
   _minParryStabAngle: 60
   _timeForParryingSwing: 1.2
@@ -329,8 +331,10 @@ MonoBehaviour:
   _fists: {fileID: 6464342419627203891, guid: a2d74654fef498746aa20509befcd693, type: 3}
   _onEquipmentBreak: {fileID: 11400000, guid: b339da683b285f6418bc7b64f180c581, type: 2}
   _onEquipmentDamage: {fileID: 11400000, guid: c914e9c28dde5604d9c103f474e083b2, type: 2}
+  _changeAnimation: {fileID: 0}
   _leftHandSocket: {fileID: 0}
   _rightHandSocket: {fileID: 0}
+  _sheathSocket: {fileID: 0}
   _itemMask:
     serializedVersion: 2
     m_Bits: 64
@@ -366,6 +370,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _lockonTarget: {fileID: 0}
   _lockonEvent: {fileID: 11400000, guid: d92c25f84e9ed4c4f9490fccdf017560, type: 2}
+  _sheathWeapon: {fileID: 11400000, guid: 40551c3801499a64ea4751aa179ac61e, type: 2}
+  _changePanel: {fileID: 0}
 --- !u!114 &8294375085882615592
 MonoBehaviour:
   m_ObjectHideFlags: 0

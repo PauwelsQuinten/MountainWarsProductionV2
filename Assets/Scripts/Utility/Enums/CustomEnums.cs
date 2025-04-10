@@ -217,6 +217,8 @@ namespace UnityEngine
         ParryShieldRight,
         ParrySwordLeft,
         ParrySwordRight,
+        SheathWeapon,
+        DrawWeapon
     }
 
     public enum ObjectTarget

@@ -1,6 +1,10 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Net.Sockets;
+using UnityEditor.EditorTools;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class EquipmentManager : MonoBehaviour
 {
@@ -12,9 +16,11 @@ public class EquipmentManager : MonoBehaviour
     [Header("Events")]
     [SerializeField] private GameEvent _onEquipmentBreak;
     [SerializeField] private GameEvent _onEquipmentDamage;
+    [SerializeField] private GameEvent _changeAnimation;
     [Header("Sockets")]
     [SerializeField] private Transform _leftHandSocket;
     [SerializeField] private Transform _rightHandSocket;
+    [SerializeField] private Transform _sheathSocket;
     [Header("Item")]
     [SerializeField] private LayerMask _itemMask;
     [Header("Blackboard")]
@@ -28,7 +34,9 @@ public class EquipmentManager : MonoBehaviour
     private const int FISTS = 2;
 
     private Equipment _discoverdEquipment;
-    
+
+    private StateManager _stateManager;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -67,7 +75,6 @@ public class EquipmentManager : MonoBehaviour
         }
 
         UpdateBlackboard();
-
     }
 
     public void LoseEquipment(Component sender, object obj)
@@ -216,14 +223,12 @@ public class EquipmentManager : MonoBehaviour
                 }
 
                 else if (!newEquip.IsRightHandEquipment)
-               {
+                {
                     DropEquipment(false);
                     HeldEquipment[LEFT_HAND] = newEquip;
                     newEquip.transform.parent = _leftHandSocket;
                     newEquip.transform.localPosition = Vector3.zero;
-               }
-
-
+                }
             }
         }
     }
@@ -274,4 +279,31 @@ public class EquipmentManager : MonoBehaviour
         return 0f;
     }
 
+    public void SheathWeapon(Component sender, object obj)
+    {
+        if (sender.gameObject != gameObject) return;
+        if(_stateManager == null) _stateManager = GetComponent<StateManager>();
+        if (_stateManager.WeaponIsSheathed)
+        {
+            HeldEquipment[RIGHT_HAND].gameObject.transform.parent = _rightHandSocket.transform;
+            HeldEquipment[RIGHT_HAND].gameObject.transform.localPosition = Vector3.zero;
+            HeldEquipment[RIGHT_HAND].gameObject.transform.localRotation = Quaternion.Euler(new Vector3(90, 0, 0));
+            _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.DrawWeapon, AnimLayer = 3, DoResetIdle = true });
+            _stateManager.WeaponIsSheathed = false;
+        }
+        else
+        {
+            StartCoroutine(SetWeaponActive(34f / 30f, _sheathSocket.gameObject));
+            _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.SheathWeapon, AnimLayer = 3, DoResetIdle = true });
+            _stateManager.WeaponIsSheathed = true;
+        }
+    }
+
+    private IEnumerator SetWeaponActive(float duration, GameObject socket)
+    {
+        yield return new WaitForSeconds(duration);
+        HeldEquipment[RIGHT_HAND].gameObject.transform.parent = socket.transform;
+        HeldEquipment[RIGHT_HAND].gameObject.transform.localPosition = Vector3.zero;
+        HeldEquipment[RIGHT_HAND].gameObject.transform.localRotation = Quaternion.identity;
+    }
 }

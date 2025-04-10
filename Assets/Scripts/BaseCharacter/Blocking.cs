@@ -50,7 +50,7 @@ public class Blocking : MonoBehaviour
 
             //send event for animation
             if (_blockMedium == BlockMedium.Shield)
-                _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.ShieldEquip, AnimLayer = 3, DoResetIdle = false, Interupt = false });
+                _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.ShieldEquip, AnimLayer = 4, DoResetIdle = false, Interupt = false });
             else if (_blockMedium == BlockMedium.Sword)
                 _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.SwordEquip, AnimLayer = 3, DoResetIdle = false, Interupt = false });            
 
@@ -65,8 +65,9 @@ public class Blocking : MonoBehaviour
             _previousState = args.AttackState;
             UpdateBlackboard(null);
 
-            _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Idle, AnimLayer = 1, DoResetIdle = false, Interupt = false });
+            _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Empty, AnimLayer = 4, DoResetIdle = false, Interupt = false });
             _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Empty, AnimLayer = 3, DoResetIdle = false, Interupt = false });
+            _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Idle, AnimLayer = 1, DoResetIdle = false, Interupt = false });
 
         }
 
@@ -314,5 +315,4 @@ public class Blocking : MonoBehaviour
 
         return blockResult;
     }
-
 }

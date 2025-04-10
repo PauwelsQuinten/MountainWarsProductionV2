@@ -194,9 +194,9 @@ public class Parry : MonoBehaviour
         else if (args.Direction == Direction.ToRight)
         {
             if (parryMedium == BlockMedium.Shield)
-                _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.ParryShieldRight, AnimLayer = 3, DoResetIdle = true, Interupt = false, Speed = args.Speed });
+                _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.ParryShieldRight, AnimLayer = 4, DoResetIdle = true, Interupt = false, Speed = args.Speed });
             else if (parryMedium == BlockMedium.Sword)
-                _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.ParrySwordRight, AnimLayer = 3, DoResetIdle = true, Interupt = false, Speed = args.Speed });
+                _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.ParrySwordRight, AnimLayer = 4, DoResetIdle = true, Interupt = false, Speed = args.Speed });
 
         }
     }

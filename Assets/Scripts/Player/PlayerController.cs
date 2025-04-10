@@ -191,7 +191,7 @@ public class PlayerController : MonoBehaviour
         else if (ctx.performed)
         {
             _stateManager.AttackState = AttackState.ShieldDefence;
-            _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.ShieldEquip, AnimLayer = 3, DoResetIdle = false, Interupt = false });
+            _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.ShieldEquip, AnimLayer = 4, DoResetIdle = false, Interupt = false });
             _isHoldingShield = false;
             _stateManager.IsHoldingShield = _isHoldingShield;
         }
@@ -283,7 +283,6 @@ public class PlayerController : MonoBehaviour
             _sheathWeapon.Raise(this, EventArgs.Empty);
             _stateManager.WeaponIsSheathed = true;
         }
-        //TODO add intract event
     }
 
     public void ProccesAtackHeightInput(InputAction.CallbackContext ctx)

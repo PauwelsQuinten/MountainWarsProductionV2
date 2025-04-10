@@ -16,10 +16,7 @@ public class RepositionAction : GoapAction
 
     public override bool IsVallid(WorldState currentWorldState, BlackboardReference blackboard)
     {
-        if (blackboard.variable.IsPlayerAgressive)
-            Cost = 0.5f;
-        else
-            Cost = 0.8f;
+       
         return true;
     }
 
@@ -27,6 +24,17 @@ public class RepositionAction : GoapAction
     {
         return !_isActivated;
     }
+
+    public override float CalculateCost(BlackboardReference blackboard, WorldState currentWorldState)
+    {
+        if (blackboard.variable.IsPlayerAgressive)
+            return 0.5f;
+        else if (currentWorldState.TargetAttackRange == EWorldStateRange.InRange)
+            return 0.25f;
+        else
+            return Cost;
+    }
+
     public override bool IsInterupted(WorldState currentWorldState, BlackboardReference blackboard)
     {
         /* return !currentWorldState.IsBlockInCorrectDirection()

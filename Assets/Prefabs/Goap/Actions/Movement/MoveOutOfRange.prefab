@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &7541507132325860394
+--- !u!1 &3379749102720681334
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,24 +8,24 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1831494060506736589}
-  - component: {fileID: 4283732040248783324}
-  - component: {fileID: 6851733242180532322}
-  - component: {fileID: 2307976950402334559}
+  - component: {fileID: 291827269588670359}
+  - component: {fileID: 8447165077177768023}
+  - component: {fileID: 4303157515969749268}
+  - component: {fileID: 1833289211845079705}
   m_Layer: 0
-  m_Name: Reposition
+  m_Name: MoveOutOfRange
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &1831494060506736589
+--- !u!4 &291827269588670359
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7541507132325860394}
+  m_GameObject: {fileID: 3379749102720681334}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.1512434, y: -1.4231012, z: 0.35149533}
@@ -34,29 +34,31 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4283732040248783324
+--- !u!114 &8447165077177768023
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7541507132325860394}
+  m_GameObject: {fileID: 3379749102720681334}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 991726422b9594243920be628124f837, type: 3}
+  m_Script: {fileID: 11500000, guid: 67ea017865241394a863ead706c18ea5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   DesiredWorldState: {fileID: 0}
   SatisfyingWorldState: {fileID: 0}
-  Cost: 0.8
-  _actionMaxRunTime: 0.5
---- !u!114 &6851733242180532322
+  Cost: 1
+  _actionMaxRunTime: 3
+  _MoveTo: 4
+  _moveInput: {fileID: 11400000, guid: c56f6b487803f2447b475d33b2fabd4b, type: 2}
+--- !u!114 &4303157515969749268
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7541507132325860394}
+  m_GameObject: {fileID: 3379749102720681334}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a1fcdc11113c2e641aa608cf6a850dda, type: 3}
@@ -74,28 +76,26 @@ MonoBehaviour:
   _lHEquipment: 5
   _hasTarget: 2
   _hasOpening: 2
-  _hasRHEquipment: 2
-  _hasLHEquipment: 2
   _targetBehaviour: 4
-  _behaviour: 0
-  _targetAttackRange: 3
+  _behaviour: 4
+  _targetAttackRange: 1
   _attackRange: 3
   _targetShieldState: 0
   _shieldState: 0
---- !u!114 &2307976950402334559
+--- !u!114 &1833289211845079705
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7541507132325860394}
+  m_GameObject: {fileID: 3379749102720681334}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a1fcdc11113c2e641aa608cf6a850dda, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   WorldStateType: 0
-  PriorityList: 05000000
+  PriorityList: 
   _targetHealth: 5
   _targetStamina: 5
   _targetRHEquipment: 5
@@ -106,11 +106,9 @@ MonoBehaviour:
   _lHEquipment: 5
   _hasTarget: 2
   _hasOpening: 2
-  _hasRHEquipment: 2
-  _hasLHEquipment: 2
   _targetBehaviour: 4
   _behaviour: 4
   _targetAttackRange: 3
   _attackRange: 3
   _targetShieldState: 0
-  _shieldState: 3
+  _shieldState: 0

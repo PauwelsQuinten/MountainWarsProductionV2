@@ -137,6 +137,8 @@ namespace UnityEngine
         LHEquipment,
         ShieldState,
         HasTarget,
+        HasRHEquipment,
+        HasLHEquipment,
 
         TargetBehaviour,
         TargetHealth,
@@ -238,6 +240,12 @@ namespace UnityEngine
         Interact
     }
 
-
+    public enum Size
+    {
+        None,
+        Small,
+        Medium,
+        Large
+    }
 
 }

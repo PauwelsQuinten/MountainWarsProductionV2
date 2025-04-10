@@ -68,7 +68,7 @@ public class AIEvents : GoapAction
             StopCoroutine(_actionPreperationCoroutine);
     }
 
-    public override float CalculateCost(BlackboardReference blackboard)
+    public override float CalculateCost(BlackboardReference blackboard, WorldState currentWorldState)
     {
         float cost = Cost;
         switch (_input)

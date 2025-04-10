@@ -199,6 +199,8 @@ public class EquipmentManager : MonoBehaviour
             _blackboard.variable.LHEquipmentHealth = GetDurabilityPercentage(LEFT_HAND);
             _blackboard.variable.RHEquipmentHealth = GetDurabilityPercentage(RIGHT_HAND);
             _blackboard.variable.WeaponRange = GetAttackRange();
+            _blackboard.variable.HasRHEquipment = HeldEquipment[RIGHT_HAND] != null;
+            _blackboard.variable.HasLHEquipment = HeldEquipment[LEFT_HAND] != null;
         }
     }
 

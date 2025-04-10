@@ -300,7 +300,7 @@ public class Blocking : MonoBehaviour
             case AttackType.HorizontalSlashToRight:
                 if (_blockDirection == Direction.Idle)
                     blockResult = BlockResult.Hit;
-                if (_blockDirection == Direction.ToCenter)
+                else if (_blockDirection == Direction.ToCenter)
                     blockResult = BlockResult.HalfBlocked;
                 else if (_blockDirection == Direction.ToRight)
                     blockResult = BlockResult.FullyBlocked;

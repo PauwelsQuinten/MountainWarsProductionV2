@@ -75,7 +75,7 @@ public class ParryAttackAction : GoapAction
 
     public override float CalculateCost(BlackboardReference blackboard, WorldState currentWorldState)
     {
-        if (blackboard.variable.ObservedAttack == blackboard.variable.TargetCurrentAttack)
+        if (blackboard.variable.ObservedAttack == blackboard.variable.TargetCurrentAttack && blackboard.variable.ObservedAttack != AttackType.None)
             return 0.1f;
         else
             return Cost;

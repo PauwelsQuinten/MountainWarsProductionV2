@@ -53,6 +53,7 @@ MonoBehaviour:
   _outputEvent: {fileID: 11400000, guid: 3ce36d1a0cee9b64db3b05b01a8aece3, type: 2}
   _executionTime: 0.25
   _attackSignal: 1
+  _swingDirection: 3
 --- !u!114 &-5060030443542841245
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -77,6 +78,8 @@ MonoBehaviour:
   _lHEquipment: 5
   _hasTarget: 2
   _hasOpening: 2
+  _hasRHEquipment: 2
+  _hasLHEquipment: 2
   _targetBehaviour: 4
   _behaviour: 4
   _targetAttackRange: 3
@@ -107,9 +110,11 @@ MonoBehaviour:
   _lHEquipment: 5
   _hasTarget: 2
   _hasOpening: 2
+  _hasRHEquipment: 2
+  _hasLHEquipment: 2
   _targetBehaviour: 4
   _behaviour: 4
   _targetAttackRange: 3
-  _attackRange: 3
+  _attackRange: 0
   _targetShieldState: 0
   _shieldState: 0

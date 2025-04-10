@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 
@@ -16,19 +15,13 @@ public class KillPlayerGoal : GoapGoal
 
     public override bool InteruptGoal(WorldState currentWorldState, BlackboardReference blackboard)
     {
-        /*bool parryMoveFound = false;
-        foreach (KeyValuePair<AttackType, int> att in currentWorldState._attackCountList)
-        {
-            if (att.Value >= 5 && currentWorldState.TargetCurrentAttack == att.Key)
-                parryMoveFound = true;
-        }
-
-        //return currentWorldState.IsBleeding || currentWorldState.Stamina < 0.3f || currentWorldState._isPlayerToAggressive || !currentWorldState.IsBlockInCorrectDirection();
-        return (currentWorldState.IsBleeding || currentWorldState.Stamina < 0.3f
-            || currentWorldState._isPlayerToAggressive || !currentWorldState.IsBlockInCorrectDirection()
-            || parryMoveFound);*/
-
-        return false;
+        //Interupt this goal when his survival is at stake
+        //Dissarm him if he uses a move to much
+        return (
+            blackboard.variable.IsBleeding 
+            || blackboard.variable.Stamina < 0.3f
+            || blackboard.variable.IsPlayerAgressive
+            || (blackboard.variable.ObservedAttack == blackboard.variable.TargetCurrentAttack && blackboard.variable.ObservedAttack != AttackType.None));
 
     }
 }

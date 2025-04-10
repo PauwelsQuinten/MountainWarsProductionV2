@@ -48,7 +48,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DesiredWorldState: {fileID: 0}
   SatisfyingWorldState: {fileID: 0}
-  Cost: 1
+  Cost: 0.8
   _actionMaxRunTime: 3
   _outputEvent: {fileID: 11400000, guid: 3ce36d1a0cee9b64db3b05b01a8aece3, type: 2}
   _executionTime: 0.5
@@ -78,6 +78,8 @@ MonoBehaviour:
   _lHEquipment: 5
   _hasTarget: 2
   _hasOpening: 2
+  _hasRHEquipment: 2
+  _hasLHEquipment: 2
   _targetBehaviour: 4
   _behaviour: 4
   _targetAttackRange: 3
@@ -108,9 +110,11 @@ MonoBehaviour:
   _lHEquipment: 5
   _hasTarget: 2
   _hasOpening: 2
+  _hasRHEquipment: 2
+  _hasLHEquipment: 2
   _targetBehaviour: 4
   _behaviour: 4
   _targetAttackRange: 3
-  _attackRange: 3
+  _attackRange: 0
   _targetShieldState: 0
   _shieldState: 0

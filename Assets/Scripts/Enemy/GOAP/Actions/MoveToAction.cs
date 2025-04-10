@@ -58,6 +58,7 @@ public class MoveToAction : GoapAction
 
                 targetDir = targetPos - npcPos;
                 targetDir.Normalize();
+                targetDir = new Vector2(targetDir.x, targetDir.z);
                 break;
 
             case ObjectTarget.Weapon:
@@ -65,6 +66,7 @@ public class MoveToAction : GoapAction
                     targetPos = _foundSpecificEquipment.transform.position;
 
                 targetDir = targetPos - npcPos;
+                targetDir = new Vector2(targetDir.x, targetDir.z);
                 targetDir.Normalize();
                 break;
 
@@ -73,21 +75,22 @@ public class MoveToAction : GoapAction
                     targetPos = _foundSpecificEquipment.transform.position;
 
                 targetDir = targetPos - npcPos;
+                targetDir = new Vector2(targetDir.x, targetDir.z);
                 targetDir.Normalize();
                 break;
 
             case ObjectTarget.Forward:
-                targetDir = new Vector3(Mathf.Cos(angleRad), Mathf.Sin(angleRad), 0f);
+                targetDir = new Vector2(Mathf.Cos(angleRad), Mathf.Sin(angleRad));
                 break;
 
             case ObjectTarget.Backward:
-                targetDir = -new Vector3(Mathf.Cos(angleRad), Mathf.Sin(angleRad), 0f);
+                targetDir = -new Vector2(Mathf.Cos(angleRad), Mathf.Sin(angleRad));
                 break;
 
             case ObjectTarget.Side:
                 //angleRad *= _direction * 0.5f;
                 angleRad += _direction * Mathf.PI * 0.5f;
-                targetDir = new Vector3(Mathf.Cos(angleRad), Mathf.Sin(angleRad), 0f);
+                targetDir = new Vector2(Mathf.Cos(angleRad), Mathf.Sin(angleRad));
                 break;
 
         }

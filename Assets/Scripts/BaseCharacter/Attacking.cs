@@ -7,7 +7,6 @@ public class Attacking : MonoBehaviour
 {
     private const string PLAYER = "Player";
 
-
     [Header("AttackAngles")]
     [SerializeField]
     private float _minAttackAngle;
@@ -83,7 +82,6 @@ public class Attacking : MonoBehaviour
                 _blackboardRef.variable.TargetCurrentAttack = AttackType.None;
             return;
         }
-
 
         CalculateChargePower(args);
 

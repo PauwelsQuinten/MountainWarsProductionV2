@@ -1,6 +1,7 @@
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -112,7 +113,20 @@ public class UIMainMenu : MonoBehaviour
         _musicVCA.setVolume(value);
         _musicVCA.getVolume(out _sfxVCAVolume);
     }
-    
+
+    private void OnEnable()
+    {
+        _mainMenuMusicInstance.start();
+    }
+
+    private void OnDisable()
+    {
+        _UIConfirmSFXInstance.release();
+        _UIBackSFXInstance.release();
+        _mainMenuMusicInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+        _mainMenuMusicInstance.release();
+    }
+
     private void OnDestroy()
     {
         _UIConfirmSFXInstance.release();

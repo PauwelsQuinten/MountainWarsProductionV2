@@ -278,6 +278,10 @@ public class PlayerController : MonoBehaviour
         {
             _sheathWeapon.Raise(this, EventArgs.Empty);
             _stateManager.WeaponIsSheathed = false;
+        }else if (!_stateManager.WeaponIsSheathed)
+        {
+            _sheathWeapon.Raise(this, EventArgs.Empty);
+            _stateManager.WeaponIsSheathed = true;
         }
         //TODO add intract event
     }

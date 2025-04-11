@@ -61,6 +61,7 @@ public class StaminaManager : MonoBehaviour
             _changedStamina.Raise(this, new StaminaEventArgs { CurrentStamina = CurrentStamina, MaxStamina = _maxStamina });
 
             UpdateBlackboard();
+            _canRegen = false;
         }
 
         if (_resetRegen != null) StopCoroutine(_resetRegen);

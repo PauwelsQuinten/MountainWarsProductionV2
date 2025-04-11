@@ -288,7 +288,7 @@ public class Aiming : MonoBehaviour
     {
         Debug.Log($"{dir}");
         Debug.Log($"distance : {_traversedAngle}");
-        var speed = CalculateSwingSpeed(_traversedAngle, 1f, 2.5f);
+        var speed = CalculateSwingSpeed(_traversedAngle, 1.5f, 2.5f);
         Debug.Log($"speed : {speed}");
         Debug.Log($"signal : {_enmAttackSignal}");
         Debug.Log($"{CalculateBlockDirection(_refAimingInput.variable.StateManager.Orientation)}");
@@ -341,7 +341,7 @@ public class Aiming : MonoBehaviour
                 ,
             BlockDirection = CalculateBlockDirection(_refAimingInput.variable.StateManager.Orientation)
                 ,
-            Speed = CalculateSwingSpeed(_traversedAngle, 1f, 2.5f)
+            Speed = CalculateSwingSpeed(_traversedAngle, 1.5f, 2.5f)
                 ,
             AttackSignal = _enmAttackSignal
                 ,
@@ -403,6 +403,8 @@ public class Aiming : MonoBehaviour
 
     private float CalculateSwingSpeed(float length, float minResult, float maxResult)
     {
+        if (_fMovingTime == 0 )
+            return minResult;
         float speed = (length * 1 / _fMovingTime) * 0.01f;
         speed = speed < minResult ? minResult:  speed;
         return speed > maxResult ? maxResult : speed;

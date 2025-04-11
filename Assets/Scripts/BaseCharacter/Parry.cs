@@ -42,7 +42,7 @@ public class Parry : MonoBehaviour
             return;
 
 
-        if (args.AttackState == AttackState.BlockAttack || args.AttackState == AttackState.ShieldDefence || args.AttackState == AttackState.SwordDefence)
+        if (/*args.AttackState == AttackState.BlockAttack || */args.AttackState == AttackState.ShieldDefence || args.AttackState == AttackState.SwordDefence)
             _parryMedium = Blocking.GetBlockMedium(args);
         else
             return;
@@ -183,13 +183,14 @@ public class Parry : MonoBehaviour
     
     private void StartAnimation(AimingOutputArgs args, BlockMedium parryMedium)
     {
+        float speed = args.Speed < 2f ? 2f : args.Speed;
         if (args.Direction == Direction.ToLeft)
         {
             if (parryMedium == BlockMedium.Shield)
                 _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.ParryShieldLeft, AnimLayer = 4, DoResetIdle = true, Interupt = false, Speed = args.Speed });
             else if (parryMedium == BlockMedium.Sword)
             {
-                float speed = args.Speed < 2f ? 2f : args.Speed;
+                
                 if (_tryDisarm)
                     speed = 4f;
                 _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.ParrySwordLeft, AnimLayer = 3, DoResetIdle = true, Interupt = false, Speed = speed  });
@@ -202,7 +203,6 @@ public class Parry : MonoBehaviour
                 _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.ParryShieldRight, AnimLayer = 4, DoResetIdle = true, Interupt = false, Speed = args.Speed });
             else if (parryMedium == BlockMedium.Sword)
             {
-                float speed = args.Speed < 2f ? 2f : args.Speed;
                 if (_tryDisarm)
                     speed = 4f;
                 _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.ParrySwordRight, AnimLayer = 3, DoResetIdle = true, Interupt = false, Speed = speed });

@@ -11,8 +11,8 @@ public class AnimationManager : MonoBehaviour
     [SerializeField] private GameEvent _endAnimation;
     [SerializeField] private GameEvent _startAnimation;
 
-    private bool _canResetIdle = true;
-    private Coroutine _animCoroutine;
+    //private bool _canResetIdle = true;
+    //private Coroutine _animCoroutine;
 
     private void Start()
     {
@@ -40,7 +40,7 @@ public class AnimationManager : MonoBehaviour
                 //else Debug.Log("Bored is null");
         }
 
-        //Debug.Log($"anim call: {args.AnimState.ToString()}, speed: {args.Speed}, layer: {args.AnimLayer}");
+        Debug.Log($"anim call: {args.AnimState.ToString()}, speed: {args.Speed}, layer: {args.AnimLayer}");
         // Crossfade with normalized transition offset
         _animator.speed = args.Speed;
         _animator.CrossFade(args.AnimState.ToString(), 0.2f, args.AnimLayer, 0f);

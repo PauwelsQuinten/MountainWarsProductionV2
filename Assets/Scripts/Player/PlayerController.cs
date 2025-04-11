@@ -340,12 +340,12 @@ public class PlayerController : MonoBehaviour
         _pauseGame.Raise(this, EventArgs.Empty);
     }
 
+
     private IEnumerator ResetAttackHeight()
     {
         yield return new WaitForSeconds(1);
         _stateManager.AttackHeight = AttackHeight.Torso;
     }
-
 
     private IEnumerator CheckSurrounding()
     {

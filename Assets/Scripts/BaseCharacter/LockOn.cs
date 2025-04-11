@@ -16,7 +16,8 @@ public class LockOn : MonoBehaviour
 
     private Coroutine _sheathingCoroutine;
     private bool _sheathing;
-    private bool _weaponIsSheated;
+
+    private bool _canResheath;
 
     private StateManager _stateManager;
 
@@ -59,7 +60,7 @@ public class LockOn : MonoBehaviour
         {
             if (!_stateManager.WeaponIsSheathed)
             {
-                if (!_sheathing)
+                if (!_sheathing && _canResheath)
                 {
                     _sheathingCoroutine = StartCoroutine(SheathWeapon(5));
                 }
@@ -71,9 +72,11 @@ public class LockOn : MonoBehaviour
             {
                 if (!_sheathing)
                 {
+                    _canResheath = true;
                     _sheathingCoroutine = StartCoroutine(SheathWeapon(0.1f));
                 }
             }
+            else _canResheath = true;
         }
 
         if (!_lockonTarget || !_lockonEvent)
@@ -91,8 +94,9 @@ public class LockOn : MonoBehaviour
     public void WeaponSheathed(Component sender, object obj)
     {
         if(sender == this) return;
-        StopCoroutine(_sheathingCoroutine);
+        if(_sheathingCoroutine != null)StopCoroutine(_sheathingCoroutine);
         _sheathing = false;
+        _canResheath = false;
     }
 
     private Orientation CalculateOrientation()

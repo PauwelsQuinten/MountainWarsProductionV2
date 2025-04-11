@@ -245,7 +245,7 @@ public class WorldState : MonoBehaviour
                     TargetShieldState = _blackboard.variable.TargetShieldState;
                 break;
            case BlackboardEventArgs.WhatChanged.TargetOpening:
-                Debug.Log($"{_blackboard.variable.TargetOpening.OpeningDirection}, {_blackboard.variable.TargetOpening.OpeningSize}");
+                //Debug.Log($"{_blackboard.variable.TargetOpening.OpeningDirection}, {_blackboard.variable.TargetOpening.OpeningSize}");
                 if (HasTarget == EWorldStatePossesion.InPossesion)
                     HasOpening = _blackboard.variable.TargetOpening.OpeningSize != Size.Small || _blackboard.variable.TargetOpening.OpeningSize != Size.None ? 
                         EWorldStatePossesion.InPossesion : EWorldStatePossesion.NotInPossesion;

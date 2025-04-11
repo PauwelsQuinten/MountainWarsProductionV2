@@ -52,7 +52,7 @@ public class Parry : MonoBehaviour
 
         if (args.AnimationStart)
         {
-            Debug.Log($"ParryInput :{args.Direction}, {args.AngleTravelled}, {_parryMedium}");
+            //Debug.Log($"ParryInput :{args.Direction}, {args.AngleTravelled}, {_parryMedium}");
             StartAnimation(args, _parryMedium);
             _swingDirection = args.Direction;
         }
@@ -176,7 +176,7 @@ public class Parry : MonoBehaviour
     
     private void OnFaildedParry(AttackEventArgs attackValues)
     {       
-        Debug.Log("Failed Parry");
+        //Debug.Log("Failed Parry");
         //signal to Block
         _onFailedParryEvent.Raise(this, attackValues);
     }
@@ -186,7 +186,7 @@ public class Parry : MonoBehaviour
         if (args.Direction == Direction.ToLeft)
         {
             if (parryMedium == BlockMedium.Shield)
-                _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.ParryShieldLeft, AnimLayer = 3, DoResetIdle = true, Interupt = false, Speed = args.Speed });
+                _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.ParryShieldLeft, AnimLayer = 4, DoResetIdle = true, Interupt = false, Speed = args.Speed });
             else if (parryMedium == BlockMedium.Sword)
                 _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.ParrySwordLeft, AnimLayer = 3, DoResetIdle = true, Interupt = false, Speed = args.Speed });
         
@@ -196,7 +196,7 @@ public class Parry : MonoBehaviour
             if (parryMedium == BlockMedium.Shield)
                 _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.ParryShieldRight, AnimLayer = 4, DoResetIdle = true, Interupt = false, Speed = args.Speed });
             else if (parryMedium == BlockMedium.Sword)
-                _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.ParrySwordRight, AnimLayer = 4, DoResetIdle = true, Interupt = false, Speed = args.Speed });
+                _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.ParrySwordRight, AnimLayer = 3, DoResetIdle = true, Interupt = false, Speed = args.Speed });
 
         }
     }

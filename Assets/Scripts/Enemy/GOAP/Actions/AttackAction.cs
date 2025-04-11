@@ -11,12 +11,10 @@ public class AttckAction : GoapAction
     [SerializeField] Direction _swingDirection = Direction.ToCenter;
 
     private Coroutine _attackCoroutine;
-    private bool _isMovementSet = false;
 
     public override void StartAction(WorldState currentWorldState, BlackboardReference blackboard)
     {
        base.StartAction(currentWorldState, blackboard);
-        _isMovementSet = true;
         _attackCoroutine = StartCoroutine(ExecuteAttack(_executionTime));
     }
 
@@ -85,7 +83,6 @@ public class AttckAction : GoapAction
     {
         SendPackage();
         yield return new WaitForSeconds(executionTime);
-        _isMovementSet = false;
         ActionCompleted();
     }
 

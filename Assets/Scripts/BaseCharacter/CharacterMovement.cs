@@ -31,8 +31,6 @@ public class CharacterMovement : MonoBehaviour
     private Vector3 _movedirection;
     private float _angleInterval = 22.5f;
 
-    private StaminaManager _staminaManager;
-
     private void Start()
     {
         _rb = GetComponent<Rigidbody>();
@@ -41,7 +39,7 @@ public class CharacterMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (gameObject.CompareTag("Player"))
+        if (gameObject.CompareTag("Player")) 
             _rb.Move(new Vector3(transform.position.x, transform.position.y,transform.position.z) + (_movedirection * (_speed * _moveInput.variable.SpeedMultiplier)) * Time.deltaTime, transform.rotation);
     }
 
@@ -80,15 +78,9 @@ public class CharacterMovement : MonoBehaviour
             _movedirection = Vector3.zero;
             return;
         }
-        if (_staminaManager == null) _staminaManager = GetComponent<StaminaManager>();
+        
         if (speedMultiplier > 1)
-        {
-            if(_staminaCost.value > _staminaManager.CurrentStamina)
-            {
-                _moveInput.variable.SpeedMultiplier = 1;
-            }else 
-                _removeStamina.Raise(this, new StaminaEventArgs { StaminaCost = _staminaCost.value * Time.deltaTime });
-        }
+            _removeStamina.Raise(this, new StaminaEventArgs { StaminaCost = _staminaCost.value * Time.deltaTime });
         _movedirection = new Vector3(input.x, 0f, input.y);
 
         if (input != Vector2.zero)

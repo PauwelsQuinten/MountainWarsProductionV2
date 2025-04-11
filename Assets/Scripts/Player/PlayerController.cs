@@ -42,17 +42,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private GameEvent _shieldBash;
 
-    [Header("Interactions")]
+    [Header("ItemPickup")]
     [SerializeField]
     private GameEvent _pickupEvent;
-    [SerializeField]
-    private GameEvent _hide;
-    [SerializeField]
-    private GameEvent _sheathWeapon;
-    [SerializeField]
-    private GameEvent _shieldGrab;
-
-
+    
     [Header("Perception")]
     [SerializeField]
     private GameEvent _LookForTarget;
@@ -61,9 +54,17 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private GameEvent _changeAnimation;
 
+    [Header("Hiding")]
+    [SerializeField]
+    private GameEvent _hide;
+
     [Header("Pause")]
     [SerializeField]
     private GameEvent _pauseGame;
+
+    [Header("Sheath Weapon")]
+    [SerializeField]
+    private GameEvent _sheathWeapon;
 
     private Vector2 _moveInput;
 
@@ -86,16 +87,21 @@ public class PlayerController : MonoBehaviour
    
     private void Start()
     {
+        
         _aimInputRef.variable.ValueChanged += AimInputRef_ValueChanged;
         _aimInputRef.variable.StateManager = _stateManager;
         _moveInputRef.variable.StateManager = _stateManager;
 
         StartCoroutine(CheckSurrounding());
+
     }
 
     public void GetStun(Component sender, object obj)
     {
-        if (sender.gameObject != gameObject) return;
+        var args = obj as StunEventArgs;
+        if (args == null) return;
+        if (args.ComesFromEnemy && sender.gameObject == gameObject) return;
+        else if (!args.ComesFromEnemy && sender.gameObject != gameObject) return;
 
         _storredAttackState = _stateManager.AttackState;
         _aimInputRef.variable.State = AttackState.Stun;
@@ -139,6 +145,7 @@ public class PlayerController : MonoBehaviour
 
 
        _aimInputRef.variable.State = _stateManager.AttackState;
+
     }
 
     public void ProccesMoveInput(InputAction.CallbackContext ctx)
@@ -166,6 +173,7 @@ public class PlayerController : MonoBehaviour
             }
             return;
         }
+
 
         if (_stateManager.AttackState != AttackState.BlockAttack)
         {
@@ -268,13 +276,11 @@ public class PlayerController : MonoBehaviour
         if (!ctx.performed) return;
         _pickupEvent.Raise(this);
         _hide.Raise(this, EventArgs.Empty);
-
-        if (_stateManager.WeaponIsSheathed)
+        if(_stateManager.WeaponIsSheathed)
         {
             _sheathWeapon.Raise(this, EventArgs.Empty);
             _stateManager.WeaponIsSheathed = false;
-        }
-        else if (!_stateManager.WeaponIsSheathed)
+        }else if (!_stateManager.WeaponIsSheathed)
         {
             _sheathWeapon.Raise(this, EventArgs.Empty);
             _stateManager.WeaponIsSheathed = true;
@@ -330,14 +336,6 @@ public class PlayerController : MonoBehaviour
     {
         if (!ctx.performed) return;
         _pauseGame.Raise(this, EventArgs.Empty);
-    }
-
-    public void ProccesShieldGrab(InputAction.CallbackContext ctx)
-    {
-        if (Time.timeScale == 0) return;
-        if (!ctx.performed) return;
-        if (_stateManager.AttackState == AttackState.ShieldDefence || _stateManager.AttackState == AttackState.BlockAttack)
-            _shieldGrab.Raise(this, EventArgs.Empty);
     }
 
     private IEnumerator ResetAttackHeight()

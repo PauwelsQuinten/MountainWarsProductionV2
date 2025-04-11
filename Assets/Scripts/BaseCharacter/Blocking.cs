@@ -34,7 +34,7 @@ public class Blocking : MonoBehaviour
         //When Shield is locked and state hasnt changed, keep previous values
         if (args.IsHoldingBlock && args.AttackState == AttackState.BlockAttack)
             return;
-        //Debug.Log($"package to Block State = {args.AttackState}, hold: {args.AimingInputState}, {_blockMedium}, {args.BlockDirection}");
+        Debug.Log($"package to Block State = {args.AttackState}, hold: {args.AimingInputState}, {_blockMedium}, {args.BlockDirection}");
 
         //only set movement when using a valid Blocking input
         if ((args.AttackState == AttackState.ShieldDefence || 
@@ -132,6 +132,8 @@ public class Blocking : MonoBehaviour
         if (blockResult == BlockResult.Hit)
         {
             _succesfullHitEvent.Raise(this, args);
+            _succesfullBlockevent.Raise(this, new StunEventArgs { StunDuration = 2f, ComesFromEnemy = false});
+
         }
         else
         {
@@ -148,10 +150,14 @@ public class Blocking : MonoBehaviour
                 case BlockResult.SwordBlock:
                     _loseStamina.Raise(this, new StaminaEventArgs { StaminaCost = _staminaCost.value * 0.5f });
                     _succesfullBlockevent.Raise(this, new StunEventArgs { StunDuration = 0.75f, ComesFromEnemy = true });
+                    //_succesfullHitEvent.Raise(this, args);
+
                     break;
                 case BlockResult.SwordHalfBlock:
                     _loseStamina.Raise(this, new StaminaEventArgs { StaminaCost = _staminaCost.value * 0.75f });
                     _succesfullBlockevent.Raise(this, new StunEventArgs { StunDuration = 0.5f, ComesFromEnemy = true });
+                    //_succesfullHitEvent.Raise(this, args);
+
                     break;
             }
                        

@@ -78,7 +78,7 @@ public class HealthManager : MonoBehaviour
     }
     public void TakeDamage(Component sender, object obj)
     {
-        if (sender.gameObject == gameObject) return;
+        if (sender.gameObject != gameObject) return;
 
         DamageEventArgs args = obj as DamageEventArgs;
         if (args == null) return;

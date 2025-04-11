@@ -33,14 +33,14 @@ public class AnimationManager : MonoBehaviour
             return;
         }
 
-        if(args.AnimState != AnimationState.Idle)
-        {
-                BoredBehaviour bored = _animator.GetBehaviour<BoredBehaviour>();
-                if (bored != null) bored.IdleExit();
-                //else Debug.Log("Bored is null");
-        }
+        //if(args.AnimState != AnimationState.Idle)
+        //{
+        //        BoredBehaviour bored = _animator.GetBehaviour<BoredBehaviour>();
+        //        if (bored != null) bored.IdleExit();
+        //        //else Debug.Log("Bored is null");
+        //}
 
-        //Debug.Log($"anim call: {args.AnimState.ToString()}");
+        //Debug.Log($"anim call: {args.AnimState.ToString()}, speed: {args.Speed}, layer: {args.AnimLayer}");
         // Crossfade with normalized transition offset
         _animator.speed = args.Speed;
         _animator.CrossFade(args.AnimState.ToString(), 0.2f, args.AnimLayer, 0f);
@@ -73,10 +73,11 @@ public class AnimationManager : MonoBehaviour
 
     private void InteruptAnimation(AnimationEventArgs args)
     {
-        _animator.CrossFade(AnimationState.Empty.ToString(), 0.3f, 3, 0.3f);
-        _animator.CrossFade(args.AnimState.ToString(), 0.3f, args.AnimLayer, 0.2f);
-        _currentState = AnimationState.Idle;
-        _animator.GetBehaviour<BoredBehaviour>().IdleExit();
+        _animator.SetTrigger("Feint");
+        //_animator.CrossFade(AnimationState.Empty.ToString(), 0.3f, 3, 0.3f);
+        //_animator.CrossFade(args.AnimState.ToString(), 0.3f, args.AnimLayer, 0.2f);
+        //_currentState = AnimationState.Idle;
+        //_animator.GetBehaviour<BoredBehaviour>().IdleExit();
         if (_animCoroutine != null) 
             StopCoroutine(_animCoroutine);
 
@@ -88,9 +89,9 @@ public class AnimationManager : MonoBehaviour
         yield return new WaitForSeconds(time);
 
         // Reset only the active layer to idle
-        Debug.Log($"end coroutine");
+        //Debug.Log($"end coroutine");
         _animator.CrossFade(AnimationState.Idle.ToString(), 0.2f, 1);
-        ChangeAnimationState(this, new AnimationEventArgs { AnimState = AnimationState.Empty, AnimLayer = layer, DoResetIdle = false });
+        //ChangeAnimationState(this, new AnimationEventArgs { AnimState = AnimationState.Empty, AnimLayer = layer, DoResetIdle = false });
         _endAnimation.Raise(this, null);
 
         _currentState = AnimationState.Idle;
@@ -98,14 +99,42 @@ public class AnimationManager : MonoBehaviour
 
     public void LastAnimFrameCalled(Component Sender, object obj)
     {
-        _animator.CrossFade(AnimationState.Idle.ToString(), 0.2f, 1);
-        ChangeAnimationState(this, new AnimationEventArgs { AnimState = AnimationState.Empty, AnimLayer = 2, DoResetIdle = false });
+        if (Sender.gameObject != gameObject) return;
+
+        //_animator.CrossFade(AnimationState.Idle.ToString(), 0.2f, 1);
+        //ChangeAnimationState(this, new AnimationEventArgs { AnimState = AnimationState.Empty, AnimLayer = 2, DoResetIdle = false });
         _currentState = AnimationState.Idle;
 
         if (_animCoroutine != null)
             StopCoroutine(_animCoroutine);
-        Debug.Log($"end through anim");
+        //Debug.Log($"end through anim");
         //_endAnimation.Raise(this, null);
     }
-}
+
+    public void GetHit(Component Sender, object obj)
+    {
+        if (Sender.gameObject != gameObject) return;
+
+        _animator.speed = 1;
+        _animator.SetTrigger("GetHit");
+    }
+    
+    public void GetStunned(Component sender, object obj)
+    {
+        var args = obj as StunEventArgs;
+        if (args == null)return;
+        if (args.ComesFromEnemy && sender.gameObject == gameObject)return;
+        else if (!args.ComesFromEnemy && sender.gameObject != gameObject) return;
         
+        _animator.speed = 1;
+        _animator.SetBool("IsStunned", true);
+    }
+
+     public void RecoverStunned(Component Sender, object obj)
+    {
+        if (Sender.gameObject != gameObject) return;
+
+        _animator.SetBool("IsStunned", false);
+    }
+
+}

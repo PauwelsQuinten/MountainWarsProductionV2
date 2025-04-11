@@ -127,7 +127,8 @@ public class GoapAction : MonoBehaviour, IActions
         }
        
         //Action finished
-        StopCoroutine(_actionCoroutine);
+        if (_actionCoroutine != null)
+            StopCoroutine(_actionCoroutine);
         _isActivated = false;
         return true;
     }

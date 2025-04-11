@@ -52,7 +52,7 @@ public class Parry : MonoBehaviour
 
         if (args.AnimationStart)
         {
-            //Debug.Log($"ParryInput :{args.Direction}, {args.AngleTravelled}, {_parryMedium}");
+            Debug.Log($"ParryInput :{args.Direction}, {args.AngleTravelled}, {_parryMedium}");
             StartAnimation(args, _parryMedium);
             _swingDirection = args.Direction;
         }

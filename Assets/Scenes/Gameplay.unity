@@ -2631,65 +2631,17 @@ PrefabInstance:
       propertyPath: _player
       value: 
       objectReference: {fileID: 710279085}
-    - target: {fileID: -9064225466436632881, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
-      propertyPath: _townMusic.Path
-      value: event:/Music/Town
+    - target: {fileID: -7891369219080097047, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
+      propertyPath: Events.Array.size
+      value: 4
       objectReference: {fileID: 0}
-    - target: {fileID: -9064225466436632881, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
-      propertyPath: _forestMusic.Path
-      value: event:/Music/Forest
+    - target: {fileID: -7891369219080097047, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
+      propertyPath: Responses.Array.size
+      value: 4
       objectReference: {fileID: 0}
-    - target: {fileID: -9064225466436632881, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
-      propertyPath: _mainThemeMusic.Path
-      value: event:/Music/Main
-      objectReference: {fileID: 0}
-    - target: {fileID: -9064225466436632881, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
-      propertyPath: _townMusic.Guid.Data1
-      value: 544658783
-      objectReference: {fileID: 0}
-    - target: {fileID: -9064225466436632881, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
-      propertyPath: _townMusic.Guid.Data2
-      value: 1317782079
-      objectReference: {fileID: 0}
-    - target: {fileID: -9064225466436632881, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
-      propertyPath: _townMusic.Guid.Data3
-      value: 1228220307
-      objectReference: {fileID: 0}
-    - target: {fileID: -9064225466436632881, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
-      propertyPath: _townMusic.Guid.Data4
-      value: -350215759
-      objectReference: {fileID: 0}
-    - target: {fileID: -9064225466436632881, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
-      propertyPath: _forestMusic.Guid.Data1
-      value: 630949937
-      objectReference: {fileID: 0}
-    - target: {fileID: -9064225466436632881, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
-      propertyPath: _forestMusic.Guid.Data2
-      value: 1129881989
-      objectReference: {fileID: 0}
-    - target: {fileID: -9064225466436632881, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
-      propertyPath: _forestMusic.Guid.Data3
-      value: 292515723
-      objectReference: {fileID: 0}
-    - target: {fileID: -9064225466436632881, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
-      propertyPath: _forestMusic.Guid.Data4
-      value: 1745741427
-      objectReference: {fileID: 0}
-    - target: {fileID: -9064225466436632881, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
-      propertyPath: _mainThemeMusic.Guid.Data1
-      value: -462302020
-      objectReference: {fileID: 0}
-    - target: {fileID: -9064225466436632881, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
-      propertyPath: _mainThemeMusic.Guid.Data2
-      value: 1209973555
-      objectReference: {fileID: 0}
-    - target: {fileID: -9064225466436632881, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
-      propertyPath: _mainThemeMusic.Guid.Data3
-      value: -827850064
-      objectReference: {fileID: 0}
-    - target: {fileID: -9064225466436632881, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
-      propertyPath: _mainThemeMusic.Guid.Data4
-      value: 48110958
+    - target: {fileID: -7891369219080097047, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
+      propertyPath: Responses.Array.data[5].m_PersistentCalls.m_Calls.Array.size
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3779732516173593837, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
       propertyPath: m_Name

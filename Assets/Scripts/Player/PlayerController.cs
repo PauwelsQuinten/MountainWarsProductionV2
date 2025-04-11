@@ -98,8 +98,10 @@ public class PlayerController : MonoBehaviour
 
     public void GetStun(Component sender, object obj)
     {
-        
-        if (sender.gameObject != gameObject) return;
+        var args = obj as StunEventArgs;
+        if (args == null) return;
+        if (args.ComesFromEnemy && sender.gameObject == gameObject) return;
+        else if (!args.ComesFromEnemy && sender.gameObject != gameObject) return;
 
         _storredAttackState = _stateManager.AttackState;
         _aimInputRef.variable.State = AttackState.Stun;

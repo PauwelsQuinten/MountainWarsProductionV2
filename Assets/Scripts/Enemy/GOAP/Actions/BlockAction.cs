@@ -12,8 +12,7 @@ public class BlockAction : GoapAction
     [SerializeField] bool _useAimedBlock = false;
 
     private Coroutine _defendCoroutine;
-    private bool _isMovementSet = false;
-    private bool _isMovementEnded = false;
+    
 
     public override void StartAction(WorldState currentWorldState, BlackboardReference blackboard)
     {
@@ -37,7 +36,6 @@ public class BlockAction : GoapAction
             }
         }
 
-        _isMovementSet = true;
         _defendCoroutine = StartCoroutine(ExecuteBlock(_executionTime));
     }
 
@@ -108,7 +106,6 @@ public class BlockAction : GoapAction
     {
         SendPackage();
         yield return new WaitForSeconds(executionTime);
-        _isMovementSet = false;
         ActionCompleted();
     }
 

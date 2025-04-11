@@ -10,7 +10,7 @@ public class HitDetection : MonoBehaviour
 
     public void DetectHit(Component sender, object obj)
     {
-        if (sender.gameObject == gameObject) return;
+        if (sender.gameObject != gameObject) return;
 
         AttackEventArgs args = obj as AttackEventArgs;
         if (args == null) return;
@@ -45,6 +45,7 @@ public class HitDetection : MonoBehaviour
                         break;
                     case AttackHeight.Torso:
                         parts.Add(BodyParts.LeftArm);
+                        //TODO shield gets hit animation
                         break;
                 }
                 break;
@@ -56,7 +57,7 @@ public class HitDetection : MonoBehaviour
                         parts.Add(BodyParts.Head);
                         break;
                     case AttackHeight.Torso:
-                        //TODO shield gets hit animation
+                        parts.Add(BodyParts.RightArm);
                         break;
                 }
                 break;

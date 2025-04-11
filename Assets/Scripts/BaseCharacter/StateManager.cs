@@ -4,10 +4,11 @@ using UnityEngine;
 public class StateManager : MonoBehaviour
 {
     private const string PLAYER = "Player";
-
+    [Header("Events")]
     [SerializeField] GameEvent _OnKnockbackRecovery;
-    [SerializeField] BlackboardReference _blackboardRef;
     [SerializeField] GameEvent _OnStunRecovery;
+    [Header("Rrefrence")]
+    [SerializeField] BlackboardReference _blackboardRef;
     public AttackState AttackState;
     public AttackHeight AttackHeight = AttackHeight.Torso;
     public Orientation Orientation;
@@ -33,26 +34,6 @@ public class StateManager : MonoBehaviour
         }
 
     }
-    
-    public void GetStunned(Component sender, object obj)
-    {
-        StunEventArgs args = obj as StunEventArgs;
-        if (args == null) return;
-
-        if (args.ComesFromEnemy)
-        {
-            if (sender.gameObject == gameObject) return;
-        }
-        else if (sender.gameObject != gameObject) return;
-
-        Debug.Log($"Stuned {gameObject.name}");
-        AttackState = AttackState.Stun;
-        StartCoroutine(RecoverStun(args.StunDuration));
-
-        if (gameObject.CompareTag(PLAYER))
-            _blackboardRef.variable.ResetCurrentAttack();
-    }
-
     public void SetTarget(Component sender, object obj)
     {
         if(sender.gameObject != gameObject) return;
@@ -101,11 +82,30 @@ public class StateManager : MonoBehaviour
         InAnimiation = false;
     }
 
+    public void GetStunned(Component sender, object obj)
+    {
+        StunEventArgs args = obj as StunEventArgs;
+        if (args == null) return;
+
+        if (args.ComesFromEnemy)
+        {
+            if (sender.gameObject == gameObject) return;
+        }
+        else if (sender.gameObject != gameObject) return;
+
+        //Debug.Log($"Stuned {gameObject.name}");
+        AttackState = AttackState.Stun;
+        StartCoroutine(RecoverStun(args.StunDuration));
+
+        if (gameObject.CompareTag(PLAYER))
+            _blackboardRef.variable.ResetCurrentAttack();
+    }
+
     private IEnumerator RecoverStun(float stunDuration)
 
     {
         yield return new WaitForSeconds(stunDuration);
-        _OnStunRecovery.Raise(this);
         AttackState = AttackState.Idle;
+        _OnStunRecovery.Raise(this, null);
     }
 }

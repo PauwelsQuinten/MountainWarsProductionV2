@@ -52,7 +52,7 @@ public class Parry : MonoBehaviour
 
         if (args.AnimationStart)
         {
-            Debug.Log($"ParryInput :{args.Direction}, {args.AngleTravelled}, {_parryMedium}");
+            //Debug.Log($"ParryInput :{args.Direction}, {args.AngleTravelled}, {_parryMedium}");
             StartAnimation(args, _parryMedium);
             _swingDirection = args.Direction;
         }
@@ -176,7 +176,7 @@ public class Parry : MonoBehaviour
     
     private void OnFaildedParry(AttackEventArgs attackValues)
     {       
-        Debug.Log("Failed Parry");
+        //Debug.Log("Failed Parry");
         //signal to Block
         _onFailedParryEvent.Raise(this, attackValues);
     }

@@ -31,6 +31,8 @@ public class HealthManager : MonoBehaviour
 
     [Header("Healing")]
     [SerializeField]
+    private float _regenDelay = 10f;
+    [SerializeField]
     private float _patchUpSpeed;
     [SerializeField]
     private GameEvent _patchUp;
@@ -51,8 +53,8 @@ public class HealthManager : MonoBehaviour
     private Dictionary<BodyParts, float> _maxBodyPartHealth = new Dictionary<BodyParts, float>();
     private float _bleedOutRate;
 
-    private bool _canRegenBlood = false;
-    private bool _canRegenHealth = false;
+    private bool _canRegenBlood = true;
+    private bool _canRegenHealth = true;
     private Coroutine _canRegenCoroutine;
 
     private List<BodyParts> _damagedBodyParts = new List<BodyParts>();
@@ -265,7 +267,7 @@ public class HealthManager : MonoBehaviour
 
     private IEnumerator ResetCanRegen()
     {
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(_regenDelay);
         if (_canRegenBlood && _currentBlood == _maxBlood) 
             _canRegenHealth = true;
         else 

@@ -197,6 +197,7 @@ public class UIHealthManager : MonoBehaviour
     {
         float time = 0;
         float size = 0;
+        _patchUpBar.fillAmount = size;
         _patchUpBar.transform.parent.gameObject.SetActive(true);
         while(_patchUpBar.fillAmount < 1)
         {
@@ -207,7 +208,7 @@ public class UIHealthManager : MonoBehaviour
         }
 
         _patchUpBar.transform.parent.gameObject.SetActive(false);
-        size = 0;
+        size = 1;
         _patchUpBar.fillAmount = size;
         _completedPatchUp = true;
         _patchUp = null;

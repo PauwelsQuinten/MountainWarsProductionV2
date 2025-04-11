@@ -41,7 +41,7 @@ public class CharacterMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (gameObject.CompareTag("Player")) ;
+        if (gameObject.CompareTag("Player"))
             _rb.Move(new Vector3(transform.position.x, transform.position.y,transform.position.z) + (_movedirection * (_speed * _moveInput.variable.SpeedMultiplier)) * Time.deltaTime, transform.rotation);
     }
 

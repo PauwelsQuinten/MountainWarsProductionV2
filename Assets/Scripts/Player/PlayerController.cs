@@ -276,11 +276,13 @@ public class PlayerController : MonoBehaviour
         if (!ctx.performed) return;
         _pickupEvent.Raise(this);
         _hide.Raise(this, EventArgs.Empty);
-        if(_stateManager.WeaponIsSheathed)
+
+        if (_stateManager.WeaponIsSheathed)
         {
             _sheathWeapon.Raise(this, EventArgs.Empty);
             _stateManager.WeaponIsSheathed = false;
-        }else if (!_stateManager.WeaponIsSheathed)
+        }
+        else if (!_stateManager.WeaponIsSheathed)
         {
             _sheathWeapon.Raise(this, EventArgs.Empty);
             _stateManager.WeaponIsSheathed = true;

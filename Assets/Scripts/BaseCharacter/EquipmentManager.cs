@@ -301,6 +301,15 @@ public class EquipmentManager : MonoBehaviour
         }
     }
 
+    public void ShieldGrabbed(Component sender, object obj)
+    {
+        if (sender.gameObject == this.gameObject) return;
+        if (Vector3.Distance(gameObject.transform.position, sender.gameObject.transform.position) > 3) return;
+        if (_stateManager == null) _stateManager = GetComponent<StateManager>();
+        _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Empty, AnimLayer = 3, DoResetIdle = true });
+        _stateManager.AttackState = AttackState.Idle;
+    }
+
     private IEnumerator SetWeaponActive(float duration, GameObject socket)
     {
         yield return new WaitForSeconds(duration);

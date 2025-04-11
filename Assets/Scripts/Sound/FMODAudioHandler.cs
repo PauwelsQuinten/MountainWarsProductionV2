@@ -47,6 +47,8 @@ public class FMODAudioHandler : MonoBehaviour
     [Header("Music")] 
     [SerializeField] private EventReference _mainThemeMusic;
     private EventInstance _mainThemeMusicInstance;
+    [SerializeField] private EventReference _townMusic;
+    private EventInstance _townMusicInstance;
     [SerializeField] private EventReference _forestMusic;
     private EventInstance _forestMusicInstance;
     
@@ -71,7 +73,7 @@ public class FMODAudioHandler : MonoBehaviour
     {
         _attributes = RuntimeUtils.To3DAttributes(transform);
         _ambienceInstance = RuntimeManager.CreateInstance(_ambience);
-        _forestMusicInstance = RuntimeManager.CreateInstance(_forestMusic);
+        _townMusicInstance = RuntimeManager.CreateInstance(_townMusic);
         GetParameterID(_ambienceInstance, "Biome", out _biomeID);
         GetParameterID(_ambienceInstance, "WindIntensity", out _windIntensityID);
         GetParameterID(_ambienceInstance, "RainIntensity", out _rainIntensityID);
@@ -79,8 +81,8 @@ public class FMODAudioHandler : MonoBehaviour
         SetParameterID(_ambienceInstance, _windIntensityID, 1.0f);
         SetParameterID(_ambienceInstance, _rainIntensityID, 0.0f);
         _ambienceInstance.set3DAttributes(_attributes);
-        //_ambienceInstance.start();
-        _forestMusicInstance.start();
+        _ambienceInstance.start();
+        _townMusicInstance.start();
     }
 
     private void GetParameterID(EventInstance eventInstance, string parameterName, out PARAMETER_ID parameterID)
@@ -147,7 +149,7 @@ public class FMODAudioHandler : MonoBehaviour
                 _surfaceTypeIDValue = 0.0f;
                 break;
         }
-        //Debug.Log(surfaceType);
+       
         if (_player.GetComponentInChildren<Animator>().GetCurrentAnimatorStateInfo(2).IsName("Walk"))
         {
             _TypeOfWalkingIDValue = 1.0f;
@@ -198,7 +200,7 @@ public class FMODAudioHandler : MonoBehaviour
         SetGlobalParameterID(_currentWeaponID, 2.0f);
         SetParameterID(_weaponHitSFXInstance, _weaponHitSurfaceID, _weaponHitSurfaceIDValue);
         _weaponHitSFXInstance.start();
-       // _weaponWhooshSFXInstance.release();
+        _weaponWhooshSFXInstance.release();
     }
 
     public void PlayWhooshSFX(Component sender, object obj)
@@ -212,18 +214,22 @@ public class FMODAudioHandler : MonoBehaviour
     {
         _comicPanelSwapSFXInstance = RuntimeManager.CreateInstance(_comicPanelSwapSFX);
         _comicPanelSwapSFXInstance.start();
-        //_comicPanelSwapSFXInstance.release();
+        _comicPanelSwapSFXInstance.release();
     }
     
     public void PlayShowdownSFX(Component sender, object obj)
     {
         _showdownSFXInstance = RuntimeManager.CreateInstance(_showdownSFX);
         _showdownSFXInstance.start();
-       // _showdownSFXInstance.release();
+        _showdownSFXInstance.release();
     }
 
     private void OnDestroy()
     {
+        _forestMusicInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+        _townMusicInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+        _mainThemeMusicInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+        _townMusicInstance.release();
         _ambienceInstance.release();
         _footstepsSFXInstance.release();
         _attackChargeSFXInstance.release();

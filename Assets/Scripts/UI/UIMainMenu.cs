@@ -1,6 +1,7 @@
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -33,7 +34,8 @@ public class UIMainMenu : MonoBehaviour
     private EventInstance _UIConfirmSFXInstance;
     [SerializeField] private EventReference _UIBackSFX;
     private EventInstance _UIBackSFXInstance;
-
+    [SerializeField] private EventReference _mainMenuMusic;
+    private EventInstance _mainMenuMusicInstance;
     private Coroutine _loadScene;
     private void Start()
     {
@@ -48,7 +50,8 @@ public class UIMainMenu : MonoBehaviour
         
         _UIConfirmSFXInstance = RuntimeManager.CreateInstance(_UIConfirmSFX);
         _UIBackSFXInstance = RuntimeManager.CreateInstance(_UIBackSFX);
-
+        _mainMenuMusicInstance = RuntimeManager.CreateInstance(_mainMenuMusic);
+        _mainMenuMusicInstance.start();
     }
 
     public void NewGamePressed()
@@ -110,10 +113,25 @@ public class UIMainMenu : MonoBehaviour
         _musicVCA.setVolume(value);
         _musicVCA.getVolume(out _sfxVCAVolume);
     }
-    
+
+    private void OnEnable()
+    {
+        _mainMenuMusicInstance.start();
+    }
+
+    private void OnDisable()
+    {
+        _UIConfirmSFXInstance.release();
+        _UIBackSFXInstance.release();
+        _mainMenuMusicInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+        _mainMenuMusicInstance.release();
+    }
+
     private void OnDestroy()
     {
         _UIConfirmSFXInstance.release();
         _UIBackSFXInstance.release();
+        _mainMenuMusicInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+        _mainMenuMusicInstance.release();
     }
 }

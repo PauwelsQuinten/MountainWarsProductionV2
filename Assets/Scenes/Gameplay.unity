@@ -2631,17 +2631,69 @@ PrefabInstance:
       propertyPath: _player
       value: 
       objectReference: {fileID: 710279085}
-    - target: {fileID: -7891369219080097047, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
-      propertyPath: Events.Array.size
-      value: 4
+    - target: {fileID: -9064225466436632881, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
+      propertyPath: _sheathSFX.Path
+      value: event:/Combat/Sheath
+      objectReference: {fileID: 0}
+    - target: {fileID: -9064225466436632881, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
+      propertyPath: _unsheathSFX.Path
+      value: event:/Combat/Unsheath
+      objectReference: {fileID: 0}
+    - target: {fileID: -9064225466436632881, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
+      propertyPath: _sheathSFX.Guid.Data1
+      value: -1298046560
+      objectReference: {fileID: 0}
+    - target: {fileID: -9064225466436632881, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
+      propertyPath: _sheathSFX.Guid.Data2
+      value: 1309921665
+      objectReference: {fileID: 0}
+    - target: {fileID: -9064225466436632881, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
+      propertyPath: _sheathSFX.Guid.Data3
+      value: 154849699
+      objectReference: {fileID: 0}
+    - target: {fileID: -9064225466436632881, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
+      propertyPath: _sheathSFX.Guid.Data4
+      value: 1073744631
+      objectReference: {fileID: 0}
+    - target: {fileID: -9064225466436632881, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
+      propertyPath: _unsheathSFX.Guid.Data1
+      value: -1329864452
+      objectReference: {fileID: 0}
+    - target: {fileID: -9064225466436632881, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
+      propertyPath: _unsheathSFX.Guid.Data2
+      value: 1206419111
+      objectReference: {fileID: 0}
+    - target: {fileID: -9064225466436632881, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
+      propertyPath: _unsheathSFX.Guid.Data3
+      value: 1953893272
+      objectReference: {fileID: 0}
+    - target: {fileID: -9064225466436632881, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
+      propertyPath: _unsheathSFX.Guid.Data4
+      value: 1673386591
       objectReference: {fileID: 0}
     - target: {fileID: -7891369219080097047, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
+      propertyPath: Events.Array.size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: -7891369219080097047, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
+      propertyPath: 'Events.Array.data[4]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 40551c3801499a64ea4751aa179ac61e, type: 2}
+    - target: {fileID: -7891369219080097047, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
+      propertyPath: 'Events.Array.data[5]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 40551c3801499a64ea4751aa179ac61e, type: 2}
+    - target: {fileID: -7891369219080097047, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
       propertyPath: Responses.Array.size
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: -7891369219080097047, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
       propertyPath: Responses.Array.data[5].m_PersistentCalls.m_Calls.Array.size
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -7891369219080097047, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
+      propertyPath: Responses.Array.data[4].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: PlaySheathSFX
       objectReference: {fileID: 0}
     - target: {fileID: 3779732516173593837, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
       propertyPath: m_Name

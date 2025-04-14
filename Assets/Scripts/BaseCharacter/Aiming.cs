@@ -2,8 +2,6 @@ using TMPro;
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using static UnityEngine.Rendering.ReloadAttribute;
-using System;
 
 public class Aiming : MonoBehaviour
 {
@@ -342,7 +340,8 @@ public class Aiming : MonoBehaviour
                 ,
             BlockDirection = CalculateBlockDirection(_refAimingInput.variable.StateManager.Orientation)
                 ,
-            Speed = CalculateSwingSpeed(_traversedAngle, 1.5f, 2.5f)
+            Speed = 2f
+            //Speed = CalculateSwingSpeed(_traversedAngle, 1.5f, 2.5f)
                 ,
             AttackSignal = _enmAttackSignal
                 ,

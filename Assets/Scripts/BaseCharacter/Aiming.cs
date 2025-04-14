@@ -42,6 +42,7 @@ public class Aiming : MonoBehaviour
     private float _previousLength = 0f;
     private float _traversedAngle = 0f;
     private Direction _swingDirection = Direction.Idle;
+    private Direction _storredBlockDirection = Direction.Idle;
     
     void Start()
     {
@@ -430,7 +431,7 @@ public class Aiming : MonoBehaviour
     private Direction CalculateBlockDirection(Orientation orientation)
     {
         float length = _refAimingInput.variable.value.magnitude;
-        if (length < 0.5f)
+        if (length < 0.5f && !_refAimingInput.variable.StateManager.IsHoldingShield)
             return Direction.Idle;
 
         int orient = (int)orientation;

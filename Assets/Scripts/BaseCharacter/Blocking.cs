@@ -45,9 +45,11 @@ public class Blocking : MonoBehaviour
                 _blockDirection = _storredHoldDirection;
                 _storredHoldDirection = Direction.Idle;
             }
+            PlayShieldAnimation();
+
             return;
         }
-        Debug.Log($"package to Block State = {args.AttackState}, hold: {args.AimingInputState}, {_blockMedium}, {args.BlockDirection}");
+        //Debug.Log($"package to Block State = {args.AttackState}, hold: {args.AimingInputState}, {_blockMedium}, {args.BlockDirection}");
 
       
         //only set movement when using a valid Blocking input
@@ -62,18 +64,13 @@ public class Blocking : MonoBehaviour
             _blockDirection = args.BlockDirection;
             _previousState = args.AttackState;
 
-            //send event for animation
-            if (_blockMedium == BlockMedium.Shield)
-                _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.ShieldEquip, AnimLayer = 4, DoResetIdle = false, Interupt = false });
-            else if (_blockMedium == BlockMedium.Sword)
-                _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.SwordEquip, AnimLayer = 3, DoResetIdle = false, Interupt = false });            
-
+            PlayShieldAnimation();
 
             UpdateBlackboard(args);
         }
         //Lower shield when no vallid block input or state
         else if ( ((int)_previousState >= 3 && (int)args.AttackState < 3 )
-            || ((int)args.AttackState >= 3 && args.AimingInputState != AimingInputState.Hold))
+            || ((int)args.AttackState >= 3 && args.AimingInputState == AimingInputState.Idle))
         {
             _aimingInputState = AimingInputState.Idle;
             //_blockDirection = Direction.Idle;
@@ -96,7 +93,16 @@ public class Blocking : MonoBehaviour
 
      
     }
-               
+
+    private void PlayShieldAnimation()
+    {
+        //send event for animation
+        if (_blockMedium == BlockMedium.Shield)
+            _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.ShieldEquip, AnimLayer = 4, DoResetIdle = false, Interupt = false });
+        else if (_blockMedium == BlockMedium.Sword)
+            _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.SwordEquip, AnimLayer = 3, DoResetIdle = false, Interupt = false });
+    }
+
     public void CheckBlock(Component sender, object obj)
     {
         //Check for vallid signal

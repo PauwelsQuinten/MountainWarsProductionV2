@@ -5,7 +5,7 @@ public class StateManager : MonoBehaviour
 {
     private const string PLAYER = "Player";
     [Header("Events")]
-    [SerializeField] GameEvent _OnKnockbackRecovery;
+    //[SerializeField] GameEvent _OnKnockbackRecovery;
     [SerializeField] GameEvent _OnStunRecovery;
     [Header("Rrefrence")]
     [SerializeField] BlackboardReference _blackboardRef;
@@ -21,6 +21,8 @@ public class StateManager : MonoBehaviour
     public bool IsBleeding;
     public bool InAnimiation = false;
     public bool WeaponIsSheathed;
+
+    private Coroutine _recoverCoroutine;
 
     private void Start()
     {
@@ -94,9 +96,12 @@ public class StateManager : MonoBehaviour
         else if (sender.gameObject != gameObject) return;
 
         //Debug.Log($"Stuned {gameObject.name}");
-        AttackState = AttackState.Stun;
-        StartCoroutine(RecoverStun(args.StunDuration));
-
+        if (AttackState != AttackState.Stun)
+        {
+            AttackState = AttackState.Stun;
+            _recoverCoroutine = StartCoroutine(RecoverStun(args.StunDuration));
+        }
+        
         if (gameObject.CompareTag(PLAYER))
             _blackboardRef.variable.ResetCurrentAttack();
     }

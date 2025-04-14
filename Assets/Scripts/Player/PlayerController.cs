@@ -103,7 +103,8 @@ public class PlayerController : MonoBehaviour
         if (args.ComesFromEnemy && sender.gameObject == gameObject) return;
         else if (!args.ComesFromEnemy && sender.gameObject != gameObject) return;
 
-        _storredAttackState = _stateManager.AttackState;
+        _storredAttackState = 
+            _stateManager.AttackState == AttackState.Stun? AttackState.Idle : _stateManager.AttackState;
         _aimInputRef.variable.State = AttackState.Stun;
     }
     
@@ -303,7 +304,7 @@ public class PlayerController : MonoBehaviour
     {
         if (Time.timeScale == 0) return;
         if (!ctx.performed) return;
-        if (_stateManager.AttackState != AttackState.ShieldDefence) return;
+        if (_stateManager.AttackState != AttackState.ShieldDefence ) return;
         _isHoldingShield = true;
         _stateManager.IsHoldingShield = _isHoldingShield;
         _stateManager.AttackState = AttackState.BlockAttack;

@@ -33,8 +33,11 @@ public class Blocking : MonoBehaviour
 
         //When Shield is locked and state hasnt changed, keep previous values
         if (args.IsHoldingBlock && args.AttackState == AttackState.BlockAttack)
+        {
+            _aimingInputState = AimingInputState.Hold;
             return;
-        //Debug.Log($"package to Block State = {args.AttackState}, hold: {args.AimingInputState}, {_blockMedium}, {args.BlockDirection}");
+        }
+        Debug.Log($"package to Block State = {args.AttackState}, hold: {args.AimingInputState}, {_blockMedium}, {args.BlockDirection}");
 
         //only set movement when using a valid Blocking input
         if ((args.AttackState == AttackState.ShieldDefence || 

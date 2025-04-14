@@ -354,7 +354,7 @@ public class Aiming : MonoBehaviour
             AnimationStart = earlyMessage
 
         };
-        //Debug.Log($"Send package: {package.AttackState}, {package.AttackSignal}, {_enmAimingInput}, angle : {_traversedAngle}, early start: {package.AnimationStart}");
+        Debug.Log($"Send package: {package.AttackState}, {package.AttackSignal}, {_enmAimingInput}, angle : {_traversedAngle}, block direction: {package.BlockDirection} holding = {package.IsHoldingBlock}");
 
         if (_enmAttackSignal == AttackSignal.Feint)
             _AimOutputEvent.Raise(this, package);
@@ -443,9 +443,9 @@ public class Aiming : MonoBehaviour
 
         if (diff > -30 && diff < 30)
             return Direction.ToCenter;
-        else if (diff > 30 && diff < 100)
+        else if (diff > 30 && diff < 100 || (_refAimingInput.variable.StateManager.IsHoldingShield && diff > 30))
             return Direction.ToLeft;
-        else if (diff < -30 && diff > -100)
+        else if (diff < -30 && diff > -100 || (_refAimingInput.variable.StateManager.IsHoldingShield && diff < -30))
             return Direction.ToRight;
         return Direction.Wrong;
     }

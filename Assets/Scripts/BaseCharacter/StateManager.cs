@@ -28,6 +28,9 @@ public class StateManager : MonoBehaviour
     {
         if (EquipmentManager == null)
             EquipmentManager = GetComponent<EquipmentManager>();
+
+        ChangeOrientation(this, new OrientationEventArgs { NewOrientation = Orientation });
+
         if (!gameObject.CompareTag(PLAYER))
         {
             _blackboardRef.variable.State = AttackState;

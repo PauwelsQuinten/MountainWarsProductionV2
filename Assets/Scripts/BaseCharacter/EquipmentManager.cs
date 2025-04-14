@@ -235,6 +235,11 @@ public class EquipmentManager : MonoBehaviour
         }
     }
 
+    public bool HasFullEquipment()
+    {
+        return HeldEquipment[RIGHT_HAND] && HeldEquipment[LEFT_HAND];
+    }
+
     public Equipment GetEquipment(bool isRighthand)
     {
         int index = isRighthand ? 1 : 0;

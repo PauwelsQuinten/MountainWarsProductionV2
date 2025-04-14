@@ -103,13 +103,18 @@ public class PlayerController : MonoBehaviour
         if (args.ComesFromEnemy && sender.gameObject == gameObject) return;
         else if (!args.ComesFromEnemy && sender.gameObject != gameObject) return;
 
-        _storredAttackState = _stateManager.AttackState;
+        _storredAttackState = 
+            _stateManager.AttackState == AttackState.Stun? AttackState.Idle : _stateManager.AttackState;
         _aimInputRef.variable.State = AttackState.Stun;
+        //_stateManager.AttackState = AttackState.Stun;
     }
     
     public void RecoveredStun(Component sender, object obj)
     {
         if (sender.gameObject != gameObject) return;
+
+        if (!_stateManager.EquipmentManager.HasFullEquipment() && _storredAttackState == AttackState.BlockAttack)
+            _storredAttackState = AttackState.Idle;
 
         _stateManager.AttackState = _storredAttackState;
         _aimInputRef.variable.State = _storredAttackState;
@@ -126,7 +131,7 @@ public class PlayerController : MonoBehaviour
     private void AimInputRef_ValueChanged(object sender, AimInputEventArgs e)
     {
         if (Time.timeScale == 0) return;
-        if (_stateManager.AttackState == AttackState.Stun)
+        if (_stateManager.AttackState == AttackState.Stun || _aimInputRef.variable.State == AttackState.Stun)
         {
             return;
         }
@@ -303,7 +308,8 @@ public class PlayerController : MonoBehaviour
     {
         if (Time.timeScale == 0) return;
         if (!ctx.performed) return;
-        if (_stateManager.AttackState != AttackState.ShieldDefence) return;
+        if (_stateManager.AttackState != AttackState.ShieldDefence ) return;
+        if (!_stateManager.EquipmentManager.HasFullEquipment() ) return;
         _isHoldingShield = true;
         _stateManager.IsHoldingShield = _isHoldingShield;
         _stateManager.AttackState = AttackState.BlockAttack;
@@ -340,12 +346,12 @@ public class PlayerController : MonoBehaviour
         _pauseGame.Raise(this, EventArgs.Empty);
     }
 
+
     private IEnumerator ResetAttackHeight()
     {
         yield return new WaitForSeconds(1);
         _stateManager.AttackHeight = AttackHeight.Torso;
     }
-
 
     private IEnumerator CheckSurrounding()
     {

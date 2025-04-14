@@ -1,4 +1,3 @@
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class AnimationStateTrigger : StateMachineBehaviour
@@ -9,7 +8,7 @@ public class AnimationStateTrigger : StateMachineBehaviour
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         _endAnimation.Raise(animator.transform.parent, null);
-        Debug.Log("Exited state: " + stateInfo.ToString());
+        //Debug.Log("Exited state: " + stateInfo.ToString());
     }
 
 }

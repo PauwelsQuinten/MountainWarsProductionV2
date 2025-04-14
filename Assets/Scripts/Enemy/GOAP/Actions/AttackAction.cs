@@ -5,10 +5,11 @@ public class AttckAction : GoapAction
 {
     [Header("Input")]
     [SerializeField] private GameEvent _outputEvent;
-    [SerializeField] float _executionTime = 0.25f;
+    [SerializeField] private float _executionTime = 0.25f;
     [Header("State")]
     [SerializeField] AttackSignal _attackSignal = AttackSignal.Idle;
     [SerializeField] Direction _swingDirection = Direction.ToCenter;
+    [SerializeField] private float _attackSpeed = 1.5f;
 
     private Coroutine _attackCoroutine;
 
@@ -62,7 +63,7 @@ public class AttckAction : GoapAction
                ,
             BlockDirection = Direction.Idle
                ,
-            Speed = 1.5f
+            Speed = _attackSpeed
                ,
             AttackSignal = _attackSignal
                ,

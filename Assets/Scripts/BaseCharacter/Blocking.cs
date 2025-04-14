@@ -90,19 +90,7 @@ public class Blocking : MonoBehaviour
             _previousState = args.AttackState;
 
         }
-
-     
     }
-
-    private void PlayShieldAnimation()
-    {
-        //send event for animation
-        if (_blockMedium == BlockMedium.Shield)
-            _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.ShieldEquip, AnimLayer = 4, DoResetIdle = false, Interupt = false });
-        else if (_blockMedium == BlockMedium.Sword)
-            _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.SwordEquip, AnimLayer = 3, DoResetIdle = false, Interupt = false });
-    }
-
     public void CheckBlock(Component sender, object obj)
     {
         //Check for vallid signal
@@ -191,6 +179,16 @@ public class Blocking : MonoBehaviour
     {
         if (sender.gameObject != gameObject) return;
         _storredHoldDirection = _blockDirection;
+    }
+
+
+    private void PlayShieldAnimation()
+    {
+        //send event for animation
+        if (_blockMedium == BlockMedium.Shield)
+            _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.ShieldEquip, AnimLayer = 4, DoResetIdle = false, Interupt = false });
+        else if (_blockMedium == BlockMedium.Sword)
+            _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.SwordEquip, AnimLayer = 3, DoResetIdle = false, Interupt = false });
     }
 
 

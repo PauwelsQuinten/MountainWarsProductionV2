@@ -89,6 +89,11 @@ public class Parry : MonoBehaviour
         if (_tryDisarm && IsSuccesfullDisarm())
             OnSuccesfullDisarm();
     }
+    public void OnStun(Component sender, object obj)
+    {
+        if (sender.gameObject != gameObject) return;
+        _InParryZone = false;
+    }
 
     //---------------------------------------------------------------------------------------------
     //Helper Functions

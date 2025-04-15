@@ -15,7 +15,7 @@ public class AnimationEvents : MonoBehaviour
     private GameEvent _inParryZone;
     private void Start()
     {
-        FindObjectOfType<FMODAudioHandler>();
+        //FindObjectOfType<FMODAudioHandler>();
     }
 
     public void Footstep()
@@ -34,7 +34,8 @@ public class AnimationEvents : MonoBehaviour
     }
     public void EndAnimation()
     {
-        _endAnimation.Raise(this.transform.parent, null);
+        if ( _endAnimation ) 
+            _endAnimation.Raise(this.transform.parent, null);
     }
     public void SetInParryZone(int InZone)
     {

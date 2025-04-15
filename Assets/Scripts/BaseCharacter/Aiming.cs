@@ -2,8 +2,6 @@ using TMPro;
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using static UnityEngine.Rendering.ReloadAttribute;
-using System;
 
 public class Aiming : MonoBehaviour
 {
@@ -42,6 +40,7 @@ public class Aiming : MonoBehaviour
     private float _previousLength = 0f;
     private float _traversedAngle = 0f;
     private Direction _swingDirection = Direction.Idle;
+    private Direction _storredBlockDirection = Direction.Idle;
     
     void Start()
     {
@@ -288,7 +287,7 @@ public class Aiming : MonoBehaviour
     {
         Debug.Log($"{dir}");
         Debug.Log($"distance : {_traversedAngle}");
-        var speed = CalculateSwingSpeed(_traversedAngle);
+        var speed = CalculateSwingSpeed(_traversedAngle, 1.5f, 2.5f);
         Debug.Log($"speed : {speed}");
         Debug.Log($"signal : {_enmAttackSignal}");
         Debug.Log($"{CalculateBlockDirection(_refAimingInput.variable.StateManager.Orientation)}");
@@ -341,7 +340,8 @@ public class Aiming : MonoBehaviour
                 ,
             BlockDirection = CalculateBlockDirection(_refAimingInput.variable.StateManager.Orientation)
                 ,
-            Speed = CalculateSwingSpeed(_traversedAngle)
+            Speed = 2f
+            //Speed = CalculateSwingSpeed(_traversedAngle, 1.5f, 2.5f)
                 ,
             AttackSignal = _enmAttackSignal
                 ,
@@ -354,7 +354,7 @@ public class Aiming : MonoBehaviour
             AnimationStart = earlyMessage
 
         };
-        //Debug.Log($"Send package: {package.AttackState}, {package.AttackSignal}, {_enmAimingInput}, angle : {_traversedAngle}, early start: {package.AnimationStart}");
+        Debug.Log($"Send package: {package.AttackState}, {package.AttackSignal}, {_enmAimingInput}, angle : {_traversedAngle}, block direction: {package.BlockDirection} holding = {package.IsHoldingBlock}");
 
         if (_enmAttackSignal == AttackSignal.Feint)
             _AimOutputEvent.Raise(this, package);
@@ -401,11 +401,13 @@ public class Aiming : MonoBehaviour
         _fMovingTime += Time.deltaTime;
     }
 
-    private float CalculateSwingSpeed(float length)
+    private float CalculateSwingSpeed(float length, float minResult, float maxResult)
     {
+        if (_fMovingTime == 0 )
+            return minResult;
         float speed = (length * 1 / _fMovingTime) * 0.01f;
-        speed = speed > 0 ? speed : 1f;
-        return speed < 2.5f? speed : 2.5f;
+        speed = speed < minResult ? minResult:  speed;
+        return speed > maxResult ? maxResult : speed;
     }
     
      private float CalculateAngleRadOfInput(Vector2 direction)
@@ -428,7 +430,7 @@ public class Aiming : MonoBehaviour
     private Direction CalculateBlockDirection(Orientation orientation)
     {
         float length = _refAimingInput.variable.value.magnitude;
-        if (length < 0.5f)
+        if (length < 0.5f && !_refAimingInput.variable.StateManager.IsHoldingShield)
             return Direction.Idle;
 
         int orient = (int)orientation;
@@ -441,9 +443,9 @@ public class Aiming : MonoBehaviour
 
         if (diff > -30 && diff < 30)
             return Direction.ToCenter;
-        else if (diff > 30 && diff < 100)
+        else if (diff > 30 && diff < 100 || (_refAimingInput.variable.StateManager.IsHoldingShield && diff > 30))
             return Direction.ToLeft;
-        else if (diff < -30 && diff > -100)
+        else if (diff < -30 && diff > -100 || (_refAimingInput.variable.StateManager.IsHoldingShield && diff < -30))
             return Direction.ToRight;
         return Direction.Wrong;
     }

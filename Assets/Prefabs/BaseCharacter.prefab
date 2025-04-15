@@ -114,7 +114,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2909b8547fd4161429a8659c53b32d0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _OnKnockbackRecovery: {fileID: 11400000, guid: ef1c1e852f404ef41a2a5ae46280abb3, type: 2}
   _OnStunRecovery: {fileID: 11400000, guid: ef1c1e852f404ef41a2a5ae46280abb3, type: 2}
   _blackboardRef:
     useConstant: 0
@@ -260,7 +259,7 @@ MonoBehaviour:
   _onFailedParryEvent: {fileID: 11400000, guid: e4d2257f33828fe45a8ba3c1de9a6a8c, type: 2}
   _onDisarmEvent: {fileID: 11400000, guid: 80230798183380d4d9daccd349bb9632, type: 2}
   _changeAnimation: {fileID: 0}
-  _disarmTime: 1.5
+  _disarmTime: 2.5
   _staminaCost:
     useConstant: 0
     constantValue: 0
@@ -721,6 +720,18 @@ MonoBehaviour:
       - m_Target: {fileID: 6822675981429713178}
         m_TargetAssemblyTypeName: AnimationManager, Assembly-CSharp
         m_MethodName: GetStunned
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 8814302524761109724}
+        m_TargetAssemblyTypeName: Parry, Assembly-CSharp
+        m_MethodName: OnStun
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

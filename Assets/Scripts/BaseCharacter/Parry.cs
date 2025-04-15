@@ -12,7 +12,7 @@ public class Parry : MonoBehaviour
     [SerializeField] private GameEvent _changeAnimation;
 
     [Header("ParryValues")]
-    [SerializeField] private float _disarmTime = 1.5f;
+    [SerializeField] private float _disarmTime = 2.5f;
     //[SerializeField] private float _minParrySwingAngle = 100f;
     //[SerializeField] private float _minParryStabAngle = 60f;
     //[SerializeField] private float _timeForParryingSwing = 1f;
@@ -26,14 +26,12 @@ public class Parry : MonoBehaviour
 
 
     private Direction _swingDirection = Direction.Idle;
-    //private float _swingAngle = 0f;
-    //private Coroutine _parryRoutine;
-    //private AttackEventArgs _attackEventValues;
     private Coroutine _disarmRoutine;
     private bool _tryDisarm = false;
     private BlockMedium _parryMedium;
 
     private bool _InParryZone = false;
+    private AttackType _opponentsAttack = AttackType.None;
 
 
     public void ParryMovement(Component sender, object obj)
@@ -44,7 +42,7 @@ public class Parry : MonoBehaviour
             return;
 
 
-        if (args.AttackState == AttackState.BlockAttack || args.AttackState == AttackState.ShieldDefence || args.AttackState == AttackState.SwordDefence)
+        if (/*args.AttackState == AttackState.BlockAttack || */args.AttackState == AttackState.ShieldDefence || args.AttackState == AttackState.SwordDefence)
             _parryMedium = Blocking.GetBlockMedium(args);
         else
             return;
@@ -52,7 +50,7 @@ public class Parry : MonoBehaviour
 
         if (args.AnimationStart)
         {
-            //Debug.Log($"ParryInput :{args.Direction}, {args.AngleTravelled}, {_parryMedium}");
+            Debug.Log($"ParryInput :{args.Direction}, {args.AngleTravelled}, {_parryMedium}");
             StartAnimation(args, _parryMedium);
             _swingDirection = args.Direction;
         }
@@ -72,9 +70,7 @@ public class Parry : MonoBehaviour
        
         if (_InParryZone )
         {
-            if (_tryDisarm && IsSuccesfullDisarm(args))
-                OnSuccesfullDisarm();
-            else if (IsSuccesfullParry(args))
+            if (IsSuccesfullParry(args))
                 OnSuccesfullParry(args);
             else
                 OnFaildedParry(args);
@@ -89,6 +85,14 @@ public class Parry : MonoBehaviour
         if (sender.gameObject != gameObject) return;
 
         _InParryZone = (bool)obj;
+
+        if (_tryDisarm && IsSuccesfullDisarm())
+            OnSuccesfullDisarm();
+    }
+    public void OnStun(Component sender, object obj)
+    {
+        if (sender.gameObject != gameObject) return;
+        _InParryZone = false;
     }
 
     //---------------------------------------------------------------------------------------------
@@ -123,13 +127,13 @@ public class Parry : MonoBehaviour
         return false;
     }
 
-    public bool IsSuccesfullDisarm(AttackEventArgs args)
+    public bool IsSuccesfullDisarm()
     {
         //Debug.Log($"DisarmAction : {_swingAngle} in {_swingDirection}");
         if (_parryMedium != BlockMedium.Sword)
             return false;
 
-        switch (args.AttackType)
+        switch (_opponentsAttack)
         {
             case AttackType.Stab:
                 return true;
@@ -159,6 +163,7 @@ public class Parry : MonoBehaviour
         Debug.Log("succesfullParry");
 
         _tryDisarm = true;
+        _opponentsAttack = attackValues.AttackType;
         _disarmRoutine = StartCoroutine(DisarmAction(_disarmTime));
         
     }
@@ -183,20 +188,30 @@ public class Parry : MonoBehaviour
     
     private void StartAnimation(AimingOutputArgs args, BlockMedium parryMedium)
     {
+        float speed = args.Speed < 2.5f ? 2.5f : args.Speed;
         if (args.Direction == Direction.ToLeft)
         {
             if (parryMedium == BlockMedium.Shield)
-                _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.ParryShieldLeft, AnimLayer = 4, DoResetIdle = true, Interupt = false, Speed = args.Speed });
+                _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.ParryShieldLeft, AnimLayer = 4, DoResetIdle = true, Interupt = false, Speed = speed });
             else if (parryMedium == BlockMedium.Sword)
-                _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.ParrySwordLeft, AnimLayer = 3, DoResetIdle = true, Interupt = false, Speed = args.Speed });
+            {
+                
+                if (_tryDisarm)
+                    speed = 4f;
+                _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.ParrySwordLeft, AnimLayer = 3, DoResetIdle = true, Interupt = false, Speed = speed  });
+            }
         
         }
         else if (args.Direction == Direction.ToRight)
         {
             if (parryMedium == BlockMedium.Shield)
-                _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.ParryShieldRight, AnimLayer = 4, DoResetIdle = true, Interupt = false, Speed = args.Speed });
+                _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.ParryShieldRight, AnimLayer = 4, DoResetIdle = true, Interupt = false, Speed = speed });
             else if (parryMedium == BlockMedium.Sword)
-                _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.ParrySwordRight, AnimLayer = 3, DoResetIdle = true, Interupt = false, Speed = args.Speed });
+            {
+                if (_tryDisarm)
+                    speed = 4f;
+                _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.ParrySwordRight, AnimLayer = 3, DoResetIdle = true, Interupt = false, Speed = speed });
+            }
 
         }
     }
@@ -223,6 +238,7 @@ public class Parry : MonoBehaviour
 
         Debug.Log("Failed Disarm");
         _tryDisarm = false;
+        _opponentsAttack = AttackType.None;
     }
 
 

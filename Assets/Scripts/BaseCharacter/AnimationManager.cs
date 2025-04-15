@@ -11,8 +11,8 @@ public class AnimationManager : MonoBehaviour
     [SerializeField] private GameEvent _endAnimation;
     [SerializeField] private GameEvent _startAnimation;
 
-    private bool _canResetIdle = true;
-    private Coroutine _animCoroutine;
+    //private bool _canResetIdle = true;
+    //private Coroutine _animCoroutine;
 
     private void Start()
     {
@@ -33,12 +33,12 @@ public class AnimationManager : MonoBehaviour
             return;
         }
 
-        //if(args.AnimState != AnimationState.Idle)
-        //{
-        //        BoredBehaviour bored = _animator.GetBehaviour<BoredBehaviour>();
-        //        if (bored != null) bored.IdleExit();
-        //        //else Debug.Log("Bored is null");
-        //}
+        if(args.AnimState != AnimationState.Idle)
+        {
+                BoredBehaviour bored = _animator.GetBehaviour<BoredBehaviour>();
+                if (bored != null) bored.IdleExit();
+                //else Debug.Log("Bored is null");
+        }
 
         //Debug.Log($"anim call: {args.AnimState.ToString()}, speed: {args.Speed}, layer: {args.AnimLayer}");
         // Crossfade with normalized transition offset
@@ -50,10 +50,6 @@ public class AnimationManager : MonoBehaviour
         if (args.DoResetIdle)
         {
             _startAnimation.Raise(this, null);
-
-            //This is only to be sure it gets cancelled if somehow the end off animition doesnt get called
-            //Dont use the diff on speed because it can give very inconsistent results 
-            _animCoroutine = StartCoroutine(ResetToIdle(_animator.GetCurrentAnimatorStateInfo(args.AnimLayer).length *1.1f, args.AnimLayer));
         }
     }
 
@@ -74,41 +70,15 @@ public class AnimationManager : MonoBehaviour
     private void InteruptAnimation(AnimationEventArgs args)
     {
         _animator.SetTrigger("Feint");
-        //_animator.CrossFade(AnimationState.Empty.ToString(), 0.3f, 3, 0.3f);
-        //_animator.CrossFade(args.AnimState.ToString(), 0.3f, args.AnimLayer, 0.2f);
-        //_currentState = AnimationState.Idle;
-        //_animator.GetBehaviour<BoredBehaviour>().IdleExit();
-        if (_animCoroutine != null) 
-            StopCoroutine(_animCoroutine);
-
-        _endAnimation.Raise(this, null);
+        
     }
 
-    private IEnumerator ResetToIdle(float time, int layer)
-    {
-        yield return new WaitForSeconds(time);
-
-        // Reset only the active layer to idle
-        //Debug.Log($"end coroutine");
-        _animator.CrossFade(AnimationState.Idle.ToString(), 0.2f, 1);
-        //ChangeAnimationState(this, new AnimationEventArgs { AnimState = AnimationState.Empty, AnimLayer = layer, DoResetIdle = false });
-        _endAnimation.Raise(this, null);
-
-        _currentState = AnimationState.Idle;
-    }
-
+    //Deprectated probably
     public void LastAnimFrameCalled(Component Sender, object obj)
     {
         if (Sender.gameObject != gameObject) return;
 
-        //_animator.CrossFade(AnimationState.Idle.ToString(), 0.2f, 1);
-        //ChangeAnimationState(this, new AnimationEventArgs { AnimState = AnimationState.Empty, AnimLayer = 2, DoResetIdle = false });
         _currentState = AnimationState.Idle;
-
-        if (_animCoroutine != null)
-            StopCoroutine(_animCoroutine);
-        //Debug.Log($"end through anim");
-        //_endAnimation.Raise(this, null);
     }
 
     public void GetHit(Component Sender, object obj)

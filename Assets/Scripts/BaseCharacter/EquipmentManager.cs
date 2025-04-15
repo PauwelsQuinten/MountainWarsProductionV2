@@ -234,6 +234,33 @@ public class EquipmentManager : MonoBehaviour
             }
         }
     }
+    public void RotateShield(Component sender, object obj)
+    {
+        if (sender.gameObject != gameObject) return;
+        if (HeldEquipment[LEFT_HAND] == null) return;
+
+        Direction blockDirection = (Direction)obj;
+        switch (blockDirection)
+        {
+            case Direction.Idle:
+                HeldEquipment[LEFT_HAND].transform.localRotation = Quaternion.Euler(15f, 0f, 0f);
+                break;
+            case Direction.ToRight:
+                HeldEquipment[LEFT_HAND].transform.localRotation = Quaternion.Euler(45f, 0f, 0f);
+                break;
+            case Direction.ToLeft:
+                HeldEquipment[LEFT_HAND].transform.localRotation = Quaternion.Euler(-15f, 0f, 0f);
+                break;
+            case Direction.ToCenter:
+                HeldEquipment[LEFT_HAND].transform.localRotation = Quaternion.Euler(15f, 0f, 0f);
+                break;
+            case Direction.Wrong:
+                HeldEquipment[LEFT_HAND].transform.localRotation = Quaternion.Euler(15f, 0f, 0f);
+                break;
+        }
+
+
+    }
 
     public bool HasFullEquipment()
     {

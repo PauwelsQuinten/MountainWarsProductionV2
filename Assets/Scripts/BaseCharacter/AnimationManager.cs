@@ -11,8 +11,8 @@ public class AnimationManager : MonoBehaviour
     [SerializeField] private GameEvent _endAnimation;
     [SerializeField] private GameEvent _startAnimation;
 
-    private bool _canResetIdle = true;
-    private Coroutine _animCoroutine;
+    //private bool _canResetIdle = true;
+    //private Coroutine _animCoroutine;
 
     private void Start()
     {

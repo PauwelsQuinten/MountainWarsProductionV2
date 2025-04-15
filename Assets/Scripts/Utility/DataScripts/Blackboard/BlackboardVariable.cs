@@ -258,6 +258,7 @@ public class BlackboardVariable : ScriptableObject
             }
         }
     }
+
     private bool _hasLHEquipment;
     public bool HasLHEquipment
     {
@@ -364,7 +365,7 @@ public class BlackboardVariable : ScriptableObject
         set
         {
             //if (_targetCurrentAttack != value)
-            if (value != AttackType.None)
+            if (value != AttackType.None && Target)
             {
                 _targetCurrentAttack = value;
                 //Debug.Log($"new currentAttack{_targetCurrentAttack}");

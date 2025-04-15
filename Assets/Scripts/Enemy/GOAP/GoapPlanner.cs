@@ -41,7 +41,7 @@ public class GoapPlanner : MonoBehaviour
 
     void Update()
     {
-        if (Time.timeScale == 0) return;
+        //if (Time.timeScale == 0) return;
 
         _currentWorldState.UpdateWorldState();
         _recursionCounter = 0;

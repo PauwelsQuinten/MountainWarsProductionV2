@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class ViewManager : MonoBehaviour
 {
@@ -175,6 +176,7 @@ public class ViewManager : MonoBehaviour
         GameObject enemy = GameObject.Find("Enemy");
         GameObject player = GameObject.Find("Player");
         CharacterMovement enemyMove = enemy.GetComponent<CharacterMovement>();
+        NavMeshAgent enemyNavMove = enemy.GetComponent<NavMeshAgent>();
         CharacterMovement playerMove = player.GetComponent<CharacterMovement>();
 
         Vector3 playerToPos = playerPanel.transform.position;
@@ -194,6 +196,8 @@ public class ViewManager : MonoBehaviour
         _vsImage.SetActive(true);
         playerMove.enabled = false;
         enemyMove.enabled = false;
+        enemyNavMove.isStopped = true;
+        enemyNavMove.enabled = false;
 
         while(Vector3.Distance(playerPanel.transform.position, playerToPos) > 0.2f)
         {
@@ -256,5 +260,8 @@ public class ViewManager : MonoBehaviour
         _vsImage.SetActive(false);
         playerMove.enabled = true;
         enemyMove.enabled = true;
+        enemyNavMove.enabled = true;
+        enemyNavMove.isStopped = false;
+
     }
 }

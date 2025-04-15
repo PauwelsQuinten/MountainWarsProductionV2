@@ -16,6 +16,10 @@ public class MoveToAction : GoapAction
     private int _direction = 0;
     private NavMeshAgent _navMeshAgent= null;
 
+    Vector3 _targetDir = Vector3.zero;
+    Vector3 _targetPos = Vector3.zero;
+
+
     public override void StartAction(WorldState currentWorldState, BlackboardReference blackboard)
     {
         base.StartAction(currentWorldState, blackboard);
@@ -45,16 +49,96 @@ public class MoveToAction : GoapAction
             case ObjectTarget.Side:
                 _direction = (Random.Range(0, 2) == 0) ? 1 : -1;
                 break;
+
         }
+
+        Vector3 npcPos = currentWorldState.transform.position;
+        float angleRad = (float)blackboard.variable.Orientation * Mathf.Deg2Rad;
+
+        FindTargetPosAndDirection(blackboard, ref _targetDir, npcPos, ref _targetPos, ref angleRad);
+
+        _navMeshAgent.SetDestination(_targetPos);
+        _moveInput.Raise(this, new DirectionEventArgs { MoveDirection = _targetDir, SpeedMultiplier = 1f, Sender = npc });
+
+        if (_navMeshAgent.isStopped)
+            _navMeshAgent.isStopped = false;
+
     }
 
     public override void UpdateAction(WorldState currentWorldState, BlackboardReference blackboard)
     {
+        if (Time.timeScale == 0)
+        {
+            _navMeshAgent.isStopped = true;
+            return;
+        }
+
         Vector3 targetDir = Vector3.zero;
         Vector3 npcPos = currentWorldState.transform.position;
         Vector3 targetPos = Vector3.zero;
         float angleRad = (float)blackboard.variable.Orientation * Mathf.Deg2Rad;
 
+        FindTargetPosAndDirection(blackboard, ref targetDir, npcPos, ref targetPos, ref angleRad);
+
+        if (Vector3.Distance(targetPos, _targetPos) > 1f )
+            _navMeshAgent.SetDestination(targetPos);
+        if (Vector3.Distance(targetDir, _targetDir) > 1f )
+            _moveInput.Raise(this, new DirectionEventArgs { MoveDirection = targetDir, SpeedMultiplier = 1f, Sender = npc });
+
+        if (_navMeshAgent.isStopped)
+            _navMeshAgent.isStopped = false;
+    }
+
+    public override bool IsCompleted(WorldState currentWorldState)
+    {
+        if (base.IsCompleted(currentWorldState))
+        {
+            _moveInput.Raise(this, new DirectionEventArgs { MoveDirection = Vector2.zero, SpeedMultiplier = 1f, Sender = npc });
+            _navMeshAgent.isStopped = true;
+
+            return true;
+        }
+        return false;
+    }
+
+    public override bool IsInterupted(WorldState currentWorldState, BlackboardReference blackboard)
+    {
+        /*return (blackboard.variable.TargetState == AttackState.Attack || blackboard.variable.TargetState == AttackState.BlockAttack)
+            && currentWorldState.TargetAttackRange == EWorldStateRange.InRange;*/
+        return false;
+    }
+
+    public override bool IsVallid(WorldState currentWorldState, BlackboardReference blackboard)
+    {
+        if (_MoveTo == ObjectTarget.Side)
+            Cost = Random.Range(0.5f, 1f);
+        return true;
+    }
+
+    public override void CancelAction()
+    {
+        _moveInput.Raise(this, new DirectionEventArgs { MoveDirection = Vector2.zero, SpeedMultiplier = 1f, Sender = npc });
+        _navMeshAgent.isStopped = true;
+
+    }
+
+
+    private Equipment FindEquipmentOfType(EquipmentType type)
+    {
+        Equipment[] foundStuff = GameObject.FindObjectsByType<Equipment>(FindObjectsSortMode.None);
+        _foundEquipment = new List<Equipment>(foundStuff);
+
+        foreach (Equipment equipment in foundStuff)
+        {
+            if (equipment.Type == type && equipment.GetComponent<SphereCollider>().enabled)
+                return equipment;
+        }
+        return null;
+
+    }
+
+    private void FindTargetPosAndDirection(BlackboardReference blackboard, ref Vector3 targetDir, Vector3 npcPos, ref Vector3 targetPos, ref float angleRad)
+    {
         switch (_MoveTo)
         {
             case ObjectTarget.Player:
@@ -103,54 +187,6 @@ public class MoveToAction : GoapAction
                 break;
 
         }
-        _navMeshAgent.SetDestination(targetPos);
-        _moveInput.Raise(this, new DirectionEventArgs{ MoveDirection = targetDir, SpeedMultiplier = 1f, Sender = npc });
-        
-    }
-
-    public override bool IsCompleted(WorldState currentWorldState)
-    {
-        if (base.IsCompleted(currentWorldState))
-        {
-            _moveInput.Raise(this, new DirectionEventArgs { MoveDirection = Vector2.zero, SpeedMultiplier = 1f, Sender = npc });
-
-            return true;
-        }
-        return false;
-    }
-
-    public override bool IsInterupted(WorldState currentWorldState, BlackboardReference blackboard)
-    {
-        /*return (blackboard.variable.TargetState == AttackState.Attack || blackboard.variable.TargetState == AttackState.BlockAttack)
-            && currentWorldState.TargetAttackRange == EWorldStateRange.InRange;*/
-        return false;
-    }
-
-    public override bool IsVallid(WorldState currentWorldState, BlackboardReference blackboard)
-    {
-        if (_MoveTo == ObjectTarget.Side)
-            Cost = Random.Range(0.5f, 1f);
-        return true;
-    }
-
-    public override void CancelAction()
-    {
-        _moveInput.Raise(this, new DirectionEventArgs { MoveDirection = Vector2.zero, SpeedMultiplier = 1f, Sender = npc });
-    }
-
-
-    private Equipment FindEquipmentOfType(EquipmentType type)
-    {
-        Equipment[] foundStuff = GameObject.FindObjectsByType<Equipment>(FindObjectsSortMode.None);
-        _foundEquipment = new List<Equipment>(foundStuff);
-
-        foreach (Equipment equipment in foundStuff)
-        {
-            if (equipment.Type == type && equipment.GetComponent<SphereCollider>().enabled)
-                return equipment;
-        }
-        return null;
-
     }
 
 }

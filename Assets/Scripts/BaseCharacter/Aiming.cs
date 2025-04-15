@@ -340,8 +340,8 @@ public class Aiming : MonoBehaviour
                 ,
             BlockDirection = CalculateBlockDirection(_refAimingInput.variable.StateManager.Orientation)
                 ,
-            Speed = 2f
-            //Speed = CalculateSwingSpeed(_traversedAngle, 1.5f, 2.5f)
+            //Speed = 2f
+            Speed = CalculateSwingSpeed(_traversedAngle, 1.5f, 2.5f)
                 ,
             AttackSignal = _enmAttackSignal
                 ,

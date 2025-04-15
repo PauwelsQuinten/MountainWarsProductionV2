@@ -87,6 +87,8 @@ public class StateManager : MonoBehaviour
         InAnimiation = false;
     }
 
+    //Add event for disabling BlockAttack when equipment breaks
+
     public void GetStunned(Component sender, object obj)
     {
         StunEventArgs args = obj as StunEventArgs;

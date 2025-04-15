@@ -234,6 +234,33 @@ public class EquipmentManager : MonoBehaviour
             }
         }
     }
+    public void RotateShield(Component sender, object obj)
+    {
+        if (sender.gameObject != gameObject) return;
+        if (HeldEquipment[LEFT_HAND] == null) return;
+
+        Direction blockDirection = (Direction)obj;
+        switch (blockDirection)
+        {
+            case Direction.Idle:
+                HeldEquipment[LEFT_HAND].transform.localRotation = Quaternion.Euler(15f, 0f, 0f);
+                break;
+            case Direction.ToRight:
+                HeldEquipment[LEFT_HAND].transform.localRotation = Quaternion.Euler(45f, 0f, 0f);
+                break;
+            case Direction.ToLeft:
+                HeldEquipment[LEFT_HAND].transform.localRotation = Quaternion.Euler(-15f, 0f, 0f);
+                break;
+            case Direction.ToCenter:
+                HeldEquipment[LEFT_HAND].transform.localRotation = Quaternion.Euler(15f, 0f, 0f);
+                break;
+            case Direction.Wrong:
+                HeldEquipment[LEFT_HAND].transform.localRotation = Quaternion.Euler(15f, 0f, 0f);
+                break;
+        }
+
+
+    }
 
     public bool HasFullEquipment()
     {
@@ -294,7 +321,7 @@ public class EquipmentManager : MonoBehaviour
         {
             HeldEquipment[RIGHT_HAND].gameObject.transform.parent = _rightHandSocket.transform;
             HeldEquipment[RIGHT_HAND].gameObject.transform.localPosition = Vector3.zero;
-            HeldEquipment[RIGHT_HAND].gameObject.transform.localRotation = Quaternion.Euler(new Vector3(90, 0, 0));
+            HeldEquipment[RIGHT_HAND].gameObject.transform.localRotation = Quaternion.Euler(new Vector3(48, 108, 194));
             _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.DrawWeapon, AnimLayer = 3, DoResetIdle = true });
             _stateManager.WeaponIsSheathed = false;
         }

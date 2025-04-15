@@ -43,18 +43,6 @@ public class FMODAudioHandler : MonoBehaviour
     [Header("Ambience")] 
     [SerializeField] private EventReference _ambience;
     private EventInstance _ambienceInstance;
-
-    [Header("Music")] 
-    [SerializeField] private EventReference _mainThemeMusic;
-    private EventInstance _mainThemeMusicInstance;
-    [SerializeField] private EventReference _townMusic;
-    private EventInstance _townMusicInstance;
-    [SerializeField] private EventReference _forestMusic;
-    private EventInstance _forestMusicInstance;
-    [SerializeField] private EventReference _gameWonMusic;
-    private EventInstance _gameWonMusicInstance;
-    [SerializeField] private EventReference _gameLostMusic;
-    private EventInstance _gameLostMusicInstance;
     
     [Header("SFX/Character")] 
     [SerializeField] private EventReference _footstepsSFX;
@@ -73,21 +61,19 @@ public class FMODAudioHandler : MonoBehaviour
     private EventInstance _comicPanelSwapSFXInstance;
     [SerializeField] private EventReference _showdownSFX;
     private EventInstance _showdownSFXInstance;
-    // private void Start()
-    // {
-    //     _attributes = RuntimeUtils.To3DAttributes(transform);
-    //     _ambienceInstance = RuntimeManager.CreateInstance(_ambience);
-    //     _townMusicInstance = RuntimeManager.CreateInstance(_townMusic);
-    //     GetParameterID(_ambienceInstance, "Biome", out _biomeID);
-    //     GetParameterID(_ambienceInstance, "WindIntensity", out _windIntensityID);
-    //     GetParameterID(_ambienceInstance, "RainIntensity", out _rainIntensityID);
-    //     SetParameterID(_ambienceInstance, _biomeID, 1.0f);
-    //     SetParameterID(_ambienceInstance, _windIntensityID, 1.0f);
-    //     SetParameterID(_ambienceInstance, _rainIntensityID, 0.0f);
-    //     _ambienceInstance.set3DAttributes(_attributes);
-    //     _ambienceInstance.start();
-    //     _townMusicInstance.start();
-    // }
+    private void OnEnable()
+    {
+        _attributes = RuntimeUtils.To3DAttributes(transform);
+        _ambienceInstance = RuntimeManager.CreateInstance(_ambience);
+        GetParameterID(_ambienceInstance, "Biome", out _biomeID);
+        GetParameterID(_ambienceInstance, "WindIntensity", out _windIntensityID);
+        GetParameterID(_ambienceInstance, "RainIntensity", out _rainIntensityID);
+        SetParameterID(_ambienceInstance, _biomeID, 1.0f);
+        SetParameterID(_ambienceInstance, _windIntensityID, 1.0f);
+        SetParameterID(_ambienceInstance, _rainIntensityID, 0.0f);
+        _ambienceInstance.set3DAttributes(_attributes);
+        _ambienceInstance.start();
+    }
 
     private void GetParameterID(EventInstance eventInstance, string parameterName, out PARAMETER_ID parameterID)
     {
@@ -119,8 +105,11 @@ public class FMODAudioHandler : MonoBehaviour
 
     public void PlayFootstepsSFX(Component sender, object obj)
     {
+        _attributes = RuntimeUtils.To3DAttributes(_player.transform);
         string surfaceType = DetectSurfaceType();
         _footstepsSFXInstance = RuntimeManager.CreateInstance(_footstepsSFX);
+        _footstepsSFXInstance.set3DAttributes(_attributes);
+
         GetParameterID(_footstepsSFXInstance, "SurfaceType", out _surfaceTypeID);
         GetParameterID(_footstepsSFXInstance, "TypeOfWalking", out _TypeOfWalkingID);
         switch (surfaceType)
@@ -187,6 +176,7 @@ public class FMODAudioHandler : MonoBehaviour
     public void PlayWeaponHitSFX(Component sender, object obj)
     {
         _weaponHitSFXInstance = RuntimeManager.CreateInstance(_weaponHitSFX);
+        _weaponHitSFXInstance.set3DAttributes(_attributes);
         GetParameterID(_weaponHitSFXInstance, "WeaponSurfaceHit", out _weaponHitSurfaceID);
         GetGlobalParameterID("AttacksStrength", out _attacksStrengthID);
         GetGlobalParameterID("CurrentWeapon", out _currentWeaponID);
@@ -210,6 +200,7 @@ public class FMODAudioHandler : MonoBehaviour
     public void PlayWhooshSFX(Component sender, object obj)
     {
         _weaponWhooshSFXInstance = RuntimeManager.CreateInstance(_weaponWhooshSFX);
+        _weaponWhooshSFXInstance.set3DAttributes(_attributes);
             _weaponWhooshSFXInstance.start();
             _weaponWhooshSFXInstance.release();
     }
@@ -227,49 +218,12 @@ public class FMODAudioHandler : MonoBehaviour
         _showdownSFXInstance.start();
         _showdownSFXInstance.release();
     }
-
-    // public void PlayGameWonMusic(Component sender, object obj)
-    // {
-    //     _gameWonMusicInstance = RuntimeManager.CreateInstance(_gameLostMusic);
-    //     _gameWonMusicInstance.start();
-    // }
-    //
-    // public void PlayGameLostMusic(Component sender, object obj)
-    // {
-    //     _gameWonMusicInstance = RuntimeManager.CreateInstance(_gameLostMusic);
-    //     _gameWonMusicInstance.start();
-    // }
-
-    private void OnEnable()
-    {
-        _attributes = RuntimeUtils.To3DAttributes(transform);
-        _ambienceInstance = RuntimeManager.CreateInstance(_ambience);
-        _townMusicInstance = RuntimeManager.CreateInstance(_townMusic);
-        GetParameterID(_ambienceInstance, "Biome", out _biomeID);
-        GetParameterID(_ambienceInstance, "WindIntensity", out _windIntensityID);
-        GetParameterID(_ambienceInstance, "RainIntensity", out _rainIntensityID);
-        SetParameterID(_ambienceInstance, _biomeID, 1.0f);
-        SetParameterID(_ambienceInstance, _windIntensityID, 1.0f);
-        SetParameterID(_ambienceInstance, _rainIntensityID, 0.0f);
-        _ambienceInstance.set3DAttributes(_attributes);
-        _ambienceInstance.start();
-        _townMusicInstance.start();
-    }
+    
     private void OnDisable()
     {
-        _forestMusicInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-        _townMusicInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-        _mainThemeMusicInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-        _gameLostMusicInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-        _gameWonMusicInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-        _gameLostMusicInstance.release();
-        _gameWonMusicInstance.release();
-        _townMusicInstance.release();
         _ambienceInstance.release();
         _footstepsSFXInstance.release();
         _attackChargeSFXInstance.release();
-        _forestMusicInstance.release();
-        _mainThemeMusicInstance.release();
         _showdownSFXInstance.release();
         _weaponWhooshSFXInstance.release();
         _comicPanelSwapSFXInstance.release();
@@ -277,19 +231,9 @@ public class FMODAudioHandler : MonoBehaviour
     }
     private void OnDestroy()
     {
-        _forestMusicInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-        _townMusicInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-        _mainThemeMusicInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-        _gameLostMusicInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-        _gameWonMusicInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-        _gameLostMusicInstance.release();
-        _gameWonMusicInstance.release();
-        _townMusicInstance.release();
         _ambienceInstance.release();
         _footstepsSFXInstance.release();
         _attackChargeSFXInstance.release();
-        _forestMusicInstance.release();
-        _mainThemeMusicInstance.release();
         _showdownSFXInstance.release();
         _weaponWhooshSFXInstance.release();
         _comicPanelSwapSFXInstance.release();

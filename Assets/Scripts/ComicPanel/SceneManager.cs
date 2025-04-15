@@ -27,8 +27,8 @@ public class SceneManager : MonoBehaviour
         Camera currentCam = _spawnPoints[args.CurrentSceneIndex].transform.parent.GetComponentInChildren<Camera>();
         Camera Nextcam = _spawnPoints[args.newSceneIndex].transform.parent.GetComponentInChildren<Camera>();
 
-        currentCam.GetComponent<CameraFollow>().enabled = false;
-        Nextcam.GetComponent<CameraFollow>().enabled = true;
+        currentCam.GetComponent<FollowObject>().enabled = false;
+        Nextcam.GetComponent<FollowObject>().enabled = true;
 
         if (_player == null) _player = GameObject.Find("Player");
 

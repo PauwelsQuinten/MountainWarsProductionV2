@@ -18,4 +18,20 @@ public struct Opening
     {
         return !(opening1 == opening2);
     }
+    public override bool Equals(object obj)
+    {
+        if (obj == null || GetType() != obj.GetType())
+        {
+            return false;
+        }
+
+        Opening other = (Opening)obj;
+        return OpeningDirection == other.OpeningDirection && OpeningSize == other.OpeningSize;
+    }
+    public override int GetHashCode()
+    {
+        return OpeningDirection.GetHashCode() ^ OpeningSize.GetHashCode();
+    }
+
+
 }

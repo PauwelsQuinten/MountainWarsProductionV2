@@ -11,8 +11,8 @@ public class AnimationManager : MonoBehaviour
     [SerializeField] private GameEvent _endAnimation;
     [SerializeField] private GameEvent _startAnimation;
 
-    private bool _canResetIdle = true;
-    private Coroutine _animCoroutine;
+    //private bool _canResetIdle = true;
+    //private Coroutine _animCoroutine;
 
     private void Start()
     {
@@ -24,7 +24,11 @@ public class AnimationManager : MonoBehaviour
         if (sender.gameObject != gameObject) return;
         AnimationEventArgs args = obj as AnimationEventArgs;
         if (args == null) return;
-        if (_currentState == args.AnimState && args.AnimState != AnimationState.Idle) return;
+        if (_currentState == args.AnimState && args.AnimState != AnimationState.Idle)
+        {
+            _animator.SetInteger("BlockDirection", (int)args.BlockDirection);
+            return;
+        }
 
         if (args.Interupt)
         {
@@ -42,13 +46,15 @@ public class AnimationManager : MonoBehaviour
 
         //Debug.Log($"anim call: {args.AnimState.ToString()}, speed: {args.Speed}, layer: {args.AnimLayer}");
         // Crossfade with normalized transition offset
-        _animator.speed = args.Speed;
+
+        _animator.SetInteger("BlockDirection", (int)args.BlockDirection);
         _animator.CrossFade(args.AnimState.ToString(), 0.2f, args.AnimLayer, 0f);
 
         _currentState = args.AnimState;
 
         if (args.DoResetIdle)
         {
+            _animator.SetFloat("ActionSpeed", args.Speed);
             _startAnimation.Raise(this, null);
         }
     }

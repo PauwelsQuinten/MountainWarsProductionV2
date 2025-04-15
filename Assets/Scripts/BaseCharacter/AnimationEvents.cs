@@ -15,7 +15,7 @@ public class AnimationEvents : MonoBehaviour
     private GameEvent _inParryZone;
     private void Start()
     {
-        FindObjectOfType<FMODAudioHandler>();
+        //FindObjectOfType<FMODAudioHandler>();
     }
 
     public void Footstep()

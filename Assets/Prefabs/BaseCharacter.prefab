@@ -114,7 +114,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2909b8547fd4161429a8659c53b32d0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _OnKnockbackRecovery: {fileID: 11400000, guid: ef1c1e852f404ef41a2a5ae46280abb3, type: 2}
   _OnStunRecovery: {fileID: 11400000, guid: ef1c1e852f404ef41a2a5ae46280abb3, type: 2}
   _blackboardRef:
     useConstant: 0
@@ -501,6 +500,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: e6bca7c795a56ff49994ff5ebb32ace4, type: 2}
   - {fileID: 11400000, guid: 48b146ca432fdaf4a98acaef1bbf49a6, type: 2}
   - {fileID: 11400000, guid: ef1c1e852f404ef41a2a5ae46280abb3, type: 2}
+  - {fileID: 11400000, guid: 7f9e479aba9dadf4abc23c350fe51bba, type: 2}
   Responses:
   - m_PersistentCalls:
       m_Calls:
@@ -730,6 +730,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 8814302524761109724}
+        m_TargetAssemblyTypeName: Parry, Assembly-CSharp
+        m_MethodName: OnStun
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1490819108717279631}
@@ -873,6 +885,20 @@ MonoBehaviour:
       - m_Target: {fileID: 6822675981429713178}
         m_TargetAssemblyTypeName: AnimationManager, Assembly-CSharp
         m_MethodName: RecoverStunned
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1490819108717279631}
+        m_TargetAssemblyTypeName: EquipmentManager, Assembly-CSharp
+        m_MethodName: RotateShield
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

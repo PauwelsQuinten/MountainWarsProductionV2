@@ -294,7 +294,7 @@ public class EquipmentManager : MonoBehaviour
         {
             HeldEquipment[RIGHT_HAND].gameObject.transform.parent = _rightHandSocket.transform;
             HeldEquipment[RIGHT_HAND].gameObject.transform.localPosition = Vector3.zero;
-            HeldEquipment[RIGHT_HAND].gameObject.transform.localRotation = Quaternion.Euler(new Vector3(90, 0, 0));
+            HeldEquipment[RIGHT_HAND].gameObject.transform.localRotation = Quaternion.Euler(new Vector3(48, 108, 194));
             _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.DrawWeapon, AnimLayer = 3, DoResetIdle = true });
             _stateManager.WeaponIsSheathed = false;
         }

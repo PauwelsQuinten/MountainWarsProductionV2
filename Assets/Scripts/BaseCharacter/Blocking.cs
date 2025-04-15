@@ -20,6 +20,7 @@ public class Blocking : MonoBehaviour
     private GameEvent _loseStamina;
 
     private Direction _blockDirection;
+    private Direction _storredHoldDirection;
     private AimingInputState _aimingInputState;
     private BlockMedium _blockMedium = BlockMedium.Shield;
     private AttackState _previousState = AttackState.Idle;
@@ -32,10 +33,25 @@ public class Blocking : MonoBehaviour
         if (sender.gameObject != gameObject && args.Sender != gameObject) return;
 
         //When Shield is locked and state hasnt changed, keep previous values
+        //Make sure that it will always be a vallid Block, even after recovering from Stun
         if (args.IsHoldingBlock && args.AttackState == AttackState.BlockAttack)
+        {
+            _aimingInputState = AimingInputState.Hold;
+            _blockMedium = Blocking.GetBlockMedium(args);
+
+            //Set this storred value by event when he gets stunned during holding Block
+            if (_storredHoldDirection != Direction.Idle)
+            {
+                _blockDirection = _storredHoldDirection;
+                _storredHoldDirection = Direction.Idle;
+            }
+            PlayShieldAnimation();
+
             return;
+        }
         //Debug.Log($"package to Block State = {args.AttackState}, hold: {args.AimingInputState}, {_blockMedium}, {args.BlockDirection}");
 
+      
         //only set movement when using a valid Blocking input
         if ((args.AttackState == AttackState.ShieldDefence || 
             args.AttackState == AttackState.SwordDefence )
@@ -48,20 +64,18 @@ public class Blocking : MonoBehaviour
             _blockDirection = args.BlockDirection;
             _previousState = args.AttackState;
 
-            //send event for animation
-            if (_blockMedium == BlockMedium.Shield)
-                _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.ShieldEquip, AnimLayer = 4, DoResetIdle = false, Interupt = false });
-            else if (_blockMedium == BlockMedium.Sword)
-                _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.SwordEquip, AnimLayer = 3, DoResetIdle = false, Interupt = false });            
+            Debug.Log($"package to Block State {args.BlockDirection}");
 
+            PlayShieldAnimation();
 
             UpdateBlackboard(args);
         }
+        //Lower shield when no vallid block input or state
         else if ( ((int)_previousState >= 3 && (int)args.AttackState < 3 )
-            || ((int)args.AttackState >= 3 && args.AimingInputState != AimingInputState.Hold))
+            || ((int)args.AttackState >= 3 && args.AimingInputState == AimingInputState.Idle))
         {
             _aimingInputState = AimingInputState.Idle;
-            _blockDirection = Direction.Idle;
+            //_blockDirection = Direction.Idle;
             _previousState = args.AttackState;
             UpdateBlackboard(null);
 
@@ -74,14 +88,11 @@ public class Blocking : MonoBehaviour
         else
         {
             _aimingInputState = AimingInputState.Idle;
-            _blockDirection = Direction.Idle;
+            //_blockDirection = Direction.Idle;
             _previousState = args.AttackState;
 
         }
-
-     
     }
-               
     public void CheckBlock(Component sender, object obj)
     {
         //Check for vallid signal
@@ -166,6 +177,22 @@ public class Blocking : MonoBehaviour
 
     }
 
+    public void SetStorredBlockValue(Component sender, object obj)
+    {
+        if (sender.gameObject != gameObject) return;
+        _storredHoldDirection = _blockDirection;
+    }
+
+
+    private void PlayShieldAnimation()
+    {
+        //send event for animation
+        if (_blockMedium == BlockMedium.Shield)
+            _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.ShieldEquip, AnimLayer = 4, DoResetIdle = false, Interupt = false, BlockDirection = _blockDirection });
+        else if (_blockMedium == BlockMedium.Sword)
+            _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.SwordEquip, AnimLayer = 3, DoResetIdle = false, Interupt = false, BlockDirection = _blockDirection });
+    }
+
 
     private void UpdateBlackboard(AimingOutputArgs args)
     {
@@ -233,14 +260,16 @@ public class Blocking : MonoBehaviour
 
     private BlockResult UsingSword(AttackEventArgs args)
     {
+        Direction blockDirection = _blockDirection;
         BlockResult blockResult = BlockResult.Hit;
+
         if (_aimingInputState != AimingInputState.Hold)
-            _blockDirection = Direction.Idle;
+            blockDirection = Direction.Idle;
 
         switch (args.AttackType)
         {
             case AttackType.Stab:
-                if (_blockDirection == Direction.ToCenter)
+                if (blockDirection == Direction.ToCenter)
                     blockResult = BlockResult.SwordHalfBlock;
                 else
                     blockResult = BlockResult.Hit;
@@ -249,14 +278,14 @@ public class Blocking : MonoBehaviour
             case AttackType.HorizontalSlashToLeft:
                 if (IsShieldPresent())
                 {
-                    if (_blockDirection == Direction.ToLeft)
+                    if (blockDirection == Direction.ToLeft)
                         blockResult = BlockResult.FullyBlocked;
                     else
                         blockResult = BlockResult.HalfBlocked;
                 }
                 else
                 {
-                    if (_blockDirection == Direction.ToLeft)
+                    if (blockDirection == Direction.ToLeft)
                         blockResult = BlockResult.SwordBlock;
                     else
                         blockResult = BlockResult.Hit;
@@ -265,9 +294,9 @@ public class Blocking : MonoBehaviour
                 break;
 
             case AttackType.HorizontalSlashToRight:
-                if (_blockDirection == Direction.ToCenter)
+                if (blockDirection == Direction.ToCenter)
                     blockResult = BlockResult.Hit;
-                else if (_blockDirection == Direction.ToRight)
+                else if (blockDirection == Direction.ToRight)
                     blockResult = BlockResult.SwordBlock;
                 else
                     blockResult = BlockResult.Hit;
@@ -282,34 +311,36 @@ public class Blocking : MonoBehaviour
 
     private BlockResult UsingShield(AttackEventArgs args)
     {
+        Direction blockDirection = _blockDirection;
         BlockResult blockResult = BlockResult.Hit;
-        if (_aimingInputState != AimingInputState.Hold)
-            _blockDirection = Direction.Idle;
+
+        if (_aimingInputState != AimingInputState.Hold )
+            blockDirection = Direction.Idle;
 
         switch (args.AttackType)
         {
             case AttackType.Stab:
-                if (_blockDirection == Direction.Idle)
+                if (blockDirection == Direction.Idle)
                     blockResult = BlockResult.Hit;
-                else if (_blockDirection == Direction.ToCenter)
+                else if (blockDirection == Direction.ToCenter)
                     blockResult = BlockResult.FullyBlocked;
                 break;
 
             case AttackType.HorizontalSlashToLeft:
-                if (_blockDirection == Direction.ToLeft)
+                if (blockDirection == Direction.ToLeft)
                     blockResult = BlockResult.FullyBlocked;
-                else if (_blockDirection == Direction.ToRight)
+                else if (blockDirection == Direction.ToRight)
                     blockResult = BlockResult.Hit;
                 else
                     blockResult = BlockResult.HalfBlocked;
                 break;
 
             case AttackType.HorizontalSlashToRight:
-                if (_blockDirection == Direction.Idle)
+                if (blockDirection == Direction.Idle)
                     blockResult = BlockResult.Hit;
-                else if (_blockDirection == Direction.ToCenter)
+                else if (blockDirection == Direction.ToCenter)
                     blockResult = BlockResult.HalfBlocked;
-                else if (_blockDirection == Direction.ToRight)
+                else if (blockDirection == Direction.ToRight)
                     blockResult = BlockResult.FullyBlocked;
                 else
                     blockResult = BlockResult.Hit;

@@ -11,7 +11,8 @@ public class FMODAudioHandler : MonoBehaviour
     private ATTRIBUTES_3D _attributes;
     private AimingOutputArgs _aimingEventArgs;
     private AttackEventArgs _attackEventArgs;
-
+    
+    private bool isSheathing = true;
     // Parameters
     // Local
     private PARAMETER_ID _surfaceTypeID;
@@ -32,6 +33,9 @@ public class FMODAudioHandler : MonoBehaviour
     private PARAMETER_ID _windIntensityID;
     private float _windIntensityIDValue;
 
+    private PARAMETER_ID _sheathID;
+    private float _sheathIDValue;
+    
     // Global
     private PARAMETER_ID _attacksStrengthID;
     private float _attacksStrengthIDValue;
@@ -67,28 +71,33 @@ public class FMODAudioHandler : MonoBehaviour
     private EventInstance _weaponWhooshSFXInstance;
     [SerializeField] private EventReference _weaponHitSFX;
     private EventInstance _weaponHitSFXInstance;
-
+    [SerializeField] private EventReference _sheathSFX;
+    private EventInstance _sheathSFXInstance;
+    [SerializeField] private EventReference _unsheathSFX;
+    private EventInstance _unsheathSFXInstance;
+    
     [Header("SFX/CameraMovements")] 
     [SerializeField] private EventReference _comicPanelSwapSFX;
     private EventInstance _comicPanelSwapSFXInstance;
     [SerializeField] private EventReference _showdownSFX;
     private EventInstance _showdownSFXInstance;
-    // private void Start()
-    // {
-    //     _attributes = RuntimeUtils.To3DAttributes(transform);
-    //     _ambienceInstance = RuntimeManager.CreateInstance(_ambience);
-    //     _townMusicInstance = RuntimeManager.CreateInstance(_townMusic);
-    //     GetParameterID(_ambienceInstance, "Biome", out _biomeID);
-    //     GetParameterID(_ambienceInstance, "WindIntensity", out _windIntensityID);
-    //     GetParameterID(_ambienceInstance, "RainIntensity", out _rainIntensityID);
-    //     SetParameterID(_ambienceInstance, _biomeID, 1.0f);
-    //     SetParameterID(_ambienceInstance, _windIntensityID, 1.0f);
-    //     SetParameterID(_ambienceInstance, _rainIntensityID, 0.0f);
-    //     _ambienceInstance.set3DAttributes(_attributes);
-    //     _ambienceInstance.start();
-    //     _townMusicInstance.start();
-    // }
 
+    private void OnEnable()
+    {
+        _attributes = RuntimeUtils.To3DAttributes(transform);
+        _ambienceInstance = RuntimeManager.CreateInstance(_ambience);
+        _townMusicInstance = RuntimeManager.CreateInstance(_townMusic);
+        GetParameterID(_ambienceInstance, "Biome", out _biomeID);
+        GetParameterID(_ambienceInstance, "WindIntensity", out _windIntensityID);
+        GetParameterID(_ambienceInstance, "RainIntensity", out _rainIntensityID);
+        SetParameterID(_ambienceInstance, _biomeID, 1.0f);
+        SetParameterID(_ambienceInstance, _windIntensityID, 1.0f);
+        SetParameterID(_ambienceInstance, _rainIntensityID, 0.0f);
+        
+        _ambienceInstance.set3DAttributes(_attributes);
+        _ambienceInstance.start();
+        _townMusicInstance.start();
+    }
     private void GetParameterID(EventInstance eventInstance, string parameterName, out PARAMETER_ID parameterID)
     {
         // Get the parameter ID
@@ -227,34 +236,25 @@ public class FMODAudioHandler : MonoBehaviour
         _showdownSFXInstance.start();
         _showdownSFXInstance.release();
     }
-
-    // public void PlayGameWonMusic(Component sender, object obj)
-    // {
-    //     _gameWonMusicInstance = RuntimeManager.CreateInstance(_gameLostMusic);
-    //     _gameWonMusicInstance.start();
-    // }
-    //
-    // public void PlayGameLostMusic(Component sender, object obj)
-    // {
-    //     _gameWonMusicInstance = RuntimeManager.CreateInstance(_gameLostMusic);
-    //     _gameWonMusicInstance.start();
-    // }
-
-    private void OnEnable()
+    
+    public void PlaySheathSFX(Component sender, object obj)
     {
-        _attributes = RuntimeUtils.To3DAttributes(transform);
-        _ambienceInstance = RuntimeManager.CreateInstance(_ambience);
-        _townMusicInstance = RuntimeManager.CreateInstance(_townMusic);
-        GetParameterID(_ambienceInstance, "Biome", out _biomeID);
-        GetParameterID(_ambienceInstance, "WindIntensity", out _windIntensityID);
-        GetParameterID(_ambienceInstance, "RainIntensity", out _rainIntensityID);
-        SetParameterID(_ambienceInstance, _biomeID, 1.0f);
-        SetParameterID(_ambienceInstance, _windIntensityID, 1.0f);
-        SetParameterID(_ambienceInstance, _rainIntensityID, 0.0f);
-        _ambienceInstance.set3DAttributes(_attributes);
-        _ambienceInstance.start();
-        _townMusicInstance.start();
+        _sheathSFXInstance = RuntimeManager.CreateInstance(_sheathSFX);
+        _unsheathSFXInstance = RuntimeManager.CreateInstance(_unsheathSFX);
+        if (isSheathing)
+        {
+            _sheathSFXInstance.start();
+            _sheathSFXInstance.release();
+            isSheathing = false;
+        }
+        else
+        {
+            _unsheathSFXInstance.start();
+            _unsheathSFXInstance.release();
+            isSheathing = true;
+        }
     }
+
     private void OnDisable()
     {
         _forestMusicInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);

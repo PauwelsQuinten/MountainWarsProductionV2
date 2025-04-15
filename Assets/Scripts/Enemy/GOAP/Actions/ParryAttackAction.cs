@@ -10,6 +10,7 @@ public class ParryAttackAction : GoapAction
     [SerializeField] BlockMedium _blockMediume = BlockMedium.Shield;
     [SerializeField] Direction _direction = Direction.Idle;
     [SerializeField] float _swingAngle = 180f;
+    [SerializeField] float _swingSpeed = 1.5f;
     [SerializeField] bool _disarmOpponent =false;
     
     private Coroutine _defendCoroutine;
@@ -51,7 +52,9 @@ public class ParryAttackAction : GoapAction
 
     override public bool IsVallid(WorldState currentWorldState, BlackboardReference blackboard)
     {
-        if (currentWorldState.TargetBehaviour == EBehaviourValue.Attacking && blackboard.variable.RHEquipmentHealth > 0f)
+        if (currentWorldState.Behaviour != EBehaviourValue.Knock
+            && currentWorldState.TargetBehaviour == EBehaviourValue.Attacking 
+            && blackboard.variable.RHEquipmentHealth > 0f)
             return true;
         return false;
     }
@@ -64,7 +67,7 @@ public class ParryAttackAction : GoapAction
 
     override public bool IsInterupted(WorldState currentWorldState, BlackboardReference blackboard)
     {
-        return currentWorldState.TargetBehaviour == EBehaviourValue.Knock;
+        return currentWorldState.Behaviour == EBehaviourValue.Knock;
     }
 
     override public void CancelAction()
@@ -75,7 +78,9 @@ public class ParryAttackAction : GoapAction
 
     public override float CalculateCost(BlackboardReference blackboard, WorldState currentWorldState)
     {
-        if (blackboard.variable.ObservedAttack == blackboard.variable.TargetCurrentAttack && blackboard.variable.ObservedAttack != AttackType.None)
+        if (blackboard.variable.ObservedAttack == blackboard.variable.TargetCurrentAttack 
+            && blackboard.variable.ObservedAttack != AttackType.None
+            && currentWorldState.TargetAttackRange == EWorldStateRange.InRange)
             return 0.1f;
         else
             return Cost;
@@ -87,9 +92,10 @@ public class ParryAttackAction : GoapAction
 
     private IEnumerator DefendRoutine(float time)
     {
+        yield return new WaitForSeconds(0.2f);
         DefendMovement(false);
         yield return new WaitForEndOfFrame();
-        StopMovement();
+        //StopMovement();
         if (_disarmOpponent)
         {
             yield return new WaitForSeconds(0.2f);
@@ -156,7 +162,7 @@ public class ParryAttackAction : GoapAction
                ,
             BlockDirection = Direction.Idle
                ,
-            Speed = 15f
+            Speed = _swingSpeed
                ,
             AttackSignal = AttackSignal.Swing
                ,

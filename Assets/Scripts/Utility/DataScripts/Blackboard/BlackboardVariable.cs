@@ -364,19 +364,20 @@ public class BlackboardVariable : ScriptableObject
         get => _targetCurrentAttack;
         set
         {
-            //if (_targetCurrentAttack != value)
-            if (value != AttackType.None && Target)
+            if (_targetCurrentAttack == AttackType.None && _targetCurrentAttack == value) return;
+            if ( Target )
             {
                 _targetCurrentAttack = value;
                 //Debug.Log($"new currentAttack{_targetCurrentAttack}");
                 ValueChanged?.Invoke(this, new BlackboardEventArgs { ThisChanged = BlackboardEventArgs.WhatChanged.TargetCurrentAttack });
 
-                
-                StorredAttacks[_targetCurrentAttack] += 1;
+                if (StorredAttacks.ContainsKey(value))
+                {
+                    StorredAttacks[_targetCurrentAttack] += 1;
+                    _observedAttack = EvaluateAttackCount();
+                    ValueChanged?.Invoke(this, new BlackboardEventArgs { ThisChanged = BlackboardEventArgs.WhatChanged.TargetObservedAttack });
 
-                _observedAttack = EvaluateAttackCount();
-                ValueChanged?.Invoke(this, new BlackboardEventArgs { ThisChanged = BlackboardEventArgs.WhatChanged.TargetObservedAttack });
-                
+                }
             }
         }
     }

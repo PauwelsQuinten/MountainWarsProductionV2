@@ -354,7 +354,7 @@ public class Aiming : MonoBehaviour
             AnimationStart = earlyMessage
 
         };
-        Debug.Log($"Send package: {package.AttackState}, {package.AttackSignal}, {_enmAimingInput}, angle : {_traversedAngle}, block direction: {package.BlockDirection} holding = {package.IsHoldingBlock}");
+        //Debug.Log($"Send package: {package.AttackState}, {package.AttackSignal}, {_enmAimingInput}, angle : {_traversedAngle}, block direction: {package.BlockDirection} holding = {package.IsHoldingBlock}");
 
         if (_enmAttackSignal == AttackSignal.Feint)
             _AimOutputEvent.Raise(this, package);
@@ -364,7 +364,8 @@ public class Aiming : MonoBehaviour
             if (package.AttackState != AttackState.Idle)
             {
                 _inputQueue.Enqueue(package);
-                Debug.Log($"Enqueue: {package.AttackState}, {package.AttackSignal}, angle : {_traversedAngle}, early start: {package.AnimationStart}");
+                //Debug.Log($"Enqueue: {package.AttackState}, {package.AttackSignal}, angle : {_traversedAngle}, early start: {package.AnimationStart}");
+                Debug.Log($"{gameObject}, {package.AttackState}, {package.AttackSignal}, angle : {_traversedAngle}, early start: {package.AnimationStart}");
             }
 
         }

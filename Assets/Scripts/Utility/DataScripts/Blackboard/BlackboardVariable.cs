@@ -324,37 +324,29 @@ public class BlackboardVariable : ScriptableObject
     {
         get => _observedAttack;
     }
-    private AttackType EvaluateAttackCount()
+    private AttackType EvaluateAttackCount(AttackType addedAttack)
     {
-        int lowestCount = 10;
         int highestCount = 0;
         AttackType attackType = AttackType.None;
         foreach(KeyValuePair<AttackType, int> att in StorredAttacks)
         {
-            if (att.Value < lowestCount) 
-                lowestCount = att.Value;
+            
             if (att.Value > highestCount)
             {
                 highestCount = att.Value;
                 attackType = att.Key;
             }
         }
-        if (lowestCount > 0)
+        
+        
+        foreach (var key in StorredAttacks.Keys.ToList())
         {
-            foreach (var key in StorredAttacks.Keys.ToList())
-            {
-                StorredAttacks[key] -= lowestCount;
-            }
-            highestCount -= lowestCount;
+            if (key != addedAttack)
+                StorredAttacks[key] -= StorredAttacks[key] > 0 ? 1 : 0;
+            else
+                StorredAttacks[key] -= StorredAttacks[key] > 5 ? 1 : 0;
         }
-        else if (highestCount > 5)
-        {
-            foreach (var key in StorredAttacks.Keys.ToList())
-            {
-                StorredAttacks[key] -= StorredAttacks[key] > 0? 1 : 0;
-            }
-            highestCount -= 1;
-        }
+           
         return highestCount >= 5? attackType : AttackType.None;
     }
 
@@ -374,7 +366,7 @@ public class BlackboardVariable : ScriptableObject
                 if (StorredAttacks.ContainsKey(value))
                 {
                     StorredAttacks[_targetCurrentAttack] += 1;
-                    _observedAttack = EvaluateAttackCount();
+                    _observedAttack = EvaluateAttackCount(_targetCurrentAttack);
                     ValueChanged?.Invoke(this, new BlackboardEventArgs { ThisChanged = BlackboardEventArgs.WhatChanged.TargetObservedAttack });
 
                 }

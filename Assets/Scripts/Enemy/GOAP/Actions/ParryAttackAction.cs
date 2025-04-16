@@ -84,7 +84,7 @@ public class ParryAttackAction : GoapAction
 
             //Lower the change for disarming compared to parry with shield
             if (_disarmOpponent)
-                cost -= 0.1f;
+                cost += 0.075f;
             return cost;
         }
         else

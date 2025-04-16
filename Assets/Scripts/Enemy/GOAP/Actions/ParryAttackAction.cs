@@ -78,14 +78,20 @@ public class ParryAttackAction : GoapAction
 
     public override float CalculateCost(BlackboardReference blackboard, WorldState currentWorldState)
     {
-        if (blackboard.variable.ObservedAttack == blackboard.variable.TargetCurrentAttack 
-            && blackboard.variable.ObservedAttack != AttackType.None
-            && currentWorldState.TargetAttackRange == EWorldStateRange.InRange)
-            return 0.1f;
+        if (SeesParryableAttack(blackboard, currentWorldState))
+        {
+            float cost = Random.Range(0.1f, 0.4f);
+
+            //Lower the change for disarming compared to parry with shield
+            if (_disarmOpponent)
+                cost -= 0.1f;
+            return cost;
+        }
         else
             return Cost;
     }
 
+   
     //-----------------------------------------------------------------------
     //Helper functions
     //-----------------------------------------------------------------------

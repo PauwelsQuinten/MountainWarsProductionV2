@@ -162,5 +162,13 @@ public class GoapAction : MonoBehaviour, IActions
         return currentWorldState.WorldStateRanges[EWorldState.TargetAttackRange] == EWorldStateRange.InRange;
     }
 
+    protected static bool SeesParryableAttack(BlackboardReference blackboard, WorldState currentWorldState)
+    {
+        return blackboard.variable.ObservedAttack == blackboard.variable.TargetCurrentAttack
+                    && blackboard.variable.ObservedAttack != AttackType.None
+                    && currentWorldState.TargetAttackRange == EWorldStateRange.InRange;
+    }
+
+
 }
 

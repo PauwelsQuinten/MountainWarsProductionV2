@@ -64,7 +64,7 @@ public class Blocking : MonoBehaviour
             _blockDirection = args.BlockDirection;
             _previousState = args.AttackState;
 
-            Debug.Log($"package to Block State {args.BlockDirection}");
+            //Debug.Log($"package to Block State {args.BlockDirection}");
 
             PlayShieldAnimation();
 
@@ -137,7 +137,7 @@ public class Blocking : MonoBehaviour
             AttackPower = args.AttackPower,
             BlockMedium = _blockMedium
         };
-        //Debug.Log($"{blockResult}, {gameObject}");
+        Debug.Log($"{gameObject} defense result = {blockResult} ");
 
 
         if (blockResult == BlockResult.Hit)

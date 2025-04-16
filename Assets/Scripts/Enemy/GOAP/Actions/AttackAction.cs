@@ -46,6 +46,11 @@ public class AttckAction : GoapAction
             StopCoroutine(_attackCoroutine);
     }
 
+    public override float CalculateCost(BlackboardReference blackboard, WorldState currentWorldState)
+    {
+        return Random.Range(0.3f, 0.9f);
+    }
+
     //-----------------------------------------------------------------------
     //Helper functions
     //-----------------------------------------------------------------------

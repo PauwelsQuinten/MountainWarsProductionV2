@@ -279,6 +279,11 @@ public class EquipmentManager : MonoBehaviour
         return HeldEquipment[index] != null;
     }
     
+    public bool HasNoneInHand()
+    {
+        return HeldEquipment[RIGHT_HAND] == null && HeldEquipment[LEFT_HAND] == null;
+    }
+    
     private void DropEquipment(bool isRightHand)
     {
         int index = isRightHand ? 1 : 0;

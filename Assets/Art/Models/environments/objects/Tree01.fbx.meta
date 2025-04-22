@@ -1,9 +1,19 @@
 fileFormatVersion: 2
-guid: 5be5a3fa0ef985c468c48a3120aec7d8
+guid: 91e110a3010163b4496b7b15d331aa94
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: leafs_bs_01_1Mat
+    second: {fileID: 2100000, guid: fa88162e0246c2b4a80d1a52504a057a, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: tileplane_defaultmaterial_basemap_0Mat
+    second: {fileID: 2100000, guid: acab574db2fb6ac43ae03155a1b496f4, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

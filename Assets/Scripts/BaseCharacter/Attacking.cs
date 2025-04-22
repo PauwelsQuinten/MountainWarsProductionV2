@@ -100,17 +100,9 @@ public class Attacking : MonoBehaviour
         {
             //Debug.Log($"speed: {args.Speed}");
             StartAnimation(args.Speed);
-            //PrintInput(args);
+            PrintInput(args);
         }
 
-
-        //
-        //if (args.AttackSignal != AttackSignal.Stab)
-        //{
-        //    if (!IsAngleBigEnough(args.AngleTravelled)) return;
-        //    if (DidOverCommit(args.AngleTravelled)) return;
-        //}
-       
         //PrintInput2(args);
         //Signal to blackboard
         if (gameObject.CompareTag(PLAYER))
@@ -130,10 +122,22 @@ public class Attacking : MonoBehaviour
 
 
         if (!IsEnemyInRange()) return;
+
+        Debug.Log($"{gameObject} throws {_attackType}");
         _doAttack.Raise(this, new AttackEventArgs { AttackType = _attackType, AttackHeight = _attackHeight, AttackPower = _attackPower });
 
     }
 
+    public void AttackFinished(Component sender, object obj)
+    {
+        if (sender.gameObject != gameObject) return;
+
+        if (gameObject.CompareTag(PLAYER))
+        {
+            _blackboardRef.variable.TargetCurrentAttack = AttackType.None;
+            _blackboardRef.variable.TargetState = AttackState.Idle;
+        }
+    }
 
     private void StartAnimation(float speed)
     {
@@ -147,7 +151,7 @@ public class Attacking : MonoBehaviour
         }
         else if (_attackType == AttackType.Stab)
         {
-            _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Stab, AnimLayer = 3, DoResetIdle = true, Interupt = false, Speed = speed *2f });
+            _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Stab, AnimLayer = 3, DoResetIdle = true, Interupt = false, Speed = speed  });
         }
 
     }

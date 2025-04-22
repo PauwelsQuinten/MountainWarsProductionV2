@@ -49,12 +49,13 @@ MonoBehaviour:
   DesiredWorldState: {fileID: 0}
   SatisfyingWorldState: {fileID: 0}
   Cost: 0.8
-  _actionMaxRunTime: 1
+  _actionMaxRunTime: 1.5
   _defendEvent: {fileID: 11400000, guid: 3ce36d1a0cee9b64db3b05b01a8aece3, type: 2}
   _timeInterval: 1.5
   _blockMediume: 0
   _direction: 0
   _swingAngle: 120
+  _swingSpeed: 1.25
   _disarmOpponent: 0
 --- !u!114 &-5060030443542841245
 MonoBehaviour:
@@ -80,6 +81,8 @@ MonoBehaviour:
   _lHEquipment: 5
   _hasTarget: 2
   _hasOpening: 2
+  _hasRHEquipment: 2
+  _hasLHEquipment: 2
   _targetBehaviour: 4
   _behaviour: 0
   _targetAttackRange: 3
@@ -110,6 +113,8 @@ MonoBehaviour:
   _lHEquipment: 5
   _hasTarget: 2
   _hasOpening: 2
+  _hasRHEquipment: 2
+  _hasLHEquipment: 2
   _targetBehaviour: 4
   _behaviour: 4
   _targetAttackRange: 3

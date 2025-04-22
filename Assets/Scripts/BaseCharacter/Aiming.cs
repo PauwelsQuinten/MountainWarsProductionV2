@@ -10,8 +10,9 @@ public class Aiming : MonoBehaviour
 
     [Header("Event")]
     [SerializeField] private GameEvent _AimOutputEvent;
-    [SerializeField]
-    private GameEvent _sheathWeapon;
+    [SerializeField] private GameEvent _sheathWeapon;
+    [Header("State")]
+    [SerializeField] private float _stabAcceptedRange = 60f;
 
     [Header("Visual")]
     [SerializeField] private TextMeshProUGUI _textMeshPro;
@@ -313,7 +314,8 @@ public class Aiming : MonoBehaviour
     private bool IsStabMovement(float inputLength)
     {
         return (inputLength >= 0.9f && inputLength > _previousLength + 0.01f
-                    && _refAimingInput.variable.StateManager.Orientation == CalculateOrientationOfInput(_refAimingInput.variable.value)
+                    && IsInputInFrontOfOrientation(_refAimingInput.variable.value, _stabAcceptedRange)
+                    //&& _refAimingInput.variable.StateManager.Orientation == CalculateOrientationOfInput(_refAimingInput.variable.value)
                     && (_refAimingInput.variable.State == AttackState.Attack || _refAimingInput.variable.State == AttackState.BlockAttack)
                     && _enmAttackSignal == AttackSignal.Idle
                     && _traversedAngle < F_MAX_ALLOWED_ANGLE_ON_ORIENTATION) ;
@@ -340,8 +342,8 @@ public class Aiming : MonoBehaviour
                 ,
             BlockDirection = CalculateBlockDirection(_refAimingInput.variable.StateManager.Orientation)
                 ,
-            Speed = 2f
-            //Speed = CalculateSwingSpeed(_traversedAngle, 1.5f, 2.5f)
+            //Speed = 2f
+            Speed = CalculateSwingSpeed(_traversedAngle, 1.5f, 2.5f)
                 ,
             AttackSignal = _enmAttackSignal
                 ,
@@ -354,7 +356,7 @@ public class Aiming : MonoBehaviour
             AnimationStart = earlyMessage
 
         };
-        Debug.Log($"Send package: {package.AttackState}, {package.AttackSignal}, {_enmAimingInput}, angle : {_traversedAngle}, block direction: {package.BlockDirection} holding = {package.IsHoldingBlock}");
+        //Debug.Log($"Send package: {package.AttackState}, {package.AttackSignal}, {_enmAimingInput}, angle : {_traversedAngle}, block direction: {package.BlockDirection} holding = {package.IsHoldingBlock}");
 
         if (_enmAttackSignal == AttackSignal.Feint)
             _AimOutputEvent.Raise(this, package);
@@ -364,7 +366,8 @@ public class Aiming : MonoBehaviour
             if (package.AttackState != AttackState.Idle)
             {
                 _inputQueue.Enqueue(package);
-                Debug.Log($"Enqueue: {package.AttackState}, {package.AttackSignal}, angle : {_traversedAngle}, early start: {package.AnimationStart}");
+                //Debug.Log($"Enqueue: {package.AttackState}, {package.AttackSignal}, angle : {_traversedAngle}, early start: {package.AnimationStart}");
+                Debug.Log($"{gameObject}, {package.AttackState}, {package.AttackSignal}, angle : {_traversedAngle}, early start: {package.AnimationStart}");
             }
 
         }
@@ -425,6 +428,13 @@ public class Aiming : MonoBehaviour
         newAngle = (newAngle == -4) ? 4 : newAngle;       
 
         return (Orientation)(newAngle * 45) ;
+    }
+
+    private bool IsInputInFrontOfOrientation(Vector2 direction , float acceptedRange)
+    {
+        float angle = CalculateAngleRadOfInput(direction) * Mathf.Rad2Deg;
+        float angleDiff = angle - (float)_refAimingInput.variable.StateManager.Orientation;
+        return Mathf.Abs(angleDiff) < acceptedRange;
     }
 
     private Direction CalculateBlockDirection(Orientation orientation)

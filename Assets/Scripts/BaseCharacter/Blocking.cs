@@ -64,6 +64,8 @@ public class Blocking : MonoBehaviour
             _blockDirection = args.BlockDirection;
             _previousState = args.AttackState;
 
+            //Debug.Log($"package to Block State {args.BlockDirection}");
+
             PlayShieldAnimation();
 
             UpdateBlackboard(args);
@@ -135,7 +137,7 @@ public class Blocking : MonoBehaviour
             AttackPower = args.AttackPower,
             BlockMedium = _blockMedium
         };
-        //Debug.Log($"{blockResult}, {gameObject}");
+        Debug.Log($"{gameObject} defense result = {blockResult} ");
 
 
         if (blockResult == BlockResult.Hit)
@@ -186,9 +188,9 @@ public class Blocking : MonoBehaviour
     {
         //send event for animation
         if (_blockMedium == BlockMedium.Shield)
-            _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.ShieldEquip, AnimLayer = 4, DoResetIdle = false, Interupt = false });
+            _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.ShieldEquip, AnimLayer = 4, DoResetIdle = false, Interupt = false, BlockDirection = _blockDirection });
         else if (_blockMedium == BlockMedium.Sword)
-            _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.SwordEquip, AnimLayer = 3, DoResetIdle = false, Interupt = false });
+            _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.SwordEquip, AnimLayer = 3, DoResetIdle = false, Interupt = false, BlockDirection = _blockDirection });
     }
 
 

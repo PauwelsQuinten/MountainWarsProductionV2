@@ -24,7 +24,9 @@ public class AnimationManager : MonoBehaviour
         if (sender.gameObject != gameObject) return;
         AnimationEventArgs args = obj as AnimationEventArgs;
         if (args == null) return;
-        if (_currentState == args.AnimState && args.AnimState != AnimationState.Idle)
+
+        //For fluid block direction switches, else he will always first equip. looks really buggy
+        if (_currentState == args.AnimState && args.AnimState != AnimationState.Idle && args.AnimState != AnimationState.Empty)
         {
             _animator.SetInteger("BlockDirection", (int)args.BlockDirection);
             return;

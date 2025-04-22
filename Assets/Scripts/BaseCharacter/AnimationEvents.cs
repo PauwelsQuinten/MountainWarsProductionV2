@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class AnimationEvents : MonoBehaviour
@@ -15,17 +16,18 @@ public class AnimationEvents : MonoBehaviour
     private GameEvent _inParryZone;
     private void Start()
     {
-        //FindObjectOfType<FMODAudioHandler>();
+        
     }
 
     public void Footstep()
     {
-      _footstep.Raise();
+      _footstep.Raise(this.transform.parent, EventArgs.Empty);
+      
     }
 
     public void Whoosh()
     {
-        _whoosh.Raise();
+        _whoosh.Raise(this.transform.parent, EventArgs.Empty);;
     }
 
     public void SwordHit()

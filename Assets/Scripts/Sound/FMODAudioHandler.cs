@@ -7,12 +7,18 @@ using Debug = UnityEngine.Debug;
 
 public class FMODAudioHandler : MonoBehaviour
 {
+    
+
+   [SerializeField] private TerrainChecker _checker;
+    private string _currentLayerName;
     [SerializeField] private GameObject _player;
     private ATTRIBUTES_3D _attributes;
     private AimingOutputArgs _aimingEventArgs;
     private AttackEventArgs _attackEventArgs;
-    
+    private FootstepSwapper _footstepSwapper;
+
     private bool isSheathing = true;
+
     // Parameters
     // Local
     private PARAMETER_ID _surfaceTypeID;
@@ -20,7 +26,7 @@ public class FMODAudioHandler : MonoBehaviour
 
     private PARAMETER_ID _TypeOfWalkingID;
     private float _TypeOfWalkingIDValue;
-    
+
     private PARAMETER_ID _weaponHitSurfaceID;
     private float _weaponHitSurfaceIDValue;
 
@@ -35,7 +41,7 @@ public class FMODAudioHandler : MonoBehaviour
 
     private PARAMETER_ID _sheathID;
     private float _sheathIDValue;
-    
+
     // Global
     private PARAMETER_ID _attacksStrengthID;
     private float _attacksStrengthIDValue;
@@ -44,12 +50,10 @@ public class FMODAudioHandler : MonoBehaviour
     private float _currentWeaponIDValue;
 
     // Events
-    [Header("Ambience")] 
-    [SerializeField] private EventReference _ambience;
+    [Header("Ambience")] [SerializeField] private EventReference _ambience;
     private EventInstance _ambienceInstance;
 
-    [Header("Music")] 
-    [SerializeField] private EventReference _mainThemeMusic;
+    [Header("Music")] [SerializeField] private EventReference _mainThemeMusic;
     private EventInstance _mainThemeMusicInstance;
     [SerializeField] private EventReference _townMusic;
     private EventInstance _townMusicInstance;
@@ -59,13 +63,15 @@ public class FMODAudioHandler : MonoBehaviour
     private EventInstance _gameWonMusicInstance;
     [SerializeField] private EventReference _gameLostMusic;
     private EventInstance _gameLostMusicInstance;
-    
-    [Header("SFX/Character")] 
-    [SerializeField] private EventReference _footstepsSFX;
+
+    [Header("SFX/Character")] [SerializeField]
+    private EventReference _footstepsSFX;
+
     private EventInstance _footstepsSFXInstance;
 
-    [Header("SFX/Combat")] 
-    [SerializeField] private EventReference _attackChargeSFX;
+    [Header("SFX/Combat")] [SerializeField]
+    private EventReference _attackChargeSFX;
+
     private EventInstance _attackChargeSFXInstance;
     [SerializeField] private EventReference _weaponWhooshSFX;
     private EventInstance _weaponWhooshSFXInstance;
@@ -75,15 +81,17 @@ public class FMODAudioHandler : MonoBehaviour
     private EventInstance _sheathSFXInstance;
     [SerializeField] private EventReference _unsheathSFX;
     private EventInstance _unsheathSFXInstance;
-    
-    [Header("SFX/CameraMovements")] 
-    [SerializeField] private EventReference _comicPanelSwapSFX;
+
+    [Header("SFX/CameraMovements")] [SerializeField]
+    private EventReference _comicPanelSwapSFX;
+
     private EventInstance _comicPanelSwapSFXInstance;
     [SerializeField] private EventReference _showdownSFX;
     private EventInstance _showdownSFXInstance;
 
     private void OnEnable()
     {
+        _checker = new TerrainChecker();
         _attributes = RuntimeUtils.To3DAttributes(transform);
         _ambienceInstance = RuntimeManager.CreateInstance(_ambience);
         _townMusicInstance = RuntimeManager.CreateInstance(_townMusic);
@@ -93,11 +101,12 @@ public class FMODAudioHandler : MonoBehaviour
         SetParameterID(_ambienceInstance, _biomeID, 1.0f);
         SetParameterID(_ambienceInstance, _windIntensityID, 1.0f);
         SetParameterID(_ambienceInstance, _rainIntensityID, 0.0f);
-        
+
         _ambienceInstance.set3DAttributes(_attributes);
         _ambienceInstance.start();
         _townMusicInstance.start();
     }
+
     private void GetParameterID(EventInstance eventInstance, string parameterName, out PARAMETER_ID parameterID)
     {
         // Get the parameter ID
@@ -130,6 +139,8 @@ public class FMODAudioHandler : MonoBehaviour
     {
         string surfaceType = DetectSurfaceType();
         _footstepsSFXInstance = RuntimeManager.CreateInstance(_footstepsSFX);
+        _attributes = RuntimeUtils.To3DAttributes(_player.transform);
+        _footstepsSFXInstance.set3DAttributes(_attributes);
         GetParameterID(_footstepsSFXInstance, "SurfaceType", out _surfaceTypeID);
         GetParameterID(_footstepsSFXInstance, "TypeOfWalking", out _TypeOfWalkingID);
         switch (surfaceType)
@@ -137,16 +148,16 @@ public class FMODAudioHandler : MonoBehaviour
             case "Concrete":
                 _surfaceTypeIDValue = 0.0f;
                 break;
-            case "Stone":
+            case "TerrainRock":
                 _surfaceTypeIDValue = 1.0f;
                 break;
             case "Gravel":
                 _surfaceTypeIDValue = 2.0f;
                 break;
-            case "Grass":
+            case "TerrainGrass":
                 _surfaceTypeIDValue = 3.0f;
                 break;
-            case "Sand":
+            case "TerrainDirt":
                 _surfaceTypeIDValue = 4.0f;
                 break;
             case "Wood":
@@ -162,7 +173,7 @@ public class FMODAudioHandler : MonoBehaviour
                 _surfaceTypeIDValue = 0.0f;
                 break;
         }
-       
+
         if (_player.GetComponentInChildren<Animator>().GetCurrentAnimatorStateInfo(2).IsName("Walk"))
         {
             _TypeOfWalkingIDValue = 1.0f;
@@ -171,26 +182,65 @@ public class FMODAudioHandler : MonoBehaviour
         {
             _TypeOfWalkingIDValue = 2.0f;
         }
-        _footstepsSFXInstance.start();
         SetParameterID(_footstepsSFXInstance, _surfaceTypeID, _surfaceTypeIDValue);
         SetParameterID(_footstepsSFXInstance, _TypeOfWalkingID, _TypeOfWalkingIDValue);
-       _footstepsSFXInstance.release();
+        _footstepsSFXInstance.start();
+        Debug.Log("Footsteps SFX started.");
+
+        //_footstepsSFXInstance.release();
     }
 
     private string DetectSurfaceType()
     {
         RaycastHit hit;
-        Vector3 offset = new Vector3(0, 0.5f,0);
+        Vector3 offset = new Vector3(0, 0.2f, 0);
         Vector3 rayOrigin = _player.transform.position - offset;
         Vector3 rayDirection = Vector3.down;
         float rayDistance = 5f;
+
         if (Physics.Raycast(rayOrigin, rayDirection, out hit, rayDistance))
         {
-            string layerName = LayerMask.LayerToName(hit.collider.gameObject.layer);
-            return layerName;
+Debug.DrawRay(rayOrigin, rayDirection * rayDistance, Color.red);
+            Terrain terrain = hit.transform.GetComponent<Terrain>();
+            if (terrain != null)
+            {
+
+                var layerMixes = _checker.GetLayerMixes(hit.point, terrain);
+
+                if (layerMixes.Count > 0)
+                {
+                    string _dominantLayer = null;
+                    float maxMixValue = 0f;
+
+                    foreach (var layer in layerMixes)
+                    {
+                        //Debug.Log($"Layer: {layer.Key}, Mix: {layer.Value}");
+                        if (layer.Value > maxMixValue)
+                        {
+                            maxMixValue = layer.Value;
+                            _dominantLayer = layer.Key;
+                        }
+                    }
+
+                  //  Debug.Log("Dominant Layer: " + _dominantLayer);
+                    return _dominantLayer;
+                }
+                else
+                {
+                   // Debug.Log("No layers detected in the terrain.");
+                }
+            }
+            else
+            {
+                //Debug.Log("Hit object is not a terrain.");
+            }
+        }
+        else
+        {
+            //Debug.Log("Raycast did not hit anything.");
         }
 
-        return "Default";// Default surface type if no specific surface is detected
+        return "Default"; // Return a default value if no terrain or layers are detected
     }
 
     public void PlayWeaponHitSFX(Component sender, object obj)
@@ -219,24 +269,24 @@ public class FMODAudioHandler : MonoBehaviour
     public void PlayWhooshSFX(Component sender, object obj)
     {
         _weaponWhooshSFXInstance = RuntimeManager.CreateInstance(_weaponWhooshSFX);
-            _weaponWhooshSFXInstance.start();
-            _weaponWhooshSFXInstance.release();
+        _weaponWhooshSFXInstance.start();
+        _weaponWhooshSFXInstance.release();
     }
-    
+
     public void PlayComicSwapSFX(Component sender, object obj)
     {
         _comicPanelSwapSFXInstance = RuntimeManager.CreateInstance(_comicPanelSwapSFX);
         _comicPanelSwapSFXInstance.start();
         _comicPanelSwapSFXInstance.release();
     }
-    
+
     public void PlayShowdownSFX(Component sender, object obj)
     {
         _showdownSFXInstance = RuntimeManager.CreateInstance(_showdownSFX);
         _showdownSFXInstance.start();
         _showdownSFXInstance.release();
     }
-    
+
     public void PlaySheathSFX(Component sender, object obj)
     {
         _sheathSFXInstance = RuntimeManager.CreateInstance(_sheathSFX);
@@ -275,6 +325,7 @@ public class FMODAudioHandler : MonoBehaviour
         _comicPanelSwapSFXInstance.release();
         _weaponHitSFXInstance.release();
     }
+
     private void OnDestroy()
     {
         _forestMusicInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);

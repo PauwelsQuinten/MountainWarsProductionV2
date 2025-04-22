@@ -32,7 +32,7 @@ public class Music : MonoBehaviour
             out PARAMETER_DESCRIPTION parameterDescription);
         _musiczoneID = parameterDescription.id;
         _musiczoneIDValue = 0.0f;
-        _musicInstance.setParameterByID(_musiczoneID, _musiczoneIDValue);
+        
         _musicInstance.start();
         
         UpdateMusicForScene(_currentSceneName);
@@ -49,6 +49,7 @@ public class Music : MonoBehaviour
 
     private void UpdateMusicForScene(string sceneName)
     {
+        
         switch (sceneName)
         {
             case "MainMenu":
@@ -67,13 +68,13 @@ public class Music : MonoBehaviour
                 _musiczoneIDValue = 0.0f;
                 break;
         }
-
-        _musicInstance.setParameterByID(_musiczoneID, _musiczoneIDValue);
+        
+        RuntimeManager.StudioSystem.setParameterByID(_musiczoneID, _musiczoneIDValue);
     }
 
     private void OnDestroy()
     {
-        _musicInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-        _musicInstance.release();
+         _musicInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+         _musicInstance.release();
     }
 }

@@ -147,8 +147,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 4ff1ee20671edb8458011d18de4685a0, type: 2}
   - {fileID: 11400000, guid: 9f1ebbc13b5bcd943b34426bdded2528, type: 2}
   - {fileID: 11400000, guid: 3c342a7b87a6ed947b049977017f3b74, type: 2}
-  - {fileID: 11400000, guid: a720c974a9a206646aac5ecc1f198d55, type: 2}
-  - {fileID: 11400000, guid: e4ffa0ee8ecd6724ba04eb950ab25433, type: 2}
   Responses:
   - m_PersistentCalls:
       m_Calls:
@@ -197,34 +195,6 @@ MonoBehaviour:
       - m_Target: {fileID: -9064225466436632881}
         m_TargetAssemblyTypeName: FMODAudioHandler, Assembly-CSharp
         m_MethodName: PlayShowdownSFX
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: -9064225466436632881}
-        m_TargetAssemblyTypeName: FMODAudioHandler, Assembly-CSharp
-        m_MethodName: PlayGameWonMusic
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: -9064225466436632881}
-        m_TargetAssemblyTypeName: FMODAudioHandler, Assembly-CSharp
-        m_MethodName: PlayGameLostMusic
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

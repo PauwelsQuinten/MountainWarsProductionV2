@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class CameraFollow : MonoBehaviour
+public class FollowObject : MonoBehaviour
 {
     public Transform target;
     public float offsetZ = -10;

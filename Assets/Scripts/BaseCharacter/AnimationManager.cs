@@ -97,6 +97,13 @@ public class AnimationManager : MonoBehaviour
     
     public void GetStunned(Component sender, object obj)
     {
+        LoseEquipmentEventArgs loseEquipmentEventArgs = obj as LoseEquipmentEventArgs;
+        if (loseEquipmentEventArgs != null && sender.gameObject == gameObject)
+        {
+            _animator.speed = 1;
+            _animator.SetBool("IsStunned", true);
+        }
+
         var args = obj as StunEventArgs;
         if (args == null)return;
         if (args.ComesFromEnemy && sender.gameObject == gameObject)return;

@@ -45,6 +45,9 @@ public class Blocking : MonoBehaviour
                 _blockDirection = _storredHoldDirection;
                 _storredHoldDirection = Direction.Idle;
             }
+            else if (_blockDirection == Direction.Wrong)
+                _blockDirection = args.BlockDirection;
+
             PlayShieldAnimation();
 
             return;

@@ -27,6 +27,7 @@ public class AimingInputVariable : ScriptableObject
 
     public AttackState State
     {
+
         get => _state;
         set
         {

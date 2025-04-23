@@ -27,6 +27,8 @@ public class ViewManager : MonoBehaviour
     private GameObject _vsImage;
     [SerializeField]
     private GameEvent _ShowdownSound;
+    [SerializeField]
+    private GameEvent _vsSound;
 
     private Camera _cam;
     private GameObject _player;
@@ -57,7 +59,6 @@ public class ViewManager : MonoBehaviour
         {
             if (!_isSwitchingPanel)
             {
-                _panelSwitchSound.Raise(this, EventArgs.Empty);
                 StartCoroutine(DoSwitchPanel(_biomePanels[args.newSceneIndex].transform.position + (_cam.transform.forward * _offsetZ), _panels[args.NewViewIndex].transform.position + (_cam.transform.forward * _offsetZ)));
             }
         }
@@ -98,6 +99,7 @@ public class ViewManager : MonoBehaviour
         float camSize = _cam.orthographicSize;
         float time = 0;
         Vector3 startpos = _cam.transform.position;
+        _panelSwitchSound.Raise(this, EventArgs.Empty);
         while (_cam.orthographicSize < camSize + 0.76f)
         {
             _cam.orthographicSize += _camZoomSpeed * Time.deltaTime;
@@ -125,6 +127,7 @@ public class ViewManager : MonoBehaviour
         camSize = _cam.orthographicSize;
         time = 0;
         startpos = _cam.transform.position;
+        _panelSwitchSound.Raise(this, EventArgs.Empty);
         while (_cam.orthographicSize < camSize + 0.76f)
         {
             _cam.orthographicSize += _camZoomSpeed * Time.deltaTime;
@@ -228,7 +231,9 @@ public class ViewManager : MonoBehaviour
         enemyNavMove.isStopped = true;
         enemyNavMove.enabled = false;
 
-        while(Vector3.Distance(playerPanel.transform.position, playerToPos) > 0.2f)
+        _panelSwitchSound.Raise(this, EventArgs.Empty);
+
+        while (Vector3.Distance(playerPanel.transform.position, playerToPos) > 0.2f)
         {
             time += Time.deltaTime;
             playerPanel.transform.position = Vector3.Lerp(playerStart, playerToPos, _camMoveSpeed * time);
@@ -236,6 +241,8 @@ public class ViewManager : MonoBehaviour
         }
         playerPanel.transform.position = playerToPos;
         time = 0;
+
+        _panelSwitchSound.Raise(this, EventArgs.Empty);
 
         while (Vector3.Distance(enemyPanel.transform.position, enemyToPos) > 0.2f)
         {
@@ -255,7 +262,9 @@ public class ViewManager : MonoBehaviour
         _vsImage.transform.position = vsToPos;
         time = 0;
 
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(1.5f);
+
+        _panelSwitchSound.Raise(this, EventArgs.Empty);
 
         while (Vector3.Distance(playerPanel.transform.position, playerStart) > 0.2f)
         {
@@ -266,6 +275,8 @@ public class ViewManager : MonoBehaviour
         playerPanel.transform.position = playerStart;
         time = 0;
 
+        _panelSwitchSound.Raise(this, EventArgs.Empty);
+
         while (Vector3.Distance(enemyPanel.transform.position, enemyStart) > 0.2f)
         {
             time += Time.deltaTime;
@@ -275,6 +286,7 @@ public class ViewManager : MonoBehaviour
         enemyPanel.transform.position = enemyStart;
         time = 0;
 
+        _vsSound.Raise(this, EventArgs.Empty);
         while (Vector3.Distance(_vsImage.transform.position, vsStart) > 0.2f)
         {
             time += Time.deltaTime;
@@ -291,6 +303,5 @@ public class ViewManager : MonoBehaviour
         enemyMove.enabled = true;
         enemyNavMove.enabled = true;
         enemyNavMove.isStopped = false;
-
     }
 }

@@ -288,19 +288,12 @@ public class PlayerController : MonoBehaviour
     {
         if (Time.timeScale == 0) return;
         if (!ctx.performed) return;
-        _pickupEvent.Raise(this);
-        _hide.Raise(this, EventArgs.Empty);
 
-        if (_stateManager.WeaponIsSheathed)
-        {
-            _sheathWeapon.Raise(this, EventArgs.Empty);
-            //_stateManager.WeaponIsSheathed = false;
-        }
-        else if (!_stateManager.WeaponIsSheathed)
-        {
-            _sheathWeapon.Raise(this, EventArgs.Empty);
-            //_stateManager.WeaponIsSheathed = true;
-        }
+        if (!_stateManager.EquipmentManager.HasEquipmentInHand(true))
+            _pickupEvent.Raise(this);
+        else
+            _hide.Raise(this, EventArgs.Empty);
+
     }
 
     public void ProccesAtackHeightInput(InputAction.CallbackContext ctx)
@@ -328,14 +321,30 @@ public class PlayerController : MonoBehaviour
     public void ProssesPatchUpInput(InputAction.CallbackContext ctx)
     {
         if (Time.timeScale == 0) return;
-        if (!_stateManager.IsBleeding) return;
         if (ctx.action.WasPressedThisFrame())
         {
-            _patchStartTime = Time.time;
-            _patchUpEvent.Raise(this, false);
+            if (!_stateManager.IsBleeding)
+            {
+                Debug.Log($"press triangle, {gameObject}");
+                if (_stateManager.WeaponIsSheathed)
+                {
+                    _sheathWeapon.Raise(this, EventArgs.Empty);
+                    //_stateManager.WeaponIsSheathed = false;
+                }
+                else if (!_stateManager.WeaponIsSheathed)
+                {
+                    _sheathWeapon.Raise(this, EventArgs.Empty);
+                    //_stateManager.WeaponIsSheathed = true;
+                }
+            }
+            else
+            {
+                _patchStartTime = Time.time;
+                _patchUpEvent.Raise(this, false);
+            }           
         }
 
-        if(ctx.action.WasReleasedThisFrame())
+        if(ctx.action.WasReleasedThisFrame() && _patchStartTime != 0f)
         {
             _patchEndTime = Time.time;
             _patchTimer = _patchEndTime - _patchStartTime;

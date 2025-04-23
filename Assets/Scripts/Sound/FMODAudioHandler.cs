@@ -145,8 +145,8 @@ public class FMODAudioHandler : MonoBehaviour
         _footstepsSFXInstance = RuntimeManager.CreateInstance(_footstepsSFX);
         _attributes = RuntimeUtils.To3DAttributes(sender.transform.position);
         _footstepsSFXInstance.set3DAttributes(_attributes);
-        Debug.Log("Attributes:" + _attributes);
-        Debug.Log("PP:" + _player.transform.position);
+        //Debug.Log("Attributes:" + _attributes);
+        //Debug.Log("PP:" + _player.transform.position);
         GetParameterID(_footstepsSFXInstance, "SurfaceType", out _surfaceTypeID);
         GetParameterID(_footstepsSFXInstance, "TypeOfWalking", out _TypeOfWalkingID);
         switch (surfaceType)

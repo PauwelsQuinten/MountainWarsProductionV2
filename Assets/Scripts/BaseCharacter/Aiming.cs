@@ -13,6 +13,7 @@ public class Aiming : MonoBehaviour
     [SerializeField] private GameEvent _sheathWeapon;
     [Header("State")]
     [SerializeField] private float _stabAcceptedRange = 60f;
+    [SerializeField] private float _maxAllowedBlockAngle = 130f;
 
     [Header("Visual")]
     [SerializeField] private TextMeshProUGUI _textMeshPro;
@@ -453,7 +454,7 @@ public class Aiming : MonoBehaviour
 
         if (diff > -30 && diff < 30)
             return Direction.ToCenter;
-        else if (diff > 30 && diff < 100 || (_refAimingInput.variable.StateManager.IsHoldingShield && diff > 30))
+        else if (diff > 30 && diff < _maxAllowedBlockAngle || (_refAimingInput.variable.StateManager.IsHoldingShield && diff > 30))
             return Direction.ToLeft;
         else if (diff < -30 && diff > -100 || (_refAimingInput.variable.StateManager.IsHoldingShield && diff < -30))
             return Direction.ToRight;

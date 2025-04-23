@@ -294,12 +294,12 @@ public class PlayerController : MonoBehaviour
         if (_stateManager.WeaponIsSheathed)
         {
             _sheathWeapon.Raise(this, EventArgs.Empty);
-            _stateManager.WeaponIsSheathed = false;
+            //_stateManager.WeaponIsSheathed = false;
         }
         else if (!_stateManager.WeaponIsSheathed)
         {
             _sheathWeapon.Raise(this, EventArgs.Empty);
-            _stateManager.WeaponIsSheathed = true;
+            //_stateManager.WeaponIsSheathed = true;
         }
     }
 

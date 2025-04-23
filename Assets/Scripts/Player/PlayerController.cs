@@ -321,11 +321,11 @@ public class PlayerController : MonoBehaviour
     public void ProssesPatchUpInput(InputAction.CallbackContext ctx)
     {
         if (Time.timeScale == 0) return;
-        if (ctx.action.WasPressedThisFrame())
+        //if (ctx.action.WasPressedThisFrame())
+        if (ctx.action.WasPerformedThisFrame())
         {
             if (!_stateManager.IsBleeding)
             {
-                Debug.Log($"press triangle, {gameObject}");
                 if (_stateManager.WeaponIsSheathed)
                 {
                     _sheathWeapon.Raise(this, EventArgs.Empty);

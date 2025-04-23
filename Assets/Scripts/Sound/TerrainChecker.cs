@@ -4,41 +4,15 @@ using UnityEngine;
 
 public class TerrainChecker
 {
-    // private float[] GetTextureMix(Vector3 playerPos, Terrain t)
-    // {
-    //     Vector3 _tPos = t.transform.position;
-    //     TerrainData _tData = t.terrainData;
-    //     
-    //     int _mapX = Mathf.RoundToInt((playerPos.x - _tPos.x) / _tData.size.x * _tData.alphamapWidth);
-    //     int _mapZ = Mathf.RoundToInt((playerPos.z - _tPos.z) / _tData.size.z* _tData.alphamapHeight);
-    //     float[,,] splatMapData = _tData.GetAlphamaps(_mapX, _mapZ, 1, 1);
-    //     float[] _cellMix = new float[splatMapData.GetUpperBound(2) + 1];
-    //     for (int i = 0; i < _cellMix.Length; i++)
-    //     {
-    //         _cellMix[i] = splatMapData[0, 0, i];
-    //     }
-    //     return _cellMix;
-    // }
-    //
-    // public String GetLayerName(Vector3 playerPos, Terrain t)
-    // {
-    //     float[] _cellMix = GetTextureMix(playerPos, t);
-    //     float _strongest = 0;
-    //     int _maxIndex = 0;
-    //     for (int i = 0; i < _cellMix.Length; i++)
-    //     {
-    //         if (_cellMix[i] > _strongest)
-    //         {
-    //             _maxIndex = i;
-    //             _strongest = _cellMix[i];
-    //         }
-    //     }
-    //     return t.terrainData.terrainLayers[_maxIndex].name;
-    // }
     public Dictionary<string, float> GetLayerMixes(Vector3 playerPos, Terrain t)
     {
         Vector3 tPos = t.transform.position;
         TerrainData tData = t.terrainData;
+
+        if (tData == null || tData.terrainLayers == null || tData.terrainLayers.Length == 0)
+        {
+            return new Dictionary<string, float>();
+        }
 
         int mapX = Mathf.RoundToInt((playerPos.x - tPos.x) / tData.size.x * tData.alphamapWidth);
         int mapZ = Mathf.RoundToInt((playerPos.z - tPos.z) / tData.size.z * tData.alphamapHeight);
@@ -48,6 +22,12 @@ public class TerrainChecker
 
         for (int i = 0; i < splatMapData.GetLength(2); i++)
         {
+            if (i >= tData.terrainLayers.Length || tData.terrainLayers[i] == null)
+            {
+                Debug.LogWarning($"Terrain layer at index {i} is null or out of bounds.");
+                continue;
+            }
+
             string layerName = tData.terrainLayers[i].name;
             float mixValue = splatMapData[0, 0, i];
             layerMixes[layerName] = mixValue;

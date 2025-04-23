@@ -1097,11 +1097,6 @@ MonoBehaviour:
   m_IgnoreFromBuild: 0
   m_ApplyToChildren: 1
   m_AffectedAgents: ffffffff
---- !u!4 &311530453 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 7007486676942544297, guid: 84920d53d85a0284d9f8ee2f567dcd6b, type: 3}
-  m_PrefabInstance: {fileID: 1409731810}
-  m_PrefabAsset: {fileID: 0}
 --- !u!224 &340998225 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4943456866223265795, guid: 612450168a7df0444a258ec2be0a03ee, type: 3}
@@ -2858,9 +2853,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3323800993719235206, guid: 84920d53d85a0284d9f8ee2f567dcd6b, type: 3}
       insertIndex: 44
       addedObject: {fileID: 124396807}
-    - targetCorrespondingSourceObject: {fileID: 7007486676942544297, guid: 84920d53d85a0284d9f8ee2f567dcd6b, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 655436860}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 7670835977375516435, guid: 84920d53d85a0284d9f8ee2f567dcd6b, type: 3}
       insertIndex: -1
@@ -4267,6 +4259,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 287873567}
     m_Modifications:
     - target: {fileID: 147633611165973722, guid: 9d4495409a27e5c449d7b5cd2051c85a, type: 3}
+      propertyPath: m_FillAmount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 147633611165973722, guid: 9d4495409a27e5c449d7b5cd2051c85a, type: 3}
       propertyPath: m_FillMethod
       value: 0
       objectReference: {fileID: 0}
@@ -4626,3 +4622,4 @@ SceneRoots:
   - {fileID: 1404183120}
   - {fileID: 666987084}
   - {fileID: 381031139}
+  - {fileID: 63200787}

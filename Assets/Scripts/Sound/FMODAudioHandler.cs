@@ -145,6 +145,8 @@ public class FMODAudioHandler : MonoBehaviour
         _footstepsSFXInstance = RuntimeManager.CreateInstance(_footstepsSFX);
         _attributes = RuntimeUtils.To3DAttributes(sender.transform.position);
         _footstepsSFXInstance.set3DAttributes(_attributes);
+        Debug.Log("Attributes:" + _attributes);
+        Debug.Log("PP:" + _player.transform.position);
         GetParameterID(_footstepsSFXInstance, "SurfaceType", out _surfaceTypeID);
         GetParameterID(_footstepsSFXInstance, "TypeOfWalking", out _TypeOfWalkingID);
         switch (surfaceType)
@@ -221,10 +223,10 @@ public class FMODAudioHandler : MonoBehaviour
                             _dominantLayer = layer.Key;
                         }
                     }
+
                     return _dominantLayer;
                 }
             }
-            
         }
         return "Default"; 
     }
@@ -248,12 +250,61 @@ public class FMODAudioHandler : MonoBehaviour
         }
 
         SetGlobalParameterID(_attacksStrengthID, _attackEventArgs.AttackPower);
-        SetGlobalParameterID(_currentWeaponID, 2.0f);
+        SetGlobalParameterID(_currentWeaponID, 9.0f);
         SetParameterID(_weaponHitSFXInstance, _weaponHitSurfaceID, _weaponHitSurfaceIDValue);
         _weaponHitSFXInstance.start();
         _weaponWhooshSFXInstance.release();
     }
 
+    public void PlayBlockSFX(Component sender, object obj)
+    {
+        _weaponHitSFXInstance = RuntimeManager.CreateInstance(_weaponHitSFX);
+        _attributes = RuntimeUtils.To3DAttributes(sender.transform.position);
+        _weaponHitSFXInstance.set3DAttributes(_attributes);
+        GetParameterID(_weaponHitSFXInstance, "WeaponSurfaceHit", out _weaponHitSurfaceID);
+        GetGlobalParameterID("AttacksStrength", out _attacksStrengthID);
+        GetGlobalParameterID("CurrentWeapon", out _currentWeaponID);
+        if (_attackEventArgs == null)
+        {
+            _attackEventArgs = obj as AttackEventArgs;
+        }
+
+        if (_aimingEventArgs == null)
+        {
+            _aimingEventArgs = obj as AimingOutputArgs;
+        }
+
+        SetGlobalParameterID(_attacksStrengthID, _attackEventArgs.AttackPower);
+        SetGlobalParameterID(_currentWeaponID, 5.0f);
+        SetParameterID(_weaponHitSFXInstance, _weaponHitSurfaceID, _weaponHitSurfaceIDValue);
+        _weaponHitSFXInstance.start();
+        _weaponWhooshSFXInstance.release();
+    }
+
+    public void PlayParrySFX(Component sender, object obj)
+    {
+        _weaponHitSFXInstance = RuntimeManager.CreateInstance(_weaponHitSFX);
+        _attributes = RuntimeUtils.To3DAttributes(sender.transform.position);
+        _weaponHitSFXInstance.set3DAttributes(_attributes);
+        GetParameterID(_weaponHitSFXInstance, "WeaponSurfaceHit", out _weaponHitSurfaceID);
+        GetGlobalParameterID("AttacksStrength", out _attacksStrengthID);
+        GetGlobalParameterID("CurrentWeapon", out _currentWeaponID);
+        if (_attackEventArgs == null)
+        {
+            _attackEventArgs = obj as AttackEventArgs;
+        }
+
+        if (_aimingEventArgs == null)
+        {
+            _aimingEventArgs = obj as AimingOutputArgs;
+        }
+
+        SetGlobalParameterID(_attacksStrengthID, _attackEventArgs.AttackPower);
+        SetGlobalParameterID(_currentWeaponID, 4.0f);
+        SetParameterID(_weaponHitSFXInstance, _weaponHitSurfaceID, _weaponHitSurfaceIDValue);
+        _weaponHitSFXInstance.start();
+        _weaponWhooshSFXInstance.release();
+    }
     public void PlayWhooshSFX(Component sender, object obj)
     {
         _weaponWhooshSFXInstance = RuntimeManager.CreateInstance(_weaponWhooshSFX);

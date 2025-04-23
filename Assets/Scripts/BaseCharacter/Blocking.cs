@@ -45,6 +45,9 @@ public class Blocking : MonoBehaviour
                 _blockDirection = _storredHoldDirection;
                 _storredHoldDirection = Direction.Idle;
             }
+            else if (_blockDirection == Direction.Wrong)
+                _blockDirection = args.BlockDirection;
+
             PlayShieldAnimation();
 
             return;
@@ -190,7 +193,7 @@ public class Blocking : MonoBehaviour
         if (_blockMedium == BlockMedium.Shield)
             _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.ShieldEquip, AnimLayer = 4, DoResetIdle = false, Interupt = false, BlockDirection = _blockDirection });
         else if (_blockMedium == BlockMedium.Sword)
-            _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.SwordEquip, AnimLayer = 3, DoResetIdle = false, Interupt = false, BlockDirection = _blockDirection });
+            _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.SwordEquip, AnimLayer = 3, DoResetIdle = false, Interupt = false, BlockDirection = 0 });
     }
 
 

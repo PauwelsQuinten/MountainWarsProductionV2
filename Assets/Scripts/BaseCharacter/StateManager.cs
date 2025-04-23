@@ -91,6 +91,14 @@ public class StateManager : MonoBehaviour
 
     public void GetStunned(Component sender, object obj)
     {
+        LoseEquipmentEventArgs loseEquipmentEventArgs = obj as LoseEquipmentEventArgs;
+        if (loseEquipmentEventArgs != null && sender.gameObject == gameObject)
+        {
+            IsHoldingShield = false;
+            SetStun(2f);
+        }
+
+
         StunEventArgs args = obj as StunEventArgs;
         if (args == null) return;
 
@@ -101,12 +109,17 @@ public class StateManager : MonoBehaviour
         else if (sender.gameObject != gameObject) return;
 
         //Debug.Log($"Stuned {gameObject.name}");
+        SetStun(args.StunDuration);
+    }
+
+    private void SetStun(float stunDuration)
+    {
         if (AttackState != AttackState.Stun)
         {
             AttackState = AttackState.Stun;
-            _recoverCoroutine = StartCoroutine(RecoverStun(args.StunDuration));
+            _recoverCoroutine = StartCoroutine(RecoverStun(stunDuration));
         }
-        
+
         if (gameObject.CompareTag(PLAYER))
             _blackboardRef.variable.ResetCurrentAttack();
     }

@@ -1,9 +1,7 @@
 using System;
 using FMOD.Studio;
 using FMODUnity;
-using UnityEditor.SearchService;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class Music : MonoBehaviour
 {

@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 3780531940537309555}
   - component: {fileID: -9064225466436632881}
   - component: {fileID: -7891369219080097047}
+  - component: {fileID: 9191901890054301822}
   m_Layer: 0
   m_Name: AudioManager
   m_TagString: Untagged
@@ -53,41 +54,13 @@ MonoBehaviour:
       Data3: -707616365
       Data4: 142493585
     Path: event:/Ambience
-  _mainThemeMusic:
+  _music:
     Guid:
-      Data1: -462302020
-      Data2: 1209973555
-      Data3: -827850064
-      Data4: 48110958
-    Path: event:/Music/Main
-  _townMusic:
-    Guid:
-      Data1: 544658783
-      Data2: 1317782079
-      Data3: 1228220307
-      Data4: -350215759
-    Path: event:/Music/Town
-  _forestMusic:
-    Guid:
-      Data1: 630949937
-      Data2: 1129881989
-      Data3: 292515723
-      Data4: 1745741427
-    Path: event:/Music/Forest
-  _gameWonMusic:
-    Guid:
-      Data1: -1616123783
-      Data2: 1155310343
-      Data3: 845188513
-      Data4: -40929154
-    Path: event:/Music/WinGame
-  _gameLostMusic:
-    Guid:
-      Data1: -985456330
-      Data2: 1173679371
-      Data3: 82465724
-      Data4: 1298356687
-    Path: event:/Music/LoseGame
+      Data1: 553843406
+      Data2: 1316606720
+      Data3: -406154574
+      Data4: 1757652676
+    Path: event:/Music/Music
   _footstepsSFX:
     Guid:
       Data1: 494737061
@@ -116,6 +89,20 @@ MonoBehaviour:
       Data3: -1785866621
       Data4: 784401017
     Path: event:/Combat/WeaponHit
+  _sheathSFX:
+    Guid:
+      Data1: -1298046560
+      Data2: 1309921665
+      Data3: 154849699
+      Data4: 1073744631
+    Path: event:/Combat/Sheath
+  _unsheathSFX:
+    Guid:
+      Data1: -1329864452
+      Data2: 1206419111
+      Data3: 1953893272
+      Data4: 1673386591
+    Path: event:/Combat/Unsheath
   _comicPanelSwapSFX:
     Guid:
       Data1: -1367207633
@@ -147,6 +134,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 4ff1ee20671edb8458011d18de4685a0, type: 2}
   - {fileID: 11400000, guid: 9f1ebbc13b5bcd943b34426bdded2528, type: 2}
   - {fileID: 11400000, guid: 3c342a7b87a6ed947b049977017f3b74, type: 2}
+  - {fileID: 11400000, guid: 40551c3801499a64ea4751aa179ac61e, type: 2}
+  - {fileID: 11400000, guid: 0bab4ec7dd547c941b5209c87202a055, type: 2}
+  - {fileID: 11400000, guid: 1fa0ac8c24365fa4fa43f0ccc057a02a, type: 2}
+  - {fileID: 11400000, guid: dc4683c9b3a45b6489f572b0765e6e9e, type: 2}
   Responses:
   - m_PersistentCalls:
       m_Calls:
@@ -204,3 +195,71 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: -9064225466436632881}
+        m_TargetAssemblyTypeName: FMODAudioHandler, Assembly-CSharp
+        m_MethodName: PlaySheathSFX
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: -9064225466436632881}
+        m_TargetAssemblyTypeName: FMODAudioHandler, Assembly-CSharp
+        m_MethodName: PlayWeaponHitSFX
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: -9064225466436632881}
+        m_TargetAssemblyTypeName: FMODAudioHandler, Assembly-CSharp
+        m_MethodName: PlayBlockSFX
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: -9064225466436632881}
+        m_TargetAssemblyTypeName: FMODAudioHandler, Assembly-CSharp
+        m_MethodName: PlayParrySFX
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &9191901890054301822
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3779732516173593837}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f97cfddaecd17c7419fc1ecc62d0b3ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

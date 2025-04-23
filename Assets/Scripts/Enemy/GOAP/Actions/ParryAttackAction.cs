@@ -10,7 +10,7 @@ public class ParryAttackAction : GoapAction
     [SerializeField] BlockMedium _blockMediume = BlockMedium.Shield;
     [SerializeField] Direction _direction = Direction.Idle;
     [SerializeField] float _swingAngle = 180f;
-    [SerializeField] float _swingSpeed = 1.5f;
+    [SerializeField] float _swingSpeed = 1.25f;
     [SerializeField] bool _disarmOpponent =false;
     
     private Coroutine _defendCoroutine;
@@ -98,7 +98,7 @@ public class ParryAttackAction : GoapAction
 
     private IEnumerator DefendRoutine(float time)
     {
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.25f);
         DefendMovement(false);
         yield return new WaitForEndOfFrame();
         //StopMovement();

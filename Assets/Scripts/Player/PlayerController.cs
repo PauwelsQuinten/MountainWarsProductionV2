@@ -98,6 +98,15 @@ public class PlayerController : MonoBehaviour
 
     public void GetStun(Component sender, object obj)
     {
+        LoseEquipmentEventArgs loseEquipmentEventArgs = obj as LoseEquipmentEventArgs;
+        if (loseEquipmentEventArgs != null && sender.gameObject == gameObject)
+        {
+            _storredAttackState =
+                _stateManager.AttackState == AttackState.Stun || _stateManager.AttackState == AttackState.BlockAttack ? 
+                    AttackState.Idle : _stateManager.AttackState;
+            _aimInputRef.variable.State = AttackState.Stun;
+        }
+
         var args = obj as StunEventArgs;
         if (args == null) return;
         if (args.ComesFromEnemy && sender.gameObject == gameObject) return;
@@ -285,12 +294,12 @@ public class PlayerController : MonoBehaviour
         if (_stateManager.WeaponIsSheathed)
         {
             _sheathWeapon.Raise(this, EventArgs.Empty);
-            _stateManager.WeaponIsSheathed = false;
+            //_stateManager.WeaponIsSheathed = false;
         }
         else if (!_stateManager.WeaponIsSheathed)
         {
             _sheathWeapon.Raise(this, EventArgs.Empty);
-            _stateManager.WeaponIsSheathed = true;
+            //_stateManager.WeaponIsSheathed = true;
         }
     }
 

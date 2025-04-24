@@ -15,7 +15,6 @@ public class UIHealthManager : MonoBehaviour
     [SerializeField]
     private Color _noHealthColor;
 
-
     [Header("Blood")]
     [SerializeField]
     private Image  _bloodBar;
@@ -33,7 +32,6 @@ public class UIHealthManager : MonoBehaviour
     private Coroutine _patchUp;
     private bool _completedPatchUp;
 
-
     [Header("Equipment")]
     [SerializeField]
     private Image _shield;
@@ -41,10 +39,20 @@ public class UIHealthManager : MonoBehaviour
     private Image _weapon;
 
     [SerializeField]
+    private GameObject _cameraToLookAt;
+    [SerializeField]
+    private GameObject _canvas;
+    [SerializeField]
     private GameEvent _gameLost;
 
-
-
+    public void Update()
+    {
+        if (gameObject.GetComponent<AIController>() != null)
+        {
+            if (_cameraToLookAt == null) return;
+            _canvas.transform.LookAt(_cameraToLookAt.transform);
+        }
+    }
     public void UpdateHealth(Component sender, object obj)
     {
         HealthEventArgs args = obj as HealthEventArgs;
@@ -154,7 +162,6 @@ public class UIHealthManager : MonoBehaviour
         _staminaBar.fillAmount = barFill;
     }
 
-
     public void UpdateEquipment(Component sender, object obj)
     {
         EquipmentEventArgs args = obj as EquipmentEventArgs;
@@ -181,7 +188,6 @@ public class UIHealthManager : MonoBehaviour
         else
             _weapon.color = newColor;
     }
-
 
     private IEnumerator PathUpBar()
     {

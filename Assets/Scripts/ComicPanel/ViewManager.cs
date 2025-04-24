@@ -253,6 +253,8 @@ public class ViewManager : MonoBehaviour
         enemyPanel.transform.position = enemyToPos;
         time = 0;
 
+        _vsSound.Raise(this, EventArgs.Empty);
+        
         while (Vector3.Distance(_vsImage.transform.position, vsToPos) > 0.2f)
         {
             time += Time.deltaTime;

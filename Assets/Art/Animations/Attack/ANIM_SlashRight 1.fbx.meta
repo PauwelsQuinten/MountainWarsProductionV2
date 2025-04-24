@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 9c727765a94d43148846b7864f067fd3
+guid: db011ab43126f224395797f93e6430e2
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -55,13 +55,6 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0.17458563
-        functionName: SetInParryZone
-        data: 
-        objectReferenceParameter: {fileID: 11500000, guid: 39f937a9b4700804eab307c59e3ace12, type: 3}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
       - time: 0.4722222
         functionName: Whoosh
         data: 
@@ -69,12 +62,19 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.5157025
-        functionName: SetInParryZone
+      - time: 0.5389534
+        functionName: SwordHit
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: 39f937a9b4700804eab307c59e3ace12, type: 3}
         floatParameter: 0
-        intParameter: 1
+        intParameter: 0
+        messageOptions: 0
+      - time: 1
+        functionName: EndAnimation
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 39f937a9b4700804eab307c59e3ace12, type: 3}
+        floatParameter: 0
+        intParameter: 0
         messageOptions: 0
       transformMask: []
       maskType: 3

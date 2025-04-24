@@ -297,7 +297,7 @@ public class EquipmentManager : MonoBehaviour
         if (rotate)
         {
 
-            HeldEquipment[RIGHT_HAND].transform.localRotation = Quaternion.Euler(0f, 0f, 20f);
+            HeldEquipment[RIGHT_HAND].transform.localRotation = Quaternion.Euler(-90f, 27f, 72f);
         }
         else
         {

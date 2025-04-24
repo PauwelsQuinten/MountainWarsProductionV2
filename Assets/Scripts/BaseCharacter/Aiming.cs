@@ -13,7 +13,7 @@ public class Aiming : MonoBehaviour
     [SerializeField] private GameEvent _sheathWeapon;
     [Header("State")]
     [SerializeField] private float _stabAcceptedRange = 60f;
-    [SerializeField] private float _maxAllowedBlockAngle = 130f;
+    [SerializeField] private float _maxAllowedBlockAngle = 150f;
 
     [Header("Visual")]
     [SerializeField] private TextMeshProUGUI _textMeshPro;

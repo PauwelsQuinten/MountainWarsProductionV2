@@ -24,6 +24,9 @@ public class EquipmentManager : MonoBehaviour
     [Header("Item")]
     [SerializeField] private LayerMask _itemMask;
     [SerializeField] private float _itemPickupRadius = 1f;
+    [Header("ShieldPosition")]
+    [SerializeField] private float _startAngle = 195f;
+    [SerializeField] private float _sideAngleToStart = 60f;
     [Header("Blackboard")]
     [SerializeField]
     private BlackboardReference _blackboard;
@@ -33,8 +36,6 @@ public class EquipmentManager : MonoBehaviour
     private const int LEFT_HAND = 0;
     private const int RIGHT_HAND = 1;
     private const int FISTS = 2;
-
-    private Equipment _discoverdEquipment;
 
     private StateManager _stateManager;
 
@@ -83,6 +84,7 @@ public class EquipmentManager : MonoBehaviour
             HeldEquipment[FISTS] = fist;
         }
 
+        _stateManager = GetComponent<StateManager>();
         UpdateBlackboard();
     }
 
@@ -262,22 +264,20 @@ public class EquipmentManager : MonoBehaviour
         if (HeldEquipment[LEFT_HAND] == null) return;
 
         Direction blockDirection = (Direction)obj;
+
+        float diffInRealOrientation = (int)_stateManager.Orientation - _stateManager.fOrientation;
         switch (blockDirection)
         {
             case Direction.Idle:
-                HeldEquipment[LEFT_HAND].transform.localRotation = Quaternion.Euler(15f, 0f, 0f);
+            case Direction.Wrong:
+            case Direction.ToCenter:
+                HeldEquipment[LEFT_HAND].transform.localRotation = Quaternion.Euler(_startAngle + diffInRealOrientation, 0f, 0f);
                 break;
             case Direction.ToRight:
-                HeldEquipment[LEFT_HAND].transform.localRotation = Quaternion.Euler(45f, 0f, 0f);
+                HeldEquipment[LEFT_HAND].transform.localRotation = Quaternion.Euler(_startAngle + _sideAngleToStart + diffInRealOrientation, 0f, 0f);
                 break;
             case Direction.ToLeft:
-                HeldEquipment[LEFT_HAND].transform.localRotation = Quaternion.Euler(-15f, 0f, 0f);
-                break;
-            case Direction.ToCenter:
-                HeldEquipment[LEFT_HAND].transform.localRotation = Quaternion.Euler(15f, 0f, 0f);
-                break;
-            case Direction.Wrong:
-                HeldEquipment[LEFT_HAND].transform.localRotation = Quaternion.Euler(15f, 0f, 0f);
+                HeldEquipment[LEFT_HAND].transform.localRotation = Quaternion.Euler(_startAngle - _sideAngleToStart + diffInRealOrientation, 0f, 0f);
                 break;
         }
 
@@ -369,7 +369,7 @@ public class EquipmentManager : MonoBehaviour
     {
         if (sender.gameObject == this.gameObject) return;
         if (Vector3.Distance(gameObject.transform.position, sender.gameObject.transform.position) > 3) return;
-        if (_stateManager == null) _stateManager = GetComponent<StateManager>();
+        //if (_stateManager == null) _stateManager = GetComponent<StateManager>();
         _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Empty, AnimLayer = 3, DoResetIdle = true });
         _stateManager.AttackState = AttackState.Idle;
     }

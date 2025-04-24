@@ -1606,6 +1606,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 1.353
       objectReference: {fileID: 0}
+    - target: {fileID: 6464342419627203891, guid: 3f5fe7f426ca66e469ff79b95b61b74a, type: 3}
+      propertyPath: _durability
+      value: 15
+      objectReference: {fileID: 0}
     - target: {fileID: 8455700961785478945, guid: 3f5fe7f426ca66e469ff79b95b61b74a, type: 3}
       propertyPath: m_Name
       value: shield
@@ -3214,6 +3218,10 @@ PrefabInstance:
       propertyPath: _textMeshPro4
       value: 
       objectReference: {fileID: 1714764824}
+    - target: {fileID: 4219942789422500819, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
+      propertyPath: _maxAllowedBlockAngle
+      value: 150
+      objectReference: {fileID: 0}
     - target: {fileID: 4527190780918245193, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
       propertyPath: _lockonEvent
       value: 
@@ -4747,3 +4755,4 @@ SceneRoots:
   - {fileID: 666987084}
   - {fileID: 381031139}
   - {fileID: 63200787}
+  - {fileID: 770432786}

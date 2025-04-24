@@ -7,13 +7,16 @@ public class StateManager : MonoBehaviour
     [Header("Events")]
     //[SerializeField] GameEvent _OnKnockbackRecovery;
     [SerializeField] GameEvent _OnStunRecovery;
-    [Header("Rrefrence")]
+    [Header("Refrence")]
     [SerializeField] BlackboardReference _blackboardRef;
+    [Header("Values")]
     public AttackState AttackState;
     public AttackHeight AttackHeight = AttackHeight.Torso;
     public Orientation Orientation;
+    //[HideInInspector]
+    public float fOrientation = 0f;
 
-    public GameObject Target;
+    [HideInInspector] public GameObject Target;
     public bool IsHoldingShield;
 
     public EquipmentManager EquipmentManager;
@@ -30,7 +33,7 @@ public class StateManager : MonoBehaviour
         if (EquipmentManager == null)
             EquipmentManager = GetComponent<EquipmentManager>();
 
-        ChangeOrientation(this, new OrientationEventArgs { NewOrientation = Orientation });
+        ChangeOrientation(this, new OrientationEventArgs { NewOrientation = Orientation, NewFOrientation = (float)Orientation });
 
         if (!gameObject.CompareTag(PLAYER))
         {
@@ -65,6 +68,7 @@ public class StateManager : MonoBehaviour
         if (args == null) return;
 
         Orientation = args.NewOrientation;
+        fOrientation = args.NewFOrientation;
         transform.rotation = Quaternion.Euler(new Vector3(0, -(int)Orientation + 90, 0));
 
 
@@ -130,7 +134,7 @@ public class StateManager : MonoBehaviour
         
     }
 
-private void SetStun(float stunDuration)
+    private void SetStun(float stunDuration)
     {
         if (AttackState != AttackState.Stun)
         {
@@ -143,7 +147,6 @@ private void SetStun(float stunDuration)
     }
 
     private IEnumerator RecoverStun(float stunDuration)
-
     {
         yield return new WaitForSeconds(stunDuration);
         AttackState = AttackState.Idle;

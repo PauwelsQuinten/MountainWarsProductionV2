@@ -26,10 +26,11 @@ public class LockOn : MonoBehaviour
         if (!_lockonTarget)
             return;
 
-        var newOrientation = CalculateOrientation();
+        float fOrientation = 0f;
+        var newOrientation = CalculateOrientation(out fOrientation);
 
         _storedOrientation = newOrientation;
-        _lockonEvent.Raise(this, new OrientationEventArgs { NewOrientation = _storedOrientation });
+        _lockonEvent.Raise(this, new OrientationEventArgs { NewOrientation = _storedOrientation, NewFOrientation = fOrientation });
         
     }
 
@@ -38,12 +39,13 @@ public class LockOn : MonoBehaviour
         if (!_lockonTarget)
             return;
 
-        var newOrientation = CalculateOrientation();
+        float fOrientation = 0f;
+        var newOrientation = CalculateOrientation(out fOrientation);
 
         if (IsOrientationChanged(newOrientation))
         {
             _storedOrientation = newOrientation;
-            _lockonEvent.Raise(this, new OrientationEventArgs { NewOrientation = _storedOrientation });
+            _lockonEvent.Raise(this, new OrientationEventArgs { NewOrientation = _storedOrientation, NewFOrientation = fOrientation });
         }
     }
 
@@ -81,9 +83,10 @@ public class LockOn : MonoBehaviour
 
         if (!_lockonTarget || !_lockonEvent)
             return;
-        var newOrientation = CalculateOrientation();
+        float fOrientation = 0f;
+        var newOrientation = CalculateOrientation(out fOrientation);
         _storedOrientation = newOrientation;
-        _lockonEvent.Raise(this, new OrientationEventArgs { NewOrientation = _storedOrientation });
+        _lockonEvent.Raise(this, new OrientationEventArgs { NewOrientation = _storedOrientation, NewFOrientation =  fOrientation});
 
         if (_previousTarget == _lockonTarget) return;
         _previousTarget = _lockonTarget;
@@ -99,12 +102,12 @@ public class LockOn : MonoBehaviour
         _canResheath = false;
     }
 
-    private Orientation CalculateOrientation()
+    private Orientation CalculateOrientation(out float fOrientation)
     {
         var direction = _lockonTarget.transform.position - transform.position;
-        float angle = Mathf.Atan2(direction.z, direction.x) * Mathf.Rad2Deg;
+        fOrientation = Mathf.Atan2(direction.z, direction.x) * Mathf.Rad2Deg;
 
-        int clampedAngle = (Mathf.RoundToInt(angle / 45)) * 45;
+        int clampedAngle = (Mathf.RoundToInt(fOrientation / 45)) * 45;
         clampedAngle = (clampedAngle == -180 )? 180 : clampedAngle;
         Orientation newOrientation = (Orientation)clampedAngle;
 

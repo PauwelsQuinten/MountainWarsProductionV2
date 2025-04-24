@@ -29,7 +29,6 @@ public class ViewManager : MonoBehaviour
     private GameEvent _ShowdownSound;
 
     private Camera _cam;
-    private GameObject _player;
 
     private TriggerEnterEventArgs _currentArgs;
     private TriggerEnterEventArgs _previousArgs;

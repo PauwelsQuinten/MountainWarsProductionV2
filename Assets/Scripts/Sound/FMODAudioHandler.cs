@@ -16,6 +16,7 @@ public class FMODAudioHandler : MonoBehaviour
     private ATTRIBUTES_3D _attributes;
     private AimingOutputArgs _aimingEventArgs;
     private AttackEventArgs _attackEventArgs;
+    private DefenceEventArgs _defenceEventArgs;
     private FootstepSwapper _footstepSwapper;
 
     private bool isSheathing = true;
@@ -264,17 +265,28 @@ public class FMODAudioHandler : MonoBehaviour
         GetParameterID(_weaponHitSFXInstance, "WeaponSurfaceHit", out _weaponHitSurfaceID);
         GetGlobalParameterID("AttacksStrength", out _attacksStrengthID);
         GetGlobalParameterID("CurrentWeapon", out _currentWeaponID);
-        if (_attackEventArgs == null)
+
+        float power = 0f;
+        _attackEventArgs = obj as AttackEventArgs;
+        if (_attackEventArgs != null)
         {
-            _attackEventArgs = obj as AttackEventArgs;
+            power = _attackEventArgs.AttackPower;
         }
 
-        if (_aimingEventArgs == null)
+        //Maybe you need them, maybe you dont
+        _defenceEventArgs = obj as DefenceEventArgs;
+        if (_defenceEventArgs != null)
         {
-            _aimingEventArgs = obj as AimingOutputArgs;
+            power = _defenceEventArgs.AttackPower;
         }
+        
+        //if (_aimingEventArgs == null)
+        //{
+        //    _aimingEventArgs = obj as AimingOutputArgs;
+        //}
 
-        SetGlobalParameterID(_attacksStrengthID, _attackEventArgs.AttackPower);
+
+        SetGlobalParameterID(_attacksStrengthID, power);
         SetGlobalParameterID(_currentWeaponID, 5.0f);
         SetParameterID(_weaponHitSFXInstance, _weaponHitSurfaceID, _weaponHitSurfaceIDValue);
         _weaponHitSFXInstance.start();

@@ -291,8 +291,10 @@ public class PlayerController : MonoBehaviour
 
         if (!_stateManager.EquipmentManager.HasEquipmentInHand(true))
             _pickupEvent.Raise(this);
-        else
+        else if (_stateManager.IsNearHidingSpot)
             _hide.Raise(this, EventArgs.Empty);
+        else
+            _pickupEvent.Raise(this);
 
     }
 

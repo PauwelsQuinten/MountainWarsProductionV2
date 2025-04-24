@@ -67,6 +67,9 @@ public class Music : MonoBehaviour
             case "MainMenu":
                 _musiczoneIDValue = 0.0f;
                 break;
+            case "Gameplay":
+                _musiczoneIDValue = 1.0f;
+                break;
             case "GameWon":
                 _musiczoneIDValue = 4.0f; 
                 break;

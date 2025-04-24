@@ -46,7 +46,7 @@ public class PanelTrigger : MonoBehaviour
         if (((1 << other.gameObject.layer) & _layerMask) != 0)
         {
             if (_isTeleportTrigger)
-                _biomeSwitch.Raise(this, new SwitchBiomeEventArgs { NextBiome = _nextBiome, IsEnter = true });
+                _biomeSwitch.Raise(this, new SwitchBiomeEventArgs { NextBiome = _nextBiome, IsEnter = false });
             _triggerExit.Raise(this, new TriggerExitEventArgs { CurrentSceneIndex = _currentSceneIndex, newSceneIndex = _nextSceneIndex, CurrentViewIndex = _currentViewIndex, NewViewIndex = _nextViewIndex, IsTeleportTrigger = _isTeleportTrigger });
         }
     }

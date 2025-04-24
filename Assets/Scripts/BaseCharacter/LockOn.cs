@@ -11,7 +11,11 @@ public class LockOn : MonoBehaviour
     [Header("Animation")]
     [SerializeField] private GameEvent _changePanel;
 
+    [Header("updateValue")]
+    [SerializeField, Tooltip("will send event to statemanager to update orientation on every change of this angle")] private float _minAngleBeforeSendEvent = 10f;
+
     private Orientation _storedOrientation = Orientation.East;
+    private float _storedfOrientation = 0;
     private GameObject _previousTarget;
 
     private Coroutine _sheathingCoroutine;
@@ -26,10 +30,12 @@ public class LockOn : MonoBehaviour
         if (!_lockonTarget)
             return;
 
-        var newOrientation = CalculateOrientation();
+        float fOrientation = 0f;
+        var newOrientation = CalculateOrientation(out fOrientation);
 
         _storedOrientation = newOrientation;
-        _lockonEvent.Raise(this, new OrientationEventArgs { NewOrientation = _storedOrientation });
+        _storedfOrientation = fOrientation;
+        _lockonEvent.Raise(this, new OrientationEventArgs { NewOrientation = _storedOrientation, NewFOrientation = fOrientation });
         
     }
 
@@ -38,12 +44,14 @@ public class LockOn : MonoBehaviour
         if (!_lockonTarget)
             return;
 
-        var newOrientation = CalculateOrientation();
+        float fOrientation = 0f;
+        var newOrientation = CalculateOrientation(out fOrientation);
 
-        if (IsOrientationChanged(newOrientation))
+        if (IsOrientationChanged(newOrientation, fOrientation))
         {
             _storedOrientation = newOrientation;
-            _lockonEvent.Raise(this, new OrientationEventArgs { NewOrientation = _storedOrientation });
+            _storedfOrientation = fOrientation;
+            _lockonEvent.Raise(this, new OrientationEventArgs { NewOrientation = _storedOrientation, NewFOrientation = fOrientation });
         }
     }
 
@@ -81,9 +89,11 @@ public class LockOn : MonoBehaviour
 
         if (!_lockonTarget || !_lockonEvent)
             return;
-        var newOrientation = CalculateOrientation();
+        float fOrientation = 0f;
+        var newOrientation = CalculateOrientation(out fOrientation);
         _storedOrientation = newOrientation;
-        _lockonEvent.Raise(this, new OrientationEventArgs { NewOrientation = _storedOrientation });
+        _storedfOrientation = fOrientation;
+        _lockonEvent.Raise(this, new OrientationEventArgs { NewOrientation = _storedOrientation, NewFOrientation =  fOrientation});
 
         if (_previousTarget == _lockonTarget) return;
         _previousTarget = _lockonTarget;
@@ -99,21 +109,22 @@ public class LockOn : MonoBehaviour
         _canResheath = false;
     }
 
-    private Orientation CalculateOrientation()
+    private Orientation CalculateOrientation(out float fOrientation)
     {
         var direction = _lockonTarget.transform.position - transform.position;
-        float angle = Mathf.Atan2(direction.z, direction.x) * Mathf.Rad2Deg;
+        fOrientation = Mathf.Atan2(direction.z, direction.x) * Mathf.Rad2Deg;
 
-        int clampedAngle = (Mathf.RoundToInt(angle / 45)) * 45;
+        int clampedAngle = (Mathf.RoundToInt(fOrientation / 45)) * 45;
         clampedAngle = (clampedAngle == -180 )? 180 : clampedAngle;
         Orientation newOrientation = (Orientation)clampedAngle;
 
         return newOrientation ;
     }
 
-    private bool IsOrientationChanged(Orientation newOrientation)
+    private bool IsOrientationChanged(Orientation newOrientation, float orientation)
     {
-        return newOrientation != _storedOrientation;
+        return _storedfOrientation - orientation < _minAngleBeforeSendEvent;
+        //return newOrientation != _storedOrientation;
     }
 
     private IEnumerator SheathWeapon(float duration)

@@ -177,7 +177,11 @@ public class UIHealthManager : MonoBehaviour
             _shield.enabled = false;
         }
         else
+        {
+            if (!_shield.enabled)
+                _shield.enabled = true;
             _shield.color = newColor;
+        }
 
         progress = args.WeaponDurability;
         newColor = Color.Lerp(_noHealthColor, _fullHealthColor, progress);
@@ -186,7 +190,11 @@ public class UIHealthManager : MonoBehaviour
             _weapon.enabled = false;
         }
         else
+        {
+            if (!_weapon.enabled)
+                _weapon.enabled = true;
             _weapon.color = newColor;
+        }
     }
 
     private IEnumerator PathUpBar()

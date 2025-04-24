@@ -57,6 +57,8 @@ public class MoveToAction : GoapAction
 
         FindTargetPosAndDirection(blackboard, ref _targetDir, npcPos, ref _targetPos, ref angleRad);
 
+        if (!_navMeshAgent.isActiveAndEnabled)return;
+
         _navMeshAgent.SetDestination(_targetPos);
         _moveInput.Raise(this, new DirectionEventArgs { MoveDirection = _targetDir, SpeedMultiplier = 1f, Sender = npc });
 
@@ -67,6 +69,8 @@ public class MoveToAction : GoapAction
 
     public override void UpdateAction(WorldState currentWorldState, BlackboardReference blackboard)
     {
+        if (!_navMeshAgent.isActiveAndEnabled) return;
+
         if (Time.timeScale == 0)
         {
             _navMeshAgent.isStopped = true;
@@ -91,6 +95,8 @@ public class MoveToAction : GoapAction
 
     public override bool IsCompleted(WorldState currentWorldState)
     {
+        if (!_navMeshAgent.isActiveAndEnabled)
+            return false;
         if (base.IsCompleted(currentWorldState))
         {
             _moveInput.Raise(this, new DirectionEventArgs { MoveDirection = Vector2.zero, SpeedMultiplier = 1f, Sender = npc });

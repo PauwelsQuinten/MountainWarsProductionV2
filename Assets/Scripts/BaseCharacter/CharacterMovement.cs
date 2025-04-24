@@ -143,48 +143,56 @@ public class CharacterMovement : MonoBehaviour
         {
             if (_stateManager.Orientation == Orientation.East) return;
             _stateManager.Orientation = Orientation.East;
+            _stateManager.fOrientation = (float)Orientation.East;
             transform.rotation = Quaternion.Euler(new Vector3(0, 90, 0));
         }
         else if (moveInputAngle > 45 - _angleInterval && moveInputAngle < 45 + _angleInterval)
         {
             if (_stateManager.Orientation == Orientation.NorthEast) return;
             _stateManager.Orientation = Orientation.NorthEast;
+            _stateManager.fOrientation = (float)Orientation.NorthEast;
             transform.rotation = Quaternion.Euler(new Vector3(0, 45, 0));
         }
         else if (moveInputAngle > 90 - _angleInterval && moveInputAngle < 90 + _angleInterval)
         {
             if (_stateManager.Orientation == Orientation.North) return;
             _stateManager.Orientation = Orientation.North;
+            _stateManager.fOrientation = (float)Orientation.North;
             transform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
         }
         else if (moveInputAngle > 135 - _angleInterval && moveInputAngle < 135 + _angleInterval)
         {
             if (_stateManager.Orientation == Orientation.NorthWest) return;
             _stateManager.Orientation = Orientation.NorthWest;
+            _stateManager.fOrientation = (float)Orientation.NorthWest;
             transform.rotation = Quaternion.Euler(new Vector3(0, -45, 0));
         }
         else if (moveInputAngle > 180 - _angleInterval && moveInputAngle < 180 || moveInputAngle < -180 + _angleInterval && moveInputAngle > -180)
         {
             if (_stateManager.Orientation == Orientation.West) return;
             _stateManager.Orientation = Orientation.West;
+            _stateManager.fOrientation = (float)Orientation.West;
             transform.rotation = Quaternion.Euler(new Vector3(0, -90, 0));
         }
         else if (moveInputAngle > -135 - _angleInterval && moveInputAngle < -135 + _angleInterval)
         {
             if (_stateManager.Orientation == Orientation.SouthWest) return;
             _stateManager.Orientation = Orientation.SouthWest;
+            _stateManager.fOrientation = (float)Orientation.SouthEast;
             transform.rotation = Quaternion.Euler(new Vector3(0, -135, 0));
         }
         else if (moveInputAngle > -90 - _angleInterval && moveInputAngle < -90 + _angleInterval)
         {
             if (_stateManager.Orientation == Orientation.South) return;
             _stateManager.Orientation = Orientation.South;
+            _stateManager.fOrientation = (float)Orientation.South;
             transform.rotation = Quaternion.Euler(new Vector3(0, 180, 0));
         }
         else if (moveInputAngle > -45 - _angleInterval && moveInputAngle < -45 + _angleInterval)
         {
             if (_stateManager.Orientation == Orientation.SouthEast) return;
             _stateManager.Orientation = Orientation.SouthEast;
+            _stateManager.fOrientation = (float)Orientation.SouthEast;
             transform.rotation = Quaternion.Euler(new Vector3(0, 135, 0));
         }
     }

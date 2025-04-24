@@ -23,6 +23,12 @@ public class EquipmentManager : MonoBehaviour
     [SerializeField] private Transform _sheathSocket;
     [Header("Item")]
     [SerializeField] private LayerMask _itemMask;
+    [SerializeField] private float _itemPickupRadius = 1f;
+    [Header("ShieldPosition")]
+    [SerializeField] private float _startAngle = 195f;
+    [SerializeField] private float _sideAngleToStart = 60f;
+    [Header("SwordPosition")]
+    /*[SerializeField] */private Quaternion _swordStartRotation = Quaternion.Euler(-32f, -116f, -195f);
     [Header("Blackboard")]
     [SerializeField]
     private BlackboardReference _blackboard;
@@ -32,8 +38,6 @@ public class EquipmentManager : MonoBehaviour
     private const int LEFT_HAND = 0;
     private const int RIGHT_HAND = 1;
     private const int FISTS = 2;
-
-    private Equipment _discoverdEquipment;
 
     private StateManager _stateManager;
 
@@ -51,6 +55,10 @@ public class EquipmentManager : MonoBehaviour
 
             leftEquipment.transform.localPosition = Vector3.zero;
             HeldEquipment[LEFT_HAND] = leftEquipment;
+
+            var collider = HeldEquipment[LEFT_HAND].GetComponent<CapsuleCollider>();
+            if (collider)
+                collider.enabled = false;
         }
 
 
@@ -62,7 +70,12 @@ public class EquipmentManager : MonoBehaviour
             else
                 rightEquipment.transform.parent = transform; 
             rightEquipment.transform.localPosition = Vector3.zero;
+            rightEquipment.transform.localRotation = _swordStartRotation;
             HeldEquipment[RIGHT_HAND] = rightEquipment;
+
+            var collider = HeldEquipment[RIGHT_HAND].GetComponent<CapsuleCollider>();
+            if (collider)
+                collider.enabled = false;
         }
 
 
@@ -74,6 +87,7 @@ public class EquipmentManager : MonoBehaviour
             HeldEquipment[FISTS] = fist;
         }
 
+        _stateManager = GetComponent<StateManager>();
         UpdateBlackboard();
     }
 
@@ -208,9 +222,8 @@ public class EquipmentManager : MonoBehaviour
     {
         if (sender.gameObject != gameObject) return;
 
-        float radius = 2f;
 
-        Collider[] hitColliders = Physics.OverlapSphere(transform.position, radius, _itemMask);
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, _itemPickupRadius, _itemMask);
         foreach (var hitCollider in hitColliders)
         {
             var newEquip = hitCollider.gameObject.GetComponent<Equipment>();
@@ -222,6 +235,10 @@ public class EquipmentManager : MonoBehaviour
                     HeldEquipment[RIGHT_HAND] = newEquip;
                     newEquip.transform.parent = _rightHandSocket;
                     newEquip.transform.localPosition = Vector3.zero;
+
+                    var collider = HeldEquipment[RIGHT_HAND].GetComponent<CapsuleCollider>();
+                    if (collider)
+                        collider.enabled = false;
                 }
 
                 else if (!newEquip.IsRightHandEquipment)
@@ -230,7 +247,17 @@ public class EquipmentManager : MonoBehaviour
                     HeldEquipment[LEFT_HAND] = newEquip;
                     newEquip.transform.parent = _leftHandSocket;
                     newEquip.transform.localPosition = Vector3.zero;
+
+                    var collider = HeldEquipment[LEFT_HAND].GetComponent<CapsuleCollider>();
+                    if (collider)
+                        collider.enabled = false;
                 }
+
+                _onEquipmentDamage.Raise(this, new EquipmentEventArgs
+                {
+                    ShieldDurability = GetDurabilityPercentage(LEFT_HAND),
+                    WeaponDurability = GetDurabilityPercentage(RIGHT_HAND)
+                });
             }
         }
     }
@@ -240,27 +267,45 @@ public class EquipmentManager : MonoBehaviour
         if (HeldEquipment[LEFT_HAND] == null) return;
 
         Direction blockDirection = (Direction)obj;
+
+        float diffInRealOrientation = (int)_stateManager.Orientation - _stateManager.fOrientation;
         switch (blockDirection)
         {
             case Direction.Idle:
-                HeldEquipment[LEFT_HAND].transform.localRotation = Quaternion.Euler(15f, 0f, 0f);
+            case Direction.Wrong:
+            case Direction.ToCenter:
+                HeldEquipment[LEFT_HAND].transform.localRotation = Quaternion.Euler(_startAngle + diffInRealOrientation, 0f, 0f);
                 break;
             case Direction.ToRight:
-                HeldEquipment[LEFT_HAND].transform.localRotation = Quaternion.Euler(45f, 0f, 0f);
+                HeldEquipment[LEFT_HAND].transform.localRotation = Quaternion.Euler(_startAngle + _sideAngleToStart + diffInRealOrientation, 0f, 0f);
                 break;
             case Direction.ToLeft:
-                HeldEquipment[LEFT_HAND].transform.localRotation = Quaternion.Euler(-15f, 0f, 0f);
-                break;
-            case Direction.ToCenter:
-                HeldEquipment[LEFT_HAND].transform.localRotation = Quaternion.Euler(15f, 0f, 0f);
-                break;
-            case Direction.Wrong:
-                HeldEquipment[LEFT_HAND].transform.localRotation = Quaternion.Euler(15f, 0f, 0f);
+                HeldEquipment[LEFT_HAND].transform.localRotation = Quaternion.Euler(_startAngle - _sideAngleToStart + diffInRealOrientation, 0f, 0f);
                 break;
         }
 
 
     }
+
+    public void RotateSword(Component sender, object obj)
+    {
+        if (sender.gameObject != gameObject) return;
+        if (HeldEquipment[RIGHT_HAND] == null) return;
+
+        bool rotate = (int)obj == 1? true : false;
+
+        if (rotate)
+        {
+
+            HeldEquipment[RIGHT_HAND].transform.localRotation = Quaternion.Euler(0f, 0f, 20f);
+        }
+        else
+        {
+            HeldEquipment[RIGHT_HAND].transform.localRotation = _swordStartRotation;
+        }
+
+    }
+
 
     public bool HasFullEquipment()
     {
@@ -290,6 +335,11 @@ public class EquipmentManager : MonoBehaviour
         if (HeldEquipment[index] == null)
             return;
         HeldEquipment[index].transform.parent = null; 
+
+        var collider = HeldEquipment[index].GetComponent<CapsuleCollider>(); 
+        if (collider)
+            collider.enabled = true;
+
         HeldEquipment[index] = null; 
     }
 
@@ -321,7 +371,7 @@ public class EquipmentManager : MonoBehaviour
     public void SheathWeapon(Component sender, object obj)
     {
         if (sender.gameObject != gameObject) return;
-        if(_stateManager == null) _stateManager = GetComponent<StateManager>();
+        if (HeldEquipment[RIGHT_HAND] == null) return;
         if (_stateManager.WeaponIsSheathed)
         {
             HeldEquipment[RIGHT_HAND].gameObject.transform.parent = _rightHandSocket.transform;
@@ -342,7 +392,6 @@ public class EquipmentManager : MonoBehaviour
     {
         if (sender.gameObject == this.gameObject) return;
         if (Vector3.Distance(gameObject.transform.position, sender.gameObject.transform.position) > 3) return;
-        if (_stateManager == null) _stateManager = GetComponent<StateManager>();
         _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Empty, AnimLayer = 3, DoResetIdle = true });
         _stateManager.AttackState = AttackState.Idle;
     }

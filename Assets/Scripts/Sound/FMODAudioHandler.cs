@@ -82,7 +82,12 @@ public class FMODAudioHandler : MonoBehaviour
     [SerializeField] private EventReference _showdownSFX;
     private EventInstance _showdownSFXInstance;
 
-    private void OnEnable()
+    private void Awake()
+    {
+        DontDestroyOnLoad(this.gameObject);
+    }
+
+    private void Start()
     {
         _checker = new TerrainChecker();
         _attributes = RuntimeUtils.To3DAttributes(transform);
@@ -146,8 +151,6 @@ public class FMODAudioHandler : MonoBehaviour
         _footstepsSFXInstance = RuntimeManager.CreateInstance(_footstepsSFX);
         _attributes = RuntimeUtils.To3DAttributes(sender.transform.position);
         _footstepsSFXInstance.set3DAttributes(_attributes);
-        //Debug.Log("Attributes:" + _attributes);
-        //Debug.Log("PP:" + _player.transform.position);
         GetParameterID(_footstepsSFXInstance, "SurfaceType", out _surfaceTypeID);
         GetParameterID(_footstepsSFXInstance, "TypeOfWalking", out _TypeOfWalkingID);
         switch (surfaceType)
@@ -360,19 +363,6 @@ public class FMODAudioHandler : MonoBehaviour
             _unsheathSFXInstance.release();
             isSheathing = true;
         }
-    }
-
-    private void OnDisable()
-    {
-        _musicInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-        _ambienceInstance.release();
-        _footstepsSFXInstance.release();
-        _attackChargeSFXInstance.release();
-        _musicInstance.release();
-        _showdownSFXInstance.release();
-        _weaponWhooshSFXInstance.release();
-        _comicPanelSwapSFXInstance.release();
-        _weaponHitSFXInstance.release();
     }
 
     private void OnDestroy()

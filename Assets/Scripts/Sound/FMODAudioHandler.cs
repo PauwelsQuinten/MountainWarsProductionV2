@@ -16,6 +16,7 @@ public class FMODAudioHandler : MonoBehaviour
     private ATTRIBUTES_3D _attributes;
     private AimingOutputArgs _aimingEventArgs;
     private AttackEventArgs _attackEventArgs;
+    private SwitchBiomeEventArgs _switchBiomeEventArgs;
     private FootstepSwapper _footstepSwapper;
 
     private bool isSheathing = true;
@@ -139,15 +140,38 @@ public class FMODAudioHandler : MonoBehaviour
         // Set the global parameter value by ID
         RuntimeManager.StudioSystem.setParameterByID(parameterID, desiredParameterValue);
     }
+public void SwitchBiome(Component sender, object obj)
+    {
+        GetParameterID(_ambienceInstance, "Biome", out _biomeID);
+        if (_switchBiomeEventArgs == null)
+        {
+            _switchBiomeEventArgs = obj as SwitchBiomeEventArgs;
+        }
 
+        switch (_switchBiomeEventArgs.NextBiome)
+        {
+            case Biome.village:
+                _biomeIDValue = 0.0f;
+                break;
+            case Biome.Mountain:
+                _biomeIDValue = 1.0f;
+                break;
+            case Biome.Forest:
+                _biomeIDValue = 2.0f;
+                break;
+            default:
+                _biomeIDValue = 0.0f;
+                break;
+        }
+        SetParameterID(_ambienceInstance, _biomeID, _biomeIDValue);
+
+    }
     public void PlayFootstepsSFX(Component sender, object obj)
     {
         string surfaceType = DetectSurfaceType();
         _footstepsSFXInstance = RuntimeManager.CreateInstance(_footstepsSFX);
         _attributes = RuntimeUtils.To3DAttributes(sender.transform.position);
         _footstepsSFXInstance.set3DAttributes(_attributes);
-        Debug.Log("Attributes:" + _attributes);
-        Debug.Log("PP:" + _player.transform.position);
         GetParameterID(_footstepsSFXInstance, "SurfaceType", out _surfaceTypeID);
         GetParameterID(_footstepsSFXInstance, "TypeOfWalking", out _TypeOfWalkingID);
         switch (surfaceType)
@@ -333,7 +357,7 @@ public class FMODAudioHandler : MonoBehaviour
     {
         _showdownMusicInstance = RuntimeManager.CreateInstance(_showdownMusic);
         _showdownMusicInstance.start();
-        //_showdownMusicInstance.release();
+        _showdownMusicInstance.release();
     }
 
     public void PlaySheathSFX(Component sender, object obj)

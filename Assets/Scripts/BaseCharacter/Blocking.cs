@@ -48,7 +48,7 @@ public class Blocking : MonoBehaviour
             else if (_blockDirection == Direction.Wrong)
                 _blockDirection = args.BlockDirection;
 
-            PlayShieldAnimation();
+            //PlayShieldAnimation();
 
             return;
         }

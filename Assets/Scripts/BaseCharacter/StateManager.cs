@@ -21,6 +21,7 @@ public class StateManager : MonoBehaviour
     public bool IsBleeding;
     public bool InAnimiation = false;
     public bool WeaponIsSheathed;
+    public bool IsNearHidingSpot = false;
 
     private Coroutine _recoverCoroutine;
 
@@ -112,7 +113,19 @@ public class StateManager : MonoBehaviour
         SetStun(args.StunDuration);
     }
 
-    private void SetStun(float stunDuration)
+    public void EnterHidingSpot(Component sender, object obj)
+    {
+        if (gameObject.CompareTag(PLAYER))
+            IsNearHidingSpot = true;
+    }
+    
+    public void LeaveHidingSpot(Component sender, object obj)
+    {
+        if (gameObject.CompareTag(PLAYER))
+            IsNearHidingSpot = false;
+    }
+
+private void SetStun(float stunDuration)
     {
         if (AttackState != AttackState.Stun)
         {

@@ -348,7 +348,7 @@ public class EquipmentManager : MonoBehaviour
     public void SheathWeapon(Component sender, object obj)
     {
         if (sender.gameObject != gameObject) return;
-        if(_stateManager == null) _stateManager = GetComponent<StateManager>();
+        if (HeldEquipment[RIGHT_HAND] == null) return;
         if (_stateManager.WeaponIsSheathed)
         {
             HeldEquipment[RIGHT_HAND].gameObject.transform.parent = _rightHandSocket.transform;
@@ -369,7 +369,6 @@ public class EquipmentManager : MonoBehaviour
     {
         if (sender.gameObject == this.gameObject) return;
         if (Vector3.Distance(gameObject.transform.position, sender.gameObject.transform.position) > 3) return;
-        //if (_stateManager == null) _stateManager = GetComponent<StateManager>();
         _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Empty, AnimLayer = 3, DoResetIdle = true });
         _stateManager.AttackState = AttackState.Idle;
     }

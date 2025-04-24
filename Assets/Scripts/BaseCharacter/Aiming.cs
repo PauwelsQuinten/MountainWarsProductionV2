@@ -12,14 +12,12 @@ public class Aiming : MonoBehaviour
     [SerializeField] private GameEvent _AimOutputEvent;
     [SerializeField] private GameEvent _sheathWeapon;
     [Header("State")]
-    [SerializeField] private float _stabAcceptedRange = 60f;
-    [SerializeField] private float _maxAllowedBlockAngle = 150f;
-
-    [Header("Visual")]
-    [SerializeField] private TextMeshProUGUI _textMeshPro;
-    [SerializeField] private TextMeshProUGUI _textMeshPro2;
-    [SerializeField] private TextMeshProUGUI _textMeshPro3;
-    [SerializeField] private TextMeshProUGUI _textMeshPro4;
+    [SerializeField, Tooltip("angle between your analog direction and the enemy direction max difference to accept as vallid stab input")] 
+    private float _stabAcceptedRange = 45f;
+    [SerializeField, Tooltip("analog input direction will be accepted as left,right until this angle is reached. higher will be set as wrong/invallid")] 
+    private float _maxAllowedBlockAngle = 150f;
+    [SerializeField, Tooltip("analog input direction will be accepted as center if between this angle and his negative")]
+    private float _acceptedAngleForCenter = 35f;
 
     private Queue<AimingOutputArgs> _inputQueue = new Queue<AimingOutputArgs>();
     private Vector2 _vec2previousDirection = Vector2.zero;
@@ -55,14 +53,6 @@ public class Aiming : MonoBehaviour
         CheckIfHoldingPosition();
         UpdateMovingTime();
         UpdateActionQueue();
-
-        if (_textMeshPro && _textMeshPro2 && _textMeshPro3 && _textMeshPro4)
-        {
-            _textMeshPro2.text = $"{_enmAttackSignal}";
-            _textMeshPro.text = $"{_enmCurrentState}";
-            _textMeshPro3.text = $"storedVec : {_vec2Start}";
-            _textMeshPro4.text = $"traversed angle : {_traversedAngle}";
-        }
 
     }
 
@@ -292,7 +282,7 @@ public class Aiming : MonoBehaviour
         var speed = CalculateSwingSpeed(_traversedAngle, 1.5f, 2.5f);
         Debug.Log($"speed : {speed}");
         Debug.Log($"signal : {_enmAttackSignal}");
-        Debug.Log($"{CalculateBlockDirection(_refAimingInput.variable.StateManager.Orientation)}");
+        Debug.Log($"{CalculateBlockDirection(_refAimingInput.variable.StateManager.fOrientation)}");
 
     }
 
@@ -341,7 +331,8 @@ public class Aiming : MonoBehaviour
             //Direction = CalculateSwingDirection(distance)
             Direction = _swingDirection
                 ,
-            BlockDirection = CalculateBlockDirection(_refAimingInput.variable.StateManager.Orientation)
+            //BlockDirection = CalculateBlockDirection(_refAimingInput.variable.StateManager.Orientation)
+            BlockDirection = CalculateBlockDirection(_refAimingInput.variable.StateManager.fOrientation)
                 ,
             //Speed = 2f
             Speed = CalculateSwingSpeed(_traversedAngle, 1.5f, 2.5f)
@@ -434,16 +425,18 @@ public class Aiming : MonoBehaviour
     private bool IsInputInFrontOfOrientation(Vector2 direction , float acceptedRange)
     {
         float angle = CalculateAngleRadOfInput(direction) * Mathf.Rad2Deg;
-        float angleDiff = angle - (float)_refAimingInput.variable.StateManager.Orientation;
+        float angleDiff = angle - _refAimingInput.variable.StateManager.fOrientation;
+        //float angleDiff = angle - (float)_refAimingInput.variable.StateManager.Orientation;
         return Mathf.Abs(angleDiff) < acceptedRange;
     }
 
-    private Direction CalculateBlockDirection(Orientation orientation)
+    private Direction CalculateBlockDirection(float orientation)
     {
         float length = _refAimingInput.variable.value.magnitude;
         if (length < 0.5f && !_refAimingInput.variable.StateManager.IsHoldingShield)
             return Direction.Idle;
 
+        //int orient = (int)orientation;
         int orient = (int)orientation;
         float input = CalculateAngleRadOfInput(_refAimingInput.variable.value) * Mathf.Rad2Deg;
         int diff = (int)input - orient;
@@ -452,7 +445,7 @@ public class Aiming : MonoBehaviour
         /*if (_enmAimingInput == AimingInputState.Hold)
             Debug.Log($"{diff}");*/
 
-        if (diff > -30 && diff < 30)
+        if (diff > -_acceptedAngleForCenter && diff < _acceptedAngleForCenter)
             return Direction.ToCenter;
         else if (diff > 30 && diff < _maxAllowedBlockAngle || (_refAimingInput.variable.StateManager.IsHoldingShield && diff > 30))
             return Direction.ToLeft;

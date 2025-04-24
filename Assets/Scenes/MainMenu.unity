@@ -188,7 +188,8 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 990987692}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 2344910227332429457, guid: 84920d53d85a0284d9f8ee2f567dcd6b, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 84920d53d85a0284d9f8ee2f567dcd6b, type: 3}
@@ -271,6 +272,17 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &207810373 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 139594947643579710, guid: 9a3f95200157a8d498f076664a8d98cb, type: 3}
+  m_PrefabInstance: {fileID: 6612953752431849524}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &231193568
 GameObject:
   m_ObjectHideFlags: 0
@@ -395,6 +407,9 @@ MonoBehaviour:
   _backButton: {fileID: 1168929036}
   _settingsButton: {fileID: 251867331}
   _eventSystem: {fileID: 200643741}
+  _MasterSlider: {fileID: 539667982}
+  _sfxSlider: {fileID: 1624164590}
+  _musicSlider: {fileID: 207810373}
   _masterVCAName: Master
   _sfxVCAName: SFX
   _musicVCAName: Music
@@ -881,6 +896,17 @@ MonoBehaviour:
       Data3: 1208659900
       Data4: 1849789532
     Path: event:/UI/UIHover
+--- !u!114 &539667982 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7422624871858157673, guid: 9a3f95200157a8d498f076664a8d98cb, type: 3}
+  m_PrefabInstance: {fileID: 6612953752431849524}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &629510517
 GameObject:
   m_ObjectHideFlags: 0
@@ -1447,6 +1473,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1537009982}
   m_CullTransparentMesh: 1
+--- !u!114 &1624164590 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2153901242904502014, guid: 9a3f95200157a8d498f076664a8d98cb, type: 3}
+  m_PrefabInstance: {fileID: 6612953752431849524}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1659753158
 GameObject:
   m_ObjectHideFlags: 0
@@ -1457,6 +1494,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1659753160}
   - component: {fileID: 1659753159}
+  - component: {fileID: 1659753161}
   m_Layer: 0
   m_Name: Music
   m_TagString: Music
@@ -1498,6 +1536,35 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1659753161
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1659753158}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: beea91935ee6d2746a0a632c4f077ee0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Events:
+  - {fileID: 11400000, guid: 2ef907f1e621ecb4a8bc591dc2091dfd, type: 2}
+  Responses:
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1659753159}
+        m_TargetAssemblyTypeName: Music, Assembly-CSharp
+        m_MethodName: SwitchBiome
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1829699746
 GameObject:
   m_ObjectHideFlags: 0

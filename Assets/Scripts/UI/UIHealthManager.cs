@@ -15,7 +15,6 @@ public class UIHealthManager : MonoBehaviour
     [SerializeField]
     private Color _noHealthColor;
 
-
     [Header("Blood")]
     [SerializeField]
     private Image  _bloodBar;
@@ -33,7 +32,6 @@ public class UIHealthManager : MonoBehaviour
     private Coroutine _patchUp;
     private bool _completedPatchUp;
 
-
     [Header("Equipment")]
     [SerializeField]
     private Image _shield;
@@ -41,10 +39,20 @@ public class UIHealthManager : MonoBehaviour
     private Image _weapon;
 
     [SerializeField]
+    private GameObject _cameraToLookAt;
+    [SerializeField]
+    private GameObject _canvas;
+    [SerializeField]
     private GameEvent _gameLost;
 
-
-
+    public void Update()
+    {
+        if (gameObject.GetComponent<AIController>() != null)
+        {
+            if (_cameraToLookAt == null) return;
+            _canvas.transform.LookAt(_cameraToLookAt.transform);
+        }
+    }
     public void UpdateHealth(Component sender, object obj)
     {
         HealthEventArgs args = obj as HealthEventArgs;
@@ -61,8 +69,9 @@ public class UIHealthManager : MonoBehaviour
 
         float fillAmount = args.CurrentHealth / args.MaxHealth;
         _healthBar.fillAmount = fillAmount;
-        
-        UpdateBodyPartColor(sender, args);
+
+        if (sender.gameObject.GetComponent<PlayerController>() == null) return;
+            UpdateBodyPartColor(sender, args);
 
         if (args.CurrentHealth > 0) return;
         _gameLost.Raise(this, EventArgs.Empty);
@@ -71,7 +80,6 @@ public class UIHealthManager : MonoBehaviour
     private void UpdateBodyPartColor(Component sender, HealthEventArgs args)
     {
         BodyParts? partToRemove = null;
-        if (sender.gameObject.GetComponent<PlayerController>() == null) return;
 
         foreach (Image part in _bodyParts)
         {
@@ -112,12 +120,16 @@ public class UIHealthManager : MonoBehaviour
         float barFill = args.CurrentBlood / args.MaxBlood;
         _bloodBar.fillAmount = barFill;
 
+        if (sender.gameObject.GetComponent<PlayerController>() == null) return;
+
         if (args.CurrentBlood > 0) return;
         _gameLost.Raise(this, EventArgs.Empty);
     }
 
     public void UpdatePatchUp(Component sender, object obj)
     {
+        if (sender.gameObject.GetComponent<PlayerController>() == null) return;
+
         if (_completedPatchUp)
         {
             _completedPatchUp = false;
@@ -144,33 +156,18 @@ public class UIHealthManager : MonoBehaviour
         StaminaEventArgs args = obj as StaminaEventArgs;
         if (args == null) return;
 
-        if (sender.gameObject.GetComponent<PlayerController>() == null)
-        {
-            if (sender.gameObject != gameObject) return;
-        }
-        else
-        {
-            if (gameObject.GetComponent<AIController>() != null) return;
-        }
+        if (sender.gameObject.GetComponent<PlayerController>() == null) return;
 
         float barFill = args.CurrentStamina / args.MaxStamina;
         _staminaBar.fillAmount = barFill;
     }
-
 
     public void UpdateEquipment(Component sender, object obj)
     {
         EquipmentEventArgs args = obj as EquipmentEventArgs;
         if (args == null) return;
 
-        if (sender.gameObject.GetComponent<PlayerController>() == null)
-        {
-            if (sender.gameObject != gameObject) return;
-        }
-        else
-        {
-            if (gameObject.GetComponent<AIController>() != null) return;
-        }
+        if (sender.gameObject.GetComponent<PlayerController>() == null) return;
 
 
         float progress = args.ShieldDurability;
@@ -199,7 +196,6 @@ public class UIHealthManager : MonoBehaviour
             _weapon.color = newColor;
         }
     }
-
 
     private IEnumerator PathUpBar()
     {

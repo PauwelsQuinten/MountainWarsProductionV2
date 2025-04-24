@@ -248,4 +248,10 @@ namespace UnityEngine
         Large
     }
 
+    public enum Biome 
+    { 
+        village,
+        Forest,
+        Mountain
+    }
 }

@@ -16,6 +16,7 @@ public class FMODAudioHandler : MonoBehaviour
     private ATTRIBUTES_3D _attributes;
     private AimingOutputArgs _aimingEventArgs;
     private AttackEventArgs _attackEventArgs;
+    private DefenceEventArgs _defenceEventArgs;
     private SwitchBiomeEventArgs _switchBiomeEventArgs;
     private FootstepSwapper _footstepSwapper;
 
@@ -298,8 +299,11 @@ public void SwitchBiome(Component sender, object obj)
         {
             _aimingEventArgs = obj as AimingOutputArgs;
         }
-
-        SetGlobalParameterID(_attacksStrengthID, _attackEventArgs.AttackPower);
+        if(_defenceEventArgs == null)
+        {
+            _defenceEventArgs = obj as DefenceEventArgs;
+        }
+        SetGlobalParameterID(_attacksStrengthID, _defenceEventArgs.AttackPower);
         SetGlobalParameterID(_currentWeaponID, 5.0f);
         SetParameterID(_weaponHitSFXInstance, _weaponHitSurfaceID, _weaponHitSurfaceIDValue);
         _weaponHitSFXInstance.start();

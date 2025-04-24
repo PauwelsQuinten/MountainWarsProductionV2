@@ -16,7 +16,6 @@ public class FMODAudioHandler : MonoBehaviour
     private ATTRIBUTES_3D _attributes;
     private AimingOutputArgs _aimingEventArgs;
     private AttackEventArgs _attackEventArgs;
-    private DefenceEventArgs _defenceEventArgs;
     private FootstepSwapper _footstepSwapper;
 
     private bool isSheathing = true;
@@ -75,19 +74,15 @@ public class FMODAudioHandler : MonoBehaviour
     [SerializeField] private EventReference _unsheathSFX;
     private EventInstance _unsheathSFXInstance;
 
-    [Header("SFX/CameraMovements")] [SerializeField]
+    [Header("SFX/Panels")] [SerializeField]
     private EventReference _comicPanelSwapSFX;
 
     private EventInstance _comicPanelSwapSFXInstance;
     [SerializeField] private EventReference _showdownSFX;
     private EventInstance _showdownSFXInstance;
-
-    private void Awake()
-    {
-        DontDestroyOnLoad(this.gameObject);
-    }
-
-    private void Start()
+    [SerializeField] private EventReference _showdownMusic;
+    private EventInstance _showdownMusicInstance;
+    private void OnEnable()
     {
         _checker = new TerrainChecker();
         _attributes = RuntimeUtils.To3DAttributes(transform);
@@ -151,6 +146,8 @@ public class FMODAudioHandler : MonoBehaviour
         _footstepsSFXInstance = RuntimeManager.CreateInstance(_footstepsSFX);
         _attributes = RuntimeUtils.To3DAttributes(sender.transform.position);
         _footstepsSFXInstance.set3DAttributes(_attributes);
+        Debug.Log("Attributes:" + _attributes);
+        Debug.Log("PP:" + _player.transform.position);
         GetParameterID(_footstepsSFXInstance, "SurfaceType", out _surfaceTypeID);
         GetParameterID(_footstepsSFXInstance, "TypeOfWalking", out _TypeOfWalkingID);
         switch (surfaceType)
@@ -268,28 +265,17 @@ public class FMODAudioHandler : MonoBehaviour
         GetParameterID(_weaponHitSFXInstance, "WeaponSurfaceHit", out _weaponHitSurfaceID);
         GetGlobalParameterID("AttacksStrength", out _attacksStrengthID);
         GetGlobalParameterID("CurrentWeapon", out _currentWeaponID);
-
-        float power = 0f;
-        _attackEventArgs = obj as AttackEventArgs;
-        if (_attackEventArgs != null)
+        if (_attackEventArgs == null)
         {
-            power = _attackEventArgs.AttackPower;
+            _attackEventArgs = obj as AttackEventArgs;
         }
 
-        //Maybe you need them, maybe you dont
-        _defenceEventArgs = obj as DefenceEventArgs;
-        if (_defenceEventArgs != null)
+        if (_aimingEventArgs == null)
         {
-            power = _defenceEventArgs.AttackPower;
+            _aimingEventArgs = obj as AimingOutputArgs;
         }
-        
-        //if (_aimingEventArgs == null)
-        //{
-        //    _aimingEventArgs = obj as AimingOutputArgs;
-        //}
 
-
-        SetGlobalParameterID(_attacksStrengthID, power);
+        SetGlobalParameterID(_attacksStrengthID, _attackEventArgs.AttackPower);
         SetGlobalParameterID(_currentWeaponID, 5.0f);
         SetParameterID(_weaponHitSFXInstance, _weaponHitSurfaceID, _weaponHitSurfaceIDValue);
         _weaponHitSFXInstance.start();
@@ -343,6 +329,13 @@ public class FMODAudioHandler : MonoBehaviour
         _showdownSFXInstance.release();
     }
 
+    public void PlayShowdownMusic(Component sender, object obj)
+    {
+        _showdownMusicInstance = RuntimeManager.CreateInstance(_showdownMusic);
+        _showdownMusicInstance.start();
+        //_showdownMusicInstance.release();
+    }
+
     public void PlaySheathSFX(Component sender, object obj)
     {
         _sheathSFXInstance = RuntimeManager.CreateInstance(_sheathSFX);
@@ -363,6 +356,19 @@ public class FMODAudioHandler : MonoBehaviour
             _unsheathSFXInstance.release();
             isSheathing = true;
         }
+    }
+
+    private void OnDisable()
+    {
+        _musicInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+        _ambienceInstance.release();
+        _footstepsSFXInstance.release();
+        _attackChargeSFXInstance.release();
+        _musicInstance.release();
+        _showdownSFXInstance.release();
+        _weaponWhooshSFXInstance.release();
+        _comicPanelSwapSFXInstance.release();
+        _weaponHitSFXInstance.release();
     }
 
     private void OnDestroy()

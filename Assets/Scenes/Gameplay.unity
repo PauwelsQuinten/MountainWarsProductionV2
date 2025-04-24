@@ -1965,6 +1965,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5318490121873195721, guid: aec7b3038c902a244ba51249ef00324a, type: 3}
+      propertyPath: _biomeSwitch
+      value: 
+      objectReference: {fileID: 11400000, guid: 2ef907f1e621ecb4a8bc591dc2091dfd, type: 2}
+    - target: {fileID: 5318490121873195721, guid: aec7b3038c902a244ba51249ef00324a, type: 3}
       propertyPath: _currentViewIndex
       value: 4
       objectReference: {fileID: 0}
@@ -2914,6 +2918,14 @@ PrefabInstance:
       propertyPath: m_ProvidesContacts
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8508484520687528794, guid: 84920d53d85a0284d9f8ee2f567dcd6b, type: 3}
+      propertyPath: _nextBiome
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8508484520687528794, guid: 84920d53d85a0284d9f8ee2f567dcd6b, type: 3}
+      propertyPath: _biomeSwitch
+      value: 
+      objectReference: {fileID: 11400000, guid: 2ef907f1e621ecb4a8bc591dc2091dfd, type: 2}
     - target: {fileID: 8615324423644961587, guid: 84920d53d85a0284d9f8ee2f567dcd6b, type: 3}
       propertyPath: m_ProvidesContacts
       value: 1
@@ -4747,3 +4759,4 @@ SceneRoots:
   - {fileID: 666987084}
   - {fileID: 381031139}
   - {fileID: 63200787}
+  - {fileID: 770432786}

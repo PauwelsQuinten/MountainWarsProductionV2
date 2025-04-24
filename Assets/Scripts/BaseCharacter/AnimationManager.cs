@@ -31,6 +31,8 @@ public class AnimationManager : MonoBehaviour
             _animator.SetInteger("BlockDirection", (int)args.BlockDirection);
             return;
         }
+        else if (args.AnimLayer == 4)
+            _animator.SetInteger("BlockDirection", (int)args.BlockDirection);
 
         if (args.Interupt)
         {
@@ -49,7 +51,6 @@ public class AnimationManager : MonoBehaviour
         //Debug.Log($"anim call: {args.AnimState.ToString()}, speed: {args.Speed}, layer: {args.AnimLayer}");
         // Crossfade with normalized transition offset
 
-        _animator.SetInteger("BlockDirection", (int)args.BlockDirection);
         _animator.CrossFade(args.AnimState.ToString(), 0.2f, args.AnimLayer, 0f);
 
         _currentState = args.AnimState;

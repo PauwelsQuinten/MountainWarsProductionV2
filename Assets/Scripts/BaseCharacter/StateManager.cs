@@ -115,14 +115,19 @@ public class StateManager : MonoBehaviour
 
     public void EnterHidingSpot(Component sender, object obj)
     {
-        if (gameObject.CompareTag(PLAYER))
+        if (!gameObject.CompareTag(PLAYER)) return;
+
+        var args = obj as TriggerEnterEventArgs;
+        if (args.IsHidingSpot)
             IsNearHidingSpot = true;
     }
     
     public void LeaveHidingSpot(Component sender, object obj)
     {
-        if (gameObject.CompareTag(PLAYER))
+        if (!gameObject.CompareTag(PLAYER)) return;
+
             IsNearHidingSpot = false;
+        
     }
 
 private void SetStun(float stunDuration)

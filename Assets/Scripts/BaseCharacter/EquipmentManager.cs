@@ -23,6 +23,7 @@ public class EquipmentManager : MonoBehaviour
     [SerializeField] private Transform _sheathSocket;
     [Header("Item")]
     [SerializeField] private LayerMask _itemMask;
+    [SerializeField] private float _itemPickupRadius = 1f;
     [Header("Blackboard")]
     [SerializeField]
     private BlackboardReference _blackboard;
@@ -51,6 +52,10 @@ public class EquipmentManager : MonoBehaviour
 
             leftEquipment.transform.localPosition = Vector3.zero;
             HeldEquipment[LEFT_HAND] = leftEquipment;
+
+            var collider = HeldEquipment[LEFT_HAND].GetComponent<CapsuleCollider>();
+            if (collider)
+                collider.enabled = false;
         }
 
 
@@ -63,6 +68,10 @@ public class EquipmentManager : MonoBehaviour
                 rightEquipment.transform.parent = transform; 
             rightEquipment.transform.localPosition = Vector3.zero;
             HeldEquipment[RIGHT_HAND] = rightEquipment;
+
+            var collider = HeldEquipment[RIGHT_HAND].GetComponent<CapsuleCollider>();
+            if (collider)
+                collider.enabled = false;
         }
 
 
@@ -208,9 +217,8 @@ public class EquipmentManager : MonoBehaviour
     {
         if (sender.gameObject != gameObject) return;
 
-        float radius = 2f;
 
-        Collider[] hitColliders = Physics.OverlapSphere(transform.position, radius, _itemMask);
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, _itemPickupRadius, _itemMask);
         foreach (var hitCollider in hitColliders)
         {
             var newEquip = hitCollider.gameObject.GetComponent<Equipment>();
@@ -222,6 +230,10 @@ public class EquipmentManager : MonoBehaviour
                     HeldEquipment[RIGHT_HAND] = newEquip;
                     newEquip.transform.parent = _rightHandSocket;
                     newEquip.transform.localPosition = Vector3.zero;
+
+                    var collider = HeldEquipment[RIGHT_HAND].GetComponent<CapsuleCollider>();
+                    if (collider)
+                        collider.enabled = false;
                 }
 
                 else if (!newEquip.IsRightHandEquipment)
@@ -230,7 +242,17 @@ public class EquipmentManager : MonoBehaviour
                     HeldEquipment[LEFT_HAND] = newEquip;
                     newEquip.transform.parent = _leftHandSocket;
                     newEquip.transform.localPosition = Vector3.zero;
+
+                    var collider = HeldEquipment[LEFT_HAND].GetComponent<CapsuleCollider>();
+                    if (collider)
+                        collider.enabled = false;
                 }
+
+                _onEquipmentDamage.Raise(this, new EquipmentEventArgs
+                {
+                    ShieldDurability = GetDurabilityPercentage(LEFT_HAND),
+                    WeaponDurability = GetDurabilityPercentage(RIGHT_HAND)
+                });
             }
         }
     }
@@ -290,6 +312,11 @@ public class EquipmentManager : MonoBehaviour
         if (HeldEquipment[index] == null)
             return;
         HeldEquipment[index].transform.parent = null; 
+
+        var collider = HeldEquipment[index].GetComponent<CapsuleCollider>(); 
+        if (collider)
+            collider.enabled = true;
+
         HeldEquipment[index] = null; 
     }
 

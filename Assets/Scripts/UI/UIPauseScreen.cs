@@ -4,6 +4,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class UIPauseScreen : MonoBehaviour
 {
@@ -13,6 +14,14 @@ public class UIPauseScreen : MonoBehaviour
     private EventSystem _eventSystem;
     [SerializeField]
     private GameObject _firstSelected;
+
+    [Header("Sliders")]
+    [SerializeField]
+    private Slider _MasterSlider;
+    [SerializeField]
+    private Slider _sfxSlider;
+    [SerializeField]
+    private Slider _musicSlider;
 
     [Header("VCA")]
     private FMOD.Studio.VCA _masterVCA;
@@ -47,6 +56,15 @@ public class UIPauseScreen : MonoBehaviour
         _UIConfirmSFXInstance = RuntimeManager.CreateInstance(_UIConfirmSFX);
         _UIBackSFXInstance = RuntimeManager.CreateInstance(_UIBackSFX);
 
+        float mastervolume;
+        float sfxVolume;
+        float musicVolume;
+        _masterVCA.getVolume(out mastervolume);
+        _sfxVCA.getVolume(out sfxVolume);
+        _musicVCA.getVolume(out musicVolume);
+        _MasterSlider.value = mastervolume;
+        _sfxSlider.value = sfxVolume;
+        _musicSlider.value = musicVolume;
     }
 
     public void OpenPauseMenu(Component sender, object obj)

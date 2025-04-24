@@ -7,6 +7,8 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using FMOD.Studio;
 using FMODUnity;
+using UnityEngine.UI;
+
 public class UIMainMenu : MonoBehaviour
 {
     [Header("Settings")] 
@@ -16,6 +18,14 @@ public class UIMainMenu : MonoBehaviour
 
     [SerializeField] private GameObject _settingsButton;
     [SerializeField] private EventSystem _eventSystem;
+
+    [Header("Sliders")]
+    [SerializeField]
+    private Slider _MasterSlider;
+    [SerializeField]
+    private Slider _sfxSlider;
+    [SerializeField]
+    private Slider _musicSlider;
 
     [Header("VCA")] 
     private FMOD.Studio.VCA _masterVCA;
@@ -52,6 +62,16 @@ public class UIMainMenu : MonoBehaviour
         _UIBackSFXInstance = RuntimeManager.CreateInstance(_UIBackSFX);
         _mainMenuMusicInstance = RuntimeManager.CreateInstance(_mainMenuMusic);
         _mainMenuMusicInstance.start();
+
+        float mastervolume;
+        float sfxVolume;
+        float musicVolume;
+        _masterVCA.getVolume(out mastervolume);
+        _sfxVCA.getVolume(out sfxVolume);
+        _musicVCA.getVolume( out musicVolume);
+        _MasterSlider.value = mastervolume;
+        _sfxSlider.value = sfxVolume;
+        _musicSlider.value = musicVolume;
     }
 
     public void NewGamePressed()

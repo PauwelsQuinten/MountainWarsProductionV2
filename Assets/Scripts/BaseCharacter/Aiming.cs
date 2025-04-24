@@ -16,7 +16,7 @@ public class Aiming : MonoBehaviour
     private float _stabAcceptedRange = 45f;
     [SerializeField, Tooltip("analog input direction will be accepted as left,right until this angle is reached. higher will be set as wrong/invallid")] 
     private float _maxAllowedBlockAngle = 150f;
-    [SerializeField, Tooltip("analog input direction will be accepted as center if between this angle and his negative")]
+    [SerializeField, Tooltip("analog input direction will be accepted as center Block if between this angle and his negative")]
     private float _acceptedAngleForCenter = 35f;
 
     private Queue<AimingOutputArgs> _inputQueue = new Queue<AimingOutputArgs>();

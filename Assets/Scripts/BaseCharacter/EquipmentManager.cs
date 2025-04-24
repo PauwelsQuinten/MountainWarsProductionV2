@@ -27,6 +27,8 @@ public class EquipmentManager : MonoBehaviour
     [Header("ShieldPosition")]
     [SerializeField] private float _startAngle = 195f;
     [SerializeField] private float _sideAngleToStart = 60f;
+    [Header("SwordPosition")]
+    /*[SerializeField] */private Quaternion _swordStartRotation = Quaternion.Euler(-32f, -116f, -195f);
     [Header("Blackboard")]
     [SerializeField]
     private BlackboardReference _blackboard;
@@ -68,6 +70,7 @@ public class EquipmentManager : MonoBehaviour
             else
                 rightEquipment.transform.parent = transform; 
             rightEquipment.transform.localPosition = Vector3.zero;
+            rightEquipment.transform.localRotation = _swordStartRotation;
             HeldEquipment[RIGHT_HAND] = rightEquipment;
 
             var collider = HeldEquipment[RIGHT_HAND].GetComponent<CapsuleCollider>();
@@ -283,6 +286,26 @@ public class EquipmentManager : MonoBehaviour
 
 
     }
+
+    public void RotateSword(Component sender, object obj)
+    {
+        if (sender.gameObject != gameObject) return;
+        if (HeldEquipment[RIGHT_HAND] == null) return;
+
+        bool rotate = (int)obj == 1? true : false;
+
+        if (rotate)
+        {
+
+            HeldEquipment[RIGHT_HAND].transform.localRotation = Quaternion.Euler(0f, 0f, 20f);
+        }
+        else
+        {
+            HeldEquipment[RIGHT_HAND].transform.localRotation = _swordStartRotation;
+        }
+
+    }
+
 
     public bool HasFullEquipment()
     {

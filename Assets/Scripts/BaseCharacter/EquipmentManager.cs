@@ -248,6 +248,7 @@ public class EquipmentManager : MonoBehaviour
                     HeldEquipment[LEFT_HAND] = newEquip;
                     newEquip.transform.parent = _leftHandSocket;
                     newEquip.transform.localPosition = Vector3.zero;
+                    newEquip.transform.localRotation = _swordStartRotation;
 
                     var collider = HeldEquipment[LEFT_HAND].GetComponent<CapsuleCollider>();
                     if (collider)

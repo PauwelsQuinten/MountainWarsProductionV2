@@ -8,9 +8,9 @@ public class Aiming : MonoBehaviour
     [Header("InputVariable")]
     [SerializeField] private AimingInputReference _refAimingInput;
 
-    [Header("Event")]
+    [Header("Events")]
     [SerializeField] private GameEvent _AimOutputEvent;
-    [SerializeField] private GameEvent _sheathWeapon;
+
     [Header("State")]
     [SerializeField, Tooltip("angle between your analog direction and the enemy direction max difference to accept as vallid stab input")] 
     private float _stabAcceptedRange = 45f;

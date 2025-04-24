@@ -18,7 +18,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("Healing")]
     [SerializeField]
-    private float _patchUpDuration;
+    private FloatReference _patchUpDuration;
     [SerializeField]
     private GameEvent _patchUpEvent;
 
@@ -34,35 +34,21 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private FloatReference _sprintCost;
 
-    [Header("Dodge")]
+    [Header("Events")]
     [SerializeField]
     private GameEvent _dodge;
-
-    [Header("ShieldBash")]
     [SerializeField]
     private GameEvent _shieldBash;
-
-    [Header("ItemPickup")]
     [SerializeField]
     private GameEvent _pickupEvent;
-    
-    [Header("Perception")]
     [SerializeField]
     private GameEvent _LookForTarget;
-
-    [Header("Animations")]
     [SerializeField]
     private GameEvent _changeAnimation;
-
-    [Header("Hiding")]
     [SerializeField]
     private GameEvent _hide;
-
-    [Header("Pause")]
     [SerializeField]
     private GameEvent _pauseGame;
-
-    [Header("Sheath Weapon")]
     [SerializeField]
     private GameEvent _sheathWeapon;
 
@@ -351,7 +337,7 @@ public class PlayerController : MonoBehaviour
             _patchEndTime = Time.time;
             _patchTimer = _patchEndTime - _patchStartTime;
 
-            if (_patchUpDuration >= _patchTimer) 
+            if (_patchUpDuration.value >= _patchTimer) 
                 _patchUpEvent.Raise(this, true);
             else _patchUpEvent.Raise(this, false);
 

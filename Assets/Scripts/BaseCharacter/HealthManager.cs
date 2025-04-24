@@ -8,30 +8,28 @@ public class HealthManager : MonoBehaviour
     private const string PLAYER = "Player";
 
     [Header("health")]
-    [SerializeField]
+    [SerializeField, Tooltip("Used to set the base limb health")]
     private float _maxBaseLimbHealth;
-    [SerializeField]
+    [SerializeField, Tooltip("The rate at which health regens")]
     private float _regenRate;
     [SerializeField]
     private GameEvent _changedHealth;
 
     [Header("Blood")]
-    [SerializeField]
     private float _currentBlood;
-    [SerializeField]
     private float _maxBlood;
-    [SerializeField]
+    [SerializeField, Tooltip("The rate at which you will lose blood")]
     private float _bleedOutSpeed;
     [SerializeField]
     private GameEvent _changedBlood;
 
     [Header("Damage")]
-    [SerializeField]
+    [SerializeField, Tooltip("How much the damage drops when hitting a second limb")]
     private float _damageDropOff;
 
     [Header("Healing")]
-    [SerializeField]
-    private float _patchUpSpeed;
+    [SerializeField, Tooltip("How long it takes to patch up your bleeding")]
+    private FloatReference _patchUpSpeed;
     [SerializeField]
     private GameEvent _patchUp;
 
@@ -278,7 +276,7 @@ public class HealthManager : MonoBehaviour
 
     private IEnumerator PatchUp()
     {
-        yield return new WaitForSeconds(_patchUpSpeed);
+        yield return new WaitForSeconds(_patchUpSpeed.value);
         PatchUpBleeding(this, true);
     }
 }

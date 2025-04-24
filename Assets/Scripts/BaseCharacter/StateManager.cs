@@ -10,20 +10,29 @@ public class StateManager : MonoBehaviour
     [Header("Refrence")]
     [SerializeField] BlackboardReference _blackboardRef;
     [Header("Values")]
+    [HideInInspector]
     public AttackState AttackState;
+    [HideInInspector]
     public AttackHeight AttackHeight = AttackHeight.Torso;
+    [HideInInspector]
     public Orientation Orientation;
-    //[HideInInspector]
+    [HideInInspector]
     public float fOrientation = 0f;
 
-    [HideInInspector] public GameObject Target;
+    [HideInInspector] 
+    public GameObject Target;
+    [HideInInspector]
     public bool IsHoldingShield;
 
     public EquipmentManager EquipmentManager;
 
+    [HideInInspector]
     public bool IsBleeding;
+    [HideInInspector]
     public bool InAnimiation = false;
+    [HideInInspector]
     public bool WeaponIsSheathed;
+    [HideInInspector]
     public bool IsNearHidingSpot = false;
 
     private Coroutine _recoverCoroutine;

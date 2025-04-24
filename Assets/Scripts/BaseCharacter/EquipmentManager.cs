@@ -17,7 +17,7 @@ public class EquipmentManager : MonoBehaviour
     [SerializeField] private GameEvent _onEquipmentBreak;
     [SerializeField] private GameEvent _onEquipmentDamage;
     [SerializeField] private GameEvent _changeAnimation;
-    [Header("Sockets")]
+    [Header("Sockets"), Tooltip("These are the sockets that will hold the equipment")]
     [SerializeField] private Transform _leftHandSocket;
     [SerializeField] private Transform _rightHandSocket;
     [SerializeField] private Transform _sheathSocket;

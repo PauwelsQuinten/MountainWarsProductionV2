@@ -3797,6 +3797,10 @@ PrefabInstance:
       value: event:/Combat/Unsheath
       objectReference: {fileID: 0}
     - target: {fileID: -9064225466436632881, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
+      propertyPath: _showdownMusic.Path
+      value: event:/Misc/ShowdownTriggered
+      objectReference: {fileID: 0}
+    - target: {fileID: -9064225466436632881, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
       propertyPath: _mainThemeMusic.Path
       value: event:/Music/Music
       objectReference: {fileID: 0}
@@ -3833,6 +3837,22 @@ PrefabInstance:
       value: 1673386591
       objectReference: {fileID: 0}
     - target: {fileID: -9064225466436632881, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
+      propertyPath: _showdownMusic.Guid.Data1
+      value: -1747750128
+      objectReference: {fileID: 0}
+    - target: {fileID: -9064225466436632881, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
+      propertyPath: _showdownMusic.Guid.Data2
+      value: 1242115771
+      objectReference: {fileID: 0}
+    - target: {fileID: -9064225466436632881, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
+      propertyPath: _showdownMusic.Guid.Data3
+      value: 1154439301
+      objectReference: {fileID: 0}
+    - target: {fileID: -9064225466436632881, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
+      propertyPath: _showdownMusic.Guid.Data4
+      value: -1782917154
+      objectReference: {fileID: 0}
+    - target: {fileID: -9064225466436632881, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
       propertyPath: _mainThemeMusic.Guid.Data1
       value: 553843406
       objectReference: {fileID: 0}
@@ -3850,7 +3870,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7891369219080097047, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
       propertyPath: Events.Array.size
-      value: 8
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: -7891369219080097047, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
       propertyPath: 'Events.Array.data[4]'
@@ -3871,10 +3891,10 @@ PrefabInstance:
     - target: {fileID: -7891369219080097047, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
       propertyPath: 'Events.Array.data[8]'
       value: 
-      objectReference: {fileID: 11400000, guid: 1fa0ac8c24365fa4fa43f0ccc057a02a, type: 2}
+      objectReference: {fileID: 11400000, guid: 256011474ec1c184e867e9af51206920, type: 2}
     - target: {fileID: -7891369219080097047, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
       propertyPath: Responses.Array.size
-      value: 8
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: -7891369219080097047, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
       propertyPath: Responses.Array.data[1].m_PersistentCalls.m_Calls.Array.size
@@ -3894,6 +3914,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7891369219080097047, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
       propertyPath: Responses.Array.data[7].m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -7891369219080097047, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
+      propertyPath: Responses.Array.data[8].m_PersistentCalls.m_Calls.Array.size
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -7891369219080097047, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
@@ -3921,6 +3945,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1866386151}
     - target: {fileID: -7891369219080097047, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
+      propertyPath: Responses.Array.data[8].m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1866386151}
+    - target: {fileID: -7891369219080097047, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
       propertyPath: Responses.Array.data[1].m_PersistentCalls.m_Calls.Array.data[1].m_CallState
       value: 2
       objectReference: {fileID: 0}
@@ -3945,8 +3973,16 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: -7891369219080097047, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
+      propertyPath: Responses.Array.data[8].m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -7891369219080097047, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
       propertyPath: Responses.Array.data[1].m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
       value: PlayWhooshSFX
+      objectReference: {fileID: 0}
+    - target: {fileID: -7891369219080097047, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
+      propertyPath: Responses.Array.data[3].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: PlayShowdownMusic
       objectReference: {fileID: 0}
     - target: {fileID: -7891369219080097047, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
       propertyPath: Responses.Array.data[4].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
@@ -3967,6 +4003,10 @@ PrefabInstance:
     - target: {fileID: -7891369219080097047, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
       propertyPath: Responses.Array.data[7].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: PlayParrySFX
+      objectReference: {fileID: 0}
+    - target: {fileID: -7891369219080097047, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
+      propertyPath: Responses.Array.data[8].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: PlayShowdownSFX
       objectReference: {fileID: 0}
     - target: {fileID: -7891369219080097047, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
       propertyPath: Responses.Array.data[1].m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
@@ -3993,6 +4033,10 @@ PrefabInstance:
       value: FMODAudioHandler, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: -7891369219080097047, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
+      propertyPath: Responses.Array.data[8].m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: FMODAudioHandler, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: -7891369219080097047, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
       propertyPath: Responses.Array.data[1].m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
@@ -4014,6 +4058,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7891369219080097047, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
       propertyPath: Responses.Array.data[7].m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: -7891369219080097047, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
+      propertyPath: Responses.Array.data[8].m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 3779732516173593837, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}

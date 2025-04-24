@@ -74,13 +74,14 @@ public class FMODAudioHandler : MonoBehaviour
     [SerializeField] private EventReference _unsheathSFX;
     private EventInstance _unsheathSFXInstance;
 
-    [Header("SFX/CameraMovements")] [SerializeField]
+    [Header("SFX/Panels")] [SerializeField]
     private EventReference _comicPanelSwapSFX;
 
     private EventInstance _comicPanelSwapSFXInstance;
     [SerializeField] private EventReference _showdownSFX;
     private EventInstance _showdownSFXInstance;
-
+    [SerializeField] private EventReference _showdownMusic;
+    private EventInstance _showdownMusicInstance;
     private void OnEnable()
     {
         _checker = new TerrainChecker();
@@ -326,6 +327,13 @@ public class FMODAudioHandler : MonoBehaviour
         _showdownSFXInstance = RuntimeManager.CreateInstance(_showdownSFX);
         _showdownSFXInstance.start();
         _showdownSFXInstance.release();
+    }
+
+    public void PlayShowdownMusic(Component sender, object obj)
+    {
+        _showdownMusicInstance = RuntimeManager.CreateInstance(_showdownMusic);
+        _showdownMusicInstance.start();
+        //_showdownMusicInstance.release();
     }
 
     public void PlaySheathSFX(Component sender, object obj)

@@ -11,7 +11,11 @@ public class LockOn : MonoBehaviour
     [Header("Animation")]
     [SerializeField] private GameEvent _changePanel;
 
+    [Header("updateValue")]
+    [SerializeField, Tooltip("will send event to statemanager to update orientation on every change of this angle")] private float _minAngleBeforeSendEvent = 10f;
+
     private Orientation _storedOrientation = Orientation.East;
+    private float _storedfOrientation = 0;
     private GameObject _previousTarget;
 
     private Coroutine _sheathingCoroutine;
@@ -30,6 +34,7 @@ public class LockOn : MonoBehaviour
         var newOrientation = CalculateOrientation(out fOrientation);
 
         _storedOrientation = newOrientation;
+        _storedfOrientation = fOrientation;
         _lockonEvent.Raise(this, new OrientationEventArgs { NewOrientation = _storedOrientation, NewFOrientation = fOrientation });
         
     }
@@ -42,9 +47,10 @@ public class LockOn : MonoBehaviour
         float fOrientation = 0f;
         var newOrientation = CalculateOrientation(out fOrientation);
 
-        if (IsOrientationChanged(newOrientation))
+        if (IsOrientationChanged(newOrientation, fOrientation))
         {
             _storedOrientation = newOrientation;
+            _storedfOrientation = fOrientation;
             _lockonEvent.Raise(this, new OrientationEventArgs { NewOrientation = _storedOrientation, NewFOrientation = fOrientation });
         }
     }
@@ -86,6 +92,7 @@ public class LockOn : MonoBehaviour
         float fOrientation = 0f;
         var newOrientation = CalculateOrientation(out fOrientation);
         _storedOrientation = newOrientation;
+        _storedfOrientation = fOrientation;
         _lockonEvent.Raise(this, new OrientationEventArgs { NewOrientation = _storedOrientation, NewFOrientation =  fOrientation});
 
         if (_previousTarget == _lockonTarget) return;
@@ -114,9 +121,10 @@ public class LockOn : MonoBehaviour
         return newOrientation ;
     }
 
-    private bool IsOrientationChanged(Orientation newOrientation)
+    private bool IsOrientationChanged(Orientation newOrientation, float orientation)
     {
-        return newOrientation != _storedOrientation;
+        return _storedfOrientation - orientation < _minAngleBeforeSendEvent;
+        //return newOrientation != _storedOrientation;
     }
 
     private IEnumerator SheathWeapon(float duration)

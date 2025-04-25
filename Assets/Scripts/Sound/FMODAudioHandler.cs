@@ -1,12 +1,9 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using FMOD;
 using FMOD.Studio;
 using UnityEngine;
 using FMODUnity;
-using UnityEngine.Serialization;
-using Debug = UnityEngine.Debug;
+
 
 public class FMODAudioHandler : MonoBehaviour
 {
@@ -186,7 +183,7 @@ public void SwitchBiome(Component sender, object obj)
             case "Gravel":
                 _surfaceTypeIDValue = 2.0f;
                 break;
-            case "TerrainGrass":
+            case "TerrainGrass2":
                 _surfaceTypeIDValue = 3.0f;
                 break;
             case "TerrainDirt":

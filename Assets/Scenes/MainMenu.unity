@@ -1550,12 +1550,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Events:
   - {fileID: 11400000, guid: 2ef907f1e621ecb4a8bc591dc2091dfd, type: 2}
+  - {fileID: 11400000, guid: 3bcbf57665777d1489ff9e53220b0be4, type: 2}
   Responses:
   - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1659753159}
         m_TargetAssemblyTypeName: Music, Assembly-CSharp
         m_MethodName: SwitchBiome
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1659753159}
+        m_TargetAssemblyTypeName: Music, Assembly-CSharp
+        m_MethodName: SetCombatLevel
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

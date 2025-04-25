@@ -7,6 +7,7 @@ public class KillPlayerGoal : GoapGoal
     {
         return _isVallid 
             && currentWorldState.Behaviour != EBehaviourValue.Knock
+            && currentWorldState.WorldStatePossesions.ContainsKey(EWorldState.HasTarget) 
             && currentWorldState.WorldStatePossesions[EWorldState.HasTarget] == EWorldStatePossesion.InPossesion;
     }
 

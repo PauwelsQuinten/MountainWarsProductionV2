@@ -15,6 +15,7 @@ namespace UnityEngine
         public bool IsHoldingBlock;
         public GameObject Sender;
         public bool AnimationStart;
+        public bool IsFeint;
     }
     
 

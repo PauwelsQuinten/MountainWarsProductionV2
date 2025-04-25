@@ -159,20 +159,15 @@ public class HealthManager : MonoBehaviour
 
                 if (_bodyPartHealth[part] <= 0)
                 {
-                    if (part == BodyParts.Head)
-                        _currentHealth = 0;
-                    else if (part == BodyParts.Torso)
-                        _bleedOutRate += _bleedOutSpeed * 1.5f;
-                    else
-                        _bleedOutRate += _bleedOutSpeed;
-
-                    _canRegenBlood = false;
-                    _isBleeding = true;
-                    _stateManager.IsBleeding = _isBleeding;
+                    StartsBleeding(part);
                 }
             }
             else
             {
+                if (_bodyPartHealth[part] <= 0 && !_isBleeding)
+                {
+                    StartsBleeding(part);
+                }
                 Debug.Log($"{part} has taken too much damage");
             }
         }
@@ -248,6 +243,20 @@ public class HealthManager : MonoBehaviour
                 MaxHealth = _maxHealth,
                 DamagedBodyParts = _damagedBodyParts
             });
+    }
+
+    private void StartsBleeding(BodyParts part)
+    {
+        if (part == BodyParts.Head)
+            _currentHealth = 0;
+        else if (part == BodyParts.Torso)
+            _bleedOutRate += _bleedOutSpeed * 1.5f;
+        else
+            _bleedOutRate += _bleedOutSpeed;
+
+        _canRegenBlood = false;
+        _isBleeding = true;
+        _stateManager.IsBleeding = _isBleeding;
     }
 
     public void PatchUpBleeding(Component sender, object obj)

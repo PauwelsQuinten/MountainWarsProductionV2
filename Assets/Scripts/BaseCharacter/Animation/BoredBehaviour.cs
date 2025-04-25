@@ -67,7 +67,8 @@ public class BoredBehaviour : StateMachineBehaviour
     {
         _canRun = false;
         ResetIdle();
-        _animator.SetFloat("BoredAnimation", _boredAnimation);
+        if (_animator != null) 
+            _animator.SetFloat("BoredAnimation", _boredAnimation);
     }
 
     private void ResetIdle()

@@ -1317,9 +1317,17 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: 3c342a7b87a6ed947b049977017f3b74, type: 2}
     - target: {fileID: 3199140902055986259, guid: f8e524e8d99e7f94d8a5e751f78bcc07, type: 3}
+      propertyPath: _panelMoveSpeed
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3199140902055986259, guid: f8e524e8d99e7f94d8a5e751f78bcc07, type: 3}
       propertyPath: _panelSwitchSound
       value: 
       objectReference: {fileID: 11400000, guid: 9f1ebbc13b5bcd943b34426bdded2528, type: 2}
+    - target: {fileID: 3199140902055986259, guid: f8e524e8d99e7f94d8a5e751f78bcc07, type: 3}
+      propertyPath: _showdownPauseTime
+      value: 0.7
+      objectReference: {fileID: 0}
     - target: {fileID: 3199140902055986259, guid: f8e524e8d99e7f94d8a5e751f78bcc07, type: 3}
       propertyPath: '_panels.Array.data[0]'
       value: 
@@ -1340,6 +1348,10 @@ PrefabInstance:
       propertyPath: '_panels.Array.data[4]'
       value: 
       objectReference: {fileID: 1226937573}
+    - target: {fileID: 3199140902055986259, guid: f8e524e8d99e7f94d8a5e751f78bcc07, type: 3}
+      propertyPath: _panelswitchPauseTime
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3199140902055986259, guid: f8e524e8d99e7f94d8a5e751f78bcc07, type: 3}
       propertyPath: _biomePanels.Array.size
       value: 2
@@ -3337,6 +3349,10 @@ PrefabInstance:
       propertyPath: _footstep
       value: 
       objectReference: {fileID: 11400000, guid: 19cd27c4b0a001d4fa296d77cbb75b16, type: 2}
+    - target: {fileID: 4789560783040527121, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
+      propertyPath: _sprintCost.variable
+      value: 
+      objectReference: {fileID: 11400000, guid: 4aa2a05291286a74bb9920c75d553284, type: 2}
     - target: {fileID: 6131864086219467642, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
       propertyPath: _pauseGame
       value: 

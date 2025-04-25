@@ -17,7 +17,7 @@ public class PlayerController : MonoBehaviour
     private MovingInputReference _moveInputRef;
 
     [Header("Healing")]
-    [SerializeField]
+    [SerializeField, Tooltip("How long it takes to patch up your bleeding")]
     private FloatReference _patchUpDuration;
     [SerializeField]
     private GameEvent _patchUpEvent;

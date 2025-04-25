@@ -63,7 +63,6 @@ public class Music : MonoBehaviour
         // Prevent scene-based updates if biome music is active
         if (_isBiomeActive)
         {
-            Debug.Log("Biome music is active, skipping scene-based updates.");
             return;
         }
 
@@ -71,7 +70,6 @@ public class Music : MonoBehaviour
         if (activeSceneName != _currentSceneName)
         {
             _currentSceneName = activeSceneName;
-            Debug.Log($"Scene changed to: {_currentSceneName}");
             UpdateMusicForScene(_currentSceneName);
         }
     }
@@ -81,6 +79,7 @@ public class Music : MonoBehaviour
         switch (sceneName)
         {
             case "MainMenu":
+                _combatLevelIDValue = 0.0f;
                 ResetToSceneMusic();
                 _musiczoneIDValue = 0.0f;
                 break;
@@ -88,10 +87,12 @@ public class Music : MonoBehaviour
                 _musiczoneIDValue = 1.0f;
                 break;
             case "GameWon":
+                _combatLevelIDValue = 0.0f;
                 ResetToSceneMusic();
                 _musiczoneIDValue = 4.0f;
                 break;
             case "GameLost":
+                _combatLevelIDValue = 0.0f;
                 ResetToSceneMusic();
                 _musiczoneIDValue = 5.0f;
                 break;
@@ -109,7 +110,6 @@ public class Music : MonoBehaviour
 
         if (_switchBiomeEventArgs == null)
         {
-            Debug.LogError("Invalid event data passed to SwitchBiome.");
             return;
         }
 
@@ -122,7 +122,6 @@ public class Music : MonoBehaviour
 
             _canChangeSong = false;
             _isBiomeActive = true; // Set biome flag to true
-            Debug.Log($"Switching to biome: {_switchBiomeEventArgs.NextBiome}");
 
             switch (_switchBiomeEventArgs.NextBiome)
             {
@@ -138,7 +137,6 @@ public class Music : MonoBehaviour
             }
 
             SetGlobalParameterID(_musiczoneID, _musiczoneIDValue);
-            Debug.Log($"Biome music set to: {_musiczoneIDValue}");
         }
         else
         {
@@ -171,12 +169,10 @@ public class Music : MonoBehaviour
     {
         if (!_isBiomeActive)
         {
-            Debug.Log("ResetToSceneMusic called, but biome music is not active.");
             return;
         }
 
-        Debug.Log("Resetting to scene-based music.");
-        _isBiomeActive = false; // Reset biome flag
+         _isBiomeActive = false; // Reset biome flag
         UpdateMusicForScene(_currentSceneName); // Reapply scene music
     }
     private void OnDestroy()

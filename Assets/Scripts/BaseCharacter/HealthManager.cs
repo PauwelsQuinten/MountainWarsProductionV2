@@ -17,6 +17,8 @@ public class HealthManager : MonoBehaviour
 
     [Header("Blood")]
     private float _currentBlood;
+    [SerializeField, Tooltip("The max amount of blood the character starts with")]
+    [Range(1f, 100f)]
     private float _maxBlood;
     [SerializeField, Tooltip("The rate at which you will lose blood")]
     private float _bleedOutSpeed;
@@ -127,6 +129,7 @@ public class HealthManager : MonoBehaviour
 
         _currentHealth = _maxHealth;
         _maxBodyPartHealth = _bodyPartHealth.ToDictionary(entry => entry.Key, entry => entry.Value);
+        _currentBlood = _maxBlood;
     }
 
     private void LoseHealth(float damage, DamageEventArgs args)
@@ -180,6 +183,9 @@ public class HealthManager : MonoBehaviour
                     _canRegenBlood = false;
                     _isBleeding = true;
                     _stateManager.IsBleeding = _isBleeding;
+
+                    if (!gameObject.CompareTag(PLAYER) && _currentHealth <= 0)
+                        Destroy(gameObject);
                 }
             }
             else
@@ -213,6 +219,9 @@ public class HealthManager : MonoBehaviour
 
         if(_canRegenCoroutine !=  null) StopCoroutine( _canRegenCoroutine );
         _canRegenCoroutine = StartCoroutine(ResetCanRegen());
+
+        if (!gameObject.CompareTag(PLAYER) && _currentBlood <= 0)
+            Destroy(gameObject);
     }
 
     private void RegenBlood()

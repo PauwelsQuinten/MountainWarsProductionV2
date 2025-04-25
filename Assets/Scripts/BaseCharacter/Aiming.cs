@@ -18,6 +18,10 @@ public class Aiming : MonoBehaviour
     private float _maxAllowedBlockAngle = 150f;
     [SerializeField, Tooltip("analog input direction will be accepted as center Block if between this angle and his negative")]
     private float _acceptedAngleForCenter = 35f;
+    private float _minSwingSpeed = 1f;
+    [SerializeField, Tooltip("This will determine the animation speed of block and attack, the attack power will also be influenced by this")]
+    [Range(1.1f, 2f)]
+    private float _maxSwingSpeed = 2f;
 
     private Queue<AimingOutputArgs> _inputQueue = new Queue<AimingOutputArgs>();
     private Vector2 _vec2previousDirection = Vector2.zero;
@@ -339,7 +343,7 @@ public class Aiming : MonoBehaviour
             BlockDirection = CalculateBlockDirection(_refAimingInput.variable.StateManager.fOrientation)
                 ,
             //Speed = 2f
-            Speed = CalculateSwingSpeed(_traversedAngle, 1.5f, 2.5f)
+            Speed = CalculateSwingSpeed(_traversedAngle, _minSwingSpeed, _maxSwingSpeed)
                 ,
             AttackSignal = _enmAttackSignal
                 ,

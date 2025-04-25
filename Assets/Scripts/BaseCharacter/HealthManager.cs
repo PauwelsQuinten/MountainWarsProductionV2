@@ -145,7 +145,7 @@ public class HealthManager : MonoBehaviour
                 if (!_damagedBodyParts.Contains(part)) _damagedBodyParts.Add(part);
 
                 index++;
-                _changedHealth.Raise
+                if(_changedHealth != null)_changedHealth.Raise
                     (this, new HealthEventArgs 
                     {   BodyPartsHealth = _bodyPartHealth, 
                         MaxBodyPartsHealth = _maxBodyPartHealth, 
@@ -160,7 +160,18 @@ public class HealthManager : MonoBehaviour
                 if (_bodyPartHealth[part] <= 0)
                 {
                     if (part == BodyParts.Head)
+                    {
                         _currentHealth = 0;
+                        if (_changedHealth != null) _changedHealth.Raise
+                            (this, new HealthEventArgs
+                            {
+                                BodyPartsHealth = _bodyPartHealth,
+                                MaxBodyPartsHealth = _maxBodyPartHealth,
+                                CurrentHealth = _currentHealth,
+                                MaxHealth = _maxHealth,
+                                DamagedBodyParts = _damagedBodyParts,
+                            }); 
+                    }
                     else if (part == BodyParts.Torso)
                         _bleedOutRate += _bleedOutSpeed * 1.5f;
                     else

@@ -55,6 +55,11 @@ public class Aiming : MonoBehaviour
 
     }
 
+    private void OnDestroy()
+    {
+        _refAimingInput.variable.ValueChanged -= Variable_ValueChanged;
+    }
+
     private void Variable_ValueChanged(object sender, AimInputEventArgs e)
     {
         switch(e.ThisChanged)

@@ -70,10 +70,16 @@ public class UIHealthManager : MonoBehaviour
         float fillAmount = args.CurrentHealth / args.MaxHealth;
         _healthBar.fillAmount = fillAmount;
 
-        if (sender.gameObject.GetComponent<PlayerController>() == null) return;
+        if (sender.gameObject.GetComponent<PlayerController>() != null)
             UpdateBodyPartColor(sender, args);
 
         if (args.CurrentHealth > 0) return;
+
+        if (sender.gameObject.GetComponent<PlayerController>() == null)
+        {
+            Destroy(this.gameObject);
+            return;
+        }
         _gameLost.Raise(this, EventArgs.Empty);
     }
 
@@ -120,10 +126,14 @@ public class UIHealthManager : MonoBehaviour
         float barFill = args.CurrentBlood / args.MaxBlood;
         _bloodBar.fillAmount = barFill;
 
-        if (sender.gameObject.GetComponent<PlayerController>() == null) return;
-
         if (args.CurrentBlood > 0) return;
-        _gameLost.Raise(this, EventArgs.Empty);
+
+        if (sender.gameObject.GetComponent<PlayerController>() == null)
+        {
+            Destroy(this.gameObject);
+            return;
+        }
+            _gameLost.Raise(this, EventArgs.Empty);
     }
 
     public void UpdatePatchUp(Component sender, object obj)

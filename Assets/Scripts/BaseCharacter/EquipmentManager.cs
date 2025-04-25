@@ -29,7 +29,6 @@ public class EquipmentManager : MonoBehaviour
     [SerializeField] private float _sideAngleToStart = 60f;
     [Header("SwordPosition")]
     [SerializeField] private Quaternion _swordStartRotation = Quaternion.Euler(-32f, -116f, -195f);
-    [SerializeField] private float _testAngle = 30.0f;
     [Header("Blackboard")]
     [SerializeField]
     private BlackboardReference _blackboard;

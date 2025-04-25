@@ -40,7 +40,6 @@ public class Aiming : MonoBehaviour
     private float _previousLength = 0f;
     private float _traversedAngle = 0f;
     private Direction _swingDirection = Direction.Idle;
-    private Direction _storredBlockDirection = Direction.Idle;
     
     void Start()
     {

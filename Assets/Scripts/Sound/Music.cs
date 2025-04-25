@@ -16,6 +16,9 @@ public class Music : MonoBehaviour
     private NewTargetEventArgs _newTargetEventArgs;
     private bool _isBiomeActive = false;
     private bool _canChangeSong = true;
+
+    private GameObject _currentTrigger;
+    private GameObject _previousTrigger;
     private void Awake()
     {
         GameObject[] objs = GameObject.FindGameObjectsWithTag("Music");
@@ -112,10 +115,11 @@ public class Music : MonoBehaviour
 
         if (_switchBiomeEventArgs.IsEnter)
         {
-            if (!_canChangeSong)
-            {
-                return;
-            }
+            _previousTrigger = _currentTrigger;
+            _currentTrigger = sender.gameObject;
+
+            if (!_canChangeSong) return;
+
             _canChangeSong = false;
             _isBiomeActive = true; // Set biome flag to true
             Debug.Log($"Switching to biome: {_switchBiomeEventArgs.NextBiome}");
@@ -138,7 +142,10 @@ public class Music : MonoBehaviour
         }
         else
         {
-            _canChangeSong = true;
+            if (_previousTrigger == null) return;
+
+            if(_previousTrigger != _currentTrigger)
+                _canChangeSong = true;
         }
     }
     public void SetCombatLevel(Component sender, object obj)

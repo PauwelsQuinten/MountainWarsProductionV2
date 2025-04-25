@@ -31,6 +31,8 @@ public class HealthManager : MonoBehaviour
     [SerializeField, Tooltip("How long it takes to patch up your bleeding")]
     private FloatReference _patchUpSpeed;
     [SerializeField]
+    private float _timeBeforeRegerating = 2f;
+    [SerializeField]
     private GameEvent _patchUp;
 
     [Header("Managers")]
@@ -52,6 +54,7 @@ public class HealthManager : MonoBehaviour
     private bool _canRegenBlood = false;
     private bool _canRegenHealth = false;
     private Coroutine _canRegenCoroutine;
+    private Coroutine _patchUpRoutine;
 
     private List<BodyParts> _damagedBodyParts = new List<BodyParts>();
 
@@ -74,6 +77,7 @@ public class HealthManager : MonoBehaviour
         if(_canRegenBlood && !_isBleeding) 
             RegenBlood();
     }
+
     public void TakeDamage(Component sender, object obj)
     {
         if (sender.gameObject != gameObject) return;
@@ -82,6 +86,12 @@ public class HealthManager : MonoBehaviour
         if (args == null) return;
 
         LoseHealth(args.AttackPower, args);
+
+        if (_patchUpRoutine != null)
+        {
+            StopCoroutine(_patchUpRoutine);
+            _patchUpRoutine = null;
+        }
 
         UpdateBlackboard();
     }
@@ -175,7 +185,7 @@ public class HealthManager : MonoBehaviour
             _isBleeding = true;
             _stateManager.IsBleeding = _isBleeding;
         }
-            if (_currentBlood <= 0)
+        if (_currentBlood <= 0)
         {
             _currentBlood = 0;
             return;
@@ -244,15 +254,16 @@ public class HealthManager : MonoBehaviour
     {
         if (!_isBleeding) return;
         if (sender.gameObject != gameObject) return;
-        _bleedOutRate = 0;
 
         bool? canRegen = obj as bool?;
 
         if (!(bool)canRegen)
         {
-            StartCoroutine(PatchUp());
+            if (_patchUpRoutine == null)
+                _patchUpRoutine = StartCoroutine(PatchUp());
             return;
         }
+        _bleedOutRate = 0;
         _isBleeding = false;
         _stateManager.IsBleeding = _isBleeding;
         if (_canRegenCoroutine != null) StopCoroutine(_canRegenCoroutine);
@@ -263,7 +274,7 @@ public class HealthManager : MonoBehaviour
 
     private IEnumerator ResetCanRegen()
     {
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(_timeBeforeRegerating);
         if (_canRegenBlood && _currentBlood == _maxBlood) 
             _canRegenHealth = true;
         else 

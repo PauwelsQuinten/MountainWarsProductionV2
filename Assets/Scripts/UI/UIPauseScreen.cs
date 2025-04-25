@@ -111,6 +111,7 @@ public class UIPauseScreen : MonoBehaviour
     private IEnumerator LoadSceneWithDelay()
     {
         yield return new WaitForEndOfFrame();
+        Time.timeScale = 1f;
         UnityEngine.SceneManagement.SceneManager.LoadScene("MainMenu");
     }
 

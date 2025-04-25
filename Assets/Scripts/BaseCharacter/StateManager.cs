@@ -97,24 +97,26 @@ public class StateManager : MonoBehaviour
     public void GetStunned(Component sender, object obj)
     {
         LoseEquipmentEventArgs loseEquipmentEventArgs = obj as LoseEquipmentEventArgs;
+        StunEventArgs args = obj as StunEventArgs;
+
         if (loseEquipmentEventArgs != null && sender.gameObject == gameObject)
         {
             IsHoldingShield = false;
             SetStun(2f);
         }
 
-
-        StunEventArgs args = obj as StunEventArgs;
-        if (args == null) return;
-
-        if (args.ComesFromEnemy)
+        else if (args != null )
         {
-            if (sender.gameObject == gameObject) return;
-        }
-        else if (sender.gameObject != gameObject) return;
+            if (args.ComesFromEnemy)
+            {
+                if (sender.gameObject == gameObject) return;
+            }
+            else if (sender.gameObject != gameObject) return;
 
-        //Debug.Log($"Stuned {gameObject.name}");
-        SetStun(args.StunDuration);
+            //Debug.Log($"Stuned {gameObject.name}");
+            SetStun(args.StunDuration);
+        }
+        
     }
 
     public void EnterHidingSpot(Component sender, object obj)

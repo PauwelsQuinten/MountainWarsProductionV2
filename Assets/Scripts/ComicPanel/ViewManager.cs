@@ -8,6 +8,10 @@ public class ViewManager : MonoBehaviour
 {
     [Header("Panels")]
     [SerializeField]
+    private float _panelswitchPauseTime = 1.5f;
+    [SerializeField]
+    private float _panelMoveSpeed = 5f;
+    [SerializeField]
     private List<GameObject> _panels = new List<GameObject>();
     [SerializeField]
     private List<GameObject> _biomePanels = new List<GameObject>();
@@ -23,6 +27,12 @@ public class ViewManager : MonoBehaviour
     private float _offsetZ = -2;
 
     [Header("Showdown")]
+    [SerializeField]
+    private float _showdownPauseTime = 1.5f;
+    [SerializeField]
+    private float _showdownMoveSpeed = 5f;
+    [SerializeField]
+    private float _startOffset = 10f;
     [SerializeField]
     private GameObject _vsImage;
     [SerializeField]
@@ -109,7 +119,7 @@ public class ViewManager : MonoBehaviour
         while (Vector3.Distance(_cam.transform.position, newCamPosBiome) > 0.2f)
         {
             time += Time.deltaTime;
-            _cam.transform.position = Vector3.Lerp(startpos, newCamPosBiome, _camMoveSpeed * time);
+            _cam.transform.position = Vector3.Lerp(startpos, newCamPosBiome, _panelMoveSpeed * time);
             yield return null;
         }
         _cam.transform.position = newCamPosBiome;
@@ -121,7 +131,7 @@ public class ViewManager : MonoBehaviour
         }
         _cam.orthographicSize = camSize;
 
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(_panelswitchPauseTime);
 
         camSize = _cam.orthographicSize;
         time = 0;
@@ -137,7 +147,7 @@ public class ViewManager : MonoBehaviour
         while (Vector3.Distance(_cam.transform.position, newCamPosPanel) > 0.2f)
         {
             time += Time.deltaTime;
-            _cam.transform.position = Vector3.Lerp(startpos, newCamPosPanel, _camMoveSpeed * time);
+            _cam.transform.position = Vector3.Lerp(startpos, newCamPosPanel, _panelMoveSpeed * time);
             yield return null;
         }
         _cam.transform.position = newCamPosPanel;
@@ -160,7 +170,7 @@ public class ViewManager : MonoBehaviour
             _panels[_currentArgs.NewViewIndex].SetActive(true);
             originPos = _panels[_currentArgs.NewViewIndex].transform.position;
 
-            _panels[_currentArgs.NewViewIndex].transform.position += Vector3.left * 10;
+            _panels[_currentArgs.NewViewIndex].transform.position += Vector3.left * _startOffset;
 
             startPos = _panels[_currentArgs.NewViewIndex].transform.position;
             float time = 0;
@@ -178,7 +188,7 @@ public class ViewManager : MonoBehaviour
             startPos = _panels[_currentArgs.NewViewIndex].transform.position;
 
 
-            originPos = _panels[_currentArgs.NewViewIndex].transform.position + Vector3.left * 10;
+            originPos = _panels[_currentArgs.NewViewIndex].transform.position + Vector3.left * _startOffset;
 
 
             float time = 0;
@@ -214,9 +224,9 @@ public class ViewManager : MonoBehaviour
         Vector3 enemyToPos = enemyPanel.transform.position;
         Vector3 vsToPos = _vsImage.transform.position;
 
-        Vector3 playerStart = playerPanel.transform.position + (-Vector3.right * 10);
-        Vector3 enemyStart = enemyPanel.transform.position +(Vector3.right * 10);
-        Vector3 vsStart = _vsImage.transform.position + (Vector3.forward * 10);
+        Vector3 playerStart = playerPanel.transform.position + (-Vector3.right * _startOffset);
+        Vector3 enemyStart = enemyPanel.transform.position +(Vector3.right * _startOffset);
+        Vector3 vsStart = _vsImage.transform.position + (Vector3.forward * _startOffset);
 
         playerPanel.transform.position = playerStart;
         enemyPanel.transform.position = enemyStart;
@@ -235,7 +245,7 @@ public class ViewManager : MonoBehaviour
         while (Vector3.Distance(playerPanel.transform.position, playerToPos) > 0.2f)
         {
             time += Time.deltaTime;
-            playerPanel.transform.position = Vector3.Lerp(playerStart, playerToPos, _camMoveSpeed * time);
+            playerPanel.transform.position = Vector3.Lerp(playerStart, playerToPos, _showdownMoveSpeed * time);
             yield return null;
         }
         playerPanel.transform.position = playerToPos;
@@ -246,7 +256,7 @@ public class ViewManager : MonoBehaviour
         while (Vector3.Distance(enemyPanel.transform.position, enemyToPos) > 0.2f)
         {
             time += Time.deltaTime;
-            enemyPanel.transform.position = Vector3.Lerp(enemyStart, enemyToPos, _camMoveSpeed * time);
+            enemyPanel.transform.position = Vector3.Lerp(enemyStart, enemyToPos, _showdownMoveSpeed * time);
             yield return null;
         }
         enemyPanel.transform.position = enemyToPos;
@@ -257,20 +267,20 @@ public class ViewManager : MonoBehaviour
         while (Vector3.Distance(_vsImage.transform.position, vsToPos) > 0.2f)
         {
             time += Time.deltaTime;
-            _vsImage.transform.position = Vector3.Lerp(vsStart, vsToPos, _camMoveSpeed * time);
+            _vsImage.transform.position = Vector3.Lerp(vsStart, vsToPos, _showdownMoveSpeed * time);
             yield return null;
         }
         _vsImage.transform.position = vsToPos;
         time = 0;
 
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(_showdownPauseTime);
 
         _panelSwitchSound.Raise(this, EventArgs.Empty);
 
         while (Vector3.Distance(playerPanel.transform.position, playerStart) > 0.2f)
         {
             time += Time.deltaTime;
-            playerPanel.transform.position = Vector3.Lerp(playerToPos, playerStart, _camMoveSpeed * time);
+            playerPanel.transform.position = Vector3.Lerp(playerToPos, playerStart, _showdownMoveSpeed * time);
             yield return null;
         }
         playerPanel.transform.position = playerStart;
@@ -281,7 +291,7 @@ public class ViewManager : MonoBehaviour
         while (Vector3.Distance(enemyPanel.transform.position, enemyStart) > 0.2f)
         {
             time += Time.deltaTime;
-            enemyPanel.transform.position = Vector3.Lerp(enemyToPos, enemyStart, _camMoveSpeed * time);
+            enemyPanel.transform.position = Vector3.Lerp(enemyToPos, enemyStart, _showdownMoveSpeed * time);
             yield return null;
         }
         enemyPanel.transform.position = enemyStart;
@@ -291,7 +301,7 @@ public class ViewManager : MonoBehaviour
         while (Vector3.Distance(_vsImage.transform.position, vsStart) > 0.2f)
         {
             time += Time.deltaTime;
-            _vsImage.transform.position = Vector3.Lerp(vsToPos, vsStart, _camMoveSpeed * time);
+            _vsImage.transform.position = Vector3.Lerp(vsToPos, vsStart, _showdownMoveSpeed * time);
             yield return null;
         }
         _vsImage.transform.position = vsStart;

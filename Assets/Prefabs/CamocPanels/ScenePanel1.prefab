@@ -227,6 +227,7 @@ Transform:
   - {fileID: 2851099565884754250}
   - {fileID: 5527713091075118858}
   - {fileID: 5143936406486765894}
+  - {fileID: 3296870697676151243}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2344910227332429457
@@ -421,6 +422,37 @@ NavMeshObstacle:
   m_CarveOnlyStationary: 1
   m_Center: {x: 0, y: 0, z: 0}
   m_TimeToStationary: 0.5
+--- !u!1 &3573265513687088263
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3296870697676151243}
+  m_Layer: 0
+  m_Name: SpawnPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3296870697676151243
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3573265513687088263}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.71746874, z: -0, w: 0.6965908}
+  m_LocalPosition: {x: 64.29, y: 3.653, z: 8.97}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7897611400581910368}
+  m_LocalEulerAnglesHint: {x: 0, y: 91.692, z: 0}
 --- !u!1 &3986664867098657226
 GameObject:
   m_ObjectHideFlags: 0

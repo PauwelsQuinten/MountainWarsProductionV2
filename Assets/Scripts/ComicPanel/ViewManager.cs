@@ -104,6 +104,10 @@ public class ViewManager : MonoBehaviour
 
     private IEnumerator DoSwitchPanel(Vector3 newCamPosBiome, Vector3 newCamPosPanel)
     {
+        GameObject player = GameObject.Find("Player");
+        CharacterMovement playerMove = player.GetComponent<CharacterMovement>();
+        playerMove.enabled = false;
+
         _isSwitchingPanel = true;
         float camSize = _cam.orthographicSize;
         float time = 0;
@@ -159,6 +163,7 @@ public class ViewManager : MonoBehaviour
         }
         _cam.orthographicSize = camSize;
         _isSwitchingPanel = false;
+        playerMove.enabled = true;
     }
 
     private IEnumerator ShowHidingSpot(bool isAvtive)

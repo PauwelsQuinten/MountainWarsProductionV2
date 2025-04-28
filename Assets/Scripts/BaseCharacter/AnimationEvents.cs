@@ -43,6 +43,8 @@ public class AnimationEvents : MonoBehaviour
     public void SetInParryZone(int InZone)
     {
         bool zone = InZone == 0? true : false;
+        Debug.Log($"in parry zone signal = {zone}");
+
         _inParryZone.Raise(this.transform.parent, zone);
     }
 

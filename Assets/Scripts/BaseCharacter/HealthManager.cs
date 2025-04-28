@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor;
 using UnityEngine;
 
 public class HealthManager : MonoBehaviour
@@ -12,6 +13,8 @@ public class HealthManager : MonoBehaviour
     private float _maxBaseLimbHealth;
     [SerializeField, Tooltip("The rate at which health regens")]
     private float _regenRate;
+     [SerializeField, Tooltip("The amount multiplied to the max health for recovering, this is done when you get an opponent to bleed. lowering his max HP")]
+    private float _maxHealthMultiplier = 0.9f;
     [SerializeField]
     private GameEvent _changedHealth;
 
@@ -188,6 +191,7 @@ public class HealthManager : MonoBehaviour
                     _canRegenBlood = false;
                     _isBleeding = true;
                     _stateManager.IsBleeding = _isBleeding;
+                    ReduceMaxHealth();
 
                     if (!gameObject.CompareTag(PLAYER) && _currentHealth <= 0)
                         Destroy(gameObject);
@@ -255,12 +259,19 @@ public class HealthManager : MonoBehaviour
         foreach(BodyParts part in _damagedBodyParts)
         {
             _bodyPartHealth[part] += healing / _damagedBodyParts.Count * Time.deltaTime;
-            if (_bodyPartHealth[part] >= _maxBodyPartHealth[part]) _bodyPartHealth[part] = _maxBodyPartHealth[part];
+            if (_bodyPartHealth[part] >= _maxBodyPartHealth[part] )
+                _bodyPartHealth[part] = _maxBodyPartHealth[part];
+        }
+        foreach(BodyParts part in _bodyPartHealth.Keys)
+        {
+            if (_bodyPartHealth[part] >= _maxBodyPartHealth[part] && _damagedBodyParts.Contains(part))
+                _damagedBodyParts.Remove(part);
         }
 
-        if(_currentHealth >= _maxHealth)
+        if(_damagedBodyParts.Count == 0)
         {
-            _currentHealth = _maxHealth;
+            if (_currentHealth > _maxHealth)
+                _currentHealth = _maxHealth;
             _canRegenHealth = false;
         }
 
@@ -295,6 +306,14 @@ public class HealthManager : MonoBehaviour
         _canRegenCoroutine = StartCoroutine(ResetCanRegen());
 
         UpdateBlackboard();
+    }
+
+    private void ReduceMaxHealth()
+    {
+        foreach (BodyParts part in _maxBodyPartHealth.Keys)
+        {
+            _maxBodyPartHealth[part] *= _maxHealthMultiplier;
+        }
     }
 
     private IEnumerator ResetCanRegen()

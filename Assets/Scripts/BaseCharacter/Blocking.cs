@@ -115,11 +115,13 @@ public class Blocking : MonoBehaviour
 
 
         //Compare attack with current defence
+        BlockMedium tempMedium = _blockMedium;
         if (!IsBlockMediumVallid() || _stateManager.AttackState == AttackState.Stun)
-            _blockMedium = BlockMedium.Nothing;
+            tempMedium = BlockMedium.Nothing;
+
 
         BlockResult blockResult;
-        switch(_blockMedium)
+        switch(tempMedium)
         {
             case BlockMedium.Shield:
                 blockResult = UsingShield(args);
@@ -169,7 +171,6 @@ public class Blocking : MonoBehaviour
                 case BlockResult.SwordBlock:
                     _loseStamina.Raise(this, new StaminaEventArgs { StaminaCost = _staminaCost.value * 0.5f });
                     _succesfullBlockevent.Raise(this, new StunEventArgs { StunDuration = 0.75f, ComesFromEnemy = true });
-                    //_succesfullHitEvent.Raise(this, args);
 
                     break;
                 case BlockResult.SwordHalfBlock:

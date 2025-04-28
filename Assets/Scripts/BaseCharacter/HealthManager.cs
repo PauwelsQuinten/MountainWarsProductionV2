@@ -43,7 +43,6 @@ public class HealthManager : MonoBehaviour
     [SerializeField]
     private BlackboardReference _blackboard;
 
-
     private float _currentHealth;
     private float _maxHealth;
 

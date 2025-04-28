@@ -52,7 +52,7 @@ public class GoapPlanner : MonoBehaviour
         if (_activeGoal == null || _actionPlan.Count == 0)
             _activeGoal = SelectCurrentGoal();
 
-        if (_activeGoal == null)
+        if (_activeGoal == null || _activeGoal.DesiredWorldState == null)
             return;
 
         if (_actionPlan.Count == 0 && !Plan(_activeGoal.DesiredWorldState))

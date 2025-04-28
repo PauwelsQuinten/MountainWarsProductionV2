@@ -9,7 +9,7 @@ public class AttckAction : GoapAction
     [Header("State")]
     [SerializeField] AttackSignal _attackSignal = AttackSignal.Idle;
     [SerializeField] Direction _swingDirection = Direction.ToCenter;
-    [SerializeField] private float _attackSpeed = 1.5f;
+    [SerializeField] private float _attackSpeed = 1.25f;
 
     private Coroutine _attackCoroutine;
 

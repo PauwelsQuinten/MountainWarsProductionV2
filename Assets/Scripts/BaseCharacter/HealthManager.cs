@@ -17,6 +17,8 @@ public class HealthManager : MonoBehaviour
 
     [Header("Blood")]
     private float _currentBlood;
+    [SerializeField, Tooltip("The max amount of blood the character starts with")]
+    [Range(1f, 100f)]
     private float _maxBlood;
     [SerializeField, Tooltip("The rate at which you will lose blood")]
     private float _bleedOutSpeed;
@@ -26,6 +28,8 @@ public class HealthManager : MonoBehaviour
     [Header("Damage")]
     [SerializeField, Tooltip("How much the damage drops when hitting a second limb")]
     private float _damageDropOff;
+    [SerializeField, Tooltip("How much the damage increases when you already were stunned")]
+    private float _damageIncreaseWhenStunned = 1.25f;
 
     [Header("Healing")]
     [SerializeField, Tooltip("How long it takes to patch up your bleeding")]
@@ -127,13 +131,17 @@ public class HealthManager : MonoBehaviour
 
         _currentHealth = _maxHealth;
         _maxBodyPartHealth = _bodyPartHealth.ToDictionary(entry => entry.Key, entry => entry.Value);
+        _currentBlood = _maxBlood;
     }
 
     private void LoseHealth(float damage, DamageEventArgs args)
     {
         List<BodyParts> parts = args.HitParts;
         int index = 0;
+        if (_stateManager.AttackState == AttackState.Stun)
+            damage *= _damageIncreaseWhenStunned;
         int damageTaken = (int)damage;
+
         foreach (BodyParts part in parts)
         {
             if (_bodyPartHealth[part] > 0)
@@ -180,6 +188,9 @@ public class HealthManager : MonoBehaviour
                     _canRegenBlood = false;
                     _isBleeding = true;
                     _stateManager.IsBleeding = _isBleeding;
+
+                    if (!gameObject.CompareTag(PLAYER) && _currentHealth <= 0)
+                        Destroy(gameObject);
                 }
             }
             else
@@ -213,6 +224,9 @@ public class HealthManager : MonoBehaviour
 
         if(_canRegenCoroutine !=  null) StopCoroutine( _canRegenCoroutine );
         _canRegenCoroutine = StartCoroutine(ResetCanRegen());
+
+        if (!gameObject.CompareTag(PLAYER) && _currentBlood <= 0)
+            Destroy(gameObject);
     }
 
     private void RegenBlood()

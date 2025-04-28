@@ -18,6 +18,13 @@ public class Aiming : MonoBehaviour
     private float _maxAllowedBlockAngle = 150f;
     [SerializeField, Tooltip("analog input direction will be accepted as center Block if between this angle and his negative")]
     private float _acceptedAngleForCenter = 35f;
+    [SerializeField, Tooltip("angle of the direction starting from your orientation, higher then this will be called as a feint")]
+    [Range(90, 180f)]
+    private float _feintAngle = 100f;
+    private float _minSwingSpeed = 1f;
+    [SerializeField, Tooltip("This will determine the animation speed of block and attack, the attack power will also be influenced by this")]
+    [Range(1.1f, 2f)]
+    private float _maxSwingSpeed = 2f;
 
     private Queue<AimingOutputArgs> _inputQueue = new Queue<AimingOutputArgs>();
     private Vector2 _vec2previousDirection = Vector2.zero;
@@ -25,6 +32,7 @@ public class Aiming : MonoBehaviour
     private AttackState _enmCurrentState = AttackState.Idle;
     private AimingInputState _enmAimingInput = AimingInputState.Idle;
     private AttackSignal _enmAttackSignal = AttackSignal.Swing;
+    //private bool _isFeint = false;
     private const float F_MIN_DIFF_BETWEEN_INPUT = 0.04f;
     private const float F_MAX_TIME_NOT_MOVING = 0.1f;
     private const float F_MIN_ACCEPTED_VALUE = 0.40f;
@@ -93,18 +101,19 @@ public class Aiming : MonoBehaviour
         //Throw attack/feint or return to idle when releasing the analogstick
         if (_refAimingInput.variable.value == Vector2.zero || inputLength < F_MIN_ACCEPTED_VALUE)
         {                       
-            //Attack/feint
-            if (_traversedAngle > F_MIN_ACCEPTED_MOVEMENT_ANGLE)
-            {
-                _enmAttackSignal = IsFeintMovement(_swingDirection);
-                if (_enmAttackSignal == AttackSignal.Feint)
-                    SendPackage();
-                _enmAimingInput = AimingInputState.Idle;
-
-            }
+            ////Attack/feint
+            //if (_traversedAngle > F_MIN_ACCEPTED_MOVEMENT_ANGLE)
+            //{
+            //    _enmAttackSignal =AttackSignal.Swing;
+            //    _isFeint = IsFeintMovement(_swingDirection);
+            //    if (_isFeint)
+            //        SendPackage();
+            //    _enmAimingInput = AimingInputState.Idle;
+            //
+            //}
 
             //Reset signal e.g. when stop charging or stop Blocking
-            else if (_enmAimingInput != AimingInputState.Idle)
+            /*else */if (_enmAimingInput != AimingInputState.Idle)
             {
                 _enmAimingInput = AimingInputState.Idle;
                 _enmAttackSignal = AttackSignal.Idle;
@@ -231,13 +240,13 @@ public class Aiming : MonoBehaviour
                     }
                 }
 
-                //When the angle is big enough, you are feinting or throw your swing attack
-                else
-                {
-                    _enmAttackSignal = IsFeintMovement(_swingDirection);
-                    if (_enmAttackSignal == AttackSignal.Feint)
-                        SendPackage();
-                }
+                ////When the angle is big enough, you are feinting or throw your swing attack
+                //else
+                //{
+                //    _enmAttackSignal = IsFeintMovement(_swingDirection);
+                //    if (_enmAttackSignal == AttackSignal.Feint)
+                //        SendPackage();
+                //}
 
                 _previousLength = 1.1f;
                 SetCooldown();
@@ -266,9 +275,9 @@ public class Aiming : MonoBehaviour
             case AttackSignal.Stab:
                 StartCoroutine(ResetAttack(F_TIME_BETWEEN_STAB));
                 break;
-            case AttackSignal.Feint:
+            /*case AttackSignal.Feint:
                 StartCoroutine(ResetAttack(F_TIME_BETWEEN_FEINT));
-                break;
+                break;*/
             case AttackSignal.Swing:
                 StartCoroutine(ResetAttack(F_TIME_BETWEEN_SWING));
                 break;
@@ -339,7 +348,7 @@ public class Aiming : MonoBehaviour
             BlockDirection = CalculateBlockDirection(_refAimingInput.variable.StateManager.fOrientation)
                 ,
             //Speed = 2f
-            Speed = CalculateSwingSpeed(_traversedAngle, 1.5f, 2.5f)
+            Speed = CalculateSwingSpeed(_traversedAngle, _minSwingSpeed, _maxSwingSpeed)
                 ,
             AttackSignal = _enmAttackSignal
                 ,
@@ -350,20 +359,22 @@ public class Aiming : MonoBehaviour
             IsHoldingBlock = _refAimingInput.variable.StateManager.IsHoldingShield
                 ,
             AnimationStart = earlyMessage
+                ,
+            IsFeint = IsFeintMovement(_swingDirection)
 
         };
-        //Debug.Log($"Send package: {package.AttackState}, {package.AttackSignal}, {_enmAimingInput}, angle : {_traversedAngle}, block direction: {package.BlockDirection} holding = {package.IsHoldingBlock}");
+        Debug.Log($"Send package: {package.AttackState}, {package.AttackSignal}, {_enmAimingInput}, angle : {_traversedAngle}, swing direction: {package.Direction}, block direction: {package.BlockDirection} holding = {package.IsHoldingBlock}");
 
-        if (_enmAttackSignal == AttackSignal.Feint)
-            _AimOutputEvent.Raise(this, package);
-            //Debug.Log("feint input");
-        else if (_refAimingInput.variable.StateManager.InAnimiation)
+        /*if (_enmAttackSignal == AttackSignal.Feint)
+            _AimOutputEvent.Raise(this, package);*/
+
+        /*else */if (_refAimingInput.variable.StateManager.InAnimiation)
         {
             if (package.AttackState != AttackState.Idle)
             {
                 _inputQueue.Enqueue(package);
                 //Debug.Log($"Enqueue: {package.AttackState}, {package.AttackSignal}, angle : {_traversedAngle}, early start: {package.AnimationStart}");
-                Debug.Log($"{gameObject}, {package.AttackState}, {package.AttackSignal}, angle : {_traversedAngle}, early start: {package.AnimationStart}");
+                //Debug.Log($"{gameObject}, {package.AttackState}, {package.AttackSignal}, angle : {_traversedAngle}, early start: {package.AnimationStart}");
             }
 
         }
@@ -431,7 +442,7 @@ public class Aiming : MonoBehaviour
         float angle = CalculateAngleRadOfInput(direction) * Mathf.Rad2Deg;
         float angleDiff = angle - _refAimingInput.variable.StateManager.fOrientation;
         //float angleDiff = angle - (float)_refAimingInput.variable.StateManager.Orientation;
-        return Mathf.Abs(angleDiff) < acceptedRange;
+        return Mathf.Abs(angleDiff) < acceptedRange || Mathf.Abs(angleDiff) > 360 - acceptedRange;
     }
 
     private Direction CalculateBlockDirection(float orientation)
@@ -464,7 +475,7 @@ public class Aiming : MonoBehaviour
         return new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
     }
 
-    private AttackSignal IsFeintMovement(Direction direction)
+    private bool IsFeintMovement(Direction direction)
     {
         Vector2 inputVec = Vector2.zero;
         if (_refAimingInput.variable.value == Vector2.zero)
@@ -472,7 +483,7 @@ public class Aiming : MonoBehaviour
         else
             inputVec = _refAimingInput.variable.value;
 
-        var orientAngleRad = (int)_refAimingInput.variable.StateManager.Orientation * Mathf.Deg2Rad;
+        var orientAngleRad = _refAimingInput.variable.StateManager.fOrientation * Mathf.Deg2Rad;
 
         var startAngleRad = CalculateAngleRadOfInput(_vec2Start) - orientAngleRad;
         startAngleRad = ClampAngle(startAngleRad);
@@ -480,19 +491,21 @@ public class Aiming : MonoBehaviour
         var endAngleRad = CalculateAngleRadOfInput(inputVec) - orientAngleRad;
         endAngleRad = ClampAngle(endAngleRad);
 
+        if (_enmAttackSignal != AttackSignal.Idle)
+            Debug.Log($"startangle for determening aim = {endAngleRad}-----------------------------------------------------");
 
         //Debug.Log($"storredDirection= {_swingDirection}");
         //Debug.Log($"end: {_refAimingInput.variable.value} angle= {endAngleRad * Mathf.Rad2Deg}, start: {_vec2Start} angle= {startAngleRad * Mathf.Rad2Deg}");
 
-        if (direction == Direction.ToLeft && startAngleRad < 0 && endAngleRad > 0)
-            return AttackSignal.Swing;
-        else if (direction == Direction.ToRight && startAngleRad > 0 && endAngleRad < 0)
-            return AttackSignal.Swing;
+        //if (direction == Direction.ToLeft && startAngleRad < 0 && endAngleRad > 0)
+        if (direction == Direction.ToLeft  && endAngleRad > -_feintAngle * Mathf.Deg2Rad && endAngleRad < 0f)
+            return false;
+        else if (direction == Direction.ToRight  && endAngleRad < _feintAngle * Mathf.Deg2Rad && endAngleRad > 0)
+            return false;
         //else if (Mathf.Abs(startAngleRad) + Mathf.Abs(endAngleRad) >= Mathf.PI || _traversedAngle >= 180)
-        else if (_traversedAngle >= 180)
-            return AttackSignal.Swing;
-
-        return AttackSignal.Feint;
+        /* else if (_traversedAngle >= 180)
+             return false;*/
+        return true;
     }
 
     private static float ClampAngle(float startAngleRad)

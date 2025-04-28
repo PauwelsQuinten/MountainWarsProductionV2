@@ -57,7 +57,7 @@ namespace UnityEngine
     {
         Idle,
         Stab,
-        Feint,
+        //Feint,
         Swing,
         Charge
     }

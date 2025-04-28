@@ -37,8 +37,7 @@ public class AnimationManager : MonoBehaviour
         if (args.Interupt)
         {
             InteruptAnimation(args);
-            Debug.Log("Disrupt");
-            return;
+            Debug.Log("feint set in animation");
         }
 
         if(args.AnimState != AnimationState.Idle)

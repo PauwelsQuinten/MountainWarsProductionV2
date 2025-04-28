@@ -70,18 +70,20 @@ public class Attacking : MonoBehaviour
         //if (args.AttackSignal != AttackSignal.Idle)
         //    PrintInput(args);
 
-        if (DidFeint(args.AttackSignal))
-        {
-            Debug.Log("---------------------------Feint-----------------------");
-            InteruptAnimation();
+        //Old way of using Feint by disrupting current animation
+        //if (args.AttackSignal == AttackSignal.Feint)
+        //{
+        //    Debug.Log("---------------------------Feint-----------------------");
+        //    InteruptAnimation();
+        //
+        //    //Signal to blackboard
+        //    if (gameObject.CompareTag(PLAYER))
+        //        _blackboardRef.variable.TargetCurrentAttack = AttackType.None;
+        //    return;
+        //}
 
-            //Signal to blackboard
-            if (gameObject.CompareTag(PLAYER))
-                _blackboardRef.variable.TargetCurrentAttack = AttackType.None;
-            return;
-        }
-
-        if (args.AttackSignal != AttackSignal.Stab && args.AttackSignal != AttackSignal.Swing)
+        //if (args.AttackSignal != AttackSignal.Stab && args.AttackSignal != AttackSignal.Swing && args.AttackSignal != AttackSignal.Charge)
+        if (args.AttackSignal == AttackSignal.Idle )
         {
             //Signal to blackboard
             if (gameObject.CompareTag(PLAYER))
@@ -95,12 +97,13 @@ public class Attacking : MonoBehaviour
         _attackRange = GetAttackMediumRange(args);
         _attackPower = CalculatePower(args);
         _attackHeight = args.AttackHeight;
+        Debug.Log($"charging : {_wasCharging}, power: {_attackPower}");
 
         if (args.AnimationStart)
         {
             //Debug.Log($"speed: {args.Speed}");
             bool useRightArm = args.EquipmentManager.HasEquipmentInHand(true) || args.EquipmentManager.HasNoneInHand();
-            StartAnimation(args.Speed, useRightArm);
+            StartAnimation(args.Speed, useRightArm, args.IsFeint);
             PrintInput(args);
         }
 
@@ -140,21 +143,21 @@ public class Attacking : MonoBehaviour
         }
     }
 
-    private void StartAnimation(float speed, bool useRightArm)
+    private void StartAnimation(float speed, bool useRightArm, bool isFeint)
     {
         int animLayer = useRightArm ? 3 : 4;
 
         if (_attackType == AttackType.HorizontalSlashToLeft)
         {
-            _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.SlashLeft, AnimLayer = animLayer, DoResetIdle = true, Interupt = false, Speed = speed });
+            _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.SlashLeft, AnimLayer = animLayer, DoResetIdle = true, Interupt = isFeint, Speed = speed });
         }
         else if (_attackType == AttackType.HorizontalSlashToRight)
         {
-            _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.SlashRight, AnimLayer = animLayer, DoResetIdle = true, Interupt = false, Speed = speed });
+            _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.SlashRight, AnimLayer = animLayer, DoResetIdle = true, Interupt = isFeint, Speed = speed });
         }
         else if (_attackType == AttackType.Stab)
         {
-            _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Stab, AnimLayer = animLayer, DoResetIdle = true, Interupt = false, Speed = speed  });
+            _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Stab, AnimLayer = animLayer, DoResetIdle = true, Interupt = false, Speed = 1.5f  });
         }
 
     }
@@ -164,12 +167,6 @@ public class Attacking : MonoBehaviour
          _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Idle, AnimLayer = 1, DoResetIdle = false, Interupt = true });
     }
         
-
-    private bool DidFeint(AttackSignal signal)
-    {
-        if(signal == AttackSignal.Feint) return true;
-        return false;
-    }
 
     private bool IsAngleBigEnough(float currentAngle)
     {

@@ -178,7 +178,7 @@ public class CharacterMovement : MonoBehaviour
         {
             if (_stateManager.Orientation == Orientation.SouthWest) return;
             _stateManager.Orientation = Orientation.SouthWest;
-            _stateManager.fOrientation = (float)Orientation.SouthEast;
+            _stateManager.fOrientation = (float)Orientation.SouthWest;
             transform.rotation = Quaternion.Euler(new Vector3(0, -135, 0));
         }
         else if (moveInputAngle > -90 - _angleInterval && moveInputAngle < -90 + _angleInterval)

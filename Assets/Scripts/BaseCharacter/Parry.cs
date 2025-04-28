@@ -124,6 +124,7 @@ public class Parry : MonoBehaviour
                 } 
                 break;
         }
+        Debug.Log("wrong paryDirection");
         return false;
     }
 

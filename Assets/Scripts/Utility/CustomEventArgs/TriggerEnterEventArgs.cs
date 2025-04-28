@@ -11,5 +11,6 @@ namespace UnityEngine
 
         public bool IsHidingSpot;
         public bool IsShowDown;
+        public GameObject VsTarget = null;
     }
 }

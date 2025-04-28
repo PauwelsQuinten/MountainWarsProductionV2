@@ -12,7 +12,8 @@ public class LockOn : MonoBehaviour
     [SerializeField] private GameEvent _changePanel;
 
     [Header("updateValue")]
-    [SerializeField, Tooltip("will send event to statemanager to update orientation on every change of this angle")] private float _minAngleBeforeSendEvent = 10f;
+    [SerializeField, Tooltip("will send event to statemanager to update orientation on every change of this angle")]
+    private float _minAngleBeforeSendEvent = 10f;
 
     private Orientation _storedOrientation = Orientation.East;
     private float _storedfOrientation = 0;
@@ -98,7 +99,7 @@ public class LockOn : MonoBehaviour
         if (_previousTarget == _lockonTarget) return;
         _previousTarget = _lockonTarget;
         if (_changePanel == null) return;
-        _changePanel.Raise(this, new TriggerEnterEventArgs { NewViewIndex = 0,IsShowDown = true});
+        _changePanel.Raise(this, new TriggerEnterEventArgs { NewViewIndex = 0,IsShowDown = true, VsTarget = _lockonTarget});
     }
 
     public void WeaponSheathed(Component sender, object obj)

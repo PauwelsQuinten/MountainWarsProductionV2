@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
 
 public class ViewManager : MonoBehaviour
 {
@@ -29,6 +30,8 @@ public class ViewManager : MonoBehaviour
     private GameEvent _ShowdownSound;
     [SerializeField]
     private GameEvent _vsSound;
+    [SerializeField]
+    private RenderTexture _renderTexture;
 
     private Camera _cam;
 
@@ -68,7 +71,7 @@ public class ViewManager : MonoBehaviour
             else if (args.IsShowDown)
             {
                 _ShowdownSound.Raise(this, EventArgs.Empty);
-                StartCoroutine(DoShowDown());
+                StartCoroutine(DoShowDown(args.VsTarget));
             }
         }
         _previousArgs = _currentArgs;
@@ -193,7 +196,7 @@ public class ViewManager : MonoBehaviour
         }
     }
 
-    private IEnumerator DoShowDown()
+    private IEnumerator DoShowDown(GameObject vsTarget)
     {
         float time = 0;
         int index = 0;
@@ -203,11 +206,16 @@ public class ViewManager : MonoBehaviour
         int newIndex = index;
 
         GameObject playerPanel = _panels[newIndex].gameObject;
+        GameObject enemy = vsTarget;
+        var cam = enemy.GetComponentInChildren<Camera>();
+        cam.targetTexture = _renderTexture;
+        cam.Render();
         GameObject enemyPanel = _panels[++newIndex].gameObject;
-        GameObject enemy = GameObject.Find("Enemy");
-        GameObject player = GameObject.Find("Player");
+        enemyPanel.GetComponentInChildren<RawImage>().texture = _renderTexture;
         CharacterMovement enemyMove = enemy.GetComponent<CharacterMovement>();
         NavMeshAgent enemyNavMove = enemy.GetComponent<NavMeshAgent>();
+
+        GameObject player = GameObject.Find("Player");
         CharacterMovement playerMove = player.GetComponent<CharacterMovement>();
 
         Vector3 playerToPos = playerPanel.transform.position;
@@ -284,7 +292,7 @@ public class ViewManager : MonoBehaviour
             enemyPanel.transform.position = Vector3.Lerp(enemyToPos, enemyStart, _camMoveSpeed * time);
             yield return null;
         }
-        enemyPanel.transform.position = enemyStart;
+        enemyPanel.transform.position = enemyStart ;
         time = 0;
 
         _vsSound.Raise(this, EventArgs.Empty);
@@ -297,6 +305,10 @@ public class ViewManager : MonoBehaviour
         _vsImage.transform.position = vsStart;
         time = 0;
 
+        playerPanel.transform.position = playerStart - (-Vector3.right * 10);
+        enemyPanel.transform.position = enemyStart - (Vector3.right * 10);
+        _vsImage.transform.position = vsStart - (Vector3.forward * 10);
+
         playerPanel.SetActive(false);
         enemyPanel.SetActive(false);
         _vsImage.SetActive(false);
@@ -304,5 +316,6 @@ public class ViewManager : MonoBehaviour
         enemyMove.enabled = true;
         enemyNavMove.enabled = true;
         enemyNavMove.isStopped = false;
+
     }
 }

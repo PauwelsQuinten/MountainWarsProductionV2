@@ -1117,6 +1117,18 @@ PrefabInstance:
       propertyPath: _patchUpSpeed.variable
       value: 
       objectReference: {fileID: 11400000, guid: 007ebc2d48c8f954d85262351a7212a0, type: 2}
+    - target: {fileID: 4200951442303491891, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
+      propertyPath: _blackboards.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4200951442303491891, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
+      propertyPath: _blackboards.Array.data[0].variable
+      value: 
+      objectReference: {fileID: 11400000, guid: 2a061d8ac2119774a93990abdf59c3ae, type: 2}
+    - target: {fileID: 4200951442303491891, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
+      propertyPath: _blackboards.Array.data[1].variable
+      value: 
+      objectReference: {fileID: 11400000, guid: 4183302ba65dec041ade313c232c61e0, type: 2}
     - target: {fileID: 5547100133384318507, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
       propertyPath: _speed
       value: 3

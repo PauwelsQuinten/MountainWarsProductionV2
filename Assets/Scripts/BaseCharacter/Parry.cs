@@ -62,11 +62,9 @@ public class Parry : MonoBehaviour
 
     public void StartParry(Component sender, object obj)
     {
-        if (sender.gameObject == gameObject)
-            return;
-        AttackEventArgs args = obj as AttackEventArgs;
+       AttackEventArgs args = obj as AttackEventArgs;
         if (args == null) return;
-
+        if (args.Defender != gameObject) return;
        
         if (_InParryZone )
         {

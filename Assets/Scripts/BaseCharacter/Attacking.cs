@@ -132,11 +132,17 @@ public class Attacking : MonoBehaviour
         if (_attackType == AttackType.Stab) _loseStamina.Raise(this, new StaminaEventArgs { StaminaCost = _staminaCost.value * 0.75f });
         else _loseStamina.Raise(this, new StaminaEventArgs { StaminaCost = _staminaCost.value });
 
-
-        if (!IsEnemyInRange()) return;
+        GameObject target = null;
+        if (!IsEnemyInRange(out target)) return;
 
         Debug.Log($"{gameObject} throws {_attackType}");
-        _doAttack.Raise(this, new AttackEventArgs { AttackType = _attackType, AttackHeight = _attackHeight, AttackPower = _attackPower });
+        _doAttack.Raise(this, new AttackEventArgs {
+            AttackType = _attackType, 
+            AttackHeight = _attackHeight, 
+            AttackPower = _attackPower ,
+            Attacker = gameObject,
+            Defender = target
+        });
 
     }
 
@@ -235,16 +241,21 @@ public class Attacking : MonoBehaviour
         return AttackType.HorizontalSlashToLeft;
     }
 
-    private bool IsEnemyInRange()
+    private bool IsEnemyInRange(out GameObject hitTarget)
     {
         List<Collider> enemy = Physics.OverlapSphere(transform.position, _attackRange * 2).ToList();
+        hitTarget = null;
         if (enemy == null) return false;
         foreach (Collider c in enemy)
         {
             if (((1 << c.gameObject.layer) & _characterLayer) != 0)
             {
                 if (c.gameObject == gameObject) continue;
-                if(Vector3.Distance(transform.position, c.transform.position) < _attackRange) return true;
+                if (Vector3.Distance(transform.position, c.transform.position) < _attackRange)
+                {
+                    hitTarget = c.gameObject;                
+                    return true;
+                }
             }
         }
             return false;

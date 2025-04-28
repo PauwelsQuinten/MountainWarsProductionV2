@@ -1,10 +1,11 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Blocking : MonoBehaviour
 {
     private const string PLAYER = "Player";
 
-    [SerializeField] private BlackboardReference _blackboard;
+    [SerializeField] private List<BlackboardReference> _blackboards;
 
     [Header("Events")]
     [SerializeField] private GameEvent _succesfullBlockevent;
@@ -208,16 +209,19 @@ public class Blocking : MonoBehaviour
         if (args == null)
         {
             if (gameObject.CompareTag(PLAYER))
-                _blackboard.variable.TargetShieldState = Direction.Idle;
+                foreach (var blackboard in _blackboards)
+                    blackboard.variable.TargetShieldState = Direction.Idle;
+
             else
-                _blackboard.variable.ShieldState = Direction.Idle;
+                _blackboards[0].variable.ShieldState = Direction.Idle;
         }
         else
         {
             if (gameObject.CompareTag(PLAYER))
-                _blackboard.variable.TargetShieldState = args.BlockDirection;
+                foreach (var blackboard in _blackboards)
+                    blackboard.variable.TargetShieldState = args.BlockDirection;
             else
-                _blackboard.variable.ShieldState = args.BlockDirection;
+                _blackboards[0].variable.ShieldState = args.BlockDirection;
         }
        
     }

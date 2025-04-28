@@ -35,7 +35,7 @@ public class Attacking : MonoBehaviour
     [Header("Enemy")]
     [SerializeField]
     private LayerMask _characterLayer;
-    [SerializeField] BlackboardReference _blackboardRef;
+    [SerializeField] List<BlackboardReference> _blackboardRefs;
 
     [Header("Animation")]
     [SerializeField]
@@ -78,7 +78,7 @@ public class Attacking : MonoBehaviour
         //
         //    //Signal to blackboard
         //    if (gameObject.CompareTag(PLAYER))
-        //        _blackboardRef.variable.TargetCurrentAttack = AttackType.None;
+        //        _blackboardRefs.variable.TargetCurrentAttack = AttackType.None;
         //    return;
         //}
 
@@ -87,7 +87,12 @@ public class Attacking : MonoBehaviour
         {
             //Signal to blackboard
             if (gameObject.CompareTag(PLAYER))
-                _blackboardRef.variable.TargetCurrentAttack = AttackType.None;
+            {
+                foreach (var blackboard in _blackboardRefs)
+                    blackboard.variable.TargetCurrentAttack = AttackType.None;
+            }
+
+
             return;
         }
 
@@ -111,8 +116,11 @@ public class Attacking : MonoBehaviour
         //Signal to blackboard
         if (gameObject.CompareTag(PLAYER))
         {
-            _blackboardRef.variable.TargetCurrentAttack = _attackType;
-            _blackboardRef.variable.TargetState = args.AttackState;
+            foreach (var blackboard in _blackboardRefs)
+            {
+                blackboard.variable.TargetCurrentAttack = _attackType;
+                blackboard.variable.TargetState = args.AttackState;
+            }
         }
     }
 
@@ -138,8 +146,12 @@ public class Attacking : MonoBehaviour
 
         if (gameObject.CompareTag(PLAYER))
         {
-            _blackboardRef.variable.TargetCurrentAttack = AttackType.None;
-            _blackboardRef.variable.TargetState = AttackState.Idle;
+            foreach (var blackboard in _blackboardRefs)
+            {
+                blackboard.variable.TargetCurrentAttack = AttackType.None;
+                blackboard.variable.TargetState = AttackState.Idle;
+            }
+
         }
     }
 

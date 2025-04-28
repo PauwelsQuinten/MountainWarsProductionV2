@@ -239,7 +239,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 761954210673117134, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
       propertyPath: m_Height
-      value: 1.29
+      value: 1.2
       objectReference: {fileID: 0}
     - target: {fileID: 761954210673117134, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
       propertyPath: m_Radius
@@ -273,10 +273,34 @@ PrefabInstance:
       propertyPath: _blackboard.variable
       value: 
       objectReference: {fileID: 11400000, guid: 2a061d8ac2119774a93990abdf59c3ae, type: 2}
+    - target: {fileID: 1490819108717279631, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
+      propertyPath: _blackboards.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1490819108717279631, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
+      propertyPath: _blackboards.Array.data[0].variable
+      value: 
+      objectReference: {fileID: 11400000, guid: 2a061d8ac2119774a93990abdf59c3ae, type: 2}
+    - target: {fileID: 1490819108717279631, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
+      propertyPath: _blackboards.Array.data[1].variable
+      value: 
+      objectReference: {fileID: 11400000, guid: 4183302ba65dec041ade313c232c61e0, type: 2}
     - target: {fileID: 3036795874959978044, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
       propertyPath: _blackboard.variable
       value: 
       objectReference: {fileID: 11400000, guid: 2a061d8ac2119774a93990abdf59c3ae, type: 2}
+    - target: {fileID: 3036795874959978044, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
+      propertyPath: _blackboards.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3036795874959978044, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
+      propertyPath: _blackboards.Array.data[0].variable
+      value: 
+      objectReference: {fileID: 11400000, guid: 2a061d8ac2119774a93990abdf59c3ae, type: 2}
+    - target: {fileID: 3036795874959978044, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
+      propertyPath: _blackboards.Array.data[1].variable
+      value: 
+      objectReference: {fileID: 11400000, guid: 4183302ba65dec041ade313c232c61e0, type: 2}
     - target: {fileID: 3485612452898370163, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
       propertyPath: _changePanel
       value: 
@@ -285,6 +309,10 @@ PrefabInstance:
       propertyPath: _sheathWeapon
       value: 
       objectReference: {fileID: 11400000, guid: 40551c3801499a64ea4751aa179ac61e, type: 2}
+    - target: {fileID: 3755031848856493801, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
+      propertyPath: _stabAcceptedRange
+      value: 35
+      objectReference: {fileID: 0}
     - target: {fileID: 3755031848856493801, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
       propertyPath: _refAimingInput.variable
       value: 
@@ -1058,6 +1086,10 @@ PrefabInstance:
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 4165634575879343316, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
+      propertyPath: AttackHeight
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4165634575879343316, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
       propertyPath: _OnKnockbackRecovery
       value: 
       objectReference: {fileID: 11400000, guid: ef1c1e852f404ef41a2a5ae46280abb3, type: 2}
@@ -1065,6 +1097,18 @@ PrefabInstance:
       propertyPath: _blackboardRef.variable
       value: 
       objectReference: {fileID: 11400000, guid: 2a061d8ac2119774a93990abdf59c3ae, type: 2}
+    - target: {fileID: 4165634575879343316, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
+      propertyPath: _blackboardRefs.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4165634575879343316, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
+      propertyPath: _blackboardRefs.Array.data[0].variable
+      value: 
+      objectReference: {fileID: 11400000, guid: 2a061d8ac2119774a93990abdf59c3ae, type: 2}
+    - target: {fileID: 4165634575879343316, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
+      propertyPath: _blackboardRefs.Array.data[1].variable
+      value: 
+      objectReference: {fileID: 11400000, guid: 4183302ba65dec041ade313c232c61e0, type: 2}
     - target: {fileID: 4200951442303491891, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
       propertyPath: _blackboard.variable
       value: 
@@ -1073,6 +1117,10 @@ PrefabInstance:
       propertyPath: _patchUpSpeed.variable
       value: 
       objectReference: {fileID: 11400000, guid: 007ebc2d48c8f954d85262351a7212a0, type: 2}
+    - target: {fileID: 5547100133384318507, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
+      propertyPath: _speed
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 5547100133384318507, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
       propertyPath: _moveInput.variable
       value: 
@@ -1089,6 +1137,10 @@ PrefabInstance:
       propertyPath: m_IsKinematic
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5687449145564820169, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
+      propertyPath: m_CollisionDetection
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 6458811806028097463, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
       propertyPath: _overCommitAngle
       value: 210
@@ -1097,10 +1149,34 @@ PrefabInstance:
       propertyPath: _blackboardRef.variable
       value: 
       objectReference: {fileID: 11400000, guid: 2a061d8ac2119774a93990abdf59c3ae, type: 2}
+    - target: {fileID: 6458811806028097463, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
+      propertyPath: _blackboardRefs.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6458811806028097463, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
+      propertyPath: _blackboardRefs.Array.data[0].variable
+      value: 
+      objectReference: {fileID: 11400000, guid: 2a061d8ac2119774a93990abdf59c3ae, type: 2}
+    - target: {fileID: 6458811806028097463, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
+      propertyPath: _blackboardRefs.Array.data[1].variable
+      value: 
+      objectReference: {fileID: 11400000, guid: 4183302ba65dec041ade313c232c61e0, type: 2}
     - target: {fileID: 6469151571926413075, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
       propertyPath: _changeAnimation
       value: 
       objectReference: {fileID: 11400000, guid: f56e344763da3c34d9b3e5d48d24a9e4, type: 2}
+    - target: {fileID: 6469151571926413075, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
+      propertyPath: _blackboards.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6469151571926413075, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
+      propertyPath: _blackboards.Array.data[0].variable
+      value: 
+      objectReference: {fileID: 11400000, guid: 2a061d8ac2119774a93990abdf59c3ae, type: 2}
+    - target: {fileID: 6469151571926413075, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
+      propertyPath: _blackboards.Array.data[1].variable
+      value: 
+      objectReference: {fileID: 11400000, guid: 4183302ba65dec041ade313c232c61e0, type: 2}
     - target: {fileID: 8294375085882615592, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
       propertyPath: _moveInput.variable
       value: 
@@ -1111,15 +1187,15 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: f56e344763da3c34d9b3e5d48d24a9e4, type: 2}
     - target: {fileID: 8819790937953159563, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 4.03
       objectReference: {fileID: 0}
     - target: {fileID: 8819790937953159563, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 8.947
+      value: 15.18
       objectReference: {fileID: 0}
     - target: {fileID: 8819790937953159563, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 6.79
       objectReference: {fileID: 0}
     - target: {fileID: 8819790937953159563, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1392,13 +1468,25 @@ MonoBehaviour:
     m_ActionId: 9caa3d8a-6b2f-4e8e-8bad-6ede561bd9be
     m_ActionName: UI/TrackedDeviceOrientation
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 6131864086219467642}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: ProccesPauseInput
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: 1d86b475-b84b-4705-9416-e67c10d9a6c7
     m_ActionName: 'Player/PauseGame[/XInputControllerWindows/start]'
   - m_PersistentCalls:
       m_Calls: []
     m_ActionId: eea702f8-d7db-494b-a0e7-88d39c2c8649
-    m_ActionName: 'Player/ShieldGrab[/XInputControllerWindows/rightShoulder]'
+    m_ActionName: 'Player/ShieldGrab[/DualShock4GamepadHID/rightShoulder,/DualShock4GamepadHID1/rightShoulder,/DualShock4GamepadHID2/rightShoulder,/DualShock4GamepadHID3/rightShoulder]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player

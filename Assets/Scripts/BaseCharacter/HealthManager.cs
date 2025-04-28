@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class HealthManager : MonoBehaviour
@@ -48,7 +49,7 @@ public class HealthManager : MonoBehaviour
 
     [Header("Blackboard")]
     [SerializeField]
-    private BlackboardReference _blackboard;
+    private List<BlackboardReference> _blackboards;
 
 
     private float _currentHealth;
@@ -112,13 +113,16 @@ public class HealthManager : MonoBehaviour
         //Update blackboard
         if (gameObject.CompareTag(PLAYER))
         {
-            _blackboard.variable.TargetHealth = _currentHealth / _maxHealth;
-            _blackboard.variable.TargetIsBleeding = _isBleeding;
+            foreach (var blackboard in _blackboards)
+            {
+                blackboard.variable.TargetHealth = _currentHealth / _maxHealth;
+                blackboard.variable.TargetIsBleeding = _isBleeding;
+            }
         }
         else
         {
-            _blackboard.variable.Health = _currentHealth / _maxHealth;
-            _blackboard.variable.IsBleeding = _isBleeding;
+            _blackboards[0].variable.Health = _currentHealth / _maxHealth;
+            _blackboards[0].variable.IsBleeding = _isBleeding;
         }
     }
 

@@ -94,6 +94,10 @@ public class HealthManager : MonoBehaviour
 
         LoseHealth(args.AttackPower, args);
 
+        if (_canRegenCoroutine != null) StopCoroutine(_canRegenCoroutine);
+        _canRegenCoroutine = StartCoroutine(ResetCanRegen());
+        _canRegenHealth = false;
+
         if (_patchUpRoutine != null)
         {
             StopCoroutine(_patchUpRoutine);
@@ -164,9 +168,7 @@ public class HealthManager : MonoBehaviour
                         DamagedBodyParts = _damagedBodyParts,
                     });
 
-                if (_canRegenCoroutine != null) StopCoroutine(_canRegenCoroutine);
-                _canRegenCoroutine = StartCoroutine(ResetCanRegen());
-                _canRegenHealth = false;
+                
 
                 if (_bodyPartHealth[part] <= 0)
                 {
@@ -254,13 +256,22 @@ public class HealthManager : MonoBehaviour
     private void RegenHealth()
     {
         float healing = _regenRate;
-        _currentHealth += healing * Time.deltaTime;
+        //_currentHealth += healing * Time.deltaTime;
 
         foreach(BodyParts part in _damagedBodyParts)
         {
-            _bodyPartHealth[part] += healing / _damagedBodyParts.Count * Time.deltaTime;
-            if (_bodyPartHealth[part] >= _maxBodyPartHealth[part] )
+            float heal = healing / _damagedBodyParts.Count * Time.deltaTime;
+            if (_bodyPartHealth[part] + heal >= _maxBodyPartHealth[part] )
+            {
+                float healFration = _maxBodyPartHealth[part] - _bodyPartHealth[part];
                 _bodyPartHealth[part] = _maxBodyPartHealth[part];
+                _currentHealth += healFration;
+            }
+            else
+            {
+                _bodyPartHealth[part] += heal;
+                _currentHealth += heal;
+            }
         }
         foreach(BodyParts part in _bodyPartHealth.Keys)
         {
@@ -310,7 +321,7 @@ public class HealthManager : MonoBehaviour
 
     private void ReduceMaxHealth()
     {
-        foreach (BodyParts part in _maxBodyPartHealth.Keys)
+        foreach (BodyParts part in _maxBodyPartHealth.Keys.ToList())
         {
             _maxBodyPartHealth[part] *= _maxHealthMultiplier;
         }

@@ -1,4 +1,3 @@
-using UnityEditor;
 using UnityEngine;
 
 public class Blocking : MonoBehaviour
@@ -19,14 +18,20 @@ public class Blocking : MonoBehaviour
     [SerializeField]
     private GameEvent _loseStamina;
 
+    private StateManager _stateManager;
     private Direction _blockDirection;
     private Direction _storredHoldDirection;
     private AimingInputState _aimingInputState;
     private BlockMedium _blockMedium = BlockMedium.Shield;
     private AttackState _previousState = AttackState.Idle;
 
+    
     public void BlockMovement(Component sender, object obj)
     {
+        //on top to make sure all objects that use this script get their statemanager initialised the momenent 1 uses it.
+        if (_stateManager == null)
+            _stateManager = GetComponent<StateManager>();
+
         //Check for vallid signal
         AimingOutputArgs args = obj as AimingOutputArgs;
         if (args == null) return;
@@ -110,7 +115,7 @@ public class Blocking : MonoBehaviour
 
 
         //Compare attack with current defence
-        if (!IsBlockMediumVallid())
+        if (!IsBlockMediumVallid() || _stateManager.AttackState == AttackState.Stun)
             _blockMedium = BlockMedium.Nothing;
 
         BlockResult blockResult;

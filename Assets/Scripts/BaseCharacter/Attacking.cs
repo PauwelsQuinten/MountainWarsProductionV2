@@ -102,7 +102,7 @@ public class Attacking : MonoBehaviour
         _attackRange = GetAttackMediumRange(args);
         _attackPower = CalculatePower(args);
         _attackHeight = args.AttackHeight;
-        Debug.Log($"charging : {_wasCharging}, power: {_attackPower}");
+        //Debug.Log($"charging : {_wasCharging}, power: {_attackPower}");
 
         if (args.AnimationStart)
         {

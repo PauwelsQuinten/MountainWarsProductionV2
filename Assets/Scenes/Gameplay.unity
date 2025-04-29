@@ -692,6 +692,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: ComicPanelCanvas
       objectReference: {fileID: 0}
+    - target: {fileID: 1568980510461740314, guid: 612450168a7df0444a258ec2be0a03ee, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4457800707215652366, guid: 612450168a7df0444a258ec2be0a03ee, type: 3}
+      propertyPath: m_Texture
+      value: 
+      objectReference: {fileID: 8400000, guid: 997b2a3d36119454e853ff943a088b42, type: 2}
     - target: {fileID: 4943456866223265795, guid: 612450168a7df0444a258ec2be0a03ee, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -779,6 +787,10 @@ PrefabInstance:
     - target: {fileID: 6780615039242120356, guid: 612450168a7df0444a258ec2be0a03ee, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7536724293365570995, guid: 612450168a7df0444a258ec2be0a03ee, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4271,14 +4283,6 @@ PrefabInstance:
       propertyPath: _cameraToLookAt
       value: 
       objectReference: {fileID: 154107434}
-    - target: {fileID: 1968497683231143963, guid: 2afb5e9156a620142b1a82f41b284732, type: 3}
-      propertyPath: _allActionPrefabs.Array.size
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 1968497683231143963, guid: 2afb5e9156a620142b1a82f41b284732, type: 3}
-      propertyPath: '_allActionPrefabs.Array.data[10]'
-      value: 
-      objectReference: {fileID: 4517659878342515072, guid: 9bba078d1fd9ed74ea9456198d784d49, type: 3}
     - target: {fileID: 8692327843256700154, guid: 2afb5e9156a620142b1a82f41b284732, type: 3}
       propertyPath: m_LocalPosition.x
       value: 4.87

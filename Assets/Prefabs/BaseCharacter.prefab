@@ -115,10 +115,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _OnStunRecovery: {fileID: 11400000, guid: ef1c1e852f404ef41a2a5ae46280abb3, type: 2}
-  _blackboardRef:
-    useConstant: 0
-    constantValue: {x: 0, y: 0}
-    variable: {fileID: 11400000, guid: 2a061d8ac2119774a93990abdf59c3ae, type: 2}
+  _blackboardRefs: []
   AttackState: 0
   AttackHeight: 0
   Orientation: 0
@@ -171,10 +168,11 @@ MonoBehaviour:
     constantValue: {x: 0, y: 0}
     variable: {fileID: 0}
   _AimOutputEvent: {fileID: 11400000, guid: 3ce36d1a0cee9b64db3b05b01a8aece3, type: 2}
-  _sheathWeapon: {fileID: 0}
   _stabAcceptedRange: 45
   _maxAllowedBlockAngle: 150
   _acceptedAngleForCenter: 35
+  _feintAngle: 100
+  _maxSwingSpeed: 2
 --- !u!114 &6458811806028097463
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -201,10 +199,7 @@ MonoBehaviour:
   _characterLayer:
     serializedVersion: 2
     m_Bits: 8
-  _blackboardRef:
-    useConstant: 0
-    constantValue: {x: 0, y: 0}
-    variable: {fileID: 11400000, guid: 2a061d8ac2119774a93990abdf59c3ae, type: 2}
+  _blackboardRefs: []
   _changeAnimation: {fileID: 11400000, guid: f56e344763da3c34d9b3e5d48d24a9e4, type: 2}
 --- !u!114 &6469151571926413075
 MonoBehaviour:
@@ -218,10 +213,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c20b34aa3e83034996fae4520c0383b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _blackboard:
-    useConstant: 0
-    constantValue: {x: 0, y: 0}
-    variable: {fileID: 11400000, guid: 2a061d8ac2119774a93990abdf59c3ae, type: 2}
+  _blackboards: []
   _succesfullBlockevent: {fileID: 11400000, guid: 2cc625b4ec016e14899ad658a28da4c8, type: 2}
   _equipmentUpdate: {fileID: 11400000, guid: 1fa0ac8c24365fa4fa43f0ccc057a02a, type: 2}
   _succesfullHitEvent: {fileID: 11400000, guid: 0bab4ec7dd547c941b5209c87202a055, type: 2}
@@ -280,19 +272,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _maxBaseLimbHealth: 100
   _regenRate: 10
+  _maxHealthMultiplier: 0.9
   _changedHealth: {fileID: 11400000, guid: 76601f3ffea2c334ab44c82b48491b3d, type: 2}
-  _currentBlood: 100
   _maxBlood: 100
   _bleedOutSpeed: 5
   _changedBlood: {fileID: 11400000, guid: e4f4ee8ab6150234d9854f343b1fed94, type: 2}
   _damageDropOff: 1
-  _patchUpSpeed: 1
+  _damageIncreaseWhenStunned: 1.25
+  _patchUpSpeed:
+    useConstant: 0
+    constantValue: 0
+    variable: {fileID: 0}
+  _timeBeforeRegerating: 2
   _patchUp: {fileID: 11400000, guid: b60a265955952bd458a744ff3fa08d58, type: 2}
   _stateManager: {fileID: 4165634575879343316}
-  _blackboard:
-    useConstant: 0
-    constantValue: {x: 0, y: 0}
-    variable: {fileID: 11400000, guid: 2a061d8ac2119774a93990abdf59c3ae, type: 2}
+  _blackboards: []
 --- !u!114 &3036795874959978044
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -309,10 +303,7 @@ MonoBehaviour:
   _maxStamina: 100
   _regenSpeed: 5
   _changedStamina: {fileID: 11400000, guid: d96f2c247ec32f843932f40997f1c382, type: 2}
-  _blackboard:
-    useConstant: 0
-    constantValue: {x: 0, y: 0}
-    variable: {fileID: 11400000, guid: 2a061d8ac2119774a93990abdf59c3ae, type: 2}
+  _blackboards: []
 --- !u!114 &1490819108717279631
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -340,10 +331,8 @@ MonoBehaviour:
   _itemPickupRadius: 1
   _startAngle: 195
   _sideAngleToStart: 60
-  _blackboard:
-    useConstant: 0
-    constantValue: {x: 0, y: 0}
-    variable: {fileID: 11400000, guid: 2a061d8ac2119774a93990abdf59c3ae, type: 2}
+  _swordStartRotation: {x: 0.82728744, y: -0.03841147, z: -0.4745222, w: -0.29824284}
+  _blackboards: []
 --- !u!114 &6822675981429713178
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -507,6 +496,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: ef1c1e852f404ef41a2a5ae46280abb3, type: 2}
   - {fileID: 11400000, guid: 7f9e479aba9dadf4abc23c350fe51bba, type: 2}
   - {fileID: 11400000, guid: f41d8ef354481b64c8a23daf9777d094, type: 2}
+  - {fileID: 11400000, guid: a3dc6a9414fda0240b1e7750860013f8, type: 2}
   Responses:
   - m_PersistentCalls:
       m_Calls:
@@ -919,6 +909,20 @@ MonoBehaviour:
       - m_Target: {fileID: 1490819108717279631}
         m_TargetAssemblyTypeName: EquipmentManager, Assembly-CSharp
         m_MethodName: RotateSword
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6469151571926413075}
+        m_TargetAssemblyTypeName: Blocking, Assembly-CSharp
+        m_MethodName: SetInParryMotion
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

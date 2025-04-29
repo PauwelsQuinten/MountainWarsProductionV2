@@ -25,6 +25,7 @@ public class Blocking : MonoBehaviour
     private AimingInputState _aimingInputState;
     private BlockMedium _blockMedium = BlockMedium.Shield;
     private AttackState _previousState = AttackState.Idle;
+    private bool _isInParryMotion = false; //is used for the block result, when the shield is in a parry animation the result should be different
 
     
     public void BlockMovement(Component sender, object obj)
@@ -193,6 +194,11 @@ public class Blocking : MonoBehaviour
         _storredHoldDirection = _blockDirection;
     }
 
+    public void SetInParryMotion(Component sender, object obj)
+    {
+        if (sender.gameObject != gameObject) return;
+        _isInParryMotion = (bool)obj;
+    }
 
     private void PlayShieldAnimation()
     {
@@ -329,6 +335,11 @@ public class Blocking : MonoBehaviour
 
         if (_aimingInputState != AimingInputState.Hold )
             blockDirection = Direction.Idle;
+         
+        //When in parryMotion, it means that the parry failed and went over to block. This would be by a wrong direction or timing     
+        if (_isInParryMotion)
+            return BlockResult.Hit;
+         
 
         switch (args.AttackType)
         {
@@ -342,7 +353,7 @@ public class Blocking : MonoBehaviour
             case AttackType.HorizontalSlashToLeft:
                 if (blockDirection == Direction.ToLeft)
                     blockResult = BlockResult.FullyBlocked;
-                else if (blockDirection == Direction.ToRight)
+                else if (blockDirection == Direction.ToRight )
                     blockResult = BlockResult.Hit;
                 else
                     blockResult = BlockResult.HalfBlocked;

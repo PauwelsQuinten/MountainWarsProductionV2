@@ -363,7 +363,7 @@ public class Aiming : MonoBehaviour
             IsFeint = IsFeintMovement(_swingDirection)
 
         };
-        Debug.Log($"Send package: {package.AttackState}, {package.AttackSignal}, {_enmAimingInput}, angle : {_traversedAngle}, swing direction: {package.Direction}, block direction: {package.BlockDirection} holding = {package.IsHoldingBlock}");
+        //Debug.Log($"Send package: {package.AttackState}, {package.AttackSignal}, {_enmAimingInput}, angle : {_traversedAngle}, swing direction: {package.Direction}, block direction: {package.BlockDirection} holding = {package.IsHoldingBlock}");
 
         /*if (_enmAttackSignal == AttackSignal.Feint)
             _AimOutputEvent.Raise(this, package);*/
@@ -491,9 +491,9 @@ public class Aiming : MonoBehaviour
         var endAngleRad = CalculateAngleRadOfInput(inputVec) - orientAngleRad;
         endAngleRad = ClampAngle(endAngleRad);
 
-        if (_enmAttackSignal != AttackSignal.Idle)
+        /*if (_enmAttackSignal != AttackSignal.Idle)
             Debug.Log($"startangle for determening aim = {endAngleRad}-----------------------------------------------------");
-
+*/
         //Debug.Log($"storredDirection= {_swingDirection}");
         //Debug.Log($"end: {_refAimingInput.variable.value} angle= {endAngleRad * Mathf.Rad2Deg}, start: {_vec2Start} angle= {startAngleRad * Mathf.Rad2Deg}");
 

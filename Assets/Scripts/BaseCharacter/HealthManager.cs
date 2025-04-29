@@ -217,12 +217,7 @@ public class HealthManager : MonoBehaviour
             _isBleeding = true;
             _stateManager.IsBleeding = _isBleeding;
         }
-        if (_currentBlood <= 0)
-        {
-            _currentBlood = 0;
-            return;
-        }
-
+        
         _currentBlood -= _bleedOutRate * Time.deltaTime;
 
         _changedBlood.Raise

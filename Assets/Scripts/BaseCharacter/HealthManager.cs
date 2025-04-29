@@ -42,6 +42,8 @@ public class HealthManager : MonoBehaviour
     private float _timeBeforeRegerating = 2f;
     [SerializeField]
     private GameEvent _patchUp;
+    [SerializeField, Tooltip("The amount of health you will recover after succesfully patching yourself up")]
+    private float _healAmount = 100f;
 
     [Header("Managers")]
     [SerializeField]
@@ -54,13 +56,14 @@ public class HealthManager : MonoBehaviour
 
     private float _currentHealth;
     private float _maxHealth;
+    private float _currentHealtAmount = 0f;
+    private bool _canRegenHealth = false;
 
     private Dictionary<BodyParts, float> _bodyPartHealth = new Dictionary<BodyParts, float>();
     private Dictionary<BodyParts, float> _maxBodyPartHealth = new Dictionary<BodyParts, float>();
     private float _bleedOutRate;
 
     private bool _canRegenBlood = false;
-    private bool _canRegenHealth = false;
     private Coroutine _canRegenCoroutine;
     private Coroutine _patchUpRoutine;
 
@@ -96,8 +99,8 @@ public class HealthManager : MonoBehaviour
         LoseHealth(args.AttackPower, args);
 
         if (_canRegenCoroutine != null) StopCoroutine(_canRegenCoroutine);
-        _canRegenCoroutine = StartCoroutine(ResetCanRegen());
         _canRegenHealth = false;
+        _canRegenBlood = false;
 
         if (_patchUpRoutine != null)
         {
@@ -176,38 +179,45 @@ public class HealthManager : MonoBehaviour
 
                 if (_bodyPartHealth[part] <= 0)
                 {
-                    if (part == BodyParts.Head)
-                    {
-                        _currentHealth = 0;
-                        if (_changedHealth != null) _changedHealth.Raise
-                            (this, new HealthEventArgs
-                            {
-                                BodyPartsHealth = _bodyPartHealth,
-                                MaxBodyPartsHealth = _maxBodyPartHealth,
-                                CurrentHealth = _currentHealth,
-                                MaxHealth = _maxHealth,
-                                DamagedBodyParts = _damagedBodyParts,
-                            }); 
-                    }
-                    else if (part == BodyParts.Torso)
-                        _bleedOutRate += _bleedOutSpeed * 1.5f;
-                    else
-                        _bleedOutRate += _bleedOutSpeed;
-
-                    _canRegenBlood = false;
-                    _isBleeding = true;
-                    _stateManager.IsBleeding = _isBleeding;
-                    ReduceMaxHealth();
-
-                    if (!gameObject.CompareTag(PLAYER) && _currentHealth <= 0)
-                        Destroy(gameObject);
+                    StartsBleeding(part);
                 }
             }
             else
             {
+                //When regen gets interupted, bodyPart stays <= 0, set bleeding again then
+                StartsBleeding(part);
                 Debug.Log($"{part} has taken too much damage");
             }
         }
+    }
+
+    private void StartsBleeding(BodyParts part)
+    {
+        if (part == BodyParts.Head)
+        {
+            _currentHealth = 0;
+            if (_changedHealth != null) _changedHealth.Raise
+                (this, new HealthEventArgs
+                {
+                    BodyPartsHealth = _bodyPartHealth,
+                    MaxBodyPartsHealth = _maxBodyPartHealth,
+                    CurrentHealth = _currentHealth,
+                    MaxHealth = _maxHealth,
+                    DamagedBodyParts = _damagedBodyParts,
+                });
+        }
+        else if (part == BodyParts.Torso)
+            _bleedOutRate += _bleedOutSpeed * 1.5f;
+        else
+            _bleedOutRate += _bleedOutSpeed;
+
+        _canRegenBlood = false;
+        _isBleeding = true;
+        _stateManager.IsBleeding = _isBleeding;
+        ReduceMaxHealth();
+
+        if (!gameObject.CompareTag(PLAYER) && _currentHealth <= 0)
+            Destroy(gameObject);
     }
 
     private void LoseBlood()
@@ -265,11 +275,13 @@ public class HealthManager : MonoBehaviour
                 float healFration = _maxBodyPartHealth[part] - _bodyPartHealth[part];
                 _bodyPartHealth[part] = _maxBodyPartHealth[part];
                 _currentHealth += healFration;
+                _currentHealtAmount += healFration;
             }
             else
             {
                 _bodyPartHealth[part] += heal;
                 _currentHealth += heal;
+                _currentHealtAmount += heal;
             }
         }
         foreach(BodyParts part in _bodyPartHealth.Keys)
@@ -278,11 +290,12 @@ public class HealthManager : MonoBehaviour
                 _damagedBodyParts.Remove(part);
         }
 
-        if(_damagedBodyParts.Count == 0)
+        if(_currentHealtAmount >= _healAmount || _damagedBodyParts.Count == 0)
         {
             if (_currentHealth > _maxHealth)
                 _currentHealth = _maxHealth;
             _canRegenHealth = false;
+            _currentHealtAmount = 0f;
         }
 
         _changedHealth.Raise
@@ -335,6 +348,8 @@ public class HealthManager : MonoBehaviour
         {
             if(_currentBlood != _maxBlood) 
                 _canRegenBlood = true;
+            if (_canRegenCoroutine != null)
+                StopCoroutine(_canRegenCoroutine);
             StartCoroutine(ResetCanRegen());
         }
     }

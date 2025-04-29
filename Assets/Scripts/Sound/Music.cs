@@ -2,11 +2,22 @@ using System;
 using FMOD.Studio;
 using FMODUnity;
 using UnityEngine;
+using STOP_MODE = FMOD.Studio.STOP_MODE;
 
 public class Music : MonoBehaviour
 {
+    [Header("Music")]
     [SerializeField] private EventReference _music;
     private EventInstance _musicInstance;
+    
+    [Header("Snapshots")]
+    [SerializeField] private EventReference _townReverbSnapshot;
+    private EventInstance _townReverbSnapshotInstance;
+    [SerializeField] private EventReference _forestReverbSnapshot;
+    private EventInstance _forestReverbSnapshotInstance;
+    [SerializeField] private EventReference _mountainReverbSnapshot;
+    private EventInstance _mountainReverbSnapshotInstance;
+    
     private PARAMETER_ID _musiczoneID;
     private float _musiczoneIDValue;
     private PARAMETER_ID _combatLevelID;
@@ -14,7 +25,6 @@ public class Music : MonoBehaviour
     private string _currentSceneName;
     private SwitchBiomeEventArgs _switchBiomeEventArgs;
     private NewTargetEventArgs _newTargetEventArgs;
-    private bool _isBiomeActive = false;
     private bool _canChangeSong = true;
 
     private GameObject _currentTrigger;
@@ -33,6 +43,10 @@ public class Music : MonoBehaviour
 
     private void Start()
     {
+        _townReverbSnapshotInstance = RuntimeManager.CreateInstance(_townReverbSnapshot);
+        _forestReverbSnapshotInstance = RuntimeManager.CreateInstance(_forestReverbSnapshot);
+        _mountainReverbSnapshotInstance = RuntimeManager.CreateInstance(_mountainReverbSnapshot);
+
         _musicInstance = RuntimeManager.CreateInstance(_music);
         _musicInstance.start();
 
@@ -60,12 +74,6 @@ public class Music : MonoBehaviour
     
     private void Update()
     {
-        // Prevent scene-based updates if biome music is active
-        if (_isBiomeActive)
-        {
-            return;
-        }
-
         string activeSceneName = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
         if (activeSceneName != _currentSceneName)
         {
@@ -80,20 +88,20 @@ public class Music : MonoBehaviour
         {
             case "MainMenu":
                 _combatLevelIDValue = 0.0f;
-                ResetToSceneMusic();
                 _musiczoneIDValue = 0.0f;
                 break;
             case "Gameplay":
                 _musiczoneIDValue = 1.0f;
+                _townReverbSnapshotInstance.start();
+                _forestReverbSnapshotInstance.stop(STOP_MODE.IMMEDIATE);
+                _mountainReverbSnapshotInstance.stop(STOP_MODE.IMMEDIATE);
                 break;
             case "GameWon":
                 _combatLevelIDValue = 0.0f;
-                ResetToSceneMusic();
                 _musiczoneIDValue = 4.0f;
                 break;
             case "GameLost":
                 _combatLevelIDValue = 0.0f;
-                ResetToSceneMusic();
                 _musiczoneIDValue = 5.0f;
                 break;
              default:
@@ -121,7 +129,6 @@ public class Music : MonoBehaviour
             if (!_canChangeSong) return;
 
             _canChangeSong = false;
-            _isBiomeActive = true; // Set biome flag to true
 
             switch (_switchBiomeEventArgs.NextBiome)
             {
@@ -130,9 +137,15 @@ public class Music : MonoBehaviour
                     break;
                 case Biome.Forest:
                     _musiczoneIDValue = 2.0f;
+                    _forestReverbSnapshotInstance.start();
+                    _mountainReverbSnapshotInstance.stop(STOP_MODE.IMMEDIATE);
+                    _townReverbSnapshotInstance.stop(STOP_MODE.IMMEDIATE);
                     break;
                 case Biome.Mountain:
                     _musiczoneIDValue = 3.0f;
+                    _mountainReverbSnapshotInstance.start();
+                    _forestReverbSnapshotInstance.stop(STOP_MODE.IMMEDIATE);
+                    _townReverbSnapshotInstance.stop(STOP_MODE.IMMEDIATE);
                     break;
             }
 
@@ -165,19 +178,15 @@ public class Music : MonoBehaviour
             SetGlobalParameterID(_combatLevelID, _combatLevelIDValue);
         }
     }
-    private void ResetToSceneMusic()
-    {
-        if (!_isBiomeActive)
-        {
-            return;
-        }
-
-         _isBiomeActive = false; // Reset biome flag
-        UpdateMusicForScene(_currentSceneName); // Reapply scene music
-    }
     private void OnDestroy()
     {
         _musicInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
         _musicInstance.release();
+        _forestReverbSnapshotInstance.stop(STOP_MODE.IMMEDIATE);
+        _townReverbSnapshotInstance.stop(STOP_MODE.IMMEDIATE);
+        _mountainReverbSnapshotInstance.stop(STOP_MODE.IMMEDIATE);
+        _forestReverbSnapshotInstance.release();
+        _townReverbSnapshotInstance.release();
+        _mountainReverbSnapshotInstance.release();
     }
 }

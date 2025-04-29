@@ -105,7 +105,6 @@ public class FMODAudioHandler : MonoBehaviour
         StartCoroutine(ChangeWindIntensity());
         _ambienceInstance.set3DAttributes(_attributes);
         _ambienceInstance.start();
-        
     }
 
     private void Start()

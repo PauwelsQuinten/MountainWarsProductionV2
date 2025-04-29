@@ -231,6 +231,7 @@ namespace UnityEngine
         Forward,
         Backward,
         Side,
+        PatrolPoint
     }
     public enum AIInputAction
     {

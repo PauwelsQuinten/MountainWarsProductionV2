@@ -1,3 +1,4 @@
+using NUnit.Framework;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
@@ -10,11 +11,14 @@ public class MoveToAction : GoapAction
     [SerializeField] private ObjectTarget _MoveTo = ObjectTarget.Player;
     [Header("Input")]
     [SerializeField] private GameEvent _moveInput;
+    [SerializeField, Tooltip("when MoveTo is set to PatrolPoints, he will take from this starting from 0")]
+    private List<Transform> _patrolPoints;
 
     private List<Equipment> _foundEquipment = new List<Equipment>();
     private Equipment _foundSpecificEquipment;
     private int _direction = 0;
     private NavMeshAgent _navMeshAgent= null;
+    private int _patrolIndex = 0;
 
     Vector3 _targetDir = Vector3.zero;
     Vector3 _targetPos = Vector3.zero;
@@ -43,6 +47,17 @@ public class MoveToAction : GoapAction
 
             case ObjectTarget.Player:
             case ObjectTarget.Forward:
+                break;
+            case ObjectTarget.PatrolPoint:
+                if (_patrolPoints != null && _patrolPoints.Count > 0) break;
+                _patrolPoints = new List<Transform>();
+                var obj = GameObject.Find("PatrolPointFountains");
+                foreach (Transform child in obj.transform)
+                {
+                    _patrolPoints.Add(child);
+                }
+
+
                 break;
             case ObjectTarget.Backward:
                 break;
@@ -84,10 +99,20 @@ public class MoveToAction : GoapAction
 
         FindTargetPosAndDirection(blackboard, ref targetDir, npcPos, ref targetPos, ref angleRad);
 
+        //Update target position when he moves around
         if (Vector3.Distance(targetPos, _targetPos) > 1f )
+        {
             _navMeshAgent.SetDestination(targetPos);
+            _targetPos = targetPos;
+        }
         if (Vector3.Distance(targetDir, _targetDir) > 1f )
             _moveInput.Raise(this, new DirectionEventArgs { MoveDirection = targetDir, SpeedMultiplier = 1f, Sender = npc });
+
+        if (Vector3.Distance(npcPos, _targetPos) < 1f)
+        {
+            _patrolIndex++;
+            _patrolIndex %= _patrolPoints.Count;
+        }
 
         if (_navMeshAgent.isStopped)
             _navMeshAgent.isStopped = false;
@@ -97,6 +122,7 @@ public class MoveToAction : GoapAction
     {
         if (!_navMeshAgent.isActiveAndEnabled)
             return false;
+
         if (base.IsCompleted(currentWorldState))
         {
             _moveInput.Raise(this, new DirectionEventArgs { MoveDirection = Vector2.zero, SpeedMultiplier = 1f, Sender = npc });
@@ -192,6 +218,15 @@ public class MoveToAction : GoapAction
                 targetPos = targetDir + npcPos;
                 break;
 
+            case ObjectTarget.PatrolPoint:
+                if (_patrolPoints == null || _patrolPoints.Count < 0) return;
+                targetPos = _patrolPoints[_patrolIndex].transform.position;
+               
+
+                targetDir = targetPos - npcPos;
+                targetDir = new Vector2(targetDir.x, targetDir.z);
+                targetDir.Normalize(); 
+                break;
         }
     }
 

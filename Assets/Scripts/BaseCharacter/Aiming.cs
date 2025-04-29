@@ -464,7 +464,7 @@ public class Aiming : MonoBehaviour
             return Direction.ToCenter;
         else if (diff > 30 && diff < _maxAllowedBlockAngle || (_refAimingInput.variable.StateManager.IsHoldingShield && diff > 30))
             return Direction.ToLeft;
-        else if (diff < -30 && diff > -100 || (_refAimingInput.variable.StateManager.IsHoldingShield && diff < -30))
+        else if (diff < -30 && diff > -_maxAllowedBlockAngle || (_refAimingInput.variable.StateManager.IsHoldingShield && diff < -30))
             return Direction.ToRight;
         return Direction.Wrong;
     }

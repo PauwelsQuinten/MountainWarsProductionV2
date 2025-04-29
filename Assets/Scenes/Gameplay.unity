@@ -3212,7 +3212,35 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7670835977375516435, guid: 84920d53d85a0284d9f8ee2f567dcd6b, type: 3}
       insertIndex: -1
       addedObject: {fileID: 311530452}
+    - targetCorrespondingSourceObject: {fileID: 6308726399885025850, guid: 84920d53d85a0284d9f8ee2f567dcd6b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1409731812}
   m_SourcePrefab: {fileID: 100100000, guid: 84920d53d85a0284d9f8ee2f567dcd6b, type: 3}
+--- !u!1 &1409731811 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6308726399885025850, guid: 84920d53d85a0284d9f8ee2f567dcd6b, type: 3}
+  m_PrefabInstance: {fileID: 1409731810}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1409731812
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1409731811}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SerializedVersion: 0
+  m_OverrideArea: 1
+  m_Area: 1
+  m_OverrideGenerateLinks: 0
+  m_GenerateLinks: 0
+  m_IgnoreFromBuild: 0
+  m_ApplyToChildren: 1
+  m_AffectedAgents: ffffffff
 --- !u!1001 &1438861116
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4377,7 +4405,7 @@ MonoBehaviour:
   m_Center: {x: 0, y: 2, z: 0}
   m_LayerMask:
     serializedVersion: 2
-    m_Bits: 8191
+    m_Bits: 4294967295
   m_UseGeometry: 0
   m_DefaultArea: 0
   m_GenerateLinks: 0

@@ -1,11 +1,11 @@
-using UnityEditor;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Blocking : MonoBehaviour
 {
     private const string PLAYER = "Player";
 
-    [SerializeField] private BlackboardReference _blackboard;
+    [SerializeField] private List<BlackboardReference> _blackboards;
 
     [Header("Events")]
     [SerializeField] private GameEvent _succesfullBlockevent;
@@ -19,14 +19,21 @@ public class Blocking : MonoBehaviour
     [SerializeField]
     private GameEvent _loseStamina;
 
+    private StateManager _stateManager;
     private Direction _blockDirection;
     private Direction _storredHoldDirection;
     private AimingInputState _aimingInputState;
     private BlockMedium _blockMedium = BlockMedium.Shield;
     private AttackState _previousState = AttackState.Idle;
+    private bool _isInParryMotion = false; //is used for the block result, when the shield is in a parry animation the result should be different
 
+    
     public void BlockMovement(Component sender, object obj)
     {
+        //on top to make sure all objects that use this script get their statemanager initialised the momenent 1 uses it.
+        if (_stateManager == null)
+            _stateManager = GetComponent<StateManager>();
+
         //Check for vallid signal
         AimingOutputArgs args = obj as AimingOutputArgs;
         if (args == null) return;
@@ -110,11 +117,13 @@ public class Blocking : MonoBehaviour
 
 
         //Compare attack with current defence
-        if (!IsBlockMediumVallid())
-            _blockMedium = BlockMedium.Nothing;
+        BlockMedium tempMedium = _blockMedium;
+        if (!IsBlockMediumVallid() || _stateManager.AttackState == AttackState.Stun)
+            tempMedium = BlockMedium.Nothing;
+
 
         BlockResult blockResult;
-        switch(_blockMedium)
+        switch(tempMedium)
         {
             case BlockMedium.Shield:
                 blockResult = UsingShield(args);
@@ -164,7 +173,6 @@ public class Blocking : MonoBehaviour
                 case BlockResult.SwordBlock:
                     _loseStamina.Raise(this, new StaminaEventArgs { StaminaCost = _staminaCost.value * 0.5f });
                     _succesfullBlockevent.Raise(this, new StunEventArgs { StunDuration = 0.75f, ComesFromEnemy = true });
-                    //_succesfullHitEvent.Raise(this, args);
 
                     break;
                 case BlockResult.SwordHalfBlock:
@@ -186,6 +194,11 @@ public class Blocking : MonoBehaviour
         _storredHoldDirection = _blockDirection;
     }
 
+    public void SetInParryMotion(Component sender, object obj)
+    {
+        if (sender.gameObject != gameObject) return;
+        _isInParryMotion = (bool)obj;
+    }
 
     private void PlayShieldAnimation()
     {
@@ -202,16 +215,19 @@ public class Blocking : MonoBehaviour
         if (args == null)
         {
             if (gameObject.CompareTag(PLAYER))
-                _blackboard.variable.TargetShieldState = Direction.Idle;
+                foreach (var blackboard in _blackboards)
+                    blackboard.variable.TargetShieldState = Direction.Idle;
+
             else
-                _blackboard.variable.ShieldState = Direction.Idle;
+                _blackboards[0].variable.ShieldState = Direction.Idle;
         }
         else
         {
             if (gameObject.CompareTag(PLAYER))
-                _blackboard.variable.TargetShieldState = args.BlockDirection;
+                foreach (var blackboard in _blackboards)
+                    blackboard.variable.TargetShieldState = args.BlockDirection;
             else
-                _blackboard.variable.ShieldState = args.BlockDirection;
+                _blackboards[0].variable.ShieldState = args.BlockDirection;
         }
        
     }
@@ -319,6 +335,11 @@ public class Blocking : MonoBehaviour
 
         if (_aimingInputState != AimingInputState.Hold )
             blockDirection = Direction.Idle;
+         
+        //When in parryMotion, it means that the parry failed and went over to block. This would be by a wrong direction or timing     
+        if (_isInParryMotion)
+            return BlockResult.Hit;
+         
 
         switch (args.AttackType)
         {
@@ -332,7 +353,7 @@ public class Blocking : MonoBehaviour
             case AttackType.HorizontalSlashToLeft:
                 if (blockDirection == Direction.ToLeft)
                     blockResult = BlockResult.FullyBlocked;
-                else if (blockDirection == Direction.ToRight)
+                else if (blockDirection == Direction.ToRight )
                     blockResult = BlockResult.Hit;
                 else
                     blockResult = BlockResult.HalfBlocked;

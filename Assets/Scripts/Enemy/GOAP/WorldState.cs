@@ -265,7 +265,9 @@ public class WorldState : MonoBehaviour
         Stamina = CalculateValue(_blackboard.variable.Stamina);
         Health = CalculateValue(_blackboard.variable.Health);
         RHEquipment = CalculateValue(_blackboard.variable.RHEquipmentHealth);
+        HasRHEquipment = RHEquipment != EWorldStateValue.Zero ? EWorldStatePossesion.InPossesion : EWorldStatePossesion.NotInPossesion;
         LHEquipment = CalculateValue(_blackboard.variable.LHEquipmentHealth);
+        HasLHEquipment = LHEquipment != EWorldStateValue.Zero ? EWorldStatePossesion.InPossesion : EWorldStatePossesion.NotInPossesion;
 
     }
 

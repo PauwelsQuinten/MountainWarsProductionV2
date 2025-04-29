@@ -126,7 +126,7 @@ public class UIHealthManager : MonoBehaviour
         float barFill = args.CurrentBlood / args.MaxBlood;
         _bloodBar.fillAmount = barFill;
 
-        if (args.CurrentBlood <= 0 && gameObject.CompareTag("Player"))
+        if (args.CurrentBlood <= 0 && sender.gameObject.CompareTag("Player"))
             _gameLost.Raise(this, EventArgs.Empty);
 
         //if (sender.gameObject.GetComponent<PlayerController>() == null)

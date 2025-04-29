@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using System.Transactions;
 using UnityEngine;
 
@@ -23,7 +24,7 @@ public class StaminaManager : MonoBehaviour
 
     [Header("Blackboard")]
     [SerializeField]
-    private BlackboardReference _blackboard;
+    private List<BlackboardReference> _blackboards;
 
     private bool _canRegen;
     private Coroutine _resetRegen;
@@ -72,9 +73,11 @@ public class StaminaManager : MonoBehaviour
     {
         //Update blackboard
         if (gameObject.CompareTag(PLAYER))
-            _blackboard.variable.TargetStamina = CurrentStamina / _maxStamina;
+            foreach (var blackboard in _blackboards)
+                blackboard.variable.TargetStamina = CurrentStamina / _maxStamina;
+
         else
-            _blackboard.variable.Stamina = CurrentStamina / _maxStamina;
+            _blackboards[0].variable.Stamina = CurrentStamina / _maxStamina;
     }
 
     private IEnumerator ResetCanRegen()

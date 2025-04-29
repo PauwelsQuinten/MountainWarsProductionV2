@@ -1,7 +1,5 @@
 using System.Collections;
 using UnityEngine;
-using static UnityEditor.Experimental.GraphView.GraphView;
-using static UnityEngine.Rendering.GPUSort;
 
 public class AnimationManager : MonoBehaviour
 {
@@ -115,7 +113,7 @@ public class AnimationManager : MonoBehaviour
         _animator.SetBool("IsStunned", true);
     }
 
-     public void RecoverStunned(Component Sender, object obj)
+    public void RecoverStunned(Component Sender, object obj)
     {
         if (Sender.gameObject != gameObject) return;
 

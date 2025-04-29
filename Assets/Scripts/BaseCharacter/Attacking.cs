@@ -35,7 +35,7 @@ public class Attacking : MonoBehaviour
     [Header("Enemy")]
     [SerializeField]
     private LayerMask _characterLayer;
-    [SerializeField] BlackboardReference _blackboardRef;
+    [SerializeField] List<BlackboardReference> _blackboardRefs;
 
     [Header("Animation")]
     [SerializeField]
@@ -78,7 +78,7 @@ public class Attacking : MonoBehaviour
         //
         //    //Signal to blackboard
         //    if (gameObject.CompareTag(PLAYER))
-        //        _blackboardRef.variable.TargetCurrentAttack = AttackType.None;
+        //        _blackboardRefs.variable.TargetCurrentAttack = AttackType.None;
         //    return;
         //}
 
@@ -87,7 +87,12 @@ public class Attacking : MonoBehaviour
         {
             //Signal to blackboard
             if (gameObject.CompareTag(PLAYER))
-                _blackboardRef.variable.TargetCurrentAttack = AttackType.None;
+            {
+                foreach (var blackboard in _blackboardRefs)
+                    blackboard.variable.TargetCurrentAttack = AttackType.None;
+            }
+
+
             return;
         }
 
@@ -97,7 +102,7 @@ public class Attacking : MonoBehaviour
         _attackRange = GetAttackMediumRange(args);
         _attackPower = CalculatePower(args);
         _attackHeight = args.AttackHeight;
-        Debug.Log($"charging : {_wasCharging}, power: {_attackPower}");
+        //Debug.Log($"charging : {_wasCharging}, power: {_attackPower}");
 
         if (args.AnimationStart)
         {
@@ -111,8 +116,11 @@ public class Attacking : MonoBehaviour
         //Signal to blackboard
         if (gameObject.CompareTag(PLAYER))
         {
-            _blackboardRef.variable.TargetCurrentAttack = _attackType;
-            _blackboardRef.variable.TargetState = args.AttackState;
+            foreach (var blackboard in _blackboardRefs)
+            {
+                blackboard.variable.TargetCurrentAttack = _attackType;
+                blackboard.variable.TargetState = args.AttackState;
+            }
         }
     }
 
@@ -124,11 +132,17 @@ public class Attacking : MonoBehaviour
         if (_attackType == AttackType.Stab) _loseStamina.Raise(this, new StaminaEventArgs { StaminaCost = _staminaCost.value * 0.75f });
         else _loseStamina.Raise(this, new StaminaEventArgs { StaminaCost = _staminaCost.value });
 
-
-        if (!IsEnemyInRange()) return;
+        GameObject target = null;
+        if (!IsEnemyInRange(out target)) return;
 
         Debug.Log($"{gameObject} throws {_attackType}");
-        _doAttack.Raise(this, new AttackEventArgs { AttackType = _attackType, AttackHeight = _attackHeight, AttackPower = _attackPower });
+        _doAttack.Raise(this, new AttackEventArgs {
+            AttackType = _attackType, 
+            AttackHeight = _attackHeight, 
+            AttackPower = _attackPower ,
+            Attacker = gameObject,
+            Defender = target
+        });
 
     }
 
@@ -138,8 +152,12 @@ public class Attacking : MonoBehaviour
 
         if (gameObject.CompareTag(PLAYER))
         {
-            _blackboardRef.variable.TargetCurrentAttack = AttackType.None;
-            _blackboardRef.variable.TargetState = AttackState.Idle;
+            foreach (var blackboard in _blackboardRefs)
+            {
+                blackboard.variable.TargetCurrentAttack = AttackType.None;
+                blackboard.variable.TargetState = AttackState.Idle;
+            }
+
         }
     }
 
@@ -223,16 +241,21 @@ public class Attacking : MonoBehaviour
         return AttackType.HorizontalSlashToLeft;
     }
 
-    private bool IsEnemyInRange()
+    private bool IsEnemyInRange(out GameObject hitTarget)
     {
         List<Collider> enemy = Physics.OverlapSphere(transform.position, _attackRange * 2).ToList();
+        hitTarget = null;
         if (enemy == null) return false;
         foreach (Collider c in enemy)
         {
             if (((1 << c.gameObject.layer) & _characterLayer) != 0)
             {
                 if (c.gameObject == gameObject) continue;
-                if(Vector3.Distance(transform.position, c.transform.position) < _attackRange) return true;
+                if (Vector3.Distance(transform.position, c.transform.position) < _attackRange)
+                {
+                    hitTarget = c.gameObject;                
+                    return true;
+                }
             }
         }
             return false;

@@ -27,7 +27,7 @@ public class KillPlayerGoal : GoapGoal
             || (blackboard.variable.ObservedAttack == blackboard.variable.TargetCurrentAttack 
                 && blackboard.variable.ObservedAttack != AttackType.None
                 && currentWorldState.AttackRange == EWorldStateRange.InRange)//Disarm
-            || currentWorldState.Behaviour == EBehaviourValue.Knock);
+            || currentWorldState.Behaviour == EBehaviourValue.Knock);//No attacks when you got hit
 
     }
 }

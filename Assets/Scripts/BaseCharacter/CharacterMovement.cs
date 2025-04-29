@@ -15,7 +15,7 @@ public class CharacterMovement : MonoBehaviour
 
     [Header("Stamina")]
     [SerializeField]
-    private FloatReference _sprintCost;
+    private FloatReference _staminaCost;
     [SerializeField]
     private GameEvent _removeStamina;
 
@@ -84,12 +84,12 @@ public class CharacterMovement : MonoBehaviour
         if (_staminaManager == null) _staminaManager = GetComponent<StaminaManager>();
         if (speedMultiplier > 1)
         {
-            if (_sprintCost.value > _staminaManager.CurrentStamina)
+            if (_staminaCost.value > _staminaManager.CurrentStamina)
             {
                 _moveInput.variable.SpeedMultiplier = 1;
             }
             else
-                _removeStamina.Raise(this, new StaminaEventArgs { StaminaCost = _sprintCost.value * Time.deltaTime });
+                _removeStamina.Raise(this, new StaminaEventArgs { StaminaCost = _staminaCost.value * Time.deltaTime });
         }
 
         _movedirection = new Vector3(input.x, 0f, input.y);

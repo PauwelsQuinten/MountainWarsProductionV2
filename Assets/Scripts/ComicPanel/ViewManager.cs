@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
@@ -213,6 +214,16 @@ public class ViewManager : MonoBehaviour
 
     private IEnumerator DoShowDown(GameObject vsTarget)
     {
+        List<StateManager> targets = GameObject.FindObjectsOfType<StateManager>().ToList();
+
+        foreach (StateManager target in targets)
+        {
+            if(target.GetComponent<AIController>() != null)
+            {
+                target.GetComponentInChildren<Camera>().enabled = false;
+            }
+        }
+
         float time = 0;
         int index = 0;
         if(_previousArgs != null) index = _previousArgs.NewViewIndex;
@@ -223,10 +234,11 @@ public class ViewManager : MonoBehaviour
         GameObject playerPanel = _panels[newIndex].gameObject;
         GameObject enemy = vsTarget;
         var cam = enemy.GetComponentInChildren<Camera>();
+        cam.enabled = true;
         cam.targetTexture = _renderTexture;
         cam.Render();
         GameObject enemyPanel = _panels[++newIndex].gameObject;
-        enemyPanel.GetComponentInChildren<RawImage>().texture = _renderTexture;
+
         CharacterMovement enemyMove = enemy.GetComponent<CharacterMovement>();
         NavMeshAgent enemyNavMove = enemy.GetComponent<NavMeshAgent>();
 

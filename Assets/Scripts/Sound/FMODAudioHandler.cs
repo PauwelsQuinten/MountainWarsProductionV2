@@ -1,8 +1,12 @@
+using System;
 using System.Collections;
+using System.Linq.Expressions;
 using FMOD;
 using FMOD.Studio;
 using UnityEngine;
 using FMODUnity;
+using UnityEditor.Experimental.GraphView;
+using Debug = UnityEngine.Debug;
 
 
 public class FMODAudioHandler : MonoBehaviour
@@ -15,10 +19,11 @@ public class FMODAudioHandler : MonoBehaviour
     private AttackEventArgs _attackEventArgs;
     private DefenceEventArgs _defenceEventArgs;
     private SwitchBiomeEventArgs _switchBiomeEventArgs;
-    private FootstepSwapper _footstepSwapper;
-
+    private StaminaEventArgs _staminaEventArgs;
+    private HealthEventArgs _healthEventArgs;
     private bool isSheathing = true;
 
+     private Vector3 _rayOrigin;
     // Parameters
     // Local
     private PARAMETER_ID _surfaceTypeID;
@@ -42,6 +47,9 @@ public class FMODAudioHandler : MonoBehaviour
     private PARAMETER_ID _sheathID;
     private float _sheathIDValue;
 
+    private PARAMETER_ID _vocalizationID;
+    private float _vocalizationIDValue;
+    
     // Global
     private PARAMETER_ID _attacksStrengthID;
     private float _attacksStrengthIDValue;
@@ -57,10 +65,13 @@ public class FMODAudioHandler : MonoBehaviour
     [SerializeField] private EventReference _music;
     private EventInstance _musicInstance;
 
-    [Header("SFX/Character")] [SerializeField]
-    private EventReference _footstepsSFX;
+    [Header("SFX/Character")] 
+    [SerializeField] private EventReference _footstepsSFX;
     private EventInstance _footstepsSFXInstance;
 
+    [SerializeField] private EventReference _vocalizationSFX;
+    private EventInstance _vocalizationSFXInstance;
+    
     [Header("SFX/Combat")] [SerializeField]
     private EventReference _attackChargeSFX;
     private EventInstance _attackChargeSFXInstance;
@@ -73,9 +84,8 @@ public class FMODAudioHandler : MonoBehaviour
     [SerializeField] private EventReference _unsheathSFX;
     private EventInstance _unsheathSFXInstance;
 
-    [Header("SFX/Panels")] [SerializeField]
-    private EventReference _comicPanelSwapSFX;
-
+    [Header("SFX/Panels")] 
+    [SerializeField] private EventReference _comicPanelSwapSFX;
     private EventInstance _comicPanelSwapSFXInstance;
     [SerializeField] private EventReference _showdownSFX;
     private EventInstance _showdownSFXInstance;
@@ -96,6 +106,15 @@ public class FMODAudioHandler : MonoBehaviour
         _ambienceInstance.set3DAttributes(_attributes);
         _ambienceInstance.start();
     }
+
+    private void Start()
+    {
+        _vocalizationSFXInstance = RuntimeManager.CreateInstance(_vocalizationSFX);
+        _attributes = RuntimeUtils.To3DAttributes(_player.transform.position);
+        _vocalizationSFXInstance.set3DAttributes(_attributes);
+        _vocalizationSFXInstance.start();
+    }
+
     private IEnumerator ChangeWindIntensity()
     {
         while (true)
@@ -138,7 +157,8 @@ public class FMODAudioHandler : MonoBehaviour
         // Set the global parameter value by ID
         RuntimeManager.StudioSystem.setParameterByID(parameterID, desiredParameterValue);
     }
-public void SwitchBiome(Component sender, object obj)
+
+    public void SwitchBiome(Component sender, object obj)
     {
         GetParameterID(_ambienceInstance, "Biome", out _biomeID);
         if (_switchBiomeEventArgs == null)
@@ -161,12 +181,48 @@ public void SwitchBiome(Component sender, object obj)
                 _biomeIDValue = 0.0f;
                 break;
         }
+
         SetParameterID(_ambienceInstance, _biomeID, _biomeIDValue);
 
     }
+    
+    public void PlayVocalizationSFX(Component sender, object obj)
+    {
+        _staminaEventArgs = obj as StaminaEventArgs;
+        
+        if (_staminaEventArgs != null)
+        {
+            if (_staminaEventArgs.CurrentStamina <= 5.0f)
+            {
+                _attributes = RuntimeUtils.To3DAttributes(sender.transform.position);
+                _vocalizationSFXInstance.set3DAttributes(_attributes);
+                GetParameterID(_vocalizationSFXInstance, "Vocalizations", out _vocalizationID);
+                _vocalizationIDValue = 3.0f;
+            }
+            else
+            {
+                _vocalizationIDValue = 0.0f;
+            }
+            SetParameterID(_vocalizationSFXInstance, _vocalizationID, _vocalizationIDValue);
+        }
+    }
+
+    public void PlayDamageVocalizationSFX(Component sender, object obj)
+    {
+        _attributes = RuntimeUtils.To3DAttributes(sender.transform.position);
+        _vocalizationSFXInstance.set3DAttributes(_attributes);
+        GetParameterID(_vocalizationSFXInstance, "Vocalizations", out _vocalizationID);
+        _vocalizationIDValue = 2.0f;
+        SetParameterID(_vocalizationSFXInstance, _vocalizationID, _vocalizationIDValue);
+        _vocalizationIDValue = 0.0f;
+        SetParameterID(_vocalizationSFXInstance, _vocalizationID, _vocalizationIDValue);
+
+    }
+    
     public void PlayFootstepsSFX(Component sender, object obj)
     {
         string surfaceType = DetectSurfaceType();
+        _rayOrigin = sender.transform.position;
         _footstepsSFXInstance = RuntimeManager.CreateInstance(_footstepsSFX);
         _attributes = RuntimeUtils.To3DAttributes(sender.transform.position);
         _footstepsSFXInstance.set3DAttributes(_attributes);
@@ -182,6 +238,9 @@ public void SwitchBiome(Component sender, object obj)
                 break;
             case "Gravel":
                 _surfaceTypeIDValue = 2.0f;
+                break;
+            case "TerrainGrass":
+                _surfaceTypeIDValue = 3.0f;
                 break;
             case "TerrainGrass2":
                 _surfaceTypeIDValue = 3.0f;
@@ -221,11 +280,11 @@ public void SwitchBiome(Component sender, object obj)
     {
         RaycastHit hit;
         Vector3 offset = new Vector3(0, 0.2f, 0);
-        Vector3 rayOrigin = _player.transform.position - offset;
+       _rayOrigin = _player.transform.position - offset;
         Vector3 rayDirection = Vector3.down;
         float rayDistance = 5f;
 
-        if (Physics.Raycast(rayOrigin, rayDirection, out hit, rayDistance))
+        if (Physics.Raycast(_rayOrigin, rayDirection, out hit, rayDistance))
         {
             Terrain terrain = hit.transform.GetComponent<Terrain>();
             if (terrain != null)
@@ -253,30 +312,40 @@ public void SwitchBiome(Component sender, object obj)
         }
         return "Default"; 
     }
-
+    private void SetWeaponHitSFXParameter()
+    {
+        GetParameterID(_weaponHitSFXInstance, "WeaponSurfaceHit", out _weaponHitSurfaceID);
+        switch(_attackEventArgs.AttackType)
+        {
+            case AttackType.HorizontalSlashToRight:
+                _weaponHitSurfaceIDValue = 9.0f;
+                break;
+            case AttackType.HorizontalSlashToLeft:
+                _weaponHitSurfaceIDValue = 9.0f;
+                break;
+            case AttackType.Stab:
+                _weaponHitSurfaceIDValue = 8.0f;
+                break;
+            case AttackType.ShieldBash:
+                _weaponHitSurfaceIDValue = 5.0f;
+                break;
+            default:
+                _weaponHitSurfaceIDValue = 0.0f;
+                break;
+        }
+        SetParameterID(_weaponHitSFXInstance, _weaponHitSurfaceID, _weaponHitSurfaceIDValue);
+    }
     public void PlayWeaponHitSFX(Component sender, object obj)
     {
         _weaponHitSFXInstance = RuntimeManager.CreateInstance(_weaponHitSFX);
         _attributes = RuntimeUtils.To3DAttributes(sender.transform.position);
         _weaponHitSFXInstance.set3DAttributes(_attributes);
-        GetParameterID(_weaponHitSFXInstance, "WeaponSurfaceHit", out _weaponHitSurfaceID);
-        GetGlobalParameterID("AttacksStrength", out _attacksStrengthID);
-        GetGlobalParameterID("CurrentWeapon", out _currentWeaponID);
-        if (_attackEventArgs == null)
-        {
-            _attackEventArgs = obj as AttackEventArgs;
-        }
-
-        if (_aimingEventArgs == null)
-        {
-            _aimingEventArgs = obj as AimingOutputArgs;
-        }
-
-        SetGlobalParameterID(_attacksStrengthID, _attackEventArgs.AttackPower);
-        SetGlobalParameterID(_currentWeaponID, 9.0f);
-        SetParameterID(_weaponHitSFXInstance, _weaponHitSurfaceID, _weaponHitSurfaceIDValue);
+        _attackEventArgs = obj as AttackEventArgs;
+        SetWeaponHitSFXParameter();
         _weaponHitSFXInstance.start();
-        _weaponWhooshSFXInstance.release();
+        _weaponHitSFXInstance.release();
+        
+      
     }
 
     public void PlayBlockSFX(Component sender, object obj)
@@ -285,26 +354,10 @@ public void SwitchBiome(Component sender, object obj)
         _attributes = RuntimeUtils.To3DAttributes(sender.transform.position);
         _weaponHitSFXInstance.set3DAttributes(_attributes);
         GetParameterID(_weaponHitSFXInstance, "WeaponSurfaceHit", out _weaponHitSurfaceID);
-        GetGlobalParameterID("AttacksStrength", out _attacksStrengthID);
-        GetGlobalParameterID("CurrentWeapon", out _currentWeaponID);
-        if (_attackEventArgs == null)
-        {
-            _attackEventArgs = obj as AttackEventArgs;
-        }
-
-        if (_aimingEventArgs == null)
-        {
-            _aimingEventArgs = obj as AimingOutputArgs;
-        }
-        if(_defenceEventArgs == null)
-        {
-            _defenceEventArgs = obj as DefenceEventArgs;
-        }
-        SetGlobalParameterID(_attacksStrengthID, _defenceEventArgs.AttackPower);
-        SetGlobalParameterID(_currentWeaponID, 5.0f);
+        _weaponHitSurfaceIDValue = 5.0f;
         SetParameterID(_weaponHitSFXInstance, _weaponHitSurfaceID, _weaponHitSurfaceIDValue);
         _weaponHitSFXInstance.start();
-        _weaponWhooshSFXInstance.release();
+        _weaponHitSFXInstance.release();
     }
 
     public void PlayParrySFX(Component sender, object obj)
@@ -313,23 +366,10 @@ public void SwitchBiome(Component sender, object obj)
         _attributes = RuntimeUtils.To3DAttributes(sender.transform.position);
         _weaponHitSFXInstance.set3DAttributes(_attributes);
         GetParameterID(_weaponHitSFXInstance, "WeaponSurfaceHit", out _weaponHitSurfaceID);
-        GetGlobalParameterID("AttacksStrength", out _attacksStrengthID);
-        GetGlobalParameterID("CurrentWeapon", out _currentWeaponID);
-        if (_attackEventArgs == null)
-        {
-            _attackEventArgs = obj as AttackEventArgs;
-        }
-
-        if (_aimingEventArgs == null)
-        {
-            _aimingEventArgs = obj as AimingOutputArgs;
-        }
-
-        SetGlobalParameterID(_attacksStrengthID, _attackEventArgs.AttackPower);
-        SetGlobalParameterID(_currentWeaponID, 4.0f);
+        _weaponHitSurfaceIDValue = 4.0f;
         SetParameterID(_weaponHitSFXInstance, _weaponHitSurfaceID, _weaponHitSurfaceIDValue);
         _weaponHitSFXInstance.start();
-        _weaponWhooshSFXInstance.release();
+        _weaponHitSFXInstance.release();
     }
     public void PlayWhooshSFX(Component sender, object obj)
     {
@@ -338,6 +378,13 @@ public void SwitchBiome(Component sender, object obj)
         _weaponWhooshSFXInstance.set3DAttributes(_attributes);
         _weaponWhooshSFXInstance.start();
         _weaponWhooshSFXInstance.release();
+        
+        GetParameterID(_vocalizationSFXInstance, "Vocalizations", out _vocalizationID);
+        _vocalizationIDValue = 1.0f;
+        _attributes = RuntimeUtils.To3DAttributes(sender.transform.position);
+        SetParameterID(_vocalizationSFXInstance, _vocalizationID, _vocalizationIDValue);
+        _vocalizationIDValue = 0.0f;
+        SetParameterID(_vocalizationSFXInstance, _vocalizationID, _vocalizationIDValue);
     }
 
     public void PlayComicSwapSFX(Component sender, object obj)

@@ -49,7 +49,9 @@ public class Dodge : MonoBehaviour
 
         _loseStamina.Raise(this, new StaminaEventArgs { StaminaCost = _staminaCost.value });
 
-        _dashDirection = new Vector3(_moveInput.Value.x, 0, _moveInput.Value.y);
+        if (_moveInput.Value != Vector2.zero)
+            _dashDirection = new Vector3(_moveInput.Value.x, 0, _moveInput.Value.y);
+        else _dashDirection = transform.forward;
         _dashing = true;
         _canRun = false;
         StartCoroutine(EndDodge());

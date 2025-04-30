@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5676839609049004566}
   - component: {fileID: 7044637763604957616}
+  - component: {fileID: 2442642646610035498}
   - component: {fileID: 4702368978736829080}
   m_Layer: 0
   m_Name: UIManager
@@ -60,6 +61,47 @@ MonoBehaviour:
   _staminaBar: {fileID: 0}
   _shield: {fileID: 0}
   _weapon: {fileID: 0}
+  _cameraToLookAt: {fileID: 0}
+  _canvas: {fileID: 0}
+  _gameLost: {fileID: 0}
+--- !u!114 &2442642646610035498
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8476201131716011252}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d4a244e11c49a8448679757cbc5cebf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _pauseMenu: {fileID: 0}
+  _eventSystem: {fileID: 0}
+  _firstSelected: {fileID: 0}
+  _MasterSlider: {fileID: 0}
+  _sfxSlider: {fileID: 0}
+  _musicSlider: {fileID: 0}
+  _masterVCAName: Master
+  _sfxVCAName: SFX
+  _musicVCAName: Music
+  _masterVCAVolume: 1
+  _sfxVCAVolume: 1
+  _musicVCAVolume: 1
+  _UIConfirmSFX:
+    Guid:
+      Data1: 1234526282
+      Data2: 1261332919
+      Data3: 1111904391
+      Data4: 1508141042
+    Path: event:/UI/UIConfirm
+  _UIBackSFX:
+    Guid:
+      Data1: -774591577
+      Data2: 1115631304
+      Data3: -200205934
+      Data4: -775834458
+    Path: event:/UI/UIReturn
 --- !u!114 &4702368978736829080
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -78,6 +120,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: b60a265955952bd458a744ff3fa08d58, type: 2}
   - {fileID: 11400000, guid: d96f2c247ec32f843932f40997f1c382, type: 2}
   - {fileID: 11400000, guid: c914e9c28dde5604d9c103f474e083b2, type: 2}
+  - {fileID: 11400000, guid: bf3787e3bed049f438794fa3beafbf1a, type: 2}
   Responses:
   - m_PersistentCalls:
       m_Calls:
@@ -140,6 +183,20 @@ MonoBehaviour:
       - m_Target: {fileID: 7044637763604957616}
         m_TargetAssemblyTypeName: UIHealthManager, Assembly-CSharp
         m_MethodName: UpdateEquipment
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2442642646610035498}
+        m_TargetAssemblyTypeName: UIPauseScreen, Assembly-CSharp
+        m_MethodName: OpenPauseMenu
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

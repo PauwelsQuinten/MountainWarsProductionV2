@@ -100,13 +100,12 @@ public class MoveToAction : GoapAction
         FindTargetPosAndDirection(blackboard, ref targetDir, npcPos, ref targetPos, ref angleRad);
 
         //Update target position when he moves around
-        if (Vector3.Distance(targetPos, _targetPos) > 1f )
+        if (Vector3.Distance(targetPos, _targetPos) > 1f || Vector3.Distance(targetDir, _targetDir) > 1f)
         {
             _navMeshAgent.SetDestination(targetPos);
             _targetPos = targetPos;
-        }
-        if (Vector3.Distance(targetDir, _targetDir) > 1f )
             _moveInput.Raise(this, new DirectionEventArgs { MoveDirection = targetDir, SpeedMultiplier = 1f, Sender = npc });
+        }
 
         if (Vector3.Distance(npcPos, _targetPos) < 1f)
         {
@@ -127,6 +126,7 @@ public class MoveToAction : GoapAction
         {
             _moveInput.Raise(this, new DirectionEventArgs { MoveDirection = Vector2.zero, SpeedMultiplier = 1f, Sender = npc });
             _navMeshAgent.isStopped = true;
+            npc.GetComponent<Rigidbody>().linearVelocity = Vector3.zero;    
 
             return true;
         }

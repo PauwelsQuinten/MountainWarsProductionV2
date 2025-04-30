@@ -7,6 +7,7 @@ public class AIPerception : MonoBehaviour
     [Header("Senses")]
     private Hearing _hearing;
     private Seeing _seeing;
+    private GameObject _target;
 
     private void Start()
     {
@@ -29,8 +30,13 @@ public class AIPerception : MonoBehaviour
 
         if (target == null)
             target = _seeing.SeeSurrounding(args.NewOrientation);
-        
-        _foundTargetEvent.Raise(this, new NewTargetEventArgs { NewTarget = target });
+
+        if (target != _target )
+        {
+            _target = target;
+            _foundTargetEvent.Raise(this, new NewTargetEventArgs { NewTarget = target });
+        }
+
     }
 
 }

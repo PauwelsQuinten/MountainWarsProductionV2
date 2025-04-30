@@ -29,6 +29,7 @@ GameObject:
   - component: {fileID: 7219521345600688927}
   - component: {fileID: 8284157178089308381}
   - component: {fileID: 3805331497090860965}
+  - component: {fileID: 7135606026184219709}
   m_Layer: 3
   m_Name: BaseCharacter
   m_TagString: Untagged
@@ -144,10 +145,10 @@ MonoBehaviour:
     constantValue: {x: 0, y: 0}
     variable: {fileID: 0}
   _speed: 5
-  _staminaCost:
+  _sprintCost:
     useConstant: 0
     constantValue: 0
-    variable: {fileID: 11400000, guid: 4aa2a05291286a74bb9920c75d553284, type: 2}
+    variable: {fileID: 0}
   _removeStamina: {fileID: 11400000, guid: 0b82292daaabdcb4e964a69a69667662, type: 2}
   _changeAnimation: {fileID: 11400000, guid: f56e344763da3c34d9b3e5d48d24a9e4, type: 2}
   _stateManager: {fileID: 4165634575879343316}
@@ -285,6 +286,7 @@ MonoBehaviour:
     variable: {fileID: 0}
   _timeBeforeRegerating: 2
   _patchUp: {fileID: 11400000, guid: b60a265955952bd458a744ff3fa08d58, type: 2}
+  _healAmount: 100
   _stateManager: {fileID: 4165634575879343316}
   _blackboards: []
 --- !u!114 &3036795874959978044
@@ -932,6 +934,20 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &7135606026184219709
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 691636631868949397}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b5b5a5b18ce42249994f099d17e8034, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _animTarget: {fileID: 0}
+  _lerpSpeed: 5
 --- !u!1 &6617748585025692743
 GameObject:
   m_ObjectHideFlags: 0

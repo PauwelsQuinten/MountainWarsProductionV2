@@ -70,7 +70,7 @@ public class UIPauseScreen : MonoBehaviour
 
     public void OpenPauseMenu(Component sender, object obj)
     {
-        if (_pauseMenu.activeSelf == false)
+        if (!_pauseMenu.activeSelf)
         {
             Time.timeScale = 0f;
             _pauseMenu.SetActive(true);

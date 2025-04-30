@@ -42,6 +42,7 @@ public class SoundAcrossSpline : MonoBehaviour
 
             float3 closestPoint = _spline.EvaluatePosition(0, closestT);
             Vector3 closestPointVector3 = closestPoint;
+            Debug.DrawLine(targetPosition, closestPointVector3, Color.red);
 
             _followSoundInstance.set3DAttributes(RuntimeUtils.To3DAttributes(closestPointVector3));
         }

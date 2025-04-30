@@ -25,10 +25,6 @@ public class Music : MonoBehaviour
     private string _currentSceneName;
     private SwitchBiomeEventArgs _switchBiomeEventArgs;
     private NewTargetEventArgs _newTargetEventArgs;
-    private bool _canChangeSong = true;
-
-    private GameObject _currentTrigger;
-    private GameObject _previousTrigger;
     private void Awake()
     {
         GameObject[] objs = GameObject.FindGameObjectsWithTag("Music");
@@ -93,8 +89,8 @@ public class Music : MonoBehaviour
             case "Gameplay":
                 _musiczoneIDValue = 1.0f;
                 _townReverbSnapshotInstance.start();
-                _forestReverbSnapshotInstance.stop(STOP_MODE.IMMEDIATE);
-                _mountainReverbSnapshotInstance.stop(STOP_MODE.IMMEDIATE);
+                _forestReverbSnapshotInstance.stop(STOP_MODE.ALLOWFADEOUT);
+                _mountainReverbSnapshotInstance.stop(STOP_MODE.ALLOWFADEOUT);
                 break;
             case "GameWon":
                 _combatLevelIDValue = 0.0f;
@@ -110,6 +106,8 @@ public class Music : MonoBehaviour
         }
 
         SetGlobalParameterID(_musiczoneID, _musiczoneIDValue);
+        _musicInstance.start();
+
     }
 
     public void SwitchBiome(Component sender, object obj)
@@ -120,16 +118,7 @@ public class Music : MonoBehaviour
         {
             return;
         }
-
-        if (_switchBiomeEventArgs.IsEnter)
-        {
-            _previousTrigger = _currentTrigger;
-            _currentTrigger = sender.gameObject;
-
-            if (!_canChangeSong) return;
-
-            _canChangeSong = false;
-
+        
             switch (_switchBiomeEventArgs.NextBiome)
             {
                 case Biome.village:
@@ -147,17 +136,8 @@ public class Music : MonoBehaviour
                     _forestReverbSnapshotInstance.stop(STOP_MODE.IMMEDIATE);
                     _townReverbSnapshotInstance.stop(STOP_MODE.IMMEDIATE);
                     break;
-            }
-
+        }
             SetGlobalParameterID(_musiczoneID, _musiczoneIDValue);
-        }
-        else
-        {
-            if (_previousTrigger == null) return;
-
-            if(_previousTrigger != _currentTrigger)
-                _canChangeSong = true;
-        }
     }
     public void SetCombatLevel(Component sender, object obj)
     {
@@ -178,9 +158,10 @@ public class Music : MonoBehaviour
             SetGlobalParameterID(_combatLevelID, _combatLevelIDValue);
         }
     }
+    
     private void OnDestroy()
     {
-        _musicInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+        _musicInstance.stop(STOP_MODE.ALLOWFADEOUT);
         _musicInstance.release();
         _forestReverbSnapshotInstance.stop(STOP_MODE.IMMEDIATE);
         _townReverbSnapshotInstance.stop(STOP_MODE.IMMEDIATE);

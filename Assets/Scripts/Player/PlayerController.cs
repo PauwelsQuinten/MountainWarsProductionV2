@@ -241,7 +241,7 @@ public class PlayerController : MonoBehaviour
     public void ProccesDodgeInput(InputAction.CallbackContext ctx)
     {
         if (Time.timeScale == 0) return;
-        if (ctx.performed)
+            if (ctx.performed)
         {
             _wasSprinting = true;
             _moveInputRef.variable.SpeedMultiplier = 1.5f;

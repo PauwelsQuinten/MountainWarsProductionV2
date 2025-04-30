@@ -280,7 +280,7 @@ public class FMODAudioHandler : MonoBehaviour
     {
         RaycastHit hit;
         Vector3 offset = new Vector3(0, 0.2f, 0);
-       _rayOrigin = _player.transform.position - offset;
+        _rayOrigin = _player.transform.position - offset;
         Vector3 rayDirection = Vector3.down;
         float rayDistance = 5f;
 
@@ -289,7 +289,6 @@ public class FMODAudioHandler : MonoBehaviour
             Terrain terrain = hit.transform.GetComponent<Terrain>();
             if (terrain != null)
             {
-
                 var layerMixes = _checker.GetLayerMixes(hit.point, terrain);
 
                 if (layerMixes.Count > 0)
@@ -309,8 +308,13 @@ public class FMODAudioHandler : MonoBehaviour
                     return _dominantLayer;
                 }
             }
+            else
+            {
+                // Return the Unity layer name if no terrain is found
+                return LayerMask.LayerToName(hit.transform.gameObject.layer);
+            }
         }
-        return "Default"; 
+        return "Default";
     }
     private void SetWeaponHitSFXParameter()
     {

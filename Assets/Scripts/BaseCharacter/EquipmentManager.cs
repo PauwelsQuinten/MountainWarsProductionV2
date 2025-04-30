@@ -266,6 +266,7 @@ public class EquipmentManager : MonoBehaviour
             }
         }
     }
+
     public void RotateShield(Component sender, object obj)
     {
         if (sender.gameObject != gameObject) return;

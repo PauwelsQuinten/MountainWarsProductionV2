@@ -58,7 +58,6 @@ public class Dodge : MonoBehaviour
     private void PerformDodge()
     {
         _rb.linearVelocity = _dashDirection * _dashSpeed;
-        Debug.Log("Dashing");
     }
 
     private IEnumerator EndDodge()

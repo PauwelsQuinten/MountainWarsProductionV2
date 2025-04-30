@@ -51,6 +51,8 @@ public class PlayerController : MonoBehaviour
     private GameEvent _pauseGame;
     [SerializeField]
     private GameEvent _sheathWeapon;
+    [SerializeField]
+    private GameEvent _shieldGrab;
 
     private Vector2 _moveInput;
 
@@ -350,6 +352,14 @@ public class PlayerController : MonoBehaviour
     {
         if (!ctx.performed) return;
         _pauseGame.Raise(this, EventArgs.Empty);
+    }
+
+    public void ProccesShieldGrab(InputAction.CallbackContext ctx)
+    {
+        if (Time.timeScale == 0) return;
+        if (!ctx.performed) return;
+        if (_stateManager.AttackState == AttackState.ShieldDefence || _stateManager.AttackState == AttackState.BlockAttack)
+            _shieldGrab.Raise(this, EventArgs.Empty);
     }
 
 

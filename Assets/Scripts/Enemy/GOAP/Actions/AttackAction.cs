@@ -57,6 +57,9 @@ public class AttckAction : GoapAction
     //-----------------------------------------------------------------------
     private void SendPackage(bool outOfRange)
     {
+        if (outOfRange)
+            return;
+
         var package = new AimingOutputArgs
         {
             AimingInputState = AimingInputState.Hold

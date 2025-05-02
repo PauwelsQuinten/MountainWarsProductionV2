@@ -137,14 +137,24 @@ public class MoveToAction : GoapAction
     {
         /*return (blackboard.variable.TargetState == AttackState.Attack || blackboard.variable.TargetState == AttackState.BlockAttack)
             && currentWorldState.TargetAttackRange == EWorldStateRange.InRange;*/
-        return false;
+        return currentWorldState.HasTarget != EWorldStatePossesion.InPossesion;
     }
 
     public override bool IsVallid(WorldState currentWorldState, BlackboardReference blackboard)
     {
         if (_MoveTo == ObjectTarget.Side)
             Cost = Random.Range(0.5f, 1f);
-        return true;
+
+        bool vallid = true;
+        switch (_MoveTo)
+        {
+            case ObjectTarget.Player:
+                if (currentWorldState.HasTarget != EWorldStatePossesion.InPossesion)
+                    vallid = false;
+                break;
+        }
+
+        return vallid;
     }
 
     public override void CancelAction()

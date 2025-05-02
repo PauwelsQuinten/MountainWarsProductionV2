@@ -19,6 +19,11 @@ public class StateManager : MonoBehaviour
     public Orientation Orientation;
     [HideInInspector]
     public float fOrientation = 0f;
+    [Header("Camera")]
+    [SerializeField]
+    public Camera StartCamera;
+    [HideInInspector]
+    public Camera CurrentCamera;
 
     [HideInInspector] 
     public GameObject Target;
@@ -40,6 +45,7 @@ public class StateManager : MonoBehaviour
 
     private void Start()
     {
+        CurrentCamera = StartCamera;
         if (EquipmentManager == null)
             EquipmentManager = GetComponent<EquipmentManager>();
 
@@ -47,10 +53,8 @@ public class StateManager : MonoBehaviour
 
         if (!gameObject.CompareTag(PLAYER))
         {
-            StartCoroutine(InitBlackboard());
-                      
+            StartCoroutine(InitBlackboard());         
         }
-
     }
     public void SetTarget(Component sender, object obj)
     {
@@ -171,6 +175,14 @@ public class StateManager : MonoBehaviour
 
     }
 
+    public void SetNewActiveCamera(Component sender, object obj)
+    {
+        Camera newCam = obj as Camera;
+        if (newCam == null) return;
+
+        CurrentCamera = newCam;
+    }
+
     private IEnumerator RecoverStun(float stunDuration)
     {
         yield return new WaitForSeconds(stunDuration);
@@ -188,6 +200,4 @@ public class StateManager : MonoBehaviour
         _blackboardRefs[0].variable.Self = gameObject;
         _blackboardRefs[0].variable.Orientation = Orientation;
     }
-
-
 }

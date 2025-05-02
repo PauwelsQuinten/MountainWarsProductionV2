@@ -51,6 +51,8 @@ public class PlayerController : MonoBehaviour
     private GameEvent _pauseGame;
     [SerializeField]
     private GameEvent _sheathWeapon;
+    [SerializeField]
+    private GameEvent _shieldGrab;
 
     private Vector2 _moveInput;
 
@@ -79,7 +81,6 @@ public class PlayerController : MonoBehaviour
         _moveInputRef.variable.StateManager = _stateManager;
 
         StartCoroutine(CheckSurrounding());
-
     }
 
     public void GetStun(Component sender, object obj)
@@ -114,7 +115,6 @@ public class PlayerController : MonoBehaviour
         _stateManager.AttackState = _storredAttackState;
         _aimInputRef.variable.State = _storredAttackState;
     }
-
 
     public void ProcessAimInput(InputAction.CallbackContext ctx)
     {
@@ -151,10 +151,26 @@ public class PlayerController : MonoBehaviour
     public void ProccesMoveInput(InputAction.CallbackContext ctx)
     {
         if (Time.timeScale == 0) return;
-        _moveInputRef.variable.value = ctx.ReadValue<Vector2>();
+        Vector2 input = ctx.ReadValue<Vector2>();
+
+        // Get camera vectors and flatten them to horizontal plane
+        Vector3 forward = _stateManager.CurrentCamera.transform.forward;
+        Vector3 right = _stateManager.CurrentCamera.transform.right;
+        forward.y = 0;
+        right.y = 0;
+        forward.Normalize();
+        right.Normalize();
+
+        // Combine vectors with proper axis input
+        Vector3 moveDirection = (forward * input.y) + (right * input.x);
+
+        // If you need Vector2 output for ground movement (XZ plane)
+        Vector2 output = new Vector2(moveDirection.x, moveDirection.z);
+
+        _moveInputRef.variable.value = output;
     }
 
-    public void ProccesSetBlockInput(InputAction.CallbackContext ctx)
+        public void ProccesSetBlockInput(InputAction.CallbackContext ctx)
     {
         if (Time.timeScale == 0) return;
         if (_stateManager.AttackState == AttackState.Stun)
@@ -241,7 +257,7 @@ public class PlayerController : MonoBehaviour
     public void ProccesDodgeInput(InputAction.CallbackContext ctx)
     {
         if (Time.timeScale == 0) return;
-        if (ctx.performed)
+            if (ctx.performed)
         {
             _wasSprinting = true;
             _moveInputRef.variable.SpeedMultiplier = 1.5f;
@@ -350,6 +366,14 @@ public class PlayerController : MonoBehaviour
     {
         if (!ctx.performed) return;
         _pauseGame.Raise(this, EventArgs.Empty);
+    }
+
+    public void ProccesShieldGrab(InputAction.CallbackContext ctx)
+    {
+        if (Time.timeScale == 0) return;
+        if (!ctx.performed) return;
+        if (_stateManager.AttackState == AttackState.ShieldDefence || _stateManager.AttackState == AttackState.BlockAttack)
+            _shieldGrab.Raise(this, EventArgs.Empty);
     }
 
 

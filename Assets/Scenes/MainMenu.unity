@@ -187,11 +187,15 @@ PrefabInstance:
       propertyPath: followTransform
       value: 
       objectReference: {fileID: 990987692}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 9188853762801730988, guid: 84920d53d85a0284d9f8ee2f567dcd6b, type: 3}
     m_RemovedGameObjects:
     - {fileID: 2344910227332429457, guid: 84920d53d85a0284d9f8ee2f567dcd6b, type: 3}
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7670835977375516435, guid: 84920d53d85a0284d9f8ee2f567dcd6b, type: 3}
+      insertIndex: 3
+      addedObject: {fileID: 2118992994}
   m_SourcePrefab: {fileID: 100100000, guid: 84920d53d85a0284d9f8ee2f567dcd6b, type: 3}
 --- !u!1 &200643739
 GameObject:
@@ -1858,6 +1862,43 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1844735172}
   m_CullTransparentMesh: 1
+--- !u!114 &1886834367 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8647151600972920137, guid: 84920d53d85a0284d9f8ee2f567dcd6b, type: 3}
+  m_PrefabInstance: {fileID: 160597529}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dab5c7d4c32e743048dfca98e2d5914f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!1 &2118992986 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7670835977375516435, guid: 84920d53d85a0284d9f8ee2f567dcd6b, type: 3}
+  m_PrefabInstance: {fileID: 160597529}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2118992994
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2118992986}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e85049f38e70766458ac93d6d0e7cc1c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _followSoundEvent:
+    Guid:
+      Data1: -2133653894
+      Data2: 1152079236
+      Data3: -2132604761
+      Data4: -1625322369
+    Path: event:/Misc/River
+  _followTransform: {fileID: 990987692}
+  _spline: {fileID: 1886834367}
 --- !u!1001 &6612953752431849524
 PrefabInstance:
   m_ObjectHideFlags: 0

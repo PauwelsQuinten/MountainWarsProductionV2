@@ -5,6 +5,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
+using static UnityEngine.Rendering.GPUSort;
 
 public class ViewManager : MonoBehaviour
 {
@@ -72,7 +73,7 @@ public class ViewManager : MonoBehaviour
         {
             if (!_isSwitchingPanel)
             {
-                StartCoroutine(DoSwitchPanel(_biomePanels[args.newSceneIndex].transform.position + (_cam.transform.forward * _offsetZ), _panels[args.NewViewIndex].transform.position + (_cam.transform.forward * _offsetZ)));
+                StartCoroutine(DoSwitchPanel(_biomePanels[args.newSceneIndex].transform.position + (_cam.transform.forward * _offsetZ), _panels[args.NewViewIndex].transform.position + (_cam.transform.forward * _offsetZ), args.CurrentSceneIndex, args.newSceneIndex));
             }
         }
         else
@@ -106,7 +107,7 @@ public class ViewManager : MonoBehaviour
         }
     }
 
-    private IEnumerator DoSwitchPanel(Vector3 newCamPosBiome, Vector3 newCamPosPanel)
+    private IEnumerator DoSwitchPanel(Vector3 newCamPosBiome, Vector3 newCamPosPanel, int currentBiomeIndex, int nextBiomeIndex)
     {
         GameObject player = GameObject.Find("Player");
         CharacterMovement playerMove = player.GetComponent<CharacterMovement>();
@@ -117,6 +118,11 @@ public class ViewManager : MonoBehaviour
         float time = 0;
         Vector3 startpos = _cam.transform.position;
         _panelSwitchSound.Raise(this, EventArgs.Empty);
+
+        _biomePanels[currentBiomeIndex].gameObject.SetActive(false);
+        _biomePanels[nextBiomeIndex].gameObject.SetActive(true);
+
+
         while (_cam.orthographicSize < camSize + 0.76f)
         {
             _cam.orthographicSize += _camZoomSpeed * Time.deltaTime;

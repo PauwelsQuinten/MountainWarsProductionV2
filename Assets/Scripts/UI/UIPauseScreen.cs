@@ -42,6 +42,7 @@ public class UIPauseScreen : MonoBehaviour
     private EventInstance _UIBackSFXInstance;
 
     private Coroutine _loadScene;
+    private Coroutine _resetTimeScale;
     private void Start()
     {
         _masterVCA = FMODUnity.RuntimeManager.GetVCA("vca:/" + _masterVCAName);
@@ -69,14 +70,19 @@ public class UIPauseScreen : MonoBehaviour
 
     public void OpenPauseMenu(Component sender, object obj)
     {
-        Time.timeScale = 0f;
-        _pauseMenu.SetActive(true);
-        _eventSystem.SetSelectedGameObject(_firstSelected);
+        if (!_pauseMenu.activeSelf)
+        {
+            Time.timeScale = 0f;
+            _pauseMenu.SetActive(true);
+            _eventSystem.SetSelectedGameObject(_firstSelected);
+        }
+        else ClosePauseMenu();
     }
 
     public void ClosePauseMenu()
     {
-        Time.timeScale = 1f;
+        if (_resetTimeScale != null) StopCoroutine(_resetTimeScale);
+        _resetTimeScale = StartCoroutine(ResetTimeScale());
         _pauseMenu.SetActive(false);
         _UIBackSFXInstance.start();
     }
@@ -113,6 +119,18 @@ public class UIPauseScreen : MonoBehaviour
         yield return new WaitForEndOfFrame();
         Time.timeScale = 1f;
         UnityEngine.SceneManagement.SceneManager.LoadScene("MainMenu");
+    }
+
+    private IEnumerator ResetTimeScale()
+    {
+        float PerformedFrames = 0;
+
+        while(PerformedFrames < 1)
+        {
+            PerformedFrames++;
+            yield return null;
+        }
+        Time.timeScale = 1f;
     }
 
     private void OnDestroy()

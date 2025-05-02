@@ -8,6 +8,10 @@ public class SceneManager : MonoBehaviour
     [SerializeField]
     private List<GameObject> _spawnPoints = new List<GameObject>();
 
+    [Header("events")]
+    [SerializeField]
+    private GameEvent _changeCam;
+
     private GameObject _player;
 
 
@@ -24,6 +28,8 @@ public class SceneManager : MonoBehaviour
 
         currentCam.GetComponent<FollowObject>().enabled = false;
         Nextcam.GetComponent<FollowObject>().enabled = true;
+
+        _changeCam.Raise(this, Nextcam);
 
         if (_player == null) _player = GameObject.Find("Player");
 

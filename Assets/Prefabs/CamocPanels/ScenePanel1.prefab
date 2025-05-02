@@ -2715,10 +2715,6 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5603469761601826179, guid: 4a77ec211b392b941b66da8e68b6cdea, type: 3}
-      propertyPath: riverCollider
-      value: 
-      objectReference: {fileID: 117285102360604099}
     - target: {fileID: 5681086348760070645, guid: 4a77ec211b392b941b66da8e68b6cdea, type: 3}
       propertyPath: m_ProvidesContacts
       value: 1
@@ -2907,7 +2903,8 @@ PrefabInstance:
       propertyPath: m_ProvidesContacts
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 5603469761601826179, guid: 4a77ec211b392b941b66da8e68b6cdea, type: 3}
     m_RemovedGameObjects:
     - {fileID: 6491765286922580936, guid: 4a77ec211b392b941b66da8e68b6cdea, type: 3}
     m_AddedGameObjects:
@@ -2929,7 +2926,7 @@ PrefabInstance:
       addedObject: {fileID: 1817499719573189064}
     - targetCorrespondingSourceObject: {fileID: 6355304145110789948, guid: 4a77ec211b392b941b66da8e68b6cdea, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 117285102360604099}
+      addedObject: {fileID: 6603905791013239068}
     - targetCorrespondingSourceObject: {fileID: 6355304145110789948, guid: 4a77ec211b392b941b66da8e68b6cdea, type: 3}
       insertIndex: -1
       addedObject: {fileID: 5989501552433896136}
@@ -2996,28 +2993,26 @@ MonoBehaviour:
   m_IgnoreFromBuild: 0
   m_ApplyToChildren: 1
   m_AffectedAgents: ffffffff
---- !u!64 &117285102360604099
-MeshCollider:
+--- !u!114 &6603905791013239068
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7670835977375516435}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 2853985462952578016, guid: a7db0a80a66e4484d8905b5ac6de3169, type: 3}
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SerializedVersion: 0
+  m_OverrideArea: 1
+  m_Area: 1
+  m_OverrideGenerateLinks: 1
+  m_GenerateLinks: 0
+  m_IgnoreFromBuild: 0
+  m_ApplyToChildren: 1
+  m_AffectedAgents: ffffffff
 --- !u!114 &5989501552433896136
 MonoBehaviour:
   m_ObjectHideFlags: 0

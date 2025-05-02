@@ -3601,6 +3601,14 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: d92c25f84e9ed4c4f9490fccdf017560, type: 2}
     - target: {fileID: 4639080165276395507, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
+      propertyPath: m_Mass
+      value: 70
+      objectReference: {fileID: 0}
+    - target: {fileID: 4639080165276395507, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
+      propertyPath: m_UseGravity
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4639080165276395507, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
       propertyPath: m_CollisionDetection
       value: 2
       objectReference: {fileID: 0}
@@ -4964,6 +4972,10 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: bed14430479db7e4e91fe4da4519d20a, type: 2}
+    - target: {fileID: 5488352903751579576, guid: 2afb5e9156a620142b1a82f41b284732, type: 3}
+      propertyPath: m_UseGravity
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8692327843256700154, guid: 2afb5e9156a620142b1a82f41b284732, type: 3}
       propertyPath: m_LocalPosition.x
       value: 4.87
@@ -5055,6 +5067,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 749679949557989253, guid: e9651b4801f36d14e86c1cb82aa75d59, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4534196890739655879, guid: e9651b4801f36d14e86c1cb82aa75d59, type: 3}
+      propertyPath: m_UseGravity
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4996746403009695576, guid: e9651b4801f36d14e86c1cb82aa75d59, type: 3}

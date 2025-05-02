@@ -92,7 +92,8 @@ public class CharacterMovement : MonoBehaviour
                 _removeStamina.Raise(this, new StaminaEventArgs { StaminaCost = _sprintCost.value * Time.deltaTime });
         }
 
-        _movedirection = new Vector3(input.x, 0f, input.y);
+            _movedirection = new Vector3(input.x, 0f, input.y);
+
 
         if (input != Vector2.zero)
         {

@@ -15,7 +15,7 @@ public class GoapGoal : MonoBehaviour, IGoals
     public WorldState DesiredWorldState;
     protected bool _isVallid = true;
     protected Coroutine _goalCoroutine;
-    [SerializeField, Tooltip("The max amount of time this action will run, after that he will cancel it and go to next action in queue")]
+    [SerializeField, Tooltip("The amount of time this goal will be disabled after it got interupted.")]
     protected float _invalidTime = 2f;
     [SerializeField, Tooltip("This score is used to determine which goal to select (higher the better), this score will be adjusted determined on the situation in their script")]
     protected float _defaultScore = 0.5f;

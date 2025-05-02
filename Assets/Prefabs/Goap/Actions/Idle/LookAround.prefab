@@ -48,9 +48,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DesiredWorldState: {fileID: 0}
   SatisfyingWorldState: {fileID: 0}
-  Cost: 1
+  Cost: 0.4
   _actionMaxRunTime: 2
-  _rotationSpeed: 130
+  _changeOrientationEvent: {fileID: 11400000, guid: d92c25f84e9ed4c4f9490fccdf017560, type: 2}
+  _rotationSpeed: 60
 --- !u!114 &-3160163725728759933
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -75,8 +76,10 @@ MonoBehaviour:
   _lHEquipment: 5
   _hasTarget: 2
   _hasOpening: 2
+  _hasRHEquipment: 2
+  _hasLHEquipment: 2
   _targetBehaviour: 4
-  _behaviour: 4
+  _behaviour: 6
   _targetAttackRange: 3
   _attackRange: 3
   _targetShieldState: 0
@@ -105,6 +108,8 @@ MonoBehaviour:
   _lHEquipment: 5
   _hasTarget: 2
   _hasOpening: 2
+  _hasRHEquipment: 2
+  _hasLHEquipment: 2
   _targetBehaviour: 4
   _behaviour: 4
   _targetAttackRange: 3

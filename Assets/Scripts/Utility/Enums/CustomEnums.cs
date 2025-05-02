@@ -177,7 +177,8 @@ namespace UnityEngine
         Defending,
         Knock,
         Default,
-        Idle
+        Idle,
+        Searching
     }
     
     public enum EWorldStateRange

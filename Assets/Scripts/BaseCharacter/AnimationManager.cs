@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using static UnityEngine.Rendering.GPUSort;
 
 public class AnimationManager : MonoBehaviour
 {
@@ -44,11 +45,11 @@ public class AnimationManager : MonoBehaviour
                 if (bored != null) bored.IdleExit();
                 //else Debug.Log("Bored is null");
         }
-
-        //Debug.Log($"anim call: {args.AnimState.ToString()}, speed: {args.Speed}, layer: {args.AnimLayer}");
+        Debug.Log($"{gameObject} anim call: {args.AnimState.ToString()}, speed: {args.Speed}, layer: {args.AnimLayer}");
         // Crossfade with normalized transition offset
 
-        _animator.CrossFade(args.AnimState.ToString(), 0.2f, args.AnimLayer, 0f);
+        if ((!_animator.GetBool("IsStunned") && !_animator.GetBool("GetHit")) || args.AnimLayer == 2)
+            _animator.CrossFade(args.AnimState.ToString(), 0.2f, args.AnimLayer, 0f);
 
         _currentState = args.AnimState;
 
@@ -93,8 +94,9 @@ public class AnimationManager : MonoBehaviour
 
         _animator.speed = 1;
         _animator.SetTrigger("GetHit");
+        Debug.Log($"{gameObject} hit");
     }
-    
+
     public void GetStunned(Component sender, object obj)
     {
         LoseEquipmentEventArgs loseEquipmentEventArgs = obj as LoseEquipmentEventArgs;
@@ -102,6 +104,7 @@ public class AnimationManager : MonoBehaviour
         {
             _animator.speed = 1;
             _animator.SetBool("IsStunned", true);
+        Debug.Log($"{gameObject} stun");
         }
 
         var args = obj as StunEventArgs;
@@ -111,6 +114,7 @@ public class AnimationManager : MonoBehaviour
         
         _animator.speed = 1;
         _animator.SetBool("IsStunned", true);
+        Debug.Log($"{gameObject} stun");
     }
 
     public void RecoverStunned(Component Sender, object obj)
@@ -118,6 +122,7 @@ public class AnimationManager : MonoBehaviour
         if (Sender.gameObject != gameObject) return;
 
         _animator.SetBool("IsStunned", false);
+        Debug.Log($"{gameObject} stun recover");
     }
 
 }

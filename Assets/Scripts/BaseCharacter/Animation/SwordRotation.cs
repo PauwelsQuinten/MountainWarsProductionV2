@@ -7,9 +7,9 @@ public class SwordRotation : StateMachineBehaviour
 
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-
-        _rotateSword.Raise(animator.transform.parent, 1);
         //Debug.Log("Exited state: " + stateInfo.ToString());
+        
+        _rotateSword.Raise(animator.transform.parent, 1);
     }
 
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)

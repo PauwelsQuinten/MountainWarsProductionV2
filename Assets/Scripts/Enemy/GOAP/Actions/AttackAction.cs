@@ -16,7 +16,8 @@ public class AttckAction : GoapAction
     public override void StartAction(WorldState currentWorldState, BlackboardReference blackboard)
     {
        base.StartAction(currentWorldState, blackboard);
-        _attackCoroutine = StartCoroutine(ExecuteAttack(_executionTime));
+        bool outOfRange = currentWorldState.AttackRange != EWorldStateRange.InRange;
+       _attackCoroutine = StartCoroutine(ExecuteAttack(_executionTime, outOfRange));
     }
 
     public override void UpdateAction(WorldState currentWorldState, BlackboardReference blackboard)
@@ -54,7 +55,7 @@ public class AttckAction : GoapAction
     //-----------------------------------------------------------------------
     //Helper functions
     //-----------------------------------------------------------------------
-    private void SendPackage()
+    private void SendPackage(bool outOfRange)
     {
         var package = new AimingOutputArgs
         {
@@ -70,9 +71,9 @@ public class AttckAction : GoapAction
                ,
             Speed = _attackSpeed
                ,
-            AttackSignal = _attackSignal
+            AttackSignal = outOfRange? AttackSignal.Idle : _attackSignal
                ,
-            AttackState = AttackState.Attack
+            AttackState = outOfRange ? AttackState.Idle : AttackState.Attack
                ,
             EquipmentManager = npc.GetComponent<EquipmentManager>()
                ,
@@ -85,9 +86,9 @@ public class AttckAction : GoapAction
         _outputEvent.Raise(this, package);
     }
 
-    private IEnumerator ExecuteAttack(float executionTime)
+    private IEnumerator ExecuteAttack(float executionTime, bool outOfRange)
     {
-        SendPackage();
+        SendPackage(outOfRange);
         yield return new WaitForSeconds(executionTime);
         ActionCompleted();
     }

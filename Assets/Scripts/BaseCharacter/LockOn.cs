@@ -77,6 +77,8 @@ public class LockOn : MonoBehaviour
         }
         else
         {
+            if (_sheathingCoroutine != null)
+                StopCoroutine(_sheathingCoroutine);
             if (_stateManager.WeaponIsSheathed)
             {
                 if (!_sheathing)
@@ -124,7 +126,7 @@ public class LockOn : MonoBehaviour
 
     private bool IsOrientationChanged(Orientation newOrientation, float orientation)
     {
-        return _storedfOrientation - orientation < _minAngleBeforeSendEvent;
+        return Mathf.Abs(_storedfOrientation - orientation) > _minAngleBeforeSendEvent;
         //return newOrientation != _storedOrientation;
     }
 

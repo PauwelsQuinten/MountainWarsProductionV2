@@ -266,6 +266,7 @@ public class EquipmentManager : MonoBehaviour
             }
         }
     }
+
     public void RotateShield(Component sender, object obj)
     {
         if (sender.gameObject != gameObject) return;
@@ -302,8 +303,8 @@ public class EquipmentManager : MonoBehaviour
 
         if (rotate)
         {
-            HeldEquipment[RIGHT_HAND].transform.localRotation = Quaternion.Euler(-90f, 27f, 72f);
-            HeldEquipment[RIGHT_HAND].transform.Rotate(Vector3.right, diffInRealOrientation);
+            HeldEquipment[RIGHT_HAND].transform.localRotation = Quaternion.Euler(-26, -27, 50);
+            //HeldEquipment[RIGHT_HAND].transform.Rotate(Vector3.right, diffInRealOrientation);
         }
         else
         {

@@ -45,7 +45,8 @@ public class GoapAction : MonoBehaviour, IActions
         _isActivated = true;
         _actionCoroutine = StartCoroutine(StartTimer(_actionMaxRunTime));
 
-        npc = blackboard.variable.Self;
+        npc = transform.parent.gameObject;
+        //npc = blackboard.variable.Self;
         //Debug.Log("Start action coroutine");
     }
 

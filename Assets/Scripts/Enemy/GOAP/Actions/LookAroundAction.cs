@@ -10,7 +10,9 @@ public class LookAroundAction : GoapAction
     protected override void Start()
     {
         base.Start();
-        var state = npc.GetComponent<StateManager>();
+        StateManager state = null;
+        if (npc)
+            state = npc.GetComponent<StateManager>();
         if (state)
             _currentAngle = state.fOrientation * Mathf.Rad2Deg;
     }

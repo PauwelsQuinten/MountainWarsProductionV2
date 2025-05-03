@@ -3610,6 +3610,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4219942789422500819, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
+      propertyPath: _feintAngle
+      value: 133
+      objectReference: {fileID: 0}
+    - target: {fileID: 4219942789422500819, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
       propertyPath: _textMeshPro
       value: 
       objectReference: {fileID: 1642128967}
@@ -5110,6 +5114,18 @@ PrefabInstance:
       propertyPath: _cameraToLookAt
       value: 
       objectReference: {fileID: 154107434}
+    - target: {fileID: 5245217995566118396, guid: e9651b4801f36d14e86c1cb82aa75d59, type: 3}
+      propertyPath: _allActionPrefabs.Array.size
+      value: 18
+      objectReference: {fileID: 0}
+    - target: {fileID: 5245217995566118396, guid: e9651b4801f36d14e86c1cb82aa75d59, type: 3}
+      propertyPath: '_allActionPrefabs.Array.data[16]'
+      value: 
+      objectReference: {fileID: -5412929135477609049, guid: 9abe8c3dca2443445884f11fb08b8524, type: 3}
+    - target: {fileID: 5245217995566118396, guid: e9651b4801f36d14e86c1cb82aa75d59, type: 3}
+      propertyPath: '_allActionPrefabs.Array.data[17]'
+      value: 
+      objectReference: {fileID: 6572297913649188877, guid: a52db103a6e074e4e86a2274f0ce5ef3, type: 3}
     - target: {fileID: 6537927211617022330, guid: e9651b4801f36d14e86c1cb82aa75d59, type: 3}
       propertyPath: m_Data.m_ConstrainedObject
       value: 

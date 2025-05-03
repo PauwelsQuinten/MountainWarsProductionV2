@@ -45,7 +45,7 @@ public class AnimationManager : MonoBehaviour
                 if (bored != null) bored.IdleExit();
                 //else Debug.Log("Bored is null");
         }
-        Debug.Log($"{gameObject} anim call: {args.AnimState.ToString()}, speed: {args.Speed}, layer: {args.AnimLayer}");
+        //Debug.Log($"{gameObject} anim call: {args.AnimState.ToString()}, speed: {args.Speed}, layer: {args.AnimLayer}");
         // Crossfade with normalized transition offset
 
         if ((!_animator.GetBool("IsStunned") && !_animator.GetBool("GetHit")) || args.AnimLayer == 2)

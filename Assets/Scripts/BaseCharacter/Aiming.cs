@@ -2,6 +2,7 @@ using TMPro;
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using Geometry;
 
 public class Aiming : MonoBehaviour
 {
@@ -38,7 +39,7 @@ public class Aiming : MonoBehaviour
     private const float F_MIN_ACCEPTED_VALUE = 0.40f;
     private const float F_TIME_BETWEEN_SWING = 0.40f;
     private const float F_TIME_BETWEEN_FEINT = 0.10f;
-    private const float F_TIME_BETWEEN_STAB = 0.20f;
+    private const float F_TIME_BETWEEN_STAB = 0.10f;
     private const float F_MAX_ALLOWED_ANGLE_ON_ORIENTATION = 17f;
     private const float F_MIN_ACCEPTED_MOVEMENT_ANGLE = 30f;
     private const float F_ACCEPTED_MIN_ANGLE = 10f;
@@ -58,9 +59,8 @@ public class Aiming : MonoBehaviour
     void Update()
     {
         CheckIfHoldingPosition();
-        UpdateMovingTime();
+        _fMovingTime += Time.deltaTime;
         UpdateActionQueue();
-
     }
 
     private void OnDestroy()
@@ -97,53 +97,35 @@ public class Aiming : MonoBehaviour
             return;
         }
 
-
         //Throw attack/feint or return to idle when releasing the analogstick
         if (_refAimingInput.variable.value == Vector2.zero || inputLength < F_MIN_ACCEPTED_VALUE)
-        {                       
-            ////Attack/feint
-            //if (_traversedAngle > F_MIN_ACCEPTED_MOVEMENT_ANGLE)
-            //{
-            //    _enmAttackSignal =AttackSignal.Swing;
-            //    _isFeint = IsFeintMovement(_swingDirection);
-            //    if (_isFeint)
-            //        SendPackage();
-            //    _enmAimingInput = AimingInputState.Idle;
-            //
-            //}
-
+        {                                   
             //Reset signal e.g. when stop charging or stop Blocking
-            /*else */if (_enmAimingInput != AimingInputState.Idle)
+            if (_enmAimingInput != AimingInputState.Idle)
             {
                 _enmAimingInput = AimingInputState.Idle;
                 _enmAttackSignal = AttackSignal.Idle;
                 SendPackage();
             }
-
-            _enmAttackSignal = AttackSignal.Idle;
-            _vec2Start = Vector2.zero;
-            _traversedAngle = 0f;
-            _swingDirection = Direction.Idle;
+            ResetValues();
         }
-
 
         //When pressing analog stick towards target perform a Stab
         else if (IsStabMovement(inputLength))
         {
             _enmAttackSignal = AttackSignal.Stab;
+            //_refAimingInput.variable.StateManager.AttackState = AttackState.Attack;
             SendPackage(true);
 
-            _vec2Start = Vector2.zero;
-            _traversedAngle = 0f;
+            ResetValues();
             _enmAimingInput = AimingInputState.Cooldown;
             StartCoroutine(ResetAttack(F_TIME_BETWEEN_STAB));
-            //Debug.Log($"Stab owner: {gameObject}");
         }
 
-
         //When it is not a Stab and input is big enough, set to moving
-        else if (DetectAnalogMovement(false)/* && _enmAttackSignal == AttackSignal.Idle*/)
+        else if (DetectAnalogMovement())
         {
+            _fNotMovingTime = 0f;
             switch (_enmAimingInput)
             {
                 case AimingInputState.Idle:
@@ -151,14 +133,13 @@ public class Aiming : MonoBehaviour
                     _vec2Start = _refAimingInput.variable.value;
                     _enmAimingInput = AimingInputState.Moving;
                     _vec2previousDirection = Vector2.zero;
-                    _fMovingTime = 0f;
-                    
+                    _fMovingTime = 0f;                    
                     break;
             }
 
             if (_traversedAngle >= F_ACCEPTED_MIN_ANGLE && _swingDirection == Direction.Idle)
             {
-                _swingDirection = CalculateSwingDirection(_traversedAngle);
+                _swingDirection = Geometry.Geometry.CalculateSwingDirection(_traversedAngle, _refAimingInput.variable.value, _vec2previousDirection, _vec2Start);
                 _enmAttackSignal = AttackSignal.Swing;
 
                 SendPackage(true);
@@ -195,63 +176,36 @@ public class Aiming : MonoBehaviour
 
     private void CheckIfHoldingPosition()
     {
-        if (_enmAimingInput == AimingInputState.Moving && !DetectAnalogMovement(true))
-        {
-            _fNotMovingTime += Time.deltaTime;
-            if (_fNotMovingTime >= F_MAX_TIME_NOT_MOVING)
-            {
-                //HoldEvents are for Holding block or charging
-                //Can also be used to throw an aatck by stop moving instead of releasing the analog stick
-                OnHoldevents();
-                _fNotMovingTime = 0f;
-                _traversedAngle = 0f;
-                _fMovingTime = 0;
-            }
-        }
-        else if (_enmAimingInput == AimingInputState.Moving)
-        {
+        if (_enmAimingInput == AimingInputState.Moving && _fNotMovingTime >= F_MAX_TIME_NOT_MOVING)
+        {            
+            //HoldEvents are for Holding block or charging
+            //Can also be used to throw an atack by stop moving instead of releasing the analog stick
+            OnHoldevents();
             _fNotMovingTime = 0f;
+            _traversedAngle = 0f;
+            _fMovingTime = 0;
         }
+            
+        _fNotMovingTime += Time.deltaTime;    
     }
 
     private void OnHoldevents()
     {
-        Vector2 orient = CalculateVectorFromOrientation(_refAimingInput.variable.StateManager.Orientation);
+        Vector2 orient = Geometry.Geometry.CalculateVectorFromOrientation(_refAimingInput.variable.StateManager.Orientation);
 
         switch (_refAimingInput.variable.State)
         {
             case AttackState.Idle:
             case AttackState.Attack:
             case AttackState.BlockAttack:
-                //When stop moving with small agle, it can only be stab, chargUp or nothing.
-                if (_traversedAngle < F_MIN_ACCEPTED_MOVEMENT_ANGLE)
-                {
-                    if (IsStabMovement(_refAimingInput.variable.value.magnitude))
-                    {
-                        _enmAttackSignal = AttackSignal.Stab;
-                        SendPackage();
-                    }
-
-                    //Charging for next attack, reset _startVec so it wont interfere when going to stab
-                    else if (AreVectorWithinAngle(-orient, _refAimingInput.variable.value, F_MIN_ACCEPTED_MOVEMENT_ANGLE))
-                    {
-                        _enmAttackSignal = AttackSignal.Charge;
-                        SendPackage();
-                    }
+                //When stop moving with small agle its chargUp or nothing.
+                if (_traversedAngle < F_MIN_ACCEPTED_MOVEMENT_ANGLE 
+                    && Geometry.Geometry.AreVectorWithinAngle(-orient, _refAimingInput.variable.value, F_MIN_ACCEPTED_MOVEMENT_ANGLE))
+                {                                   
+                    _enmAttackSignal = AttackSignal.Charge;
+                    SendPackage();                   
                 }
-
-                ////When the angle is big enough, you are feinting or throw your swing attack
-                //else
-                //{
-                //    _enmAttackSignal = IsFeintMovement(_swingDirection);
-                //    if (_enmAttackSignal == AttackSignal.Feint)
-                //        SendPackage();
-                //}
-
-                _previousLength = 1.1f;
-                SetCooldown();
                 break;
-
 
             case AttackState.ShieldDefence:
             case AttackState.SwordDefence:
@@ -264,75 +218,34 @@ public class Aiming : MonoBehaviour
                 break;
 
         }       
-
     }
-
-    private void SetCooldown()
-    {
-        _enmAimingInput = AimingInputState.Cooldown;
-        switch (_enmAttackSignal)
-        {
-            case AttackSignal.Stab:
-                StartCoroutine(ResetAttack(F_TIME_BETWEEN_STAB));
-                break;
-            /*case AttackSignal.Feint:
-                StartCoroutine(ResetAttack(F_TIME_BETWEEN_FEINT));
-                break;*/
-            case AttackSignal.Swing:
-                StartCoroutine(ResetAttack(F_TIME_BETWEEN_SWING));
-                break;
-            case AttackSignal.Idle:
-            case AttackSignal.Charge:
-                _enmAimingInput = AimingInputState.Idle;
-                break;
-        } 
-    }
-
-    private void DebugLines(Direction dir)
-    {
-        Debug.Log($"{dir}");
-        Debug.Log($"distance : {_traversedAngle}");
-        var speed = CalculateSwingSpeed(_traversedAngle, 1.5f, 2.5f);
-        Debug.Log($"speed : {speed}");
-        Debug.Log($"signal : {_enmAttackSignal}");
-        Debug.Log($"{CalculateBlockDirection(_refAimingInput.variable.StateManager.fOrientation)}");
-
-    }
-
-    
-    private bool DetectAnalogMovement(bool setNewValue)
+ 
+    private bool DetectAnalogMovement()
     {
         var diff = _vec2previousDirection - _refAimingInput.variable.value;
         bool value = diff.magnitude > F_MIN_DIFF_BETWEEN_INPUT;
-
-        if (setNewValue)
-        {
-            _traversedAngle += Vector2.Angle(_vec2previousDirection, _refAimingInput.variable.value);
-            _vec2previousDirection = _refAimingInput.variable.value;
-        }
-
+        
+        _traversedAngle += Vector2.Angle(_vec2previousDirection, _refAimingInput.variable.value);
+        _vec2previousDirection = _refAimingInput.variable.value;
+        
         return value;
     }
-
 
     private bool IsStabMovement(float inputLength)
     {
         return (inputLength >= 0.9f && inputLength > _previousLength + 0.01f
-                    && IsInputInFrontOfOrientation(_refAimingInput.variable.value, _stabAcceptedRange)
-                    //&& _refAimingInput.variable.StateManager.Orientation == CalculateOrientationOfInput(_refAimingInput.variable.value)
-                    && (_refAimingInput.variable.State == AttackState.Attack || _refAimingInput.variable.State == AttackState.BlockAttack)
+                    && Geometry.Geometry.IsInputInFrontOfOrientation(_refAimingInput.variable.value, _stabAcceptedRange, _refAimingInput.variable.StateManager.fOrientation)
+                    //&& (_refAimingInput.variable.State == AttackState.Attack || _refAimingInput.variable.State == AttackState.BlockAttack)
+                    && (_refAimingInput.variable.State != AttackState.SwordDefence && _refAimingInput.variable.State != AttackState.ShieldDefence)
                     && _enmAttackSignal == AttackSignal.Idle
                     && _traversedAngle < F_MAX_ALLOWED_ANGLE_ON_ORIENTATION) ;
-           /* return true;
-        else
-            Debug.Log($"{CalculateOrientationOfInput(_refAimingInput.variable.value)}, {_traversedAngle}");
-        return false;*/
+        /*if (!value)
+            Debug.Log($"inputlength = {inputLength}, previousLength = {_previousLength}, state = {_refAimingInput.variable.State}, signal = {_enmAttackSignal}, angle = {_traversedAngle}");
+        return value;*/
     }
-
 
     private void SendPackage(bool earlyMessage = false)
     {
-
         var package = new AimingOutputArgs
         {
             AimingInputState = _enmAimingInput
@@ -341,14 +254,12 @@ public class Aiming : MonoBehaviour
                 ,
             AttackHeight = _refAimingInput.variable.StateManager.AttackHeight
                 ,
-            //Direction = CalculateSwingDirection(distance)
             Direction = _swingDirection
                 ,
-            //BlockDirection = CalculateBlockDirection(_refAimingInput.variable.StateManager.Orientation)
-            BlockDirection = CalculateBlockDirection(_refAimingInput.variable.StateManager.fOrientation)
+            BlockDirection = Geometry.Geometry.CalculateBlockDirection
+                (_refAimingInput.variable.StateManager.fOrientation, _refAimingInput.variable.value, _refAimingInput.variable.StateManager.IsHoldingShield, _acceptedAngleForCenter, _maxAllowedBlockAngle)
                 ,
-            //Speed = 2f
-            Speed = CalculateSwingSpeed(_traversedAngle, _minSwingSpeed, _maxSwingSpeed)
+            Speed = Geometry.Geometry.CalculateSwingSpeed(_traversedAngle, _fMovingTime, _minSwingSpeed, _maxSwingSpeed)
                 ,
             AttackSignal = _enmAttackSignal
                 ,
@@ -365,172 +276,31 @@ public class Aiming : MonoBehaviour
         };
         //Debug.Log($"Send package: {package.AttackState}, {package.AttackSignal}, {_enmAimingInput}, angle : {_traversedAngle}, swing direction: {package.Direction}, block direction: {package.BlockDirection} holding = {package.IsHoldingBlock}");
 
-        /*if (_enmAttackSignal == AttackSignal.Feint)
-            _AimOutputEvent.Raise(this, package);*/
-
-        /*else */if (_refAimingInput.variable.StateManager.InAnimiation)
-        {
-            if (package.AttackState != AttackState.Idle)
-            {
-                _inputQueue.Enqueue(package);
-                //Debug.Log($"Enqueue: {package.AttackState}, {package.AttackSignal}, angle : {_traversedAngle}, early start: {package.AnimationStart}");
-                //Debug.Log($"{gameObject}, {package.AttackState}, {package.AttackSignal}, angle : {_traversedAngle}, early start: {package.AnimationStart}");
-            }
-
-        }
+        if (_refAimingInput.variable.StateManager.InAnimiation /*&& package.AttackState != AttackState.Idle*/)
+             _inputQueue.Enqueue(package);
+       
         else
             _AimOutputEvent.Raise(this, package);
     }
 
-    private Direction CalculateSwingDirection(float angleDegree)
-    {
-        Vector2 inputVec = Vector2.zero;
-        if (_refAimingInput.variable.value == Vector2.zero)
-            inputVec = _refAimingInput.variable.value;
-        else 
-            inputVec = _vec2previousDirection;//Debug switching--------------------------------------------------
-
-        float cross = _vec2Start.x * inputVec.y - _vec2Start.y * inputVec.x;
-        if (cross == 0f)
-            return Direction.ToCenter;
-
-        var startAngle = CalculateAngleRadOfInput(_vec2Start);
-        var endAngle = CalculateAngleRadOfInput(inputVec);
-
-        if (angleDegree < 180)
-        //if (Mathf.Abs(startAngle) + Mathf.Abs(endAngle) < Mathf.PI)
-            return cross > 0 ? Direction.ToLeft : Direction.ToRight;
-        
-        return cross < 0 ? Direction.ToLeft : Direction.ToRight;
-
-        //return angleDegree > 0 ? Direction.ToLeft : Direction.ToRight;
-    }
-
-    private void UpdateMovingTime()
-    {
-        _fMovingTime += Time.deltaTime;
-    }
-
-    private float CalculateSwingSpeed(float length, float minResult, float maxResult)
-    {
-        if (_fMovingTime == 0 )
-            return minResult;
-        float speed = (length * 1 / _fMovingTime) * 0.01f;
-        speed = speed < minResult ? minResult:  speed;
-        return speed > maxResult ? maxResult : speed;
-    }
-    
-     private float CalculateAngleRadOfInput(Vector2 direction)
-    {
-        return Mathf.Atan2(direction.y, direction.x);
-    }
-    private Orientation CalculateOrientationOfInput(Vector2 direction)
-    {
-        //Debug.Log($"{Mathf.Atan2(_refAimingInput.variable.value.y, _refAimingInput.variable.value.x)}");
-        float angle = CalculateAngleRadOfInput(direction) * Mathf.Rad2Deg;
-        if (angle == 0)
-            return Orientation.East;
-
-        int newAngle = (int) Mathf.Round(angle / 45);
-        newAngle = (newAngle == -4) ? 4 : newAngle;       
-
-        return (Orientation)(newAngle * 45) ;
-    }
-
-    private bool IsInputInFrontOfOrientation(Vector2 direction , float acceptedRange)
-    {
-        float angle = CalculateAngleRadOfInput(direction) * Mathf.Rad2Deg;
-        float angleDiff = angle - _refAimingInput.variable.StateManager.fOrientation;
-        //float angleDiff = angle - (float)_refAimingInput.variable.StateManager.Orientation;
-        return Mathf.Abs(angleDiff) < acceptedRange || Mathf.Abs(angleDiff) > 360 - acceptedRange;
-    }
-
-    private Direction CalculateBlockDirection(float orientation)
-    {
-        float length = _refAimingInput.variable.value.magnitude;
-        if (length < 0.5f && !_refAimingInput.variable.StateManager.IsHoldingShield)
-            return Direction.Idle;
-
-        //int orient = (int)orientation;
-        int orient = (int)orientation;
-        float input = CalculateAngleRadOfInput(_refAimingInput.variable.value) * Mathf.Rad2Deg;
-        int diff = (int)input - orient;
-        diff = diff < -180? 360 + diff  : diff;
-
-        /*if (_enmAimingInput == AimingInputState.Hold)
-            Debug.Log($"{diff}");*/
-
-        if (diff > -_acceptedAngleForCenter && diff < _acceptedAngleForCenter)
-            return Direction.ToCenter;
-        else if (diff > 30 && diff < _maxAllowedBlockAngle || (_refAimingInput.variable.StateManager.IsHoldingShield && diff > 30))
-            return Direction.ToLeft;
-        else if (diff < -30 && diff > -_maxAllowedBlockAngle || (_refAimingInput.variable.StateManager.IsHoldingShield && diff < -30))
-            return Direction.ToRight;
-        return Direction.Wrong;
-    }
-
-    private Vector2 CalculateVectorFromOrientation(Orientation orientation)
-    {
-        float angle = (int)orientation * Mathf.Deg2Rad;
-        return new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
-    }
-
     private bool IsFeintMovement(Direction direction)
-    {
-        Vector2 inputVec = Vector2.zero;
-        if (_refAimingInput.variable.value == Vector2.zero)
-            inputVec = _vec2previousDirection;
-        else
-            inputVec = _refAimingInput.variable.value;
-
+    {       
         var orientAngleRad = _refAimingInput.variable.StateManager.fOrientation * Mathf.Deg2Rad;
 
-        var startAngleRad = CalculateAngleRadOfInput(_vec2Start) - orientAngleRad;
-        startAngleRad = ClampAngle(startAngleRad);
+        var startAngleRad = Geometry.Geometry.CalculateAngleRadOfInput(_vec2Start) - orientAngleRad;
+        startAngleRad = Geometry.Geometry.ClampAngle(startAngleRad);
 
-        var endAngleRad = CalculateAngleRadOfInput(inputVec) - orientAngleRad;
-        endAngleRad = ClampAngle(endAngleRad);
+        if (_enmAttackSignal != AttackSignal.Idle)
+            Debug.Log($", start: {_vec2Start} angle= {startAngleRad * Mathf.Rad2Deg}");
 
-        /*if (_enmAttackSignal != AttackSignal.Idle)
-            Debug.Log($"startangle for determening aim = {endAngleRad}-----------------------------------------------------");
-*/
         //Debug.Log($"storredDirection= {_swingDirection}");
-        //Debug.Log($"end: {_refAimingInput.variable.value} angle= {endAngleRad * Mathf.Rad2Deg}, start: {_vec2Start} angle= {startAngleRad * Mathf.Rad2Deg}");
 
-        //if (direction == Direction.ToLeft && startAngleRad < 0 && endAngleRad > 0)
-        if (direction == Direction.ToLeft  && endAngleRad > -_feintAngle * Mathf.Deg2Rad && endAngleRad < 0f)
+        if (direction == Direction.ToLeft  && startAngleRad > -_feintAngle * Mathf.Deg2Rad && startAngleRad < 0f)
             return false;
-        else if (direction == Direction.ToRight  && endAngleRad < _feintAngle * Mathf.Deg2Rad && endAngleRad > 0)
+        else if (direction == Direction.ToRight  && startAngleRad < _feintAngle * Mathf.Deg2Rad && startAngleRad > 0)
             return false;
-        //else if (Mathf.Abs(startAngleRad) + Mathf.Abs(endAngleRad) >= Mathf.PI || _traversedAngle >= 180)
-        /* else if (_traversedAngle >= 180)
-             return false;*/
+        
         return true;
-    }
-
-    private static float ClampAngle(float startAngleRad)
-    {
-        if (startAngleRad < -Mathf.PI)
-            startAngleRad += Mathf.PI * 2f;
-        else if (startAngleRad > Mathf.PI)
-            startAngleRad -= Mathf.PI * 2f;
-        return startAngleRad;
-    }
-
-    private IEnumerator ResetAttack(float time)
-    {
-        yield return new WaitForSeconds(time);
-        _enmAimingInput = AimingInputState.Idle;
-    }
-
-    private bool AreVectorWithinAngle(Vector2 one, Vector2 two, float angleDegree)
-    {
-        Vector2 nOne = one.normalized;
-        Vector2 nTwo = two.normalized;
-        float dot = Vector2.Dot(nOne, nTwo);
-
-
-        return Mathf.Acos(dot) < angleDegree * Mathf.Deg2Rad;
     }
 
     private void UpdateActionQueue()
@@ -547,10 +317,17 @@ public class Aiming : MonoBehaviour
     {
         _enmAimingInput = AimingInputState.Idle;
         _enmAttackSignal = AttackSignal.Idle;
+        _swingDirection = Direction.Idle;
         _vec2Start = Vector2.zero;
         _vec2previousDirection = Vector2.zero;
         _traversedAngle = 0f;
         _previousLength = 0f;
         _fMovingTime = 0f;
+    }
+
+    private IEnumerator ResetAttack(float time)
+    {
+        yield return new WaitForSeconds(time);
+        _enmAimingInput = AimingInputState.Idle;
     }
 }

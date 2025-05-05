@@ -45,6 +45,8 @@ public class UIHealthManager : MonoBehaviour
     [SerializeField]
     private GameEvent _gameLost;
 
+    private Coroutine _dissableHealth;
+
     public void Update()
     {
         if (gameObject.GetComponent<AIController>() != null)
@@ -61,6 +63,12 @@ public class UIHealthManager : MonoBehaviour
         if(sender.gameObject.GetComponent<PlayerController>() == null)
         {
             if (sender.gameObject != gameObject) return;
+
+            _bloodBar.transform.parent.gameObject.SetActive(true);
+            _healthBar.transform.parent.gameObject.SetActive(true);
+
+            if (_dissableHealth != null) StopCoroutine(_dissableHealth);
+            _dissableHealth = StartCoroutine(DissableHealthUI());
         }
         else
         {
@@ -118,6 +126,11 @@ public class UIHealthManager : MonoBehaviour
         if (sender.gameObject.GetComponent<PlayerController>() == null)
         {
             if (sender.gameObject != gameObject) return;
+
+            _bloodBar.transform.parent.gameObject.SetActive(true);
+            _healthBar.transform.parent.gameObject.SetActive(true);
+
+            if (_dissableHealth != null) StopCoroutine(_dissableHealth);
         }
         else
         {
@@ -225,5 +238,13 @@ public class UIHealthManager : MonoBehaviour
         _patchUpBar.fillAmount = size;
         _completedPatchUp = true;
         _patchUp = null;
+    }
+
+    private IEnumerator DissableHealthUI()
+    {
+         yield return new WaitForSeconds(10);
+
+        _bloodBar.transform.parent.gameObject.SetActive(false);
+        _healthBar.transform.parent.gameObject.SetActive(false);
     }
 }

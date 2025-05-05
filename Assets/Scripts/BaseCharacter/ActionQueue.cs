@@ -29,14 +29,16 @@ public class ActionQueue : MonoBehaviour
 
         if (_stateManager && !_stateManager.InAnimiation && _inputQueue.Count > 0)
         {
+            if (_inputQueue.Peek().Package.AnimationStart && _actionCount > 0)
+                _actionCount--;
             var package = _inputQueue.Dequeue();
-            _actionCount--;
             _activateAction.Raise(this, package.Package);
         }
 
         if (IsOldestElementInQueueToLong(_maxTimeInQueue))
         {
-            _actionCount--;
+            if (_inputQueue.Peek().Package.AnimationStart && _actionCount > 0)
+                _actionCount--;
             _inputQueue.Dequeue();
         }
 

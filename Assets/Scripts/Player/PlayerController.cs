@@ -84,6 +84,8 @@ public class PlayerController : MonoBehaviour
         StartCoroutine(CheckSurrounding());
     }
 
+    //This OnStun is purely for storing his attackstate for if he is hilding shield or not
+    //!! its important that this event is called before the statemanager stunEvent!!!
     public void GetStun(Component sender, object obj)
     {
         LoseEquipmentEventArgs loseEquipmentEventArgs = obj as LoseEquipmentEventArgs;
@@ -171,7 +173,7 @@ public class PlayerController : MonoBehaviour
         _moveInputRef.variable.value = output;
     }
 
-        public void ProccesSetBlockInput(InputAction.CallbackContext ctx)
+    public void ProccesSetBlockInput(InputAction.CallbackContext ctx)
     {
         if (Time.timeScale == 0) return;
         if (_stateManager.AttackState == AttackState.Stun)

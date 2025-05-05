@@ -6,5 +6,8 @@ namespace UnityEngine
     {
         public float StunDuration;
         public bool ComesFromEnemy;
+
+        public GameObject Attacker;
+        public GameObject Defender;
     }
 }

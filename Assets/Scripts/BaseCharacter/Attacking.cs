@@ -109,7 +109,6 @@ public class Attacking : MonoBehaviour
             //Debug.Log($"speed: {args.Speed}");
             bool useRightArm = args.EquipmentManager.HasEquipmentInHand(true) || args.EquipmentManager.HasNoneInHand();
             StartAnimation(args.Speed, useRightArm, args.IsFeint);
-            PrintInput(args);
         }
 
         //PrintInput2(args);
@@ -135,7 +134,6 @@ public class Attacking : MonoBehaviour
         GameObject target = null;
         if (!IsEnemyInRange(out target)) return;
 
-        Debug.Log($"{gameObject} throws {_attackType}");
         _doAttack.Raise(this, new AttackEventArgs {
             AttackType = _attackType, 
             AttackHeight = _attackHeight, 

@@ -149,8 +149,6 @@ public class Blocking : MonoBehaviour
             AttackPower = args.AttackPower,
             BlockMedium = _blockMedium
         };
-        Debug.Log($"{gameObject} defense result = {blockResult} ");
-
 
         if (blockResult == BlockResult.Hit)
         {

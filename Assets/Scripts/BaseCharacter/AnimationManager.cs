@@ -36,7 +36,6 @@ public class AnimationManager : MonoBehaviour
         if (args.Interupt)
         {
             InteruptAnimation(args);
-            Debug.Log("feint set in animation");
         }
 
         if(args.AnimState != AnimationState.Idle)
@@ -45,7 +44,7 @@ public class AnimationManager : MonoBehaviour
                 if (bored != null) bored.IdleExit();
                 //else Debug.Log("Bored is null");
         }
-        Debug.Log($"{gameObject} anim call: {args.AnimState.ToString()}, speed: {args.Speed}, layer: {args.AnimLayer}");
+
         // Crossfade with normalized transition offset
 
         if ((!_animator.GetBool("IsStunned") && !_animator.GetBool("GetHit")) || args.AnimLayer == 2)
@@ -94,7 +93,6 @@ public class AnimationManager : MonoBehaviour
 
         _animator.speed = 1;
         _animator.SetTrigger("GetHit");
-        Debug.Log($"{gameObject} hit");
     }
 
     public void GetStunned(Component sender, object obj)
@@ -104,7 +102,6 @@ public class AnimationManager : MonoBehaviour
         {
             _animator.speed = 1;
             _animator.SetBool("IsStunned", true);
-        Debug.Log($"{gameObject} stun");
         }
 
         var args = obj as StunEventArgs;
@@ -114,7 +111,6 @@ public class AnimationManager : MonoBehaviour
         
         _animator.speed = 1;
         _animator.SetBool("IsStunned", true);
-        Debug.Log($"{gameObject} stun");
     }
 
     public void RecoverStunned(Component Sender, object obj)
@@ -122,7 +118,5 @@ public class AnimationManager : MonoBehaviour
         if (Sender.gameObject != gameObject) return;
 
         _animator.SetBool("IsStunned", false);
-        Debug.Log($"{gameObject} stun recover");
     }
-
 }

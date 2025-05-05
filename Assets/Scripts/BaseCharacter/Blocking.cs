@@ -55,8 +55,6 @@ public class Blocking : MonoBehaviour
             else if (_blockDirection == Direction.Wrong)
                 _blockDirection = args.BlockDirection;
 
-            //PlayShieldAnimation();
-
             return;
         }
         //Debug.Log($"package to Block State = {args.AttackState}, hold: {args.AimingInputState}, {_blockMedium}, {args.BlockDirection}");
@@ -74,13 +72,10 @@ public class Blocking : MonoBehaviour
             _blockDirection = args.BlockDirection;
             _previousState = args.AttackState;
 
-            //Debug.Log($"package to Block State {args.BlockDirection}");
-
             PlayShieldAnimation();
-
             UpdateBlackboard(args);
         }
-        //Lower shield when no vallid block input or state
+        //Lower shield when no vallid block input or state eg getting stunned, lowering shield
         else if ( ((int)_previousState >= 3 && (int)args.AttackState < 3 )
             || ((int)args.AttackState >= 3 && args.AimingInputState == AimingInputState.Idle))
         {
@@ -92,7 +87,6 @@ public class Blocking : MonoBehaviour
             _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Empty, AnimLayer = 4, DoResetIdle = false, Interupt = false });
             _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Empty, AnimLayer = 3, DoResetIdle = false, Interupt = false });
             _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Idle, AnimLayer = 1, DoResetIdle = false, Interupt = false });
-
         }
 
         else
@@ -226,8 +220,7 @@ public class Blocking : MonoBehaviour
                     blackboard.variable.TargetShieldState = args.BlockDirection;
             else
                 _blackboards[0].variable.ShieldState = args.BlockDirection;
-        }
-       
+        }       
     }
 
     static public BlockMedium GetBlockMedium(AimingOutputArgs args)

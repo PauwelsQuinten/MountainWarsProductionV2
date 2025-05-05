@@ -27,6 +27,7 @@ public class AIController : MonoBehaviour
     [SerializeField] private GameEvent _LookForTarget;
 
     private Coroutine _resetAttackheight;
+    private AttackState _storredAttackState = AttackState.Idle;
 
     private bool _wasSprinting;
     private bool _isHoldingShield;
@@ -37,8 +38,36 @@ public class AIController : MonoBehaviour
         StartCoroutine(CheckSurrounding());
     }
 
-    //Send Package to Block/ParryAction/Attack instead of going through aiming.
-    //
+    //This OnStun is purely for storing his attackstate for if he is hilding shield or not
+    //!! its important that this event is called before the statemanager stunEvent!!!
+    public void OnStun(Component sender, object obj)
+    {
+        LoseEquipmentEventArgs loseEquipmentEventArgs = obj as LoseEquipmentEventArgs;
+        if (loseEquipmentEventArgs != null && sender.gameObject == gameObject)
+        {
+            _storredAttackState =
+                _stateManager.AttackState == AttackState.Stun || _stateManager.AttackState == AttackState.BlockAttack ?
+                    AttackState.Idle : _stateManager.AttackState;
+        }
+
+        var args = obj as StunEventArgs;
+        if (args == null) return;
+        if (args.ComesFromEnemy && sender.gameObject == gameObject) return;
+        else if (!args.ComesFromEnemy && sender.gameObject != gameObject) return;
+
+        _storredAttackState =
+            _stateManager.AttackState == AttackState.Stun ? AttackState.Idle : _stateManager.AttackState;
+    }
+
+    public void RecoveredStun(Component sender, object obj)
+    {
+        if (sender.gameObject != gameObject) return;
+
+        if (!_stateManager.EquipmentManager.HasFullEquipment() && _storredAttackState == AttackState.BlockAttack)
+            _storredAttackState = AttackState.Idle;
+
+        _stateManager.AttackState = _storredAttackState;
+    }
 
     public void AIEvents(Component sender, object obj)
     {
@@ -58,6 +87,9 @@ public class AIController : MonoBehaviour
                 Sprint(false);
                 break;
             case AIInputAction.Interact:
+                break;
+            case AIInputAction.LockShield:
+                LockShield();
                 break;
         }
     }
@@ -90,7 +122,13 @@ public class AIController : MonoBehaviour
         _interactEvent.Raise(this);
     }
 
-
+    public void LockShield()
+    {
+        if (!_stateManager.EquipmentManager.HasFullEquipment()) return;
+        _isHoldingShield = true;
+        _stateManager.IsHoldingShield = _isHoldingShield;
+        _stateManager.AttackState = AttackState.BlockAttack;
+    }
 
     private IEnumerator CheckSurrounding()
     {

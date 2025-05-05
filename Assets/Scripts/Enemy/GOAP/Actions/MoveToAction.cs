@@ -77,8 +77,7 @@ public class MoveToAction : GoapAction
         _moveInput.Raise(this, new DirectionEventArgs { MoveDirection = _targetDir, SpeedMultiplier = 1f, Sender = npc });
         _navMeshAgent.SetDestination(_targetPos);
 
-        if (_navMeshAgent.isStopped)
-            _navMeshAgent.isStopped = false;
+        ReactivateAgent();
 
     }
 
@@ -106,15 +105,16 @@ public class MoveToAction : GoapAction
         FindTargetPosAndDirection(blackboard, ref targetDir, npcPos, ref targetPos, ref angleRad);
 
         //Update target position when he moves around
-        if (Vector3.Distance(targetPos, _targetPos) > 1f || Vector3.Distance(targetDir, _targetDir) > 1f)
+        if (Vector3.Distance(targetPos, _targetPos) > 1f || Vector3.Angle(targetDir, _targetDir) > 25f)
         {
             _navMeshAgent.SetDestination(targetPos);
             _targetPos = targetPos;
+            _targetDir = targetDir;
             _moveInput.Raise(this, new DirectionEventArgs { MoveDirection = targetDir, SpeedMultiplier = 1f, Sender = npc });
+            ReactivateAgent();
         }
 
-        if (_navMeshAgent.isStopped)
-            _navMeshAgent.isStopped = false;
+        
     }
 
     public override bool IsCompleted(WorldState currentWorldState)
@@ -255,8 +255,20 @@ public class MoveToAction : GoapAction
         {
             _navMeshAgent.isStopped = true;
             _navMeshAgent.velocity = Vector3.zero;
+            _navMeshAgent.updatePosition = false;
+            _navMeshAgent.updateRotation = false;
         }       
         npc.GetComponent<Rigidbody>().linearVelocity = Vector3.zero;
+    }
+
+    private void ReactivateAgent()
+    {
+        if (_navMeshAgent.isStopped)
+        {
+            _navMeshAgent.isStopped = false;
+            _navMeshAgent.updatePosition = true;
+            _navMeshAgent.updateRotation = true;
+        }
     }
 
 

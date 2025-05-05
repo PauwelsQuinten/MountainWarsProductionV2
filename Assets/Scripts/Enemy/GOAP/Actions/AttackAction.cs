@@ -12,12 +12,15 @@ public class AttckAction : GoapAction
     [SerializeField] private float _attackSpeed = 1.25f;
 
     private Coroutine _attackCoroutine;
+    private StateManager _stateManager;
 
     public override void StartAction(WorldState currentWorldState, BlackboardReference blackboard)
     {
-       base.StartAction(currentWorldState, blackboard);
+        base.StartAction(currentWorldState, blackboard);
+        if (_stateManager == null && npc) 
+            _stateManager = npc.GetComponent<StateManager>();
         bool outOfRange = currentWorldState.AttackRange != EWorldStateRange.InRange;
-       _attackCoroutine = StartCoroutine(ExecuteAttack(_executionTime, outOfRange));
+        _attackCoroutine = StartCoroutine(ExecuteAttack(_executionTime, outOfRange));
     }
 
     public override void UpdateAction(WorldState currentWorldState, BlackboardReference blackboard)
@@ -76,11 +79,11 @@ public class AttckAction : GoapAction
                ,
             AttackSignal = _attackSignal
                ,
-            AttackState = AttackState.Attack
+            AttackState = _stateManager.IsHoldingShield? AttackState.BlockAttack : AttackState.Attack
                ,
             EquipmentManager = npc.GetComponent<EquipmentManager>()
                ,
-            IsHoldingBlock = false
+            IsHoldingBlock = _stateManager.IsHoldingShield
                 ,
             Sender = npc
             ,

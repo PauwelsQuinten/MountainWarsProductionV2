@@ -240,7 +240,8 @@ namespace UnityEngine
         PatchUp,
         Dash,
         StopDash,
-        Interact
+        Interact,
+        LockShield
     }
 
     public enum Size

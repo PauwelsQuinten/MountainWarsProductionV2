@@ -61,6 +61,8 @@ public class ActionQueue : MonoBehaviour
 
     public void OnStun(Component sender, object obj)
     {
+        if (sender.gameObject != gameObject) return;
+
         _inputQueue.Clear();
         _actionCount = 0;
     }

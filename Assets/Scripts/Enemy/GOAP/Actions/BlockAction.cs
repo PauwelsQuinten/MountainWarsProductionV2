@@ -3,13 +3,15 @@ using UnityEngine;
 
 public class BlockAction : GoapAction
 {
-    [Header("Input")]
-    [SerializeField] private GameEvent _outputEvent;
-    [SerializeField] float _executionTime = 0.25f;
+    [Header("Events")]
+    [SerializeField, Tooltip("event send to the ActionQueue")] private GameEvent _outputEvent;
+    [SerializeField, Tooltip("event send to the AIController")] private GameEvent _aiControllerEvent;
     [Header("State")]
+    [SerializeField, Tooltip("time it will take after sending the event and the end of this action")] float _executionTime = 0.25f;
     [SerializeField] BlockMedium _blockMediume = BlockMedium.Shield;
     [SerializeField] Direction _direction = Direction.ToCenter;
-    [SerializeField] bool _useAimedBlock = false;
+    [SerializeField, Tooltip("When true, it will look at the opponent attack and direct his block towards it. els it will be in the direction you have it set")]
+    bool _useAimedBlock = false;
 
     private Coroutine _defendCoroutine;
     
@@ -100,6 +102,7 @@ public class BlockAction : GoapAction
             AnimationStart = true
         };
         _outputEvent.Raise(this, package);
+        _aiControllerEvent.Raise(this, new AIInputEventArgs { Input = AIInputAction.LockShield, Sender = npc });
     }
 
     private IEnumerator ExecuteBlock(float executionTime)

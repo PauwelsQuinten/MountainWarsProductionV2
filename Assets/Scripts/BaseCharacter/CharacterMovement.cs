@@ -111,7 +111,7 @@ public class CharacterMovement : MonoBehaviour
             }
             else
             {
-                Animator animator = GetComponentInChildren<Animator>();
+                /*Animator animator = GetComponentInChildren<Animator>();
                 AnimatorClipInfo[] clipInfo = null;
                 if (animator != null)
                     clipInfo = animator.GetCurrentAnimatorClipInfo(2);
@@ -121,7 +121,7 @@ public class CharacterMovement : MonoBehaviour
                         _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Walk, AnimLayer = 2, DoResetIdle = false, Interupt = false });
                     
                 }
-                else _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Walk, AnimLayer = 2, DoResetIdle = false, Interupt = false });
+                else */_changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Walk, AnimLayer = 2, DoResetIdle = false, Interupt = false });
             }
         }
         else

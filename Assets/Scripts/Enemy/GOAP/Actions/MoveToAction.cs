@@ -97,7 +97,7 @@ public class MoveToAction : GoapAction
         Vector3 targetPos = Vector3.zero;
         float angleRad = (float)blackboard.variable.Orientation * Mathf.Deg2Rad;
 
-        if (Vector3.Distance(npcPos, _targetPos) < 0.5f)
+        if (Vector3.Distance(npcPos, _targetPos) < 0.5f && _patrolPoints.Count > 0)
         {
             _patrolIndex++;
             _patrolIndex %= _patrolPoints.Count;
@@ -251,8 +251,11 @@ public class MoveToAction : GoapAction
     private void StopMovement()
     {
         _moveInput.Raise(this, new DirectionEventArgs { MoveDirection = Vector2.zero, SpeedMultiplier = 1f, Sender = npc });
-        _navMeshAgent.isStopped = true;
-        _navMeshAgent.velocity = Vector3.zero;
+        if (_navMeshAgent.isActiveAndEnabled)
+        {
+            _navMeshAgent.isStopped = true;
+            _navMeshAgent.velocity = Vector3.zero;
+        }       
         npc.GetComponent<Rigidbody>().linearVelocity = Vector3.zero;
     }
 

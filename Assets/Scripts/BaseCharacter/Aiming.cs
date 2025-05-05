@@ -27,13 +27,11 @@ public class Aiming : MonoBehaviour
     [Range(1.1f, 2f)]
     private float _maxSwingSpeed = 2f;
 
-    private Queue<AimingOutputArgs> _inputQueue = new Queue<AimingOutputArgs>();
     private Vector2 _vec2previousDirection = Vector2.zero;
     private Vector2 _vec2Start = Vector2.zero;
     private AttackState _enmCurrentState = AttackState.Idle;
     private AimingInputState _enmAimingInput = AimingInputState.Idle;
     private AttackSignal _enmAttackSignal = AttackSignal.Swing;
-    //private bool _isFeint = false;
     private const float F_MIN_DIFF_BETWEEN_INPUT = 0.04f;
     private const float F_MAX_TIME_NOT_MOVING = 0.1f;
     private const float F_MIN_ACCEPTED_VALUE = 0.40f;
@@ -60,7 +58,6 @@ public class Aiming : MonoBehaviour
     {
         CheckIfHoldingPosition();
         _fMovingTime += Time.deltaTime;
-        UpdateActionQueue();
     }
 
     private void OnDestroy()
@@ -275,12 +272,7 @@ public class Aiming : MonoBehaviour
 
         };
         //Debug.Log($"Send package: {package.AttackState}, {package.AttackSignal}, {_enmAimingInput}, angle : {_traversedAngle}, swing direction: {package.Direction}, block direction: {package.BlockDirection} holding = {package.IsHoldingBlock}");
-
-        if (_refAimingInput.variable.StateManager.InAnimiation /*&& package.AttackState != AttackState.Idle*/)
-             _inputQueue.Enqueue(package);
-       
-        else
-            _AimOutputEvent.Raise(this, package);
+        _AimOutputEvent.Raise(this, package);
     }
 
     private bool IsFeintMovement(Direction direction)
@@ -301,16 +293,6 @@ public class Aiming : MonoBehaviour
             return false;
         
         return true;
-    }
-
-    private void UpdateActionQueue()
-    {
-        if (!_refAimingInput.variable.StateManager.InAnimiation && _inputQueue.Count > 0)
-        {
-            var package = _inputQueue.Peek();
-            _AimOutputEvent.Raise(this, _inputQueue.Dequeue());
-            //Debug.Log($"Enqueue: {package.AttackState}, {package.AttackSignal}, early start: {package.AnimationStart}");
-        }
     }
 
     private void ResetValues()

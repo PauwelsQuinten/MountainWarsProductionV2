@@ -194,7 +194,7 @@ PrefabInstance:
     - target: {fileID: 706843702269815693, guid: 59d995a06c44d3d46b9df0aeb40f2db8, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1198075102}
     - target: {fileID: 706843702269815693, guid: 59d995a06c44d3d46b9df0aeb40f2db8, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: MainMenuPressed
@@ -3642,6 +3642,14 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: d92c25f84e9ed4c4f9490fccdf017560, type: 2}
     - target: {fileID: 4639080165276395507, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
+      propertyPath: m_Mass
+      value: 70
+      objectReference: {fileID: 0}
+    - target: {fileID: 4639080165276395507, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
+      propertyPath: m_UseGravity
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4639080165276395507, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
       propertyPath: m_CollisionDetection
       value: 2
       objectReference: {fileID: 0}
@@ -3702,12 +3710,20 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6942723020165011854, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
+      propertyPath: m_ActionEvents.Array.data[15].m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 710279109}
+    - target: {fileID: 6942723020165011854, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
       propertyPath: m_ActionEvents.Array.data[19].m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 710279109}
     - target: {fileID: 6942723020165011854, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
       propertyPath: m_ActionEvents.Array.data[19].m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6942723020165011854, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
+      propertyPath: m_ActionEvents.Array.data[15].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ProccesPauseInput
       objectReference: {fileID: 0}
     - target: {fileID: 6942723020165011854, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
       propertyPath: m_ActionEvents.Array.data[19].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
@@ -5001,22 +5017,18 @@ PrefabInstance:
       propertyPath: _cameraToLookAt
       value: 
       objectReference: {fileID: 154107434}
-    - target: {fileID: 1968497683231143963, guid: 2afb5e9156a620142b1a82f41b284732, type: 3}
-      propertyPath: _allActionPrefabs.Array.size
-      value: 10
+    - target: {fileID: 3918756397142279764, guid: 2afb5e9156a620142b1a82f41b284732, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1968497683231143963, guid: 2afb5e9156a620142b1a82f41b284732, type: 3}
-      propertyPath: '_allActionPrefabs.Array.data[8]'
+    - target: {fileID: 4529990203394775604, guid: 2afb5e9156a620142b1a82f41b284732, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 8447165077177768023, guid: 44dfaf3099cfc8a4197b347b863e4ba9, type: 3}
-    - target: {fileID: 1968497683231143963, guid: 2afb5e9156a620142b1a82f41b284732, type: 3}
-      propertyPath: '_allActionPrefabs.Array.data[9]'
-      value: 
-      objectReference: {fileID: -7810283385682158347, guid: 768864db8fd79434cbdba5c3321ad305, type: 3}
-    - target: {fileID: 1968497683231143963, guid: 2afb5e9156a620142b1a82f41b284732, type: 3}
-      propertyPath: '_allActionPrefabs.Array.data[10]'
-      value: 
-      objectReference: {fileID: -7810283385682158347, guid: 768864db8fd79434cbdba5c3321ad305, type: 3}
+      objectReference: {fileID: 2100000, guid: bed14430479db7e4e91fe4da4519d20a, type: 2}
+    - target: {fileID: 5488352903751579576, guid: 2afb5e9156a620142b1a82f41b284732, type: 3}
+      propertyPath: m_UseGravity
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8692327843256700154, guid: 2afb5e9156a620142b1a82f41b284732, type: 3}
       propertyPath: m_LocalPosition.x
       value: 4.87
@@ -5057,13 +5069,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8750371083623907664, guid: 2afb5e9156a620142b1a82f41b284732, type: 3}
-      propertyPath: m_Acceleration
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 8750371083623907664, guid: 2afb5e9156a620142b1a82f41b284732, type: 3}
-      propertyPath: m_AngularSpeed
-      value: 60
+    - target: {fileID: 8861402810008150015, guid: 2afb5e9156a620142b1a82f41b284732, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -5078,6 +5086,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 119326113320564490, guid: e9651b4801f36d14e86c1cb82aa75d59, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 749679949557989253, guid: e9651b4801f36d14e86c1cb82aa75d59, type: 3}
       propertyPath: m_LocalPosition.x
       value: 40.78
@@ -5116,6 +5128,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 749679949557989253, guid: e9651b4801f36d14e86c1cb82aa75d59, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2379870441380990213, guid: e9651b4801f36d14e86c1cb82aa75d59, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4534196890739655879, guid: e9651b4801f36d14e86c1cb82aa75d59, type: 3}
+      propertyPath: m_UseGravity
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4996746403009695576, guid: e9651b4801f36d14e86c1cb82aa75d59, type: 3}

@@ -43,6 +43,7 @@ public class CharacterMovement : MonoBehaviour
     {
         if (gameObject.CompareTag("Player")) 
             _rb.Move(new Vector3(transform.position.x, transform.position.y,transform.position.z) + (_movedirection * (_speed * _moveInput.variable.SpeedMultiplier)) * Time.deltaTime, transform.rotation);
+        _rb.AddForce(Vector3.down * 9.81f * 300, ForceMode.Force);
     }
 
     private void MoveInput_ValueChanged(object sender, EventArgs e)

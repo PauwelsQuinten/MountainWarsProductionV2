@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: -5060030443542841245}
   - component: {fileID: 7607232700774041888}
   m_Layer: 0
-  m_Name: Stab
+  m_Name: Charge
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -48,13 +48,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DesiredWorldState: {fileID: 0}
   SatisfyingWorldState: {fileID: 0}
-  Cost: 1
+  Cost: 0.8
   _actionMaxRunTime: 15
   _outputEvent: {fileID: 11400000, guid: 3ce36d1a0cee9b64db3b05b01a8aece3, type: 2}
-  _executionTime: 3
-  _attackSignal: 1
-  _swingDirection: 3
-  _attackSpeed: 1.5
+  _executionTime: 4
+  _attackSignal: 3
+  _swingDirection: 0
+  _attackSpeed: 1.25
 --- !u!114 &-5060030443542841245
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -69,7 +69,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   WorldStateType: 1
   PriorityList: 
-  _targetHealth: 4
+  _targetHealth: 5
   _targetStamina: 5
   _targetRHEquipment: 5
   _targetLHEquipment: 5
@@ -82,7 +82,7 @@ MonoBehaviour:
   _hasRHEquipment: 2
   _hasLHEquipment: 2
   _targetBehaviour: 4
-  _behaviour: 1
+  _behaviour: 7
   _targetAttackRange: 3
   _attackRange: 3
   _targetShieldState: 0
@@ -114,7 +114,7 @@ MonoBehaviour:
   _hasRHEquipment: 2
   _hasLHEquipment: 2
   _targetBehaviour: 4
-  _behaviour: 4
+  _behaviour: 1
   _targetAttackRange: 3
   _attackRange: 0
   _targetShieldState: 0

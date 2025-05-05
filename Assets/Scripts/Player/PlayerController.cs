@@ -77,6 +77,7 @@ public class PlayerController : MonoBehaviour
     {
         _aimInputRef.variable.ValueChanged += AimInputRef_ValueChanged;
         _aimInputRef.variable.StateManager = _stateManager;
+        _aimInputRef.variable.State = _stateManager.AttackState;
         _moveInputRef.variable.StateManager = _stateManager;
 
         _aimInputRef.variable.State = _stateManager.AttackState;

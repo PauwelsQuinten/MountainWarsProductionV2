@@ -47,6 +47,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DesiredWorldState: {fileID: 0}
   _invalidTime: 2
+  _defaultScore: 0.7
 --- !u!114 &1894566068034219173
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -69,7 +70,7 @@ MonoBehaviour:
   _stamina: 5
   _rHEquipment: 5
   _lHEquipment: 5
-  _hasTarget: 0
+  _hasTarget: 2
   _hasOpening: 2
   _hasRHEquipment: 2
   _hasLHEquipment: 2

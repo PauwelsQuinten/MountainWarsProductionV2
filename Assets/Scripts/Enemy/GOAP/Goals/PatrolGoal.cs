@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class StayAliveGoal : GoapGoal
+public class PatrolGoal : GoapGoal
 {
     public override bool IsVallid(WorldState currentWorldState, BlackboardReference blackboard)
     {
@@ -9,15 +9,7 @@ public class StayAliveGoal : GoapGoal
 
     public override float GoalScore(CharacterMentality menatlity, WorldState currentWorldState, BlackboardReference blackboard)
     {
-        if (blackboard.variable.IsBleeding)
-            return 1f;
-        if (blackboard.variable.Stamina < 0.3f)
-            return 0.8f;
-        if (blackboard.variable.IsPlayerAgressive)
-            return 0.8f;        
-        if (blackboard.variable.ObservedAttack == blackboard.variable.TargetCurrentAttack && blackboard.variable.ObservedAttack != AttackType.None )
-            return 0.9f;        
-
+        
         return _defaultScore;
     }
     public override bool InteruptGoal(WorldState currentWorldState, BlackboardReference blackboard)

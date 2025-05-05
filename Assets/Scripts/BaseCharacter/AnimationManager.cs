@@ -44,7 +44,6 @@ public class AnimationManager : MonoBehaviour
                 if (bored != null) bored.IdleExit();
                 //else Debug.Log("Bored is null");
         }
-
         // Crossfade with normalized transition offset
 
         if ((!_animator.GetBool("IsStunned") && !_animator.GetBool("GetHit")) || args.AnimLayer == 2)

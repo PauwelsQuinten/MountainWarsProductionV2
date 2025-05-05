@@ -57,6 +57,9 @@ public class AttckAction : GoapAction
     //-----------------------------------------------------------------------
     private void SendPackage(bool outOfRange)
     {
+        if (outOfRange && _attackSignal != AttackSignal.Charge)
+            return;
+
         var package = new AimingOutputArgs
         {
             AimingInputState = AimingInputState.Hold
@@ -71,9 +74,9 @@ public class AttckAction : GoapAction
                ,
             Speed = _attackSpeed
                ,
-            AttackSignal = outOfRange? AttackSignal.Idle : _attackSignal
+            AttackSignal = _attackSignal
                ,
-            AttackState = outOfRange ? AttackState.Idle : AttackState.Attack
+            AttackState = AttackState.Attack
                ,
             EquipmentManager = npc.GetComponent<EquipmentManager>()
                ,

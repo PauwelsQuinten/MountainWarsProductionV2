@@ -128,7 +128,7 @@ public class StateManager : MonoBehaviour
         {
             if (args.ComesFromEnemy)
             {
-                if (sender.gameObject == gameObject) return;
+                if (sender.gameObject == gameObject && args.Attacker != gameObject) return;
             }
             else if (sender.gameObject != gameObject) return;
 

@@ -21,7 +21,7 @@ public class GameEvent : ScriptableObject
     {
         bool added = _listeners.TryAdd(listener, index);
         if(!added) 
-            Debug.Log($"Event = {this.name}, listener = {listener.gameObject.name}");
+            Debug.LogError($"Event = {this.name}, listener = {listener.gameObject.name}");
     }
     public void RemoveListener(GameEventListener listener)
     {

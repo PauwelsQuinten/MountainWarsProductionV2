@@ -75,11 +75,12 @@ public class PlayerController : MonoBehaviour
    
     private void Start()
     {
-        
         _aimInputRef.variable.ValueChanged += AimInputRef_ValueChanged;
         _aimInputRef.variable.StateManager = _stateManager;
         _aimInputRef.variable.State = _stateManager.AttackState;
         _moveInputRef.variable.StateManager = _stateManager;
+
+        _aimInputRef.variable.State = _stateManager.AttackState;
 
         StartCoroutine(CheckSurrounding());
     }

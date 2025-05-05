@@ -33,7 +33,6 @@ public class AnimationEvents : MonoBehaviour
     public void SwordHit()
     {
         _recieveAttackEvent.Raise(this.transform.parent, null);
-        Debug.Log("Swordhit signal");
     }
     public void EndAnimation()
     {

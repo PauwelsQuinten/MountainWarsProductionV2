@@ -21,7 +21,8 @@ public class GoapAction : MonoBehaviour, IActions
     [HideInInspector]
     public WorldState SatisfyingWorldState;
     public float Cost = 1.0f;
-    [SerializeField] protected float _actionMaxRunTime = 3f;
+    [SerializeField, Tooltip("Maximum time this action will run, when negative it can run forever or until interupted by other sources")] 
+    protected float _actionMaxRunTime = 3f;
     protected bool _isActivated = false;
     protected Coroutine _actionCoroutine;
     protected GameObject npc;
@@ -43,7 +44,8 @@ public class GoapAction : MonoBehaviour, IActions
         if (_isActivated)
             return;
         _isActivated = true;
-        _actionCoroutine = StartCoroutine(StartTimer(_actionMaxRunTime));
+        if (_actionMaxRunTime >= 0)
+            _actionCoroutine = StartCoroutine(StartTimer(_actionMaxRunTime));
 
         npc = transform.parent.gameObject;
         //npc = blackboard.variable.Self;

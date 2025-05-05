@@ -12,7 +12,7 @@ public class StateManager : MonoBehaviour
     [SerializeField] List<BlackboardReference> _blackboardRefs = new List<BlackboardReference>();
     [Header("Values")]
     [HideInInspector]
-    public AttackState AttackState;
+    public AttackState AttackState = AttackState.Idle;
     [HideInInspector]
     public AttackHeight AttackHeight = AttackHeight.Torso;
     [HideInInspector]

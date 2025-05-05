@@ -69,20 +69,7 @@ public class Attacking : MonoBehaviour
 
         //if (args.AttackSignal != AttackSignal.Idle)
         //    PrintInput(args);
-
-        //Old way of using Feint by disrupting current animation
-        //if (args.AttackSignal == AttackSignal.Feint)
-        //{
-        //    Debug.Log("---------------------------Feint-----------------------");
-        //    InteruptAnimation();
-        //
-        //    //Signal to blackboard
-        //    if (gameObject.CompareTag(PLAYER))
-        //        _blackboardRefs.variable.TargetCurrentAttack = AttackType.None;
-        //    return;
-        //}
-
-        //if (args.AttackSignal != AttackSignal.Stab && args.AttackSignal != AttackSignal.Swing && args.AttackSignal != AttackSignal.Charge)
+        
         if (args.AttackSignal == AttackSignal.Idle )
         {
             //Signal to blackboard
@@ -91,7 +78,6 @@ public class Attacking : MonoBehaviour
                 foreach (var blackboard in _blackboardRefs)
                     blackboard.variable.TargetCurrentAttack = AttackType.None;
             }
-
 
             return;
         }

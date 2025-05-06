@@ -8,7 +8,11 @@ public class DragShieldDown : MonoBehaviour
     [Header("Events")]
     [SerializeField] private GameEvent _changeAnimation;
     [SerializeField] private GameEvent _lowerBlock;
-
+    [Header("Stamina")]
+    [SerializeField]
+    private FloatReference _staminaCost;
+    [SerializeField]
+    private GameEvent _loseStamina;
 
     //Start the animation that grabs your opponent shield
     public void GrabShield(Component sender, object obj)
@@ -18,6 +22,7 @@ public class DragShieldDown : MonoBehaviour
         if (args.Special != SpecialInput.ShieldGrab) return;
 
         _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.DragShieldDown, AnimLayer = 3, DoResetIdle = true});
+        _loseStamina.Raise(this, new StaminaEventArgs { StaminaCost = _staminaCost.value });
     }
 
     // Event that lowers your shield, triggered from your opponent animation

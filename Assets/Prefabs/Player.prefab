@@ -2306,6 +2306,11 @@ MonoBehaviour:
   _shieldGrabDistance: 1
   _changeAnimation: {fileID: 11400000, guid: f56e344763da3c34d9b3e5d48d24a9e4, type: 2}
   _lowerBlock: {fileID: 11400000, guid: 3ce36d1a0cee9b64db3b05b01a8aece3, type: 2}
+  _staminaCost:
+    useConstant: 0
+    constantValue: 0
+    variable: {fileID: 11400000, guid: 344cb57a5ba49bc42a7f7c94bccbf69c, type: 2}
+  _loseStamina: {fileID: 11400000, guid: 0b82292daaabdcb4e964a69a69667662, type: 2}
 --- !u!114 &1890603772516002997 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1490819108717279631, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}

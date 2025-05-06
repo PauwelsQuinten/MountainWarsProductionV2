@@ -333,6 +333,9 @@ public class Blocking : MonoBehaviour
                     blockResult = BlockResult.Hit;
                 break;
 
+            case AttackType.ShieldBash:                
+                blockResult = BlockResult.Hit;
+                break;
             default:
                 break;
         }
@@ -382,6 +385,12 @@ public class Blocking : MonoBehaviour
                     blockResult = BlockResult.Hit;
                 break;
 
+            case AttackType.ShieldBash: 
+                if (blockDirection == Direction.ToCenter)
+                    blockResult = BlockResult.HalfBlocked;
+                else
+                    blockResult = BlockResult.Hit;
+                break;
             default:
                 break;
         }

@@ -54,7 +54,7 @@ public class Blocking : MonoBehaviour
             //}
             //else if (_blockDirection == Direction.Wrong)
             //    _blockDirection = args.BlockDirection;
-
+            UpdateBlackboard(args);
             return;
         }
         //Debug.Log($"package to Block State = {args.AttackState}, hold: {args.AimingInputState}, {_blockMedium}, {args.BlockDirection}");

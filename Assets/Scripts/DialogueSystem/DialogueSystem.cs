@@ -43,7 +43,7 @@ public class DialogueSystem : MonoBehaviour
     {
         DialogueTriggerEventArgs args = obj as DialogueTriggerEventArgs;
         if (args == null) return;
-        if (_isTyping) return;
+        if (_isInDialogue.variable.value) return;
         _currentDialogueIndex = args.NextDialogueIndex;
         if (_dialogues.Count - 1 < _currentDialogueIndex) return;
         if (!_dialogues[_currentDialogueIndex].IsStarted) _dialogues[_currentDialogueIndex].IsStarted = true;
@@ -84,6 +84,7 @@ public class DialogueSystem : MonoBehaviour
 
     private IEnumerator EnableTextBalloon()
     {
+        _isTyping = true;
         Vector2 pos = GetTextBalloonPos();
         pos.y += _dialogues[_currentDialogueIndex].Lines[_currentLineIndex].TextBalloon.GetComponent<Image>().rectTransform.rect.height * 0.5f;
 
@@ -120,7 +121,6 @@ public class DialogueSystem : MonoBehaviour
 
     private IEnumerator TypeText(string text)
     {
-        _isTyping = true;
         _text.text = "";
         foreach (char letter in text)
         {
@@ -129,11 +129,11 @@ public class DialogueSystem : MonoBehaviour
             {
                 _text.text = text;
                 _canSkip = false;
+                _isTyping = false;
                 break;
             }
             yield return new WaitForSeconds(_dialogues[_currentDialogueIndex].Lines[_currentLineIndex].DisplaySpeed);
         }
-
         _isTyping = false;
     }
 

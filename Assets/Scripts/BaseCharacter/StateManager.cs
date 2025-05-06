@@ -10,6 +10,8 @@ public class StateManager : MonoBehaviour
     [SerializeField] GameEvent _OnStunRecovery;
     [Header("Refrence")]
     [SerializeField] List<BlackboardReference> _blackboardRefs = new List<BlackboardReference>();
+    [SerializeField]
+    public BoolReference IsInDialogue;
     [Header("Values")]
     [HideInInspector]
     public AttackState AttackState = AttackState.Idle;

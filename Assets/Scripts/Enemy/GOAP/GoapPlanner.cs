@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class GoapPlanner : MonoBehaviour
@@ -21,6 +22,8 @@ public class GoapPlanner : MonoBehaviour
 
     private int _recursionCounter = 0;
 
+    private StateManager _stateManager;
+
     void Start()
     {
         _blackboard.variable.ResetAtStart();
@@ -42,7 +45,8 @@ public class GoapPlanner : MonoBehaviour
     void Update()
     {
         //if (Time.timeScale == 0) return;
-
+        if(_stateManager == null) _stateManager = GetComponent<StateManager>();
+        if (_stateManager.IsInDialogue.value) return;
         _currentWorldState.UpdateWorldState();
         _recursionCounter = 0;
 

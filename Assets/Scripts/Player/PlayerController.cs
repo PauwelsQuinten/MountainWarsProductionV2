@@ -120,14 +120,14 @@ public class PlayerController : MonoBehaviour
 
     public void ProcessAimInput(InputAction.CallbackContext ctx)
     {
-        if (Time.timeScale == 0) return;
+        if (Time.timeScale == 0 || _stateManager) return;
         if (_staminaManager.CurrentStamina < _aimCost.value) return;
         _aimInputRef.variable.value = ctx.ReadValue<Vector2>();
     }
 
     private void AimInputRef_ValueChanged(object sender, AimInputEventArgs e)
     {
-        if (Time.timeScale == 0) return;
+        if (Time.timeScale == 0 || _stateManager.IsInDialogue.value) return;
         if (_stateManager.AttackState == AttackState.Stun || _aimInputRef.variable.State == AttackState.Stun)
         {
             return;
@@ -152,7 +152,7 @@ public class PlayerController : MonoBehaviour
 
     public void ProccesMoveInput(InputAction.CallbackContext ctx)
     {
-        if (Time.timeScale == 0) return;
+        if (Time.timeScale == 0 || _stateManager.IsInDialogue.value) return;
         Vector2 input = ctx.ReadValue<Vector2>();
 
         // Get camera vectors and flatten them to horizontal plane
@@ -174,7 +174,7 @@ public class PlayerController : MonoBehaviour
 
         public void ProccesSetBlockInput(InputAction.CallbackContext ctx)
     {
-        if (Time.timeScale == 0) return;
+        if (Time.timeScale == 0 || _stateManager.IsInDialogue.value) return;
         if (_stateManager.AttackState == AttackState.Stun)
         {
             if (ctx.action.WasPressedThisFrame())
@@ -221,7 +221,7 @@ public class PlayerController : MonoBehaviour
 
     public void ProccesSetParryInput(InputAction.CallbackContext ctx)
     {
-        if (Time.timeScale == 0) return;
+        if (Time.timeScale == 0 || _stateManager.IsInDialogue.value) return;
         if (_stateManager.AttackState == AttackState.Stun)
         {
             if (ctx.action.WasPressedThisFrame())
@@ -258,7 +258,7 @@ public class PlayerController : MonoBehaviour
 
     public void ProccesDodgeInput(InputAction.CallbackContext ctx)
     {
-        if (Time.timeScale == 0) return;
+        if (Time.timeScale == 0 || _stateManager.IsInDialogue.value) return;
             if (ctx.performed)
         {
             _wasSprinting = true;
@@ -290,7 +290,7 @@ public class PlayerController : MonoBehaviour
 
     public void ProccesInteractInput(InputAction.CallbackContext ctx)
     {
-        if (Time.timeScale == 0) return;
+        if (Time.timeScale == 0 || _stateManager.IsInDialogue.value) return;
         if (!ctx.performed) return;
 
         if (!_stateManager.EquipmentManager.HasEquipmentInHand(true))
@@ -304,7 +304,7 @@ public class PlayerController : MonoBehaviour
 
     public void ProccesAtackHeightInput(InputAction.CallbackContext ctx)
     {
-        if (Time.timeScale == 0) return;
+        if (Time.timeScale == 0 || _stateManager.IsInDialogue.value) return;
         if (!ctx.performed) return;
         _stateManager.AttackHeight = AttackHeight.Head;
 
@@ -314,7 +314,7 @@ public class PlayerController : MonoBehaviour
 
     public void ProssesLockShieldInput(InputAction.CallbackContext ctx)
     {
-        if (Time.timeScale == 0) return;
+        if (Time.timeScale == 0 || _stateManager.IsInDialogue.value) return;
         if (!ctx.performed) return;
         if (_stateManager.AttackState != AttackState.ShieldDefence ) return;
         if (!_stateManager.EquipmentManager.HasFullEquipment() ) return;
@@ -326,7 +326,7 @@ public class PlayerController : MonoBehaviour
 
     public void ProssesPatchUpInput(InputAction.CallbackContext ctx)
     {
-        if (Time.timeScale == 0) return;
+        if (Time.timeScale == 0 || _stateManager.IsInDialogue.value) return;
         //if (ctx.action.WasPressedThisFrame())
         if (ctx.action.WasPerformedThisFrame())
         {
@@ -372,7 +372,7 @@ public class PlayerController : MonoBehaviour
 
     public void ProccesShieldGrab(InputAction.CallbackContext ctx)
     {
-        if (Time.timeScale == 0) return;
+        if (Time.timeScale == 0 || _stateManager.IsInDialogue.value) return;
         if (!ctx.performed) return;
         if (_stateManager.AttackState == AttackState.ShieldDefence || _stateManager.AttackState == AttackState.BlockAttack)
             _shieldGrab.Raise(this, EventArgs.Empty);

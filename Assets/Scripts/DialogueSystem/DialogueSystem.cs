@@ -14,6 +14,8 @@ public class DialogueSystem : MonoBehaviour
     private List<Dialogues> _dialogues = new List<Dialogues>();
     [SerializeField]
     private TextMeshProUGUI _text;
+    [SerializeField]
+    private BoolReference _isInDialogue;
 
     [Header("TextBalloons")]
     [SerializeField]
@@ -32,6 +34,11 @@ public class DialogueSystem : MonoBehaviour
 
     private GameObject _currentTextBalloon;
 
+    private void Start()
+    {
+        _isInDialogue.variable.value = false;
+    }
+
     [ContextMenu("StartDialogue")]
     public void StartNewDialoge()
     {
@@ -39,6 +46,7 @@ public class DialogueSystem : MonoBehaviour
         if (_dialogues.Count - 1 < _currentDialogueIndex) return;
         if (!_dialogues[_currentDialogueIndex].IsStarted) _dialogues[_currentDialogueIndex].IsStarted = true;
         else return;
+        _isInDialogue.variable.value = true;
         StartCoroutine(EnableTextBalloon());
     }
 
@@ -152,7 +160,8 @@ public class DialogueSystem : MonoBehaviour
         _text.transform.parent = _canvas.transform;
         GameObject.Destroy(_currentTextBalloon);
 
-        if(startNextLine) StartCoroutine(EnableTextBalloon());
+        if (startNextLine) StartCoroutine(EnableTextBalloon());
+        else _isInDialogue.variable.value = true;
     }
 
     private void OnDestroy()

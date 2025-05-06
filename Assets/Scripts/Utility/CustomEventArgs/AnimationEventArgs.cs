@@ -9,6 +9,7 @@ namespace UnityEngine
         public bool Interupt;
         public int AnimLayer;
         public float Speed = 1f;
-        public Direction BlockDirection = Direction.Idle;
+        public Direction BlockDirection = Direction.Default;
+        public BlockMedium BlockMedium = BlockMedium.Shield;
     }
 }

@@ -27,12 +27,19 @@ public class AnimationManager : MonoBehaviour
         //For fluid block direction switches, else he will always first equip. looks really buggy
         if (_currentState == args.AnimState && args.AnimState != AnimationState.Idle && args.AnimState != AnimationState.Empty)
         {
-            _animator.SetInteger("BlockDirection", (int)args.BlockDirection);
+            if (args.BlockDirection != Direction.Default)
+            {
+                _animator.SetFloat("fBlockDirection", (float)(int)args.BlockDirection);
+                _animator.SetInteger("BlockState", (int)args.BlockMedium);
+            }
+
             return;
         }
-        else if (args.AnimLayer == 4)
-            _animator.SetInteger("BlockDirection", (int)args.BlockDirection);
-
+        else if (args.BlockDirection != Direction.Default)
+        {
+            _animator.SetFloat("fBlockDirection", (float)(int)args.BlockDirection);
+            _animator.SetInteger("BlockState", (int)args.BlockMedium);
+        }
         if (args.Interupt)
         {
             InteruptAnimation(args);

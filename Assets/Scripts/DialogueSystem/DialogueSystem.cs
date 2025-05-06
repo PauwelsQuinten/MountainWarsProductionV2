@@ -39,10 +39,12 @@ public class DialogueSystem : MonoBehaviour
         _isInDialogue.variable.value = false;
     }
 
-    [ContextMenu("StartDialogue")]
-    public void StartNewDialoge()
+    public void StartNewDialoge(Component sender, object obj)
     {
+        DialogueTriggerEventArgs args = obj as DialogueTriggerEventArgs;
+        if (args == null) return;
         if (_isTyping) return;
+        _currentDialogueIndex = args.NextDialogueIndex;
         if (_dialogues.Count - 1 < _currentDialogueIndex) return;
         if (!_dialogues[_currentDialogueIndex].IsStarted) _dialogues[_currentDialogueIndex].IsStarted = true;
         else return;
@@ -50,8 +52,7 @@ public class DialogueSystem : MonoBehaviour
         StartCoroutine(EnableTextBalloon());
     }
 
-    [ContextMenu("NextLine")]
-    public void PlayNextLine()
+    public void PlayNextLine(Component sender, object obj)
     {
         if (_isTyping)
         {
@@ -63,7 +64,6 @@ public class DialogueSystem : MonoBehaviour
         else
         {
             _currentLineIndex = 0;
-            _currentDialogueIndex++;
 
             StartCoroutine(DissableTextBalloon(false));
             return;
@@ -161,7 +161,7 @@ public class DialogueSystem : MonoBehaviour
         GameObject.Destroy(_currentTextBalloon);
 
         if (startNextLine) StartCoroutine(EnableTextBalloon());
-        else _isInDialogue.variable.value = true;
+        else _isInDialogue.variable.value = false;
     }
 
     private void OnDestroy()

@@ -53,6 +53,8 @@ public class PlayerController : MonoBehaviour
     private GameEvent _sheathWeapon;
     [SerializeField]
     private GameEvent _shieldGrab;
+    [SerializeField]
+    private GameEvent _nextDialogueLine;
 
     private Vector2 _moveInput;
 
@@ -258,6 +260,12 @@ public class PlayerController : MonoBehaviour
 
     public void ProccesDodgeInput(InputAction.CallbackContext ctx)
     {
+        if (_stateManager.IsInDialogue.value)
+        {
+            if (!ctx.performed) return;
+            _nextDialogueLine.Raise();
+            return;
+        }
         if (Time.timeScale == 0 || _stateManager.IsInDialogue.value) return;
             if (ctx.performed)
         {

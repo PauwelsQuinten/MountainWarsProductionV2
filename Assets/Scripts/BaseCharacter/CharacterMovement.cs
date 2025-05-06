@@ -41,13 +41,13 @@ public class CharacterMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (_stateManager.IsInDialogue.value)
+        /*if (_stateManager.IsInDialogue.value)
         {
             _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Idle, AnimLayer = 1, DoResetIdle = true, Interupt = true });
             _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Empty, AnimLayer = 2, DoResetIdle = true, Interupt = true });
             _movedirection = Vector3.zero;
             return;
-        }
+        }*/
             if (gameObject.CompareTag("Player")) 
             _rb.Move(new Vector3(transform.position.x, transform.position.y,transform.position.z) + (_movedirection * (_speed * _moveInput.variable.SpeedMultiplier)) * Time.deltaTime, transform.rotation);
         _rb.AddForce(Vector3.down * 9.81f * 300, ForceMode.Force);
@@ -55,13 +55,13 @@ public class CharacterMovement : MonoBehaviour
 
     private void MoveInput_ValueChanged(object sender, EventArgs e)
     {
-        if (_stateManager.IsInDialogue.value) return;
+        //if (_stateManager.IsInDialogue.value) return;
             UpdateMoveVector(null);
     }
 
     public void MoveInput(Component sender, object obj)
     {
-        if (_stateManager.IsInDialogue.value) return;
+        //if (_stateManager.IsInDialogue.value) return;
         var args = obj as DirectionEventArgs;
         if (args == null) return;
         if (args.Sender != gameObject) return;

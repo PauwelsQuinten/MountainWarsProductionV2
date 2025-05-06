@@ -43,17 +43,17 @@ public class Blocking : MonoBehaviour
         //Make sure that it will always be a vallid Block, even after recovering from Stun
         if (args.IsHoldingBlock && args.AttackState == AttackState.BlockAttack)
         {
-            _aimingInputState = AimingInputState.Hold;
-            _blockMedium = Blocking.GetBlockMedium(args);
-
-            //Set this storred value by event when he gets stunned during holding Block
-            if (_storredHoldDirection != Direction.Idle)
-            {
-                _blockDirection = _storredHoldDirection;
-                _storredHoldDirection = Direction.Idle;
-            }
-            else if (_blockDirection == Direction.Wrong)
-                _blockDirection = args.BlockDirection;
+            //_aimingInputState = AimingInputState.Hold;
+            //_blockMedium = Blocking.GetBlockMedium(args);
+            //
+            ////Set this storred value by event when he gets stunned during holding Block
+            //if (_storredHoldDirection != Direction.Idle)
+            //{
+            //    _blockDirection = _storredHoldDirection;
+            //    _storredHoldDirection = Direction.Idle;
+            //}
+            //else if (_blockDirection == Direction.Wrong)
+            //    _blockDirection = args.BlockDirection;
 
             return;
         }

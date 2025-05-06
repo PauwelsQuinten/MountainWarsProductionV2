@@ -104,7 +104,7 @@ public class PlayerController : MonoBehaviour
         else if (!args.ComesFromEnemy && sender.gameObject != gameObject) return;
 
         _storredAttackState = 
-            _stateManager.AttackState == AttackState.Stun? AttackState.Idle : _stateManager.AttackState;
+            _stateManager.AttackState == AttackState.Stun? _storredAttackState : _stateManager.AttackState;
         _aimInputRef.variable.State = AttackState.Stun;
         //_stateManager.AttackState = AttackState.Stun;
     }

@@ -56,6 +56,7 @@ public class Attacking : MonoBehaviour
         AimingOutputArgs args = obj as AimingOutputArgs;
         if (args == null) return;
         if (sender.gameObject != gameObject && args.Sender != gameObject) return;
+        if (args.Special != SpecialInput.Default) return;
 
 
         if (_stateManager == null) _stateManager = GetComponent<StateManager>();
@@ -137,7 +138,7 @@ public class Attacking : MonoBehaviour
     {
         if (sender.gameObject != gameObject) return;
 
-        if (gameObject.CompareTag(PLAYER))
+        if (gameObject.CompareTag(PLAYER) && _stateManager != null)
         {
             foreach (var blackboard in _blackboardRefs)
             {

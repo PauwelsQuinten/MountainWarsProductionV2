@@ -28,6 +28,7 @@ public class EquipmentManager : MonoBehaviour
     [Header("ShieldPosition")]
     [SerializeField] private float _startAngle = 195f;
     [SerializeField] private float _sideAngleToStart = 60f;
+    
     [Header("SwordPosition")]
     [SerializeField] private Quaternion _swordStartRotation = Quaternion.Euler(-32f, -116f, -195f);
     [Header("Blackboard")]
@@ -395,14 +396,7 @@ public class EquipmentManager : MonoBehaviour
         }
     }
 
-    public void ShieldGrabbed(Component sender, object obj)
-    {
-        if (sender.gameObject == this.gameObject) return;
-        if (Vector3.Distance(gameObject.transform.position, sender.gameObject.transform.position) > 3) return;
-        _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Empty, AnimLayer = 3, DoResetIdle = true });
-        _stateManager.AttackState = AttackState.Idle;
-    }
-
+   
     private IEnumerator SetWeaponActive(float duration, GameObject socket)
     {
         yield return new WaitForSeconds(duration);

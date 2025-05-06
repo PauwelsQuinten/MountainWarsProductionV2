@@ -223,7 +223,8 @@ namespace UnityEngine
         ParrySwordLeft,
         ParrySwordRight,
         SheathWeapon,
-        DrawWeapon
+        DrawWeapon,
+        DragShieldDown
     }
 
     public enum ObjectTarget
@@ -242,7 +243,8 @@ namespace UnityEngine
         Dash,
         StopDash,
         Interact,
-        LockShield
+        LockShield,
+        GrabShield
     }
 
     public enum Size
@@ -259,4 +261,15 @@ namespace UnityEngine
         Forest,
         Mountain
     }
+    
+    public enum SpecialInput
+    { 
+        Default,
+        ShieldGrab,
+        PatchUp,
+        PickUp
+    }
+
+
+
 }

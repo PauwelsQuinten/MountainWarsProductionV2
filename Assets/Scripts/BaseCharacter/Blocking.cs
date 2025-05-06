@@ -38,6 +38,7 @@ public class Blocking : MonoBehaviour
         AimingOutputArgs args = obj as AimingOutputArgs;
         if (args == null) return;
         if (sender.gameObject != gameObject && args.Sender != gameObject) return;
+        if (args.Special != SpecialInput.Default) return;
 
         //When Shield is locked and state hasnt changed, keep previous values
         //Make sure that it will always be a vallid Block, even after recovering from Stun

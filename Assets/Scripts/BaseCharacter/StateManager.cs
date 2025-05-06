@@ -161,8 +161,10 @@ public class StateManager : MonoBehaviour
         {
             AttackState = AttackState.Stun;
             _recoverCoroutine = StartCoroutine(RecoverStun(stunDuration));
+            InAnimiation = false;
         }
 
+        //Update Blaackboard
         if (gameObject.CompareTag(PLAYER))
         {
             foreach (var blackboard in _blackboardRefs)
@@ -173,7 +175,6 @@ public class StateManager : MonoBehaviour
         }
         else
             _blackboardRefs[0].variable.State = AttackState.Stun;
-
     }
 
     public void SetNewActiveCamera(Component sender, object obj)

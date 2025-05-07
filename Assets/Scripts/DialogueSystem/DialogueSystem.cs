@@ -36,6 +36,8 @@ public class DialogueSystem : MonoBehaviour
 
     private GameObject _currentTextBalloon;
 
+    private DialogueLines _currentLine;
+
     private void Start()
     {
         _isInDialogue.variable.value = false;
@@ -117,14 +119,21 @@ public class DialogueSystem : MonoBehaviour
         _isTyping = true;
         Vector2 pos = GetTextBalloonPos();
 
-        _currentTextBalloon = Instantiate(_dialogues[_currentDialogueIndex].Lines[_currentLineIndex].TextBalloon, _canvas.transform);
+        _currentLine = _dialogues[_currentDialogueIndex].Lines[_currentLineIndex];
+
+        _currentTextBalloon = Instantiate(_currentLine.TextBalloon, _canvas.transform);
         _currentTextBalloon.transform.position = new Vector3(pos.x, pos.y, 0);
+
         _text.transform.parent = _currentTextBalloon.transform;
         _text.transform.localPosition = Vector3.zero;
-        _text.fontSize = _dialogues[_currentDialogueIndex].Lines[_currentLineIndex].FontSize;
-        if(_dialogues[_currentDialogueIndex].Lines[_currentLineIndex].Bold)
+        _text.fontSize = _currentLine.FontSize;
+        _text.font = _currentLine.Font;
+
+        if(_currentLine.Bold)
             _text.fontStyle = FontStyles.Bold;
         else _text.fontStyle = FontStyles.Normal;
+
+        if(_currentLine.Images.Count > 0) DistributeImages();
 
         Image balloon = _currentTextBalloon.GetComponent<Image>();
         balloon.color = new Color(1, 1, 1, 0);
@@ -141,7 +150,61 @@ public class DialogueSystem : MonoBehaviour
 
         balloon.color = Color.white;
 
-        StartCoroutine(TypeText(_dialogues[_currentDialogueIndex].Lines[_currentLineIndex].Text));
+        StartCoroutine(TypeText(_currentLine.Text));
+    }
+
+    private void DistributeImages()
+    {
+        RectTransform rectTransform = _currentTextBalloon.GetComponent<Image>().rectTransform;
+
+        Rect imageRect = RectTransformUtility.PixelAdjustRect(rectTransform, _canvas.GetComponent<Canvas>());
+
+        float balloonWith = imageRect.width;
+        float balloonHeight = imageRect.height;
+
+        float spacingX = 0;
+        float spacingY = 0;
+
+        int amountOfImagesInLine = 0;
+        int imagesOnFirstLine = 0;
+        int imagesOnSecondLine = 0;
+
+        int linesindex = 1;
+
+        if (_currentLine.HasSecondLine)
+        {
+            spacingX = balloonWith / Mathf.Ceil(_currentLine.Images.Count * 0.5f);
+            spacingY = balloonHeight * 0.25f;
+
+            imagesOnFirstLine = (int)Mathf.Ceil(_currentLine.Images.Count * 0.5f);
+            imagesOnSecondLine = _currentLine.Images.Count - imagesOnFirstLine;
+            linesindex = 2;
+        }
+        else
+        {
+            spacingX = balloonWith / _currentLine.Images.Count;
+            imagesOnFirstLine = _currentLine.Images.Count;
+        }
+
+            amountOfImagesInLine = imagesOnFirstLine;
+
+        for (int i = 0; i < linesindex; i++)
+        {
+            for (int j = 0; j < amountOfImagesInLine; j++)
+            {
+                GameObject newImage = (Instantiate(_currentLine.Images[j * (i + 1)], _currentTextBalloon.transform));
+
+                float newX = 0 + (balloonWith / 2f) - (spacingX * j) - (newImage.GetComponent<Image>().rectTransform.rect.width);
+                float newY = 0;
+
+                if (_currentLine.HasSecondLine) newY = 0 + (balloonHeight * 0.25f) - (spacingY * i) - (newImage.GetComponent<Image>().rectTransform.rect.width / 2);
+
+                newImage.transform.localPosition = new Vector3(newX, newY, 0);
+                newImage.transform.parent = _currentTextBalloon.transform;
+            }
+
+            amountOfImagesInLine = imagesOnSecondLine;
+        }
     }
 
     private IEnumerator TypeText(string text)
@@ -157,7 +220,7 @@ public class DialogueSystem : MonoBehaviour
                 _isTyping = false;
                 break;
             }
-            yield return new WaitForSeconds(_dialogues[_currentDialogueIndex].Lines[_currentLineIndex].DisplaySpeed);
+            yield return new WaitForSeconds(_currentLine.DisplaySpeed);
         }
         _isTyping = false;
     }

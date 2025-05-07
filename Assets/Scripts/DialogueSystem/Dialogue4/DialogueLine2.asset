@@ -12,13 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aebd895158945eb40b35fd978a0587ef, type: 3}
   m_Name: DialogueLine2
   m_EditorClassIdentifier: 
-  Text: Oh hey. Yeah she left me a couple of weeks ago.
+  Text: 
   DisplaySpeed: 0.02
-  Font: {fileID: 11400000, guid: 65351b3f44be77245bc5c4618741e0f9, type: 2}
+  Font: {fileID: 0}
   FontSize: 36
   Bold: 0
-  Images: []
-  HasSecondLine: 0
+  Images:
+  - {fileID: 1643545390761264672, guid: f6a23aea52d0f674dbadaa776aedbebc, type: 3}
+  - {fileID: 1857187268575111128, guid: 8049f496604332949ba4389d7343e6db, type: 3}
+  - {fileID: 2797005787010629771, guid: 8d0a35798b09dda418ac4992969a0ab2, type: 3}
+  - {fileID: 2797005787010629771, guid: 8d0a35798b09dda418ac4992969a0ab2, type: 3}
+  - {fileID: 2797005787010629771, guid: 8d0a35798b09dda418ac4992969a0ab2, type: 3}
+  - {fileID: 2797005787010629771, guid: 8d0a35798b09dda418ac4992969a0ab2, type: 3}
+  HasSecondLine: 1
   TextBalloon: {fileID: 2592667508800547744, guid: 2bac7fcd62ad2254ba0b5c6805ad7e98, type: 3}
   _flipTextBalloon: 1
   _characterName: Paul

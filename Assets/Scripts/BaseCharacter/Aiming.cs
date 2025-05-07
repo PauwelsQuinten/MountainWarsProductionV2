@@ -138,13 +138,14 @@ public class Aiming : MonoBehaviour
             StartCoroutine(ResetAttack(F_TIME_BETWEEN_STAB));
         }
 
-        //else if ( inputLength > 0.9f && _swingDirection == Direction.Idle)
-        //{
-        //    _swingDirection = Geometry.Geometry.CalculateFeintDirection(_refAimingInput.variable.StateManager.fOrientation, _refAimingInput.variable.value);
-        //    _enmAttackSignal = AttackSignal.Swing;
-        //
-        //    SendPackage(true);
-        //}
+        else if ( inputLength > 0.9f && _swingDirection == Direction.Idle && _refAimingInput.variable.State == AttackState.Attack)
+        {
+            _swingDirection = Geometry.Geometry.CalculateFeintDirection(_refAimingInput.variable.StateManager.fOrientation, _refAimingInput.variable.value);
+            _enmAttackSignal = AttackSignal.Swing;
+            
+        
+            SendPackage(true);
+        }
 
         //When it is not a Stab and input is big enough, set to moving
         else if (DetectAnalogMovement() || _traversedAngle > F_ACCEPTED_MIN_ANGLE)
@@ -163,14 +164,14 @@ public class Aiming : MonoBehaviour
                     break;
             }
 
-            if (_traversedAngle >= F_ACCEPTED_MIN_ANGLE && _swingDirection == Direction.Idle)
+            /*if (_traversedAngle >= F_ACCEPTED_MIN_ANGLE && _swingDirection == Direction.Idle)
             {
                 _swingDirection = Geometry.Geometry.CalculateSwingDirection(_traversedAngle, _refAimingInput.variable.value, _vec2previousDirection, _vec2Start);
                 _enmAttackSignal = AttackSignal.Swing;
 
                 SendPackage(true);
             }
-            else if (_traversedAngle > _minSwingAngle && !_noFeintSignalSend)
+            else */if (_traversedAngle > _minSwingAngle && !_noFeintSignalSend)
             {
                 _noFeintSignalSend = true;
                 SendPackage(false, false);

@@ -162,11 +162,11 @@ public class Attacking : MonoBehaviour
 
         if (_attackType == AttackType.HorizontalSlashToLeft)
         {
-            _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.SlashLeft, AnimLayer = animLayer, DoResetIdle = true, Speed = speed });
+            _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.SlashLeft, AnimLayer = animLayer, DoResetIdle = true, Speed = 1.5f });
         }
         else if (_attackType == AttackType.HorizontalSlashToRight)
         {
-            _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.SlashRight, AnimLayer = animLayer, DoResetIdle = true, Speed = speed });
+            _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.SlashRight, AnimLayer = animLayer, DoResetIdle = true, Speed = 1.5f });
         }
         else if (_attackType == AttackType.Stab)
         {

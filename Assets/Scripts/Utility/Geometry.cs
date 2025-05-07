@@ -78,7 +78,7 @@ namespace Geometry
             int diff = (int)input - orient;
             diff = diff < -180 ? 360 + diff : diff;
 
-            if (diff > 0)                
+            if (diff < 0 || diff > 180)                
                 return Direction.ToLeft;
             else 
                 return Direction.ToRight;

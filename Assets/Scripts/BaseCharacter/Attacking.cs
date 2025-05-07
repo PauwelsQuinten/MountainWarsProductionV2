@@ -70,7 +70,14 @@ public class Attacking : MonoBehaviour
         //if (args.AttackSignal != AttackSignal.Idle)
         //    PrintInput(args);
         
-        if (args.AttackSignal == AttackSignal.Idle )
+        //Send signal to the animator if the current swing turns out not to be a feint
+        if (!args.IsFeint )
+        {
+            _changeAnimation.Raise(this, new AnimationEventArgs { IsFeint = false });
+            return;
+        }
+
+            if (args.AttackSignal == AttackSignal.Idle )
         {
             //Signal to blackboard
             if (gameObject.CompareTag(PLAYER))
@@ -94,7 +101,7 @@ public class Attacking : MonoBehaviour
         {
             //Debug.Log($"speed: {args.Speed}");
             bool useRightArm = args.EquipmentManager.HasEquipmentInHand(true) || args.EquipmentManager.HasNoneInHand();
-            StartAnimation(args.Speed, useRightArm, args.IsFeint);
+            StartAnimation(args.Speed, useRightArm);
         }
 
         //PrintInput2(args);
@@ -149,28 +156,23 @@ public class Attacking : MonoBehaviour
         }
     }
 
-    private void StartAnimation(float speed, bool useRightArm, bool isFeint)
+    private void StartAnimation(float speed, bool useRightArm)
     {
         int animLayer = useRightArm ? 3 : 4;
 
         if (_attackType == AttackType.HorizontalSlashToLeft)
         {
-            _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.SlashLeft, AnimLayer = animLayer, DoResetIdle = true, Interupt = isFeint, Speed = speed });
+            _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.SlashLeft, AnimLayer = animLayer, DoResetIdle = true, Speed = speed });
         }
         else if (_attackType == AttackType.HorizontalSlashToRight)
         {
-            _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.SlashRight, AnimLayer = animLayer, DoResetIdle = true, Interupt = isFeint, Speed = speed });
+            _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.SlashRight, AnimLayer = animLayer, DoResetIdle = true, Speed = speed });
         }
         else if (_attackType == AttackType.Stab)
         {
-            _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Stab, AnimLayer = animLayer, DoResetIdle = true, Interupt = false, Speed = 1.5f  });
+            _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Stab, AnimLayer = animLayer, DoResetIdle = true, Speed = 1.5f  });
         }
 
-    }
-    
-    private void InteruptAnimation()
-    {
-         _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Idle, AnimLayer = 1, DoResetIdle = false, Interupt = true });
     }
         
 

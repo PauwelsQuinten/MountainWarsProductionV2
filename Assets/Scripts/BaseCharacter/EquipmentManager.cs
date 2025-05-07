@@ -1,10 +1,6 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Net.Sockets;
-using UnityEditor.EditorTools;
 using UnityEngine;
-using UnityEngine.Rendering;
 
 public class EquipmentManager : MonoBehaviour
 {

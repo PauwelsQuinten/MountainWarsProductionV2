@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 using static UnityEngine.Rendering.GPUSort;
 
@@ -24,6 +25,14 @@ public class AnimationManager : MonoBehaviour
         AnimationEventArgs args = obj as AnimationEventArgs;
         if (args == null) return;
 
+        //Reset signal to make sure the swing will not be interupted, this is only for reseting the trigger and nothing else
+        if (!args.IsFeint)
+        {
+            InteruptAnimation(false);
+            return;
+        }
+        InteruptAnimation(true);
+
         //For fluid block direction switches, else he will always first equip. looks really buggy
         if (_currentState == args.AnimState && args.AnimState != AnimationState.Idle && args.AnimState != AnimationState.Empty)
         {
@@ -40,10 +49,7 @@ public class AnimationManager : MonoBehaviour
             _animator.SetFloat("fBlockDirection", (float)(int)args.BlockDirection);
             _animator.SetInteger("BlockState", (int)args.BlockMedium);
         }
-        if (args.Interupt)
-        {
-            InteruptAnimation(args);
-        }
+        
 
         if(args.AnimState != AnimationState.Idle)
         {
@@ -79,9 +85,12 @@ public class AnimationManager : MonoBehaviour
         //_animator.Play("Empty", LOWER_BODY_LAYER);
     }
 
-    private void InteruptAnimation(AnimationEventArgs args)
+    private void InteruptAnimation(bool isFeint)
     {
-        _animator.SetTrigger("Feint");
+        if(isFeint) 
+            _animator.SetTrigger("Feint");
+        else
+            _animator.ResetTrigger("Feint");
         
     }
 

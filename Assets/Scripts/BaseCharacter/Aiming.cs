@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using Geometry;
+using UnityEngine.InputSystem;
 
 public class Aiming : MonoBehaviour
 {
@@ -26,13 +27,16 @@ public class Aiming : MonoBehaviour
     [SerializeField, Tooltip("This will determine the animation speed of block and attack, the attack power will also be influenced by this")]
     [Range(1.1f, 2f)]
     private float _maxSwingSpeed = 2f;
+    [SerializeField, Tooltip("the minimum angle your analog stick needs to travel to consider the attack not to be a feint")]
+    [Range(F_ACCEPTED_MIN_ANGLE, 180f)]
+    private float _minSwingAngle = 60f;
 
     private Vector2 _vec2previousDirection = Vector2.zero;
     private Vector2 _vec2Start = Vector2.zero;
     private AttackState _enmCurrentState = AttackState.Idle;
     private AimingInputState _enmAimingInput = AimingInputState.Idle;
     private AttackSignal _enmAttackSignal = AttackSignal.Swing;
-    private const float F_MIN_DIFF_BETWEEN_INPUT = 0.04f;
+    private const float F_MIN_DIFF_BETWEEN_INPUT = 0.03f;
     private const float F_MAX_TIME_NOT_MOVING = 0.1f;
     private const float F_MIN_ACCEPTED_VALUE = 0.40f;
     private const float F_TIME_BETWEEN_SWING = 0.40f;
@@ -47,17 +51,32 @@ public class Aiming : MonoBehaviour
     private float _previousLength = 0f;
     private float _traversedAngle = 0f;
     private Direction _swingDirection = Direction.Idle;
-    
+    private bool _noFeintSignalSend = false;
+
+    //private InputAction _moveAction;
+
     void Start()
     {
         _enmAimingInput = AimingInputState.Idle;
         _refAimingInput.variable.ValueChanged += Variable_ValueChanged;
+
+        //PlayerInput playerInput = GetComponent<PlayerInput>();
+        //_moveAction = playerInput.actions["Aim"];
+
     }
 
     void Update()
     {
         CheckIfHoldingPosition();
         _fMovingTime += Time.deltaTime;
+
+        //Vector2 moveVector = _moveAction.ReadValue<Vector2>();
+        //_traversedAngle += Vector2.Angle(_vec2previousDirection, moveVector);
+        //_vec2previousDirection = moveVector;
+
+
+        if (_traversedAngle > 0)
+            Debug.Log($"updated angle {_traversedAngle}");
     }
 
     private void OnDestroy()
@@ -119,8 +138,16 @@ public class Aiming : MonoBehaviour
             StartCoroutine(ResetAttack(F_TIME_BETWEEN_STAB));
         }
 
+        //else if ( inputLength > 0.9f && _swingDirection == Direction.Idle)
+        //{
+        //    _swingDirection = Geometry.Geometry.CalculateFeintDirection(_refAimingInput.variable.StateManager.fOrientation, _refAimingInput.variable.value);
+        //    _enmAttackSignal = AttackSignal.Swing;
+        //
+        //    SendPackage(true);
+        //}
+
         //When it is not a Stab and input is big enough, set to moving
-        else if (DetectAnalogMovement())
+        else if (DetectAnalogMovement() || _traversedAngle > F_ACCEPTED_MIN_ANGLE)
         {
             _fNotMovingTime = 0f;
             switch (_enmAimingInput)
@@ -130,7 +157,9 @@ public class Aiming : MonoBehaviour
                     _vec2Start = _refAimingInput.variable.value;
                     _enmAimingInput = AimingInputState.Moving;
                     _vec2previousDirection = Vector2.zero;
-                    _fMovingTime = 0f;                    
+                    _fMovingTime = 0f;
+                    //_traversedAngle = 0f;
+                    _noFeintSignalSend = false;
                     break;
             }
 
@@ -140,6 +169,12 @@ public class Aiming : MonoBehaviour
                 _enmAttackSignal = AttackSignal.Swing;
 
                 SendPackage(true);
+            }
+            else if (_traversedAngle > _minSwingAngle && !_noFeintSignalSend)
+            {
+                _noFeintSignalSend = true;
+                SendPackage(false, false);
+                Debug.Log($"angle travelled = {_traversedAngle}");
             }
         }
         //Store measured length to use as comparision for the IsStabMovement
@@ -221,7 +256,8 @@ public class Aiming : MonoBehaviour
     {
         var diff = _vec2previousDirection - _refAimingInput.variable.value;
         bool value = diff.magnitude > F_MIN_DIFF_BETWEEN_INPUT;
-        
+
+        //_traversedAngle = Vector2.Angle(_vec2Start, _refAimingInput.variable.value);
         _traversedAngle += Vector2.Angle(_vec2previousDirection, _refAimingInput.variable.value);
         _vec2previousDirection = _refAimingInput.variable.value;
         
@@ -241,7 +277,7 @@ public class Aiming : MonoBehaviour
         return value;*/
     }
 
-    private void SendPackage(bool earlyMessage = false)
+    private void SendPackage(bool earlyMessage = false, bool isFeint = true )
     {
         var package = new AimingOutputArgs
         {
@@ -268,7 +304,8 @@ public class Aiming : MonoBehaviour
                 ,
             AnimationStart = earlyMessage
                 ,
-            IsFeint = IsFeintMovement(_swingDirection)
+            IsFeint = isFeint
+            //IsFeint = IsFeintMovement(_swingDirection)
 
         };
         //Debug.Log($"Send package: {package.AttackState}, {package.AttackSignal}, {_enmAimingInput}, angle : {_traversedAngle}, swing direction: {package.Direction}, block direction: {package.BlockDirection} holding = {package.IsHoldingBlock}");

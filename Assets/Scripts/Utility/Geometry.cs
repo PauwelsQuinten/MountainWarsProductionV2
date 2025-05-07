@@ -70,6 +70,20 @@ namespace Geometry
             return Direction.Wrong;
         }
 
+        public static Direction CalculateFeintDirection(float orientation, Vector2 analogInput)
+        {
+            //int orient = (int)orientation;
+            int orient = (int)orientation;
+            float input = CalculateAngleRadOfInput(analogInput) * Mathf.Rad2Deg;
+            int diff = (int)input - orient;
+            diff = diff < -180 ? 360 + diff : diff;
+
+            if (diff > 0)                
+                return Direction.ToLeft;
+            else 
+                return Direction.ToRight;
+        }
+
         public static Direction CalculateSwingDirection(float angleDegree, Vector2 analogInput, Vector2 previousInput, Vector2 StorredStartInput)
         {
             Vector2 inputVec = Vector2.zero;

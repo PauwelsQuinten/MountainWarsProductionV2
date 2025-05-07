@@ -71,18 +71,6 @@ public class DialogueSystem : MonoBehaviour
             return;
         }
 
-        if (_currentLineIndex < _dialogues[_currentDialogueIndex].Lines.Count - 1)
-        {
-            _allowMovement = false;
-            _currentLineIndex++;
-        }
-        else
-        {
-            _currentLineIndex = 0;
-
-            StartCoroutine(DissableTextBalloon(false));
-            return;
-        }
         StartCoroutine(DissableTextBalloon(true));
     }
 
@@ -98,6 +86,7 @@ public class DialogueSystem : MonoBehaviour
 
         float offsetX = _dialogues[_currentDialogueIndex].Lines[_currentLineIndex].TextBalloon.GetComponent<Image>().rectTransform.rect.width * 0.5f;
         bool needsFlip = _dialogues[_currentDialogueIndex].Lines[_currentLineIndex]._flipTextBalloon;
+
         if (needsFlip)
         {
             TextballoonPos = new Vector2(TextballoonPos.x - offsetX, TextballoonPos.y);
@@ -247,9 +236,18 @@ public class DialogueSystem : MonoBehaviour
         _text.color = Color.black;
         _text.transform.parent = _canvas.transform;
         GameObject.Destroy(_currentTextBalloon);
+        _allowMovement = false;
 
-        if (startNextLine) StartCoroutine(EnableTextBalloon());
-        else _isInDialogue.variable.value = false;
+        if (_currentLineIndex < _dialogues[_currentDialogueIndex].Lines.Count - 1)
+        {
+            _currentLineIndex++;
+            if (startNextLine) StartCoroutine(EnableTextBalloon());
+            else _isInDialogue.variable.value = false;
+        }
+        else
+        {
+            _currentLineIndex = 0;
+        }
     }
 
     private void OnDestroy()

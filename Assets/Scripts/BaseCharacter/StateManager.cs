@@ -161,18 +161,20 @@ public class StateManager : MonoBehaviour
         {
             AttackState = AttackState.Stun;
             _recoverCoroutine = StartCoroutine(RecoverStun(stunDuration));
+            InAnimiation = false;
         }
 
+        //Update Blaackboard
         if (gameObject.CompareTag(PLAYER))
         {
             foreach (var blackboard in _blackboardRefs)
             {
                 blackboard.variable.ResetCurrentAttack();
+                blackboard.variable.TargetState = AttackState.Stun;
             }
         }
         else
             _blackboardRefs[0].variable.State = AttackState.Stun;
-
     }
 
     public void SetNewActiveCamera(Component sender, object obj)
@@ -191,7 +193,11 @@ public class StateManager : MonoBehaviour
 
         if (!gameObject.CompareTag(PLAYER))
             _blackboardRefs[0].variable.State = AttackState.Idle;
-
+        else
+            foreach (var blackboard in _blackboardRefs)
+            {
+                blackboard.variable.TargetState = AttackState.Idle;
+            }
     }
     private IEnumerator InitBlackboard()
     {

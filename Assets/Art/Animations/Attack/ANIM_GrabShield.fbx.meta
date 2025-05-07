@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: bd6cd68ff2aff8b49ad35578e5484907
+guid: 2041b8190660a224694db3daf3e2d900
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -31,18 +31,18 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: ShieldHold
+      name: Stab
       takeName: mixamo.com
       internalID: -203655887218126122
       firstFrame: 0
-      lastFrame: 42
+      lastFrame: 64
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 1
+      loopTime: 0
       loopBlend: 0
       loopBlendOrientation: 1
       loopBlendPositionY: 1
@@ -51,16 +51,23 @@ ModelImporter:
       keepOriginalPositionY: 1
       keepOriginalPositionXZ: 1
       heightFromFeet: 0
-      mirror: 0
+      mirror: 1
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0
-        functionName: RotateShield
+      - time: 0.36787868
+        functionName: Whoosh
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 24f52033f6173df4ca5a0f6455d590ec, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.55206615
+        functionName: DragShield
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: 39f937a9b4700804eab307c59e3ace12, type: 3}
         floatParameter: 0
-        intParameter: 3
+        intParameter: 0
         messageOptions: 0
       transformMask: []
       maskType: 3

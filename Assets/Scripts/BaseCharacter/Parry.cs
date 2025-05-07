@@ -40,7 +40,7 @@ public class Parry : MonoBehaviour
         if (args == null) return;
         if (sender.gameObject != gameObject && args.Sender != gameObject)
             return;
-
+        if (args.Special != SpecialInput.Default) return;
 
         if (/*args.AttackState == AttackState.BlockAttack || */args.AttackState == AttackState.ShieldDefence || args.AttackState == AttackState.SwordDefence)
             _parryMedium = Blocking.GetBlockMedium(args);

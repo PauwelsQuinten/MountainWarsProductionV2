@@ -14,6 +14,12 @@ public class AnimationEvents : MonoBehaviour
     private GameEvent _endAnimation;
     [SerializeField] 
     private GameEvent _inParryZone;
+    [SerializeField] 
+    private GameEvent _rotateShield;
+    [SerializeField] 
+    private GameEvent _dragShieldDown;
+
+    private int _storredDirection = 0;
     private void Start()
     {
         
@@ -45,6 +51,22 @@ public class AnimationEvents : MonoBehaviour
         Debug.Log($"in parry zone signal = {zone}");
 
         _inParryZone.Raise(this.transform.parent, zone);
+    }
+
+    public void RotateShield(int direction)
+    {
+        if (direction != _storredDirection)
+        {
+            _storredDirection = direction;
+            _rotateShield.Raise(this.transform.parent, direction);
+        }
+        
+    }
+    
+    public void DragShield()
+    {
+
+        _dragShieldDown.Raise(this.transform.parent, null);
     }
 
 }

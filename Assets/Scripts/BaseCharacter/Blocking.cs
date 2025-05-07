@@ -38,23 +38,24 @@ public class Blocking : MonoBehaviour
         AimingOutputArgs args = obj as AimingOutputArgs;
         if (args == null) return;
         if (sender.gameObject != gameObject && args.Sender != gameObject) return;
+        if (args.Special != SpecialInput.Default) return;
 
         //When Shield is locked and state hasnt changed, keep previous values
         //Make sure that it will always be a vallid Block, even after recovering from Stun
         if (args.IsHoldingBlock && args.AttackState == AttackState.BlockAttack)
         {
-            _aimingInputState = AimingInputState.Hold;
-            _blockMedium = Blocking.GetBlockMedium(args);
-
-            //Set this storred value by event when he gets stunned during holding Block
-            if (_storredHoldDirection != Direction.Idle)
-            {
-                _blockDirection = _storredHoldDirection;
-                _storredHoldDirection = Direction.Idle;
-            }
-            else if (_blockDirection == Direction.Wrong)
-                _blockDirection = args.BlockDirection;
-
+            //_aimingInputState = AimingInputState.Hold;
+            //_blockMedium = Blocking.GetBlockMedium(args);
+            //
+            ////Set this storred value by event when he gets stunned during holding Block
+            //if (_storredHoldDirection != Direction.Idle)
+            //{
+            //    _blockDirection = _storredHoldDirection;
+            //    _storredHoldDirection = Direction.Idle;
+            //}
+            //else if (_blockDirection == Direction.Wrong)
+            //    _blockDirection = args.BlockDirection;
+            UpdateBlackboard(args);
             return;
         }
         //Debug.Log($"package to Block State = {args.AttackState}, hold: {args.AimingInputState}, {_blockMedium}, {args.BlockDirection}");
@@ -75,8 +76,20 @@ public class Blocking : MonoBehaviour
             PlayShieldAnimation();
             UpdateBlackboard(args);
         }
-        //Lower shield when no vallid block input or state eg getting stunned, lowering shield
-        else if ( ((int)_previousState >= 3 && (int)args.AttackState < 3 )
+        //Keep block direction when getting stunned in animator, on stun the block will allready be invallid so no need to temporary adjust it
+        else if (args.AttackState == AttackState.Stun)
+        {
+            if (!args.EquipmentManager.HasFullEquipment())
+            {
+                _blockDirection = Direction.Idle;
+                _aimingInputState = AimingInputState.Idle;
+                _previousState = AttackState.Idle;
+                LowerEquipment();
+            }
+            UpdateBlackboard(null);
+        }
+        //Lower shield when no vallid block input or state eg lowering shield
+        else if ( ((int)_previousState >= 3 && (int)args.AttackState < 2 )
             || ((int)args.AttackState >= 3 && args.AimingInputState == AimingInputState.Idle))
         {
             _aimingInputState = AimingInputState.Idle;
@@ -84,9 +97,7 @@ public class Blocking : MonoBehaviour
             _previousState = args.AttackState;
             UpdateBlackboard(null);
 
-            _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Empty, AnimLayer = 4, DoResetIdle = false, Interupt = false });
-            _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Empty, AnimLayer = 3, DoResetIdle = false, Interupt = false });
-            _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Idle, AnimLayer = 1, DoResetIdle = false, Interupt = false });
+            LowerEquipment();
         }
 
         else
@@ -97,6 +108,8 @@ public class Blocking : MonoBehaviour
 
         }
     }
+
+
     public void CheckBlock(Component sender, object obj)
     {
         //Check for vallid signal
@@ -196,11 +209,19 @@ public class Blocking : MonoBehaviour
     {
         //send event for animation
         if (_blockMedium == BlockMedium.Shield)
-            _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.ShieldEquip, AnimLayer = 4, DoResetIdle = false, Interupt = false, BlockDirection = _blockDirection });
+            _changeAnimation.Raise(this, new AnimationEventArgs 
+            { AnimState = AnimationState.ShieldEquip, AnimLayer = 4, DoResetIdle = false, Interupt = false, BlockDirection = _blockDirection, BlockMedium = BlockMedium.Shield });
         else if (_blockMedium == BlockMedium.Sword)
-            _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.SwordEquip, AnimLayer = 3, DoResetIdle = false, Interupt = false, BlockDirection = 0 });
+            _changeAnimation.Raise(this, new AnimationEventArgs 
+            { AnimState = AnimationState.SwordEquip, AnimLayer = 3, DoResetIdle = false, Interupt = false, BlockDirection = _blockDirection, BlockMedium = BlockMedium.Sword });
     }
 
+    private void LowerEquipment()
+    {
+        _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Empty, AnimLayer = 4, DoResetIdle = false, Interupt = false, BlockDirection = Direction.Idle });
+        _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Empty, AnimLayer = 3, DoResetIdle = false, Interupt = false });
+        _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Idle, AnimLayer = 1, DoResetIdle = false, Interupt = false });
+    }
 
     private void UpdateBlackboard(AimingOutputArgs args)
     {
@@ -312,6 +333,9 @@ public class Blocking : MonoBehaviour
                     blockResult = BlockResult.Hit;
                 break;
 
+            case AttackType.ShieldBash:                
+                blockResult = BlockResult.Hit;
+                break;
             default:
                 break;
         }
@@ -361,6 +385,12 @@ public class Blocking : MonoBehaviour
                     blockResult = BlockResult.Hit;
                 break;
 
+            case AttackType.ShieldBash: 
+                if (blockDirection == Direction.ToCenter)
+                    blockResult = BlockResult.HalfBlocked;
+                else
+                    blockResult = BlockResult.Hit;
+                break;
             default:
                 break;
         }

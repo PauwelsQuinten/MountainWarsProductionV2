@@ -46,11 +46,12 @@ namespace UnityEngine
 
     public enum Direction
     {
-        Idle,
-        ToRight, 
+        Idle, //no specific direction
+        ToRight,
         ToLeft, 
         ToCenter,
-        Wrong
+        Wrong,//aimed to a bad direction, like for an invallid block
+        Default // used for sending signal, on default dont change current direction in animator 
     }
 
     public enum AttackSignal
@@ -222,7 +223,8 @@ namespace UnityEngine
         ParrySwordLeft,
         ParrySwordRight,
         SheathWeapon,
-        DrawWeapon
+        DrawWeapon,
+        DragShieldDown
     }
 
     public enum ObjectTarget
@@ -241,7 +243,8 @@ namespace UnityEngine
         Dash,
         StopDash,
         Interact,
-        LockShield
+        LockShield,
+        GrabShield
     }
 
     public enum Size
@@ -258,4 +261,15 @@ namespace UnityEngine
         Forest,
         Mountain
     }
+    
+    public enum SpecialInput
+    { 
+        Default,
+        ShieldGrab,
+        PatchUp,
+        PickUp
+    }
+
+
+
 }

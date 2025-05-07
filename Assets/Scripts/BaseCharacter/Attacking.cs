@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using static UnityEngine.Rendering.GPUSort;
 
 public class Attacking : MonoBehaviour
 {
@@ -57,6 +56,7 @@ public class Attacking : MonoBehaviour
         AimingOutputArgs args = obj as AimingOutputArgs;
         if (args == null) return;
         if (sender.gameObject != gameObject && args.Sender != gameObject) return;
+        if (args.Special != SpecialInput.Default) return;
 
 
         if (_stateManager == null) _stateManager = GetComponent<StateManager>();
@@ -104,8 +104,12 @@ public class Attacking : MonoBehaviour
             foreach (var blackboard in _blackboardRefs)
             {
                 blackboard.variable.TargetCurrentAttack = _attackType;
-                blackboard.variable.TargetState = args.AttackState;
+                blackboard.variable.TargetState = AttackState.Attack;
             }
+        }
+        else
+        {
+            _blackboardRefs[0].variable.State = AttackState.Attack;
         }
     }
 
@@ -134,12 +138,12 @@ public class Attacking : MonoBehaviour
     {
         if (sender.gameObject != gameObject) return;
 
-        if (gameObject.CompareTag(PLAYER))
+        if (gameObject.CompareTag(PLAYER) && _stateManager != null)
         {
             foreach (var blackboard in _blackboardRefs)
             {
                 blackboard.variable.TargetCurrentAttack = AttackType.None;
-                blackboard.variable.TargetState = AttackState.Idle;
+                blackboard.variable.TargetState = _stateManager.AttackState == AttackState.Stun? _stateManager.AttackState : AttackState.Idle;
             }
 
         }

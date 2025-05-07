@@ -194,7 +194,8 @@ public class WorldState : MonoBehaviour
                 Behaviour = WatchBehaviour(_blackboard.variable.State);
                 break;
             case BlackboardEventArgs.WhatChanged.TargetBehaviour:
-                TargetBehaviour = WatchBehaviour(_blackboard.variable.TargetState);
+                if (HasTarget == EWorldStatePossesion.InPossesion)
+                    TargetBehaviour = WatchBehaviour(_blackboard.variable.TargetState);
                 break;
             case BlackboardEventArgs.WhatChanged.Stamina:
                 Stamina = CalculateValue(_blackboard.variable.Stamina);

@@ -52,7 +52,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private GameEvent _sheathWeapon;
     [SerializeField]
-    private GameEvent _shieldGrab;
+    private GameEvent _inQueue;
 
     private Vector2 _moveInput;
 
@@ -104,7 +104,7 @@ public class PlayerController : MonoBehaviour
         else if (!args.ComesFromEnemy && sender.gameObject != gameObject) return;
 
         _storredAttackState = 
-            _stateManager.AttackState == AttackState.Stun? AttackState.Idle : _stateManager.AttackState;
+            _stateManager.AttackState == AttackState.Stun? _storredAttackState : _stateManager.AttackState;
         _aimInputRef.variable.State = AttackState.Stun;
         //_stateManager.AttackState = AttackState.Stun;
     }
@@ -376,8 +376,8 @@ public class PlayerController : MonoBehaviour
     {
         if (Time.timeScale == 0) return;
         if (!ctx.performed) return;
-        if (_stateManager.AttackState == AttackState.ShieldDefence || _stateManager.AttackState == AttackState.BlockAttack)
-            _shieldGrab.Raise(this, EventArgs.Empty);
+        //if (_stateManager.AttackState == AttackState.ShieldDefence || _stateManager.AttackState == AttackState.BlockAttack)
+            _inQueue.Raise(this, new AimingOutputArgs { Special = SpecialInput.ShieldGrab, AnimationStart = true});
     }
 
 

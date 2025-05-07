@@ -25,6 +25,9 @@ public class AIController : MonoBehaviour
 
     [Header("Perception")]
     [SerializeField] private GameEvent _LookForTarget;
+    
+    [Header("Actions")]
+    [SerializeField] private GameEvent _inQueueAction;
 
     private Coroutine _resetAttackheight;
     private AttackState _storredAttackState = AttackState.Idle;
@@ -90,6 +93,9 @@ public class AIController : MonoBehaviour
                 break;
             case AIInputAction.LockShield:
                 LockShield();
+                break;
+            case AIInputAction.GrabShield:
+                _inQueueAction.Raise(this, new AimingOutputArgs {Special = SpecialInput.ShieldGrab, AnimationStart = true });
                 break;
         }
     }

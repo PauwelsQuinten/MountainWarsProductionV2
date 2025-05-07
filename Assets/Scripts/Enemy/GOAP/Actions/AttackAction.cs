@@ -58,7 +58,7 @@ public class AttckAction : GoapAction
     //-----------------------------------------------------------------------
     //Helper functions
     //-----------------------------------------------------------------------
-    private void SendPackage(bool outOfRange)
+    private void SendPackage(bool outOfRange, bool isFeint)
     {
         if (outOfRange && _attackSignal != AttackSignal.Charge)
             return;
@@ -88,13 +88,16 @@ public class AttckAction : GoapAction
             Sender = npc
             ,
             AnimationStart = true
+            ,
+            IsFeint = isFeint
         };
         _outputEvent.Raise(this, package);
     }
 
     private IEnumerator ExecuteAttack(float executionTime, bool outOfRange)
     {
-        SendPackage(outOfRange);
+        SendPackage(outOfRange, true);
+        SendPackage(outOfRange, false);
         yield return new WaitForSeconds(executionTime);
         ActionCompleted();
     }

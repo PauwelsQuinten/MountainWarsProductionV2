@@ -47,7 +47,7 @@ public class GoapPlanner : MonoBehaviour
         _currentWorldState.UpdateWorldState();
         _recursionCounter = 0;
 
-        if (_activeGoal && _activeGoal.InteruptGoal(_currentWorldState, _blackboard)) //Placed for when getting a knockback
+        if (_activeGoal && _activeGoal.InteruptGoal(_currentWorldState, _blackboard)) //Placed for when getting a knockback 
             ResetPlan(true);
 
         if (_activeGoal == null || _actionPlan.Count == 0)

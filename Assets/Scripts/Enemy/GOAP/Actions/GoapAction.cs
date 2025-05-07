@@ -55,7 +55,7 @@ public class GoapAction : MonoBehaviour, IActions
 
     public virtual void UpdateAction(WorldState currentWorldState, BlackboardReference blackboard)
     {
-
+        ActionCompleted();
     }
 
     virtual public bool IsVallid(WorldState currentWorldState, BlackboardReference blackboard)

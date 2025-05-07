@@ -74,9 +74,6 @@ public class Aiming : MonoBehaviour
         //_traversedAngle += Vector2.Angle(_vec2previousDirection, moveVector);
         //_vec2previousDirection = moveVector;
 
-
-        if (_traversedAngle > 0)
-            Debug.Log($"updated angle {_traversedAngle}");
     }
 
     private void OnDestroy()

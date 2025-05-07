@@ -6,8 +6,8 @@ public class GoapPlanner : MonoBehaviour
     [SerializeField] private BlackboardReference _blackboard;
     [Header("CharacterStyle")]
     [SerializeField] private CharacterMentality _characterMentality = CharacterMentality.Basic;
-    [Range(0f, 1f)]
-    public float Perception = 0.8f;
+    [Range(0, 10)]
+    public int Perception = 8;
     [SerializeField] private List<GoapAction> _allActionPrefabs;
     [SerializeField] private List<GoapGoal> _allGoalPrefabs;
     private List<GoapAction> _allActions = new List<GoapAction>();
@@ -26,6 +26,7 @@ public class GoapPlanner : MonoBehaviour
         _blackboard.variable.ResetAtStart();
         _currentWorldState = gameObject.AddComponent<WorldState>();
         _currentWorldState.WorldStateType = WorldStateType.Current;
+        _blackboard.variable.SetPerception(Perception);
         _currentWorldState.AsignBlackboard(_blackboard);
         _currentWorldState.Init();
 

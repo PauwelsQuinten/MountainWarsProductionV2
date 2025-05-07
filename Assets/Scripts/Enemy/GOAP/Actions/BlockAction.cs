@@ -51,6 +51,11 @@ public class BlockAction : GoapAction
         return true;
     }
 
+    public override float CalculateCost(BlackboardReference blackboard, WorldState currentWorldState)
+    {
+        return base.CalculateCost(blackboard, currentWorldState);
+    }
+
     public override bool IsCompleted(WorldState current)
     {
         return base.IsCompleted(current);

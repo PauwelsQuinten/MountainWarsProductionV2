@@ -7,6 +7,8 @@ using UnityEngine;
 public class BlackboardVariable : ScriptableObject
 {
     public event EventHandler<BlackboardEventArgs> ValueChanged;
+    int _numOfAttacksSeen = 5;
+    public int Perception = 5;
     public void ResetAtStart()
     {
         _state = AttackState.Idle;
@@ -35,6 +37,21 @@ public class BlackboardVariable : ScriptableObject
         _targetShieldState = Direction.Idle;
         _shieldState = Direction.Idle;
         _isPlayerAgressive = false;
+    }
+
+    public void SetPerception(int perception)
+    {
+        Perception = perception;
+
+        if (perception < 3)
+            _numOfAttacksSeen = 7;
+        else if (perception < 6)
+            _numOfAttacksSeen = 5;
+         else if (perception < 9)
+            _numOfAttacksSeen = 3;
+        else if (perception == 10)
+            _numOfAttacksSeen = 1;
+
     }
 
     private AttackState _state;
@@ -344,10 +361,10 @@ public class BlackboardVariable : ScriptableObject
             if (key != addedAttack)
                 StorredAttacks[key] -= StorredAttacks[key] > 0 ? 1 : 0;
             else
-                StorredAttacks[key] -= StorredAttacks[key] > 5 ? 1 : 0;
+                StorredAttacks[key] -= StorredAttacks[key] > _numOfAttacksSeen ? 1 : 0;
         }
            
-        return highestCount >= 5? attackType : AttackType.None;
+        return highestCount >= _numOfAttacksSeen ? attackType : AttackType.None;
     }
 
     private AttackType _targetCurrentAttack;

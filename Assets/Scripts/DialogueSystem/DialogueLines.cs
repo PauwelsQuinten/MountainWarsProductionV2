@@ -24,7 +24,8 @@ public class DialogueLines : ScriptableObject
 
     [Header("Text Balloon")]
     public GameObject TextBalloon;
-    public bool _flipTextBalloon;
+    public bool FlipTextBalloon;
+    public Vector2 AddedScale;
 
     [Header("Character Name")]
     public string _characterName;

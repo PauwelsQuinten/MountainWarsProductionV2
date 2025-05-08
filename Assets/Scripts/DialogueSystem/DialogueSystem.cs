@@ -90,7 +90,7 @@ public class DialogueSystem : MonoBehaviour
         TextballoonPos.y += _dialogues[_currentDialogueIndex].Lines[_currentLineIndex].TextBalloon.GetComponent<Image>().rectTransform.rect.height * 0.5f;
 
         float offsetX = _dialogues[_currentDialogueIndex].Lines[_currentLineIndex].TextBalloon.GetComponent<Image>().rectTransform.rect.width * 0.5f;
-        bool needsFlip = _dialogues[_currentDialogueIndex].Lines[_currentLineIndex]._flipTextBalloon;
+        bool needsFlip = _dialogues[_currentDialogueIndex].Lines[_currentLineIndex].FlipTextBalloon;
 
         if (needsFlip)
         {
@@ -218,8 +218,8 @@ public class DialogueSystem : MonoBehaviour
         float FontSizeMultiplier = DetermineFontSizeMultiplier();
 
         Vector2 size = new Vector2((((FontSizeMultiplier * characterWidth) + _currentLine.CharacterSpacing) * LetterCount), (((FontSizeMultiplier * characterHeight) + _currentLine.LineSpacing) * linecount));
-        //74.8 125.1
-        // Set sizes
+        size += _currentLine.AddedScale;
+
         if (_currentTextBalloon != null)
         {
             RectTransform balloonRect = _currentTextBalloon.GetComponent<Image>().rectTransform;
@@ -258,6 +258,7 @@ public class DialogueSystem : MonoBehaviour
 
         float imagesOnFirstLine = Mathf.Ceil(_currentLine.Images.Count * 0.5f);
         Vector2 size = new Vector2((imageSizeX + imageSpacingX) * imagesOnFirstLine, (imagesSizeY + imageSpacingY) * 2);
+        size += _currentLine.AddedScale;
 
         _currentTextBalloon.GetComponent<Image>().rectTransform.sizeDelta = size;
         _text.rectTransform.sizeDelta = size;

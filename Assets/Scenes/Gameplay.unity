@@ -4676,7 +4676,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7504157853857913847, guid: ebda3d553a834264ebd7b3df69ac6dd3, type: 3}
       propertyPath: _nextDialogueIndex
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 8319330883209865449, guid: ebda3d553a834264ebd7b3df69ac6dd3, type: 3}
       propertyPath: m_Size.x
@@ -5113,7 +5113,7 @@ PrefabInstance:
       objectReference: {fileID: 710279111}
     - target: {fileID: 8171449612649151243, guid: 1352057bfd5cc2d4eb63063de6768533, type: 3}
       propertyPath: _dialogues.Array.size
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 8171449612649151243, guid: 1352057bfd5cc2d4eb63063de6768533, type: 3}
       propertyPath: _isInDialogue.variable
@@ -5123,6 +5123,10 @@ PrefabInstance:
       propertyPath: '_dialogues.Array.data[2]'
       value: 
       objectReference: {fileID: 11400000, guid: aa61bf2b03290e241b0fc36c3284a3f5, type: 2}
+    - target: {fileID: 8171449612649151243, guid: 1352057bfd5cc2d4eb63063de6768533, type: 3}
+      propertyPath: '_dialogues.Array.data[3]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 4d368a1291a7887428eadacdf3411a3f, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

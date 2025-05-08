@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
-using UnityEditor.Rendering;
 using UnityEngine;
-using UnityEngine.InputSystem;
+using UnityEngine.TextCore;
+using UnityEngine.TextCore.LowLevel;
 using UnityEngine.UI;
-using static UnityEditor.PlayerSettings;
+
 
 public class DialogueSystem : MonoBehaviour
 {
@@ -38,6 +38,11 @@ public class DialogueSystem : MonoBehaviour
 
     private DialogueLines _currentLine;
 
+    private List<GameObject> _activeImages = new List<GameObject>();
+
+    private int _LineSizeX;
+    private int _LineSizeY;
+
     private void Start()
     {
         _isInDialogue.variable.value = false;
@@ -45,7 +50,7 @@ public class DialogueSystem : MonoBehaviour
 
     private void LateUpdate()
     {
-        if (!_stateManager.IsInDialogue.value || !_allowMovement) return;
+        if (!_stateManager.IsInDialogue.value || !_allowMovement || _currentTextBalloon == null) return;
         Vector2 newPos = GetTextBalloonPos();
         _currentTextBalloon.transform.position = new Vector3(newPos.x, newPos.y, 0);
     }
@@ -106,11 +111,14 @@ public class DialogueSystem : MonoBehaviour
     {
         _allowMovement = true;
         _isTyping = true;
-        Vector2 pos = GetTextBalloonPos();
 
         _currentLine = _dialogues[_currentDialogueIndex].Lines[_currentLineIndex];
-
         _currentTextBalloon = Instantiate(_currentLine.TextBalloon, _canvas.transform);
+
+        string tempText = " ";
+        if (_currentLine.Images.Count == 0) tempText = InsertLineBreaksByWord(_currentLine.Text, 5);
+
+        Vector2 pos = GetTextBalloonPos();
         _currentTextBalloon.transform.position = new Vector3(pos.x, pos.y, 0);
 
         _text.transform.parent = _currentTextBalloon.transform;
@@ -122,7 +130,11 @@ public class DialogueSystem : MonoBehaviour
             _text.fontStyle = FontStyles.Bold;
         else _text.fontStyle = FontStyles.Normal;
 
-        if(_currentLine.Images.Count > 0) DistributeImages();
+        if (_currentLine.Images.Count > 0)
+        {
+            DistributeImages();
+            DetermineTextBalloonSizeBasedOnImages();
+        }
 
         Image balloon = _currentTextBalloon.GetComponent<Image>();
         balloon.color = new Color(1, 1, 1, 0);
@@ -139,7 +151,126 @@ public class DialogueSystem : MonoBehaviour
 
         balloon.color = Color.white;
 
-        StartCoroutine(TypeText(_currentLine.Text));
+        StartCoroutine(TypeText(tempText));
+    }
+
+    private string InsertLineBreaksByWord(string text, int maxWordsPerLine)
+    {
+        if (maxWordsPerLine <= 0) return text;
+
+        var words = text.Split(' ');
+        var result = new System.Text.StringBuilder();
+        int wordCount = 0;
+        int LineLength = 0;
+        int lettercount = 0;
+        int lineCount = 1;
+
+        for (int i = 0; i < words.Length; i++)
+        {
+            result.Append(words[i]);
+            wordCount++;
+
+            lettercount += words[i].Length;
+            if (LineLength < lettercount) LineLength = lettercount;
+
+            if (wordCount >= maxWordsPerLine && i != words.Length - 1)
+            {
+                lineCount++;
+                result.Append('\n');
+                wordCount = 0;
+                lettercount = 0;
+            }
+            else if (i != words.Length - 1)
+            {
+                result.Append(' ');
+            }
+        }
+
+        DetermineTextBalloonSizeBasedOnText(LineLength, lineCount);
+        return result.ToString();
+    }
+
+    private void DetermineTextBalloonSizeBasedOnText(int LetterCount, int linecount)
+    {
+        if (_currentLine.Font == null)
+        {
+            Debug.LogError("Font asset is null!");
+            return;
+        }
+
+        TMP_FontAsset fontAsset = _currentLine.Font;
+
+        // Get character 'A' metrics
+        float characterWidth = 0;
+        float characterHeight = 0;
+        const char sampleChar = 'a';
+
+        if (fontAsset.characterLookupTable.TryGetValue(sampleChar, out TMP_Character character))
+        {
+            characterWidth = character.glyph.metrics.width * 0.60f;
+            characterHeight = character.glyph.metrics.height * 0.60f;
+        }
+        else
+        {
+            Debug.LogError($"Font {fontAsset.name} is missing character '{sampleChar}'");
+        }
+
+        float FontSizeMultiplier = DetermineFontSizeMultiplier();
+
+        Vector2 size = new Vector2((((FontSizeMultiplier * characterWidth) + _currentLine.CharacterSpacing) * LetterCount), (((FontSizeMultiplier * characterHeight) + _currentLine.LineSpacing) * linecount));
+        //74.8 125.1
+        // Set sizes
+        if (_currentTextBalloon != null)
+        {
+            RectTransform balloonRect = _currentTextBalloon.GetComponent<Image>().rectTransform;
+            if (balloonRect != null) balloonRect.sizeDelta = size;
+        }
+
+        if (_text != null)
+        {
+            _text.rectTransform.sizeDelta = size;
+        }
+    }
+
+    private void DetermineTextBalloonSizeBasedOnImages()
+    {
+        float imageSizeX = 0;
+        float imagesSizeY = 0;
+
+        float imageSpacingX = 0;
+        float imageSpacingY = 0;
+
+        imageSizeX += _activeImages[0].GetComponent<Image>().rectTransform.rect.width;
+        imagesSizeY += _activeImages[0].GetComponent<Image>().rectTransform.rect.height;
+
+
+        if (_currentLine.Images.Count > 1)
+        {
+            imageSpacingX = Vector3.Distance(_activeImages[0].transform.position, _activeImages[1].transform.position);
+            imageSpacingX -= imageSizeX / _currentLine.Images.Count;
+
+            if (_currentLine.HasSecondLine)
+            {
+                imageSpacingY = Vector3.Distance(_activeImages[0].transform.position, _activeImages[(int)Mathf.Ceil(_currentLine.Images.Count * 0.5f)].transform.position);
+                imageSpacingY -= imagesSizeY / 2;
+            }
+        }
+
+        float imagesOnFirstLine = Mathf.Ceil(_currentLine.Images.Count * 0.5f);
+        Vector2 size = new Vector2((imageSizeX + imageSpacingX) * imagesOnFirstLine, (imagesSizeY + imageSpacingY) * 2);
+
+        _currentTextBalloon.GetComponent<Image>().rectTransform.sizeDelta = size;
+        _text.rectTransform.sizeDelta = size;
+    }
+
+    private float DetermineFontSizeMultiplier()
+    {
+        float baseSize = 36;
+        float currentSize = _currentLine.FontSize;
+
+        float multiplier = currentSize / baseSize;
+
+        return multiplier;
     }
 
     private void DistributeImages()
@@ -190,6 +321,7 @@ public class DialogueSystem : MonoBehaviour
 
                 newImage.transform.localPosition = new Vector3(newX, newY, 0);
                 newImage.transform.parent = _currentTextBalloon.transform;
+                _activeImages.Add(newImage);
             }
 
             amountOfImagesInLine = imagesOnSecondLine;
@@ -226,11 +358,26 @@ public class DialogueSystem : MonoBehaviour
 
             balloon.color = new Color(1, 1, 1, time);
             _text.color = new Color(0, 0, 0, time);
+            if (_activeImages.Count != 0)
+            {
+                foreach (GameObject image in _activeImages)
+                {
+                    image.GetComponent<Image>().color = new Color(0, 0, 0, time);
+                }
+            }
             yield return null;
         }
 
         balloon.color = new Color(1, 1, 1, 0);
         _text.color = new Color(0, 0, 0, 0);
+        if (_activeImages.Count != 0)
+        {
+            foreach (GameObject image in _activeImages)
+            {
+                image.GetComponent<Image>().color = balloon.color = new Color(0, 0, 0, time);
+                GameObject.Destroy(image.gameObject);
+            }
+        }
 
         _text.text = "";
         _text.color = Color.black;

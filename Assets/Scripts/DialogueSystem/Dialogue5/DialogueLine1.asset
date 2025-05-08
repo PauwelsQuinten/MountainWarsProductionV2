@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aebd895158945eb40b35fd978a0587ef, type: 3}
+  m_Name: DialogueLine1
+  m_EditorClassIdentifier: 
+  Text: This is a verry long text line to test the new spacing functionality.
+  DisplaySpeed: 0.02
+  Font: {fileID: 11400000, guid: 33f18d3d0ea17354bb11a7ac3f2f34fc, type: 2}
+  FontSize: 36
+  Bold: 0
+  Images: []
+  HasSecondLine: 0
+  TextBalloon: {fileID: 2592667508800547744, guid: 2bac7fcd62ad2254ba0b5c6805ad7e98, type: 3}
+  _flipTextBalloon: 0
+  _characterName: Player

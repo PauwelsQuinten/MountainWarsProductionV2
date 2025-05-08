@@ -9,6 +9,10 @@ public class DialogueLines : ScriptableObject
     [Header("Text")]
     [TextArea]
     public string Text;
+    [HideInInspector]
+    public int LineSpacing = 36;
+    [HideInInspector]
+    public int CharacterSpacing = 0;
     public float DisplaySpeed;
     public TMP_FontAsset Font;
     public int FontSize = 36;

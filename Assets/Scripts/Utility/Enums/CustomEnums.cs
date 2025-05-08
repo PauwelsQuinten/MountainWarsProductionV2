@@ -120,6 +120,13 @@ namespace UnityEngine
         Shield,
         Fist
     }
+    
+    public enum EquipmentHand
+    {
+       LeftHand = 0,
+       RightHand = 1,
+       TwoHanded = 2
+    }
 
 
     public enum WorldStateType

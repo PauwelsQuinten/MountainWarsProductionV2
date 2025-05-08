@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime;
 using UnityEngine;
 
 public class EquipmentManager : MonoBehaviour
@@ -42,52 +43,36 @@ public class EquipmentManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-
-        if (_leftHand && !_leftHand.IsRightHandEquipment)
-        {
-            var leftEquipment = Instantiate(_leftHand);
-            if (_leftHandSocket)
-                leftEquipment.transform.parent = _leftHandSocket;
-            else
-                leftEquipment.transform.parent = transform;
-
-            leftEquipment.transform.localPosition = Vector3.zero;
-            HeldEquipment[LEFT_HAND] = leftEquipment;
-
-            var collider = HeldEquipment[LEFT_HAND].GetComponent<CapsuleCollider>();
-            if (collider)
-                collider.enabled = false;
-        }
-
-
-        if (_rightHand && _rightHand.IsRightHandEquipment)
-        {
-            var rightEquipment = Instantiate(_rightHand);
-            if (_rightHandSocket)
-                rightEquipment.transform.parent = _rightHandSocket;
-            else
-                rightEquipment.transform.parent = transform; 
-            rightEquipment.transform.localPosition = Vector3.zero;
-            rightEquipment.transform.localRotation = _swordStartRotation;
-            HeldEquipment[RIGHT_HAND] = rightEquipment;
-
-            var collider = HeldEquipment[RIGHT_HAND].GetComponent<CapsuleCollider>();
-            if (collider)
-                collider.enabled = false;
-        }
-
-
         if (_fists && _fists.Type == EquipmentType.Fist)
         {
-            var fist = Instantiate(_fists);
-            fist.transform.parent = transform;
-            fist.transform.localPosition = Vector3.zero;
-            HeldEquipment[FISTS] = fist;
+            var equipment = Instantiate(_fists);
+            EquipmentHelper.CreateAndEquip(HeldEquipment, equipment, FISTS, null, transform);
+        }
+
+        if (_rightHand && _rightHand.EquipmentHand == EquipmentHand.RightHand)
+        {
+            var equipment = Instantiate(_rightHand);
+            EquipmentHelper.CreateAndEquip(HeldEquipment, equipment, RIGHT_HAND, _rightHandSocket, transform);
+            HeldEquipment[RIGHT_HAND].transform.localRotation = _swordStartRotation;
+
+            if (_rightHand.EquipmentHand == EquipmentHand.TwoHanded)
+            {
+                _stateManager = GetComponent<StateManager>();
+                UpdateBlackboard();
+                return;
+            }
+        }
+
+        if (_leftHand && _leftHand.EquipmentHand == EquipmentHand.LeftHand )
+        {
+            var equipment = Instantiate(_leftHand);
+            EquipmentHelper.CreateAndEquip(HeldEquipment, equipment, LEFT_HAND, _leftHandSocket, transform);
         }
 
         _stateManager = GetComponent<StateManager>();
         UpdateBlackboard();
     }
+
 
     public void LoseEquipment(Component sender, object obj)
     {
@@ -97,23 +82,23 @@ public class EquipmentManager : MonoBehaviour
         if (args.ToSelf && sender.gameObject != gameObject) return;
         if (!args.ToSelf && sender.gameObject == gameObject) return;
 
-        bool isRighthand = false;
+        int hand = 0;
         switch (args.EquipmentType)
         {
             case EquipmentType.Ranged:
             case EquipmentType.Melee:
-                isRighthand = true;
+                hand = RIGHT_HAND;
                 break;
               
             case EquipmentType.Shield:
-                isRighthand = false;
+                hand = LEFT_HAND;
                 break;
 
             case EquipmentType.Fist:
                 return;
         }
 
-        DropEquipment(isRighthand);
+        EquipmentHelper.DropEquipment(HeldEquipment, hand);
     }
 
     public void CheckDurability(Component sender, object obj)
@@ -223,45 +208,24 @@ public class EquipmentManager : MonoBehaviour
     {
         if (sender.gameObject != gameObject) return;
 
-
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, _itemPickupRadius, _itemMask);
+        if (hitColliders.Length == 0) return; 
+
         foreach (var hitCollider in hitColliders)
         {
             var newEquip = hitCollider.gameObject.GetComponent<Equipment>();
             if (newEquip && newEquip.transform.parent == null)
             {
-                if (newEquip.IsRightHandEquipment)
-                {
-                    DropEquipment(true);
-                    HeldEquipment[RIGHT_HAND] = newEquip;
-                    newEquip.transform.parent = _rightHandSocket;
-                    newEquip.transform.localPosition = Vector3.zero;
-
-                    var collider = HeldEquipment[RIGHT_HAND].GetComponent<CapsuleCollider>();
-                    if (collider)
-                        collider.enabled = false;
-                }
-
-                else if (!newEquip.IsRightHandEquipment)
-                {
-                    DropEquipment(false);
-                    HeldEquipment[LEFT_HAND] = newEquip;
-                    newEquip.transform.parent = _leftHandSocket;
-                    newEquip.transform.localPosition = Vector3.zero;
-                    newEquip.transform.localRotation = _swordStartRotation;
-
-                    var collider = HeldEquipment[LEFT_HAND].GetComponent<CapsuleCollider>();
-                    if (collider)
-                        collider.enabled = false;
-                }
-
-                _onEquipmentDamage.Raise(this, new EquipmentEventArgs
-                {
-                    ShieldDurability = GetDurabilityPercentage(LEFT_HAND),
-                    WeaponDurability = GetDurabilityPercentage(RIGHT_HAND)
-                });
+                Transform socket = newEquip.EquipmentHand == EquipmentHand.RightHand? _rightHandSocket : _leftHandSocket;
+                EquipmentHelper.EquipEquipment(HeldEquipment, newEquip, newEquip.EquipmentHand, socket);
             }
         }
+
+        _onEquipmentDamage.Raise(this, new EquipmentEventArgs
+        {
+            ShieldDurability = GetDurabilityPercentage(LEFT_HAND),
+            WeaponDurability = GetDurabilityPercentage(RIGHT_HAND)
+        });
     }
 
     public void RotateShield(Component sender, object obj)
@@ -332,20 +296,7 @@ public class EquipmentManager : MonoBehaviour
     {
         return HeldEquipment[RIGHT_HAND] == null && HeldEquipment[LEFT_HAND] == null;
     }
-    
-    private void DropEquipment(bool isRightHand)
-    {
-        int index = isRightHand ? 1 : 0;
-        if (HeldEquipment[index] == null)
-            return;
-        HeldEquipment[index].transform.parent = null; 
-
-        var collider = HeldEquipment[index].GetComponent<CapsuleCollider>(); 
-        if (collider)
-            collider.enabled = true;
-
-        HeldEquipment[index] = null; 
-    }
+   
 
     public float GetEquipmentPower()
     {
@@ -391,7 +342,6 @@ public class EquipmentManager : MonoBehaviour
             _stateManager.WeaponIsSheathed = true;
         }
     }
-
    
     private IEnumerator SetWeaponActive(float duration, GameObject socket)
     {

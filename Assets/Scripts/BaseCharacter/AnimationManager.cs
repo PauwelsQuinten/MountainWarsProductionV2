@@ -71,6 +71,17 @@ public class AnimationManager : MonoBehaviour
         }
     }
 
+    public void SwitchWeaponStance(Component sender, object obj)
+    {
+        if (sender.gameObject != gameObject) return;
+        if (obj is bool)
+        {
+            bool useSpear = (bool)obj;
+            _animator.SetBool("IsHoldingSpear", useSpear);
+        }
+        
+    }
+
     private void ResetAllLayers()
     {
         // Reset all layers to weight 0 first

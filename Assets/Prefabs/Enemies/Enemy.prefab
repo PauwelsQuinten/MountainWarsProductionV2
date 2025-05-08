@@ -244,7 +244,7 @@ MonoBehaviour:
       m_Length: 1
       m_Item0:
         transform: {fileID: 6043056715047345203}
-        weight: 1
+        weight: 0.62
       m_Item1:
         transform: {fileID: 0}
         weight: 0
@@ -267,8 +267,8 @@ MonoBehaviour:
         transform: {fileID: 0}
         weight: 0
     m_Offset: {x: 0, y: 0, z: 0}
-    m_MinLimit: -100
-    m_MaxLimit: 100
+    m_MinLimit: -65
+    m_MaxLimit: 65
     m_AimAxis: 4
     m_UpAxis: 2
     m_WorldUpType: 0
@@ -276,9 +276,9 @@ MonoBehaviour:
     m_WorldUpAxis: 2
     m_MaintainOffset: 0
     m_ConstrainedAxes:
-      x: 1
+      x: 0
       y: 1
-      z: 1
+      z: 0
 --- !u!1 &876388255845842133
 GameObject:
   m_ObjectHideFlags: 0
@@ -2863,7 +2863,7 @@ MonoBehaviour:
     constantValue: {x: 0, y: 0}
     variable: {fileID: 11400000, guid: 2a061d8ac2119774a93990abdf59c3ae, type: 2}
   _characterMentality: 0
-  Perception: 0.8
+  Perception: 0
   _allActionPrefabs:
   - {fileID: -1797275518084691768, guid: 44cf234799c54b64ca6ef818b6279bea, type: 3}
   - {fileID: -1797275518084691768, guid: 6f1946348ce92134bb94f15d85e28b12, type: 3}

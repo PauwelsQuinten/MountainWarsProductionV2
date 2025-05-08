@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime;
@@ -26,8 +27,9 @@ public class EquipmentManager : MonoBehaviour
     [SerializeField] private float _startAngle = 195f;
     [SerializeField] private float _sideAngleToStart = 60f;
     
-    [Header("SwordPosition")]
+    [Header("EquipmentPosition")]
     [SerializeField] private Quaternion _swordStartRotation = Quaternion.Euler(-32f, -116f, -195f);
+    [SerializeField] private Quaternion _spearStartRotation = Quaternion.Euler(180f, -50f, 118f);
     [Header("Blackboard")]
     [SerializeField]
     private List<BlackboardReference> _blackboards;
@@ -53,13 +55,22 @@ public class EquipmentManager : MonoBehaviour
         {
             var equipment = Instantiate(_rightHand);
             EquipmentHelper.CreateAndEquip(HeldEquipment, equipment, RIGHT_HAND, _rightHandSocket, transform);
-            HeldEquipment[RIGHT_HAND].transform.localRotation = _swordStartRotation;
 
             if (_rightHand.EquipmentHand == EquipmentHand.TwoHanded)
             {
+                DisableAimingScript(_rightHand.EquipmentHand);
+                HeldEquipment[RIGHT_HAND].transform.localRotation = _spearStartRotation;
+                _changeAnimation.Raise(this, true);
+
                 _stateManager = GetComponent<StateManager>();
                 UpdateBlackboard();
                 return;
+            }
+            else
+            {
+                DisableAimingScript(_rightHand.EquipmentHand);
+                HeldEquipment[RIGHT_HAND].transform.localRotation = _swordStartRotation;
+                _changeAnimation.Raise(this, false);
             }
         }
 
@@ -72,7 +83,6 @@ public class EquipmentManager : MonoBehaviour
         _stateManager = GetComponent<StateManager>();
         UpdateBlackboard();
     }
-
 
     public void LoseEquipment(Component sender, object obj)
     {
@@ -134,7 +144,13 @@ public class EquipmentManager : MonoBehaviour
             WeaponDurability = GetDurabilityPercentage(RIGHT_HAND)
         });
 
-        CheckIfBroken(args, attackIndex);
+        LoseEquipmentEventArgs send = null;
+        if (EquipmentHelper.CheckIfBroken(args, attackIndex, HeldEquipment, out send))
+        {
+            Destroy(HeldEquipment[attackIndex].gameObject);
+            HeldEquipment[attackIndex] = null;
+            _onEquipmentBreak.Raise(this, send);
+        }
     }
 
     private void BlockMediumReduction(DefenceEventArgs args)
@@ -160,26 +176,15 @@ public class EquipmentManager : MonoBehaviour
             WeaponDurability = GetDurabilityPercentage(RIGHT_HAND)
         });
 
-        CheckIfBroken(args, index);
-    }
-
-    private void CheckIfBroken(DefenceEventArgs args, int index)
-    {
-        //Check if broken
-        if (HeldEquipment[index].Durability < 0f)
+        LoseEquipmentEventArgs send = null;
+        if(EquipmentHelper.CheckIfBroken(args, index, HeldEquipment, out send))
         {
-            Debug.Log($"!!!!!!!!!!!!!!!!!!!!! breaks {HeldEquipment[index]} !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
             Destroy(HeldEquipment[index].gameObject);
             HeldEquipment[index] = null;
-
-            var send = new LoseEquipmentEventArgs
-            {
-                EquipmentType = args.BlockMedium == BlockMedium.Shield ? EquipmentType.Shield : EquipmentType.Melee,
-                ToSelf = true
-            };
             _onEquipmentBreak.Raise(this, send);
-        }
+        }        
     }
+
 
     private void UpdateBlackboard()
     {
@@ -216,10 +221,30 @@ public class EquipmentManager : MonoBehaviour
             var newEquip = hitCollider.gameObject.GetComponent<Equipment>();
             if (newEquip && newEquip.transform.parent == null)
             {
-                Transform socket = newEquip.EquipmentHand == EquipmentHand.RightHand? _rightHandSocket : _leftHandSocket;
+                Transform socket = newEquip.EquipmentHand == EquipmentHand.LeftHand? _leftHandSocket : _rightHandSocket ;
                 EquipmentHelper.EquipEquipment(HeldEquipment, newEquip, newEquip.EquipmentHand, socket);
             }
         }
+
+        //Update which aiming script to use on the new equipment and fighting stance
+        var hand = HeldEquipment[RIGHT_HAND];
+        if (hand)
+        {
+            if (hand.EquipmentHand == EquipmentHand.TwoHanded)
+            {
+                hand.transform.localRotation = _spearStartRotation;
+                _changeAnimation.Raise(this, true);
+            }
+
+            else
+            {
+                hand.transform.localRotation = _swordStartRotation;
+                _changeAnimation.Raise(this, false);
+            }
+            DisableAimingScript(hand.EquipmentHand);
+        }
+        else
+            DisableAimingScript(EquipmentHand.RightHand);
 
         _onEquipmentDamage.Raise(this, new EquipmentEventArgs
         {
@@ -284,6 +309,28 @@ public class EquipmentManager : MonoBehaviour
     {
         int index = isRighthand ? 1 : 0;
         return HeldEquipment[index];
+    }
+
+    private void DisableAimingScript(EquipmentHand hand)
+    {
+        var aimingComp = GetComponent<Aiming>();
+        var aimingSpearComp = GetComponent<SpearAiming>();
+
+        if (hand == EquipmentHand.TwoHanded)
+        {
+            if (aimingComp)
+                aimingComp.SetActive(false);
+            if (aimingSpearComp)
+                aimingSpearComp.SetActive(true);
+        }
+        else
+        {
+            if (aimingSpearComp)
+                aimingSpearComp.SetActive(false);
+            if (aimingComp)
+                aimingComp.SetActive(true);
+        }
+       
     }
     
     public bool HasEquipmentInHand(bool isRighthand)

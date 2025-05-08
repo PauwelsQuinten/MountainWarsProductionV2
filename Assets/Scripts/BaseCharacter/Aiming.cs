@@ -7,6 +7,8 @@ using UnityEngine.InputSystem;
 
 public class Aiming : MonoBehaviour
 {
+    private bool _isActive = true;
+
     [Header("InputVariable")]
     [SerializeField] private AimingInputReference _refAimingInput;
 
@@ -55,6 +57,11 @@ public class Aiming : MonoBehaviour
 
     //private InputAction _moveAction;
 
+    public void SetActive(bool active)
+    {
+        _isActive = active;
+    }
+
     void Start()
     {
         _enmAimingInput = AimingInputState.Idle;
@@ -67,6 +74,8 @@ public class Aiming : MonoBehaviour
 
     void Update()
     {
+        if (!_isActive) return; 
+
         CheckIfHoldingPosition();
         _fMovingTime += Time.deltaTime;
 
@@ -83,7 +92,9 @@ public class Aiming : MonoBehaviour
 
     private void Variable_ValueChanged(object sender, AimInputEventArgs e)
     {
-        switch(e.ThisChanged)
+        if (!_isActive) return;
+
+        switch (e.ThisChanged)
         {
             case AimInputEventArgs.WhatChanged.State:
                 OnStateChanged();

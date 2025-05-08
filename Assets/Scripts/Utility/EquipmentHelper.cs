@@ -9,7 +9,7 @@ public static class EquipmentHelper
     private const int RIGHT_HAND = 1;
     private const int FISTS = 2;
 
-    public static void EquipEquipment(List<Equipment> HeldEquipment, Equipment newEquip, EquipmentHand hand, Transform socket)
+    public static void EquipEquipment(List<Equipment> HeldEquipment, Equipment newEquip, EquipmentHand hand, Transform socket )
     {
         int index = 0;
         switch (hand)
@@ -32,8 +32,7 @@ public static class EquipmentHelper
         HeldEquipment[index] = newEquip;
         newEquip.transform.parent = socket;
         newEquip.transform.localPosition = Vector3.zero;
-        if (hand == EquipmentHand.RightHand)
-            newEquip.transform.localRotation = _swordStartRotation;
+        
 
         var collider = HeldEquipment[index].GetComponent<CapsuleCollider>();
         if (collider)
@@ -70,4 +69,23 @@ public static class EquipmentHelper
         if (collider)
             collider.enabled = false;
     }
+
+    public static bool CheckIfBroken(DefenceEventArgs args, int index, List<Equipment> HeldEquipment, out LoseEquipmentEventArgs package)
+    {
+        //Check if broken
+        if (HeldEquipment[index].Durability < 0f)
+        {
+            Debug.Log($"!!!!!!!!!!!!!!!!!!!!! breaks {HeldEquipment[index]} !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+
+            package = new LoseEquipmentEventArgs
+            {
+                EquipmentType = args.BlockMedium == BlockMedium.Shield ? EquipmentType.Shield : EquipmentType.Melee,
+                ToSelf = true
+            };
+            return true;
+        }
+        package = null;
+        return false;
+    }
+
 }

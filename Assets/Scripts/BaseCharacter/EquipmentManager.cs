@@ -59,8 +59,8 @@ public class EquipmentManager : MonoBehaviour
 
             if (_rightHand.EquipmentHand == EquipmentHand.TwoHanded)
             {
-                DisableAimingScript(_rightHand.EquipmentHand);
                 HeldEquipment[RIGHT_HAND].transform.localRotation = _spearStartRotation;
+                DisableAimingScript(_rightHand.EquipmentHand);
                 _changeAnimation.Raise(this, true);
                 _changeIKStance?.Raise(this, new ChangeIKStanceEventArgs { UseSpear = true, LHSocket = equipment.WeaponSocket });
 

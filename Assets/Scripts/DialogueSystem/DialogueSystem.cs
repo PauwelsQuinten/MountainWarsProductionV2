@@ -276,56 +276,105 @@ public class DialogueSystem : MonoBehaviour
 
     private void DistributeImages()
     {
-        RectTransform rectTransform = _currentTextBalloon.GetComponent<Image>().rectTransform;
+        //RectTransform rectTransform = _currentTextBalloon.GetComponent<Image>().rectTransform;
 
-        Rect imageRect = RectTransformUtility.PixelAdjustRect(rectTransform, _canvas.GetComponent<Canvas>());
+        //Rect imageRect = RectTransformUtility.PixelAdjustRect(rectTransform, _canvas.GetComponent<Canvas>());
 
-        float balloonWith = imageRect.width;
-        float balloonHeight = imageRect.height;
+        //float balloonWith = imageRect.width;
+        //float balloonHeight = imageRect.height;
 
-        float spacingX = 0;
-        float spacingY = 0;
+        //float spacingX = 0;
+        //float spacingY = 0;
 
-        int amountOfImagesInLine = 0;
-        int imagesOnFirstLine = 0;
-        int imagesOnSecondLine = 0;
+        //int amountOfImagesInLine = 0;
+        //int imagesOnFirstLine = 0;
+        //int imagesOnSecondLine = 0;
 
-        int linesindex = 1;
+        //int linesindex = 1;
 
-        if (_currentLine.HasSecondLine)
+        //if (_currentLine.HasSecondLine)
+        //{
+        //    spacingX = balloonWith / Mathf.Ceil(_currentLine.Images.Count * 0.5f);
+        //    spacingY = balloonHeight * 0.25f;
+
+        //    imagesOnFirstLine = (int)Mathf.Ceil(_currentLine.Images.Count * 0.5f);
+        //    imagesOnSecondLine = _currentLine.Images.Count - imagesOnFirstLine;
+        //    linesindex = 2;
+        //}
+        //else
+        //{
+        //    spacingX = balloonWith / _currentLine.Images.Count;
+        //    imagesOnFirstLine = _currentLine.Images.Count;
+        //}
+
+        //    amountOfImagesInLine = imagesOnFirstLine;
+
+        //for (int i = 0; i < linesindex; i++)
+        //{
+        //    for (int j = 0; j < amountOfImagesInLine; j++)
+        //    {
+        //        GameObject newImage = (Instantiate(_currentLine.Images[j * (i + 1)], _currentTextBalloon.transform));
+
+        //        float newX = +spacingX - (spacingX * j);
+
+        //    //    float newX = 0 + (balloonWith / 2f) - (spacingX * j) - (newImage.GetComponent<Image>().rectTransform.rect.width);
+        //        float newY = 0;
+
+        //        if (_currentLine.HasSecondLine) newY = 0 + (balloonHeight * 0.25f) - (spacingY * i) - (newImage.GetComponent<Image>().rectTransform.rect.width / 2);
+
+        //        newImage.transform.localPosition = new Vector3(newX, newY, 0);
+        //        newImage.transform.parent = _currentTextBalloon.transform;
+        //        _activeImages.Add(newImage);
+        //    }
+
+        //    amountOfImagesInLine = imagesOnSecondLine;
+        //}
+
+        int childCount = _currentLine.Images.Count;
+        int columns = Mathf.CeilToInt(Mathf.Sqrt(childCount));
+        int rows = Mathf.CeilToInt((float)childCount / columns);
+
+        Image balloon = _currentTextBalloon.GetComponent<Image>();
+        RectTransform balloonRect = balloon.rectTransform;
+
+        // Define what percentage of space you want the images to occupy (0.6 = 60%)
+        float imageSizeRatio = 1f;
+
+        // Calculate desired cell dimensions based on the container size and image ratio
+        float desiredCellWidth = (balloonRect.rect.width / columns) * imageSizeRatio;
+        float desiredCellHeight = (balloonRect.rect.height / rows) * imageSizeRatio;
+
+        // Calculate spacing based on desired cell size
+        float spacingX = (balloonRect.rect.width - (desiredCellWidth * columns)) / (columns - 1);
+        float spacingY = spacingY = (balloonRect.rect.height - (desiredCellHeight * rows)) / (rows - 1);
+
+        // Use these calculated values for placement
+        for (int i = 0; i < childCount; i++)
         {
-            spacingX = balloonWith / Mathf.Ceil(_currentLine.Images.Count * 0.5f);
-            spacingY = balloonHeight * 0.25f;
-
-            imagesOnFirstLine = (int)Mathf.Ceil(_currentLine.Images.Count * 0.5f);
-            imagesOnSecondLine = _currentLine.Images.Count - imagesOnFirstLine;
-            linesindex = 2;
-        }
-        else
-        {
-            spacingX = balloonWith / _currentLine.Images.Count;
-            imagesOnFirstLine = _currentLine.Images.Count;
-        }
-
-            amountOfImagesInLine = imagesOnFirstLine;
-
-        for (int i = 0; i < linesindex; i++)
-        {
-            for (int j = 0; j < amountOfImagesInLine; j++)
+            int row = 0;
+            if (_currentLine.HasSecondLine) row = i / columns;
+            else row = 1;
+            int col = i % columns;
+            GameObject newImage = (Instantiate(_currentLine.Images[i], _currentTextBalloon.transform));
+            if (newImage != null)
             {
-                GameObject newImage = (Instantiate(_currentLine.Images[j * (i + 1)], _currentTextBalloon.transform));
-
-                float newX = 0 + (balloonWith / 2f) - (spacingX * j) - (newImage.GetComponent<Image>().rectTransform.rect.width);
-                float newY = 0;
-
-                if (_currentLine.HasSecondLine) newY = 0 + (balloonHeight * 0.25f) - (spacingY * i) - (newImage.GetComponent<Image>().rectTransform.rect.width / 2);
-
-                newImage.transform.localPosition = new Vector3(newX, newY, 0);
-                newImage.transform.parent = _currentTextBalloon.transform;
                 _activeImages.Add(newImage);
-            }
+                // Calculate position using the spacing values we just determined
+                float x = (col * desiredCellWidth) + (col * spacingX);
+                float y = (row * desiredCellHeight) + (row * spacingY);
 
-            amountOfImagesInLine = imagesOnSecondLine;
+                // Adjust position based on balloon's position
+                Vector3 position = new Vector3(x - balloonRect.rect.width / 2 + desiredCellWidth / 2, -y + balloonRect.rect.height / 2 - desiredCellHeight / 2, 0);
+
+                newImage.transform.localPosition = position;
+
+                //// Make sure the child has a RectTransform to set its size
+                //RectTransform childRect = newImage.GetComponent<RectTransform>();
+                //if (childRect != null)
+                //{
+                //    childRect.sizeDelta = new Vector2(desiredCellWidth, desiredCellHeight);
+                //}
+            }
         }
     }
 

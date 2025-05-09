@@ -14,12 +14,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Text: This is an even longer text line to test the new spacing and caling functionality.
     hopefully this works flawlesly like intended.
+  LineSpacing: 30
+  CharacterSpacing: 1
   DisplaySpeed: 0.02
   Font: {fileID: 11400000, guid: 33f18d3d0ea17354bb11a7ac3f2f34fc, type: 2}
-  FontSize: 36
+  FontSize: 19
   Bold: 0
   Images: []
   HasSecondLine: 0
   TextBalloon: {fileID: 2592667508800547744, guid: 2bac7fcd62ad2254ba0b5c6805ad7e98, type: 3}
-  _flipTextBalloon: 1
+  FlipTextBalloon: 0
+  AddedScale: {x: 0, y: 0}
   _characterName: Paul

@@ -16,6 +16,7 @@ public class EquipmentManager : MonoBehaviour
     [SerializeField] private GameEvent _onEquipmentBreak;
     [SerializeField] private GameEvent _onEquipmentDamage;
     [SerializeField] private GameEvent _changeAnimation;
+    [SerializeField] private GameEvent _changeIKStance;
     [Header("Sockets"), Tooltip("These are the sockets that will hold the equipment")]
     [SerializeField] private Transform _leftHandSocket;
     [SerializeField] private Transform _rightHandSocket;
@@ -29,7 +30,7 @@ public class EquipmentManager : MonoBehaviour
     
     [Header("EquipmentPosition")]
     [SerializeField] private Quaternion _swordStartRotation = Quaternion.Euler(-32f, -116f, -195f);
-    [SerializeField] private Quaternion _spearStartRotation = Quaternion.Euler(180f, -50f, 118f);
+    [SerializeField] private Quaternion _spearStartRotation = Quaternion.Euler(15f, -160f, -45);
     [Header("Blackboard")]
     [SerializeField]
     private List<BlackboardReference> _blackboards;
@@ -61,6 +62,7 @@ public class EquipmentManager : MonoBehaviour
                 DisableAimingScript(_rightHand.EquipmentHand);
                 HeldEquipment[RIGHT_HAND].transform.localRotation = _spearStartRotation;
                 _changeAnimation.Raise(this, true);
+                _changeIKStance?.Raise(this, new ChangeIKStanceEventArgs { UseSpear = true, LHSocket = equipment.WeaponSocket });
 
                 _stateManager = GetComponent<StateManager>();
                 UpdateBlackboard();
@@ -71,6 +73,7 @@ public class EquipmentManager : MonoBehaviour
                 DisableAimingScript(_rightHand.EquipmentHand);
                 HeldEquipment[RIGHT_HAND].transform.localRotation = _swordStartRotation;
                 _changeAnimation.Raise(this, false);
+                _changeIKStance?.Raise(this, new ChangeIKStanceEventArgs { UseSpear = false });
             }
         }
 
@@ -98,6 +101,8 @@ public class EquipmentManager : MonoBehaviour
             case EquipmentType.Ranged:
             case EquipmentType.Melee:
                 hand = RIGHT_HAND;
+                _changeAnimation.Raise(this, false);
+                _changeIKStance?.Raise(this, new ChangeIKStanceEventArgs { UseSpear = false });
                 break;
               
             case EquipmentType.Shield:
@@ -234,12 +239,14 @@ public class EquipmentManager : MonoBehaviour
             {
                 hand.transform.localRotation = _spearStartRotation;
                 _changeAnimation.Raise(this, true);
+                _changeIKStance?.Raise(this, new ChangeIKStanceEventArgs { UseSpear = true, LHSocket = hand.WeaponSocket });
             }
 
             else
             {
                 hand.transform.localRotation = _swordStartRotation;
                 _changeAnimation.Raise(this, false);
+                _changeIKStance?.Raise(this, new ChangeIKStanceEventArgs { UseSpear = false });
             }
             DisableAimingScript(hand.EquipmentHand);
         }

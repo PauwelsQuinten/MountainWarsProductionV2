@@ -13,6 +13,9 @@ public class Equipment : MonoBehaviour
     public float Power { get { return _power; } private set { _power = value; } }
     [SerializeField] private float _range = 1f;
     public float Range { get { return _range; } private set { _range = value; } }
+    [SerializeField, Tooltip("When using a two hand weapon, he needs a socket for the second hand to be placed on")] 
+    private GameObject _weaponSocket;
+    public GameObject WeaponSocket { get { return _weaponSocket; } private set { _weaponSocket = value; } }
 
     private void Awake()
     {

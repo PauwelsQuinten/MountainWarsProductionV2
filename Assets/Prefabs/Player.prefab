@@ -111,7 +111,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70b342d8ce5c2fd48b8fa3147d48d1d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Weight: 1
+  m_Weight: 0
   m_Effectors:
   - m_Transform: {fileID: 5938864109034793227}
     m_Style:
@@ -2510,6 +2510,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1958639655996742180}
     - target: {fileID: 7135606026184219709, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
+      propertyPath: _spearRig
+      value: 
+      objectReference: {fileID: 2241067710586651576}
+    - target: {fileID: 7135606026184219709, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
       propertyPath: _IKTargetLh
       value: 
       objectReference: {fileID: 3105132751085145485}
@@ -2923,6 +2927,7 @@ MonoBehaviour:
     variable: {fileID: 11400000, guid: c07edaff124f1b04e8b8a49de23949a5, type: 2}
   _AimOutputEvent: {fileID: 11400000, guid: 5bbe9fe65ae2c8546a64169ae42e8a8a, type: 2}
   _maxAngle: 60
+  _moveDistance: 5
   _aimTarget: {fileID: 8566021021764608479}
 --- !u!114 &4260960683829066258
 MonoBehaviour:

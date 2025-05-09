@@ -909,6 +909,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7624141693975833928, guid: 1f61e288059eb014199d2fcce1d9f9f1, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.058
+      objectReference: {fileID: 0}
     - target: {fileID: 8455700961785478945, guid: 1f61e288059eb014199d2fcce1d9f9f1, type: 3}
       propertyPath: m_Name
       value: Spear
@@ -4193,8 +4197,28 @@ PrefabInstance:
       value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 7893246462861609223, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
+      propertyPath: _spearAngle
+      value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 7893246462861609223, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
+      propertyPath: _spearRight
+      value: -0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 7893246462861609223, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
+      propertyPath: _spearheight
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7893246462861609223, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
+      propertyPath: _spearForward
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 7893246462861609223, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
       propertyPath: _lerpSpeedRArm
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7893246462861609223, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
+      propertyPath: _lerpSpeedLHand
+      value: 250
       objectReference: {fileID: 0}
     - target: {fileID: 7893246462861609223, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
       propertyPath: _torsoWeightSpear

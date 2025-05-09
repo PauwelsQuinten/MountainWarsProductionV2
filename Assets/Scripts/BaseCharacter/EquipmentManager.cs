@@ -328,12 +328,12 @@ public class EquipmentManager : MonoBehaviour
             if (aimingComp)
                 aimingComp.SetActive(false);
             if (aimingSpearComp)
-                aimingSpearComp.SetActive(true);
+                aimingSpearComp.SetActive(true, HeldEquipment[RIGHT_HAND]);
         }
         else
         {
             if (aimingSpearComp)
-                aimingSpearComp.SetActive(false);
+                aimingSpearComp.SetActive(false, null);
             if (aimingComp)
                 aimingComp.SetActive(true);
         }

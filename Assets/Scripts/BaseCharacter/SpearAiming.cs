@@ -15,6 +15,8 @@ public class SpearAiming : MonoBehaviour
     private float _maxAngle = 60f;
     [SerializeField, Tooltip("Max length of movement from spear to its idle position")]
     private float _moveDistance = 5f;
+    private Vector3 _spearForwardVector = Vector3.zero;
+    private Equipment _spear;
 
     [Header("IK")]
     [SerializeField, Tooltip("IK aim target")]
@@ -35,9 +37,10 @@ public class SpearAiming : MonoBehaviour
 
     }
 
-    public void SetActive(bool active)
+    public void SetActive(bool active, Equipment forward )
     {
         _isActive = active;
+        _spear = forward;
     }
 
     private void OnSpearMovement(object sender, AimInputEventArgs e)
@@ -49,8 +52,12 @@ public class SpearAiming : MonoBehaviour
 
     private void MoveSpearAimingPoint()
     {
-        var offset = new Vector3(_refAimingInput.variable.value.x, 0f, _refAimingInput.variable.value.y) * _moveDistance;
-        _aimTarget.transform.localPosition = _spearIdlePosition + offset;
+        //var offset = new Vector3(_refAimingInput.variable.value.x, 0f, _refAimingInput.variable.value.y) * _moveDistance;
+        //var offset = _spear.transform.up * _outputLength * _moveDistance;
+
+        Quaternion rotation = Quaternion.Euler(0, _refAimingInput.variable.StateManager.fOrientation, 0);
+        var offset = -transform.right * _outputLength * _moveDistance;
+        _aimTarget.transform.localPosition = _spearIdlePosition + rotation * offset;
     }
 
     private Vector2 ClampedMovementAngle(Vector2 input)

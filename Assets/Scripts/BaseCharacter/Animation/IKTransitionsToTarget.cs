@@ -10,7 +10,10 @@ public class IKTransitionsToTarget : MonoBehaviour
     [SerializeField] private MultiAimConstraint _lookRig;
     [SerializeField, Tooltip("the weight of the spine rotation when holding a spear")] private float _torsoWeightSpear = 0.25f;
     [SerializeField, Tooltip("the weight of the spine rotation when holding a sword")] private float _torsoWeightSword = 0.65f;
+
     [Header("Spear IK")]
+    [SerializeField, Tooltip("the parent rig of all th spear IK")]
+    private Rig _spearRig;
     [SerializeField, Tooltip("the position on the spear for the left hand to attach to")]
     private GameObject _lhHoldingPosition;
     [SerializeField, Tooltip("the target of the Left hand IK 2 bone component")]
@@ -105,9 +108,14 @@ public class IKTransitionsToTarget : MonoBehaviour
         {
             _lookRig.weight = _torsoWeightSpear;
             _lhHoldingPosition = args.LHSocket;
+            _spearRig.weight = 1f;
         }
         else
+        {
             _lookRig.weight = _torsoWeightSword;
+            _spearRig.weight = 0f;
+        }
+            
         
     }
 

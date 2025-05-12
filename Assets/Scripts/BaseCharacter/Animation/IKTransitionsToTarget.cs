@@ -146,8 +146,8 @@ public class IKTransitionsToTarget : MonoBehaviour
 
     private IEnumerator LerpWeight(bool activate)
     {
+        //On active lerp weight up slowly but lerp quickly down when disabled
         int multiplier = activate ? 1 : -5;
-        //var rigComp = _rArmRig.GetComponentInChildren<TwoBoneIKConstraint>();
         var rigComp = _rArmRig.GetComponentInChildren<MultiAimConstraint>();
 
         while (true)

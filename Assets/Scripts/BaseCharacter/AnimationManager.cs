@@ -17,6 +17,7 @@ public class AnimationManager : MonoBehaviour
     private void Start()
     {
         _animator = GetComponentInChildren<Animator>();
+        _animator.SetFloat("AttackState", 3f);
     }
 
     public void ChangeAnimationState(Component sender, object obj)
@@ -59,8 +60,29 @@ public class AnimationManager : MonoBehaviour
         }
         // Crossfade with normalized transition offset
 
+        //Lowerbody(2) should always transition even when stunnend
         if ((!_animator.GetBool("IsStunned") && !_animator.GetBool("GetHit")) || args.AnimLayer == 2)
-            _animator.CrossFade(args.AnimState.ToString(), 0.2f, args.AnimLayer, 0f);
+        {
+            switch(args.AnimState)
+            {
+                case AnimationState.Stab:
+                    _animator.SetBool("IsAttackHigh", args.IsAttackHigh);
+                    _animator.SetFloat("AttackState", 2f);
+                    break;
+                case AnimationState.SlashLeft:
+                    _animator.SetBool("IsAttackHigh", args.IsAttackHigh);
+                    _animator.SetFloat("AttackState", 0f);
+                    break;
+                case AnimationState.SlashRight:
+                    _animator.SetBool("IsAttackHigh", args.IsAttackHigh);
+                    _animator.SetFloat("AttackState", 1f);
+                    break;
+                default:
+                    _animator.SetFloat("AttackState", 3f);
+                    _animator.CrossFade(args.AnimState.ToString(), 0.2f, args.AnimLayer, 0f);
+                    break;
+            }
+        }
 
         _currentState = args.AnimState;
 

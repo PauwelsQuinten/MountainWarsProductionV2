@@ -5,6 +5,7 @@ namespace UnityEngine
     public class AnimationEventArgs : EventArgs
     {
         public AnimationState AnimState;
+        public bool IsAttackHigh = false;
         public bool DoResetIdle;
         public bool IsFeint = true;
         public int AnimLayer;

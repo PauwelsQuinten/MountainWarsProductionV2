@@ -102,7 +102,7 @@ public class Attacking : MonoBehaviour
         {
             //Debug.Log($"speed: {args.Speed}");
             bool useRightArm = args.EquipmentManager.HasEquipmentInHand(true) || args.EquipmentManager.HasNoneInHand();
-            StartAnimation(args.Speed, useRightArm);
+            StartAnimation(args.Speed, useRightArm, args.AttackHeight == AttackHeight.Head);
         }
 
         //PrintInput2(args);
@@ -157,21 +157,24 @@ public class Attacking : MonoBehaviour
         }
     }
 
-    private void StartAnimation(float speed, bool useRightArm)
+    private void StartAnimation(float speed, bool useRightArm, bool isAttackHigh)
     {
         int animLayer = useRightArm ? 3 : 4;
 
         if (_attackType == AttackType.HorizontalSlashToLeft)
         {
-            _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.SlashLeft, AnimLayer = animLayer, DoResetIdle = true, Speed = 1.5f });
+            _changeAnimation.Raise(this, new AnimationEventArgs 
+            { AnimState = AnimationState.SlashLeft, AnimLayer = animLayer, DoResetIdle = true, Speed = 1.5f, IsAttackHigh = isAttackHigh });
         }
         else if (_attackType == AttackType.HorizontalSlashToRight)
         {
-            _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.SlashRight, AnimLayer = animLayer, DoResetIdle = true, Speed = 1.5f });
+            _changeAnimation.Raise(this, new AnimationEventArgs 
+            { AnimState = AnimationState.SlashRight, AnimLayer = animLayer, DoResetIdle = true, Speed = 1.5f, IsAttackHigh = isAttackHigh });
         }
         else if (_attackType == AttackType.Stab)
         {
-            _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Stab, AnimLayer = animLayer, DoResetIdle = true, Speed = 1.5f  });
+            _changeAnimation.Raise(this, new AnimationEventArgs 
+            { AnimState = AnimationState.Stab, AnimLayer = animLayer, DoResetIdle = true, Speed = 1.5f, IsAttackHigh = isAttackHigh });
         }
         else if (_attackType == AttackType.Charge)
         {

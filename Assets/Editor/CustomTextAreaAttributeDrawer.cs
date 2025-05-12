@@ -42,15 +42,28 @@ public class CustomTextAreaAttributeDrawer : PropertyDrawer
         GUIContent guiContent = new GUIContent(prop.stringValue);
         _textHeight = style.CalcHeight(guiContent, EditorGUIUtility.currentViewWidth);
 
-        _newFont = (TMP_FontAsset)EditorGUILayout.ObjectField("New font", _newFont, typeof(TMP_FontAsset), false);
-
         GUILayout.BeginHorizontal();
 
-        EditorGUILayout.LabelField("Font Style", GUILayout.Width(50));
+        EditorGUILayout.LabelField("Font Style", GUILayout.Width(75));
 
-        _tempFontSize = (int)EditorGUILayout.IntField("new Font Size", _tempFontSize, GUILayout.Width(100));
+        //EditorGUILayout.LabelField("New Font Size", GUILayout.Width(100));
+        _tempFontSize = (int)EditorGUILayout.IntField(_tempFontSize, GUILayout.Width(30));
 
-        if (GUILayout.Button("Font", GUILayout.Height(25)))
+        if (GUILayout.Button("Size", GUILayout.Height(25), GUILayout.Width(50)))
+        {
+            TextEditor t = new TextEditor();
+            string highlightedText = "";
+            highlightedText = GetHighlighted(out t);
+
+            t.text = AddTags("size", t, highlightedText, input, null, _tempFontSize);
+            _newInput = t.text;
+        }
+
+        GUILayout.Space(15);
+
+        _newFont = (TMP_FontAsset)EditorGUILayout.ObjectField(_newFont, typeof(TMP_FontAsset), false,GUILayout.Width(100));
+
+        if (GUILayout.Button("Font", GUILayout.Height(25), GUILayout.Width(50)))
         {
             TextEditor t = new TextEditor();
             string highlightedText = "";
@@ -60,7 +73,9 @@ public class CustomTextAreaAttributeDrawer : PropertyDrawer
             _newInput = t.text;
         }
 
-        if (GUILayout.Button("B", GUILayout.Height(25)))
+        GUILayout.Space(15);
+
+        if (GUILayout.Button("B", GUILayout.Height(25), GUILayout.Width(30)))
         {
             TextEditor t = new TextEditor();
             string highlightedText = "";
@@ -70,7 +85,9 @@ public class CustomTextAreaAttributeDrawer : PropertyDrawer
             _newInput = t.text;
         }
 
-        if (GUILayout.Button("I", GUILayout.Height(25)))
+        GUILayout.Space(15);
+
+        if (GUILayout.Button("I", GUILayout.Height(25), GUILayout.Width(30)))
         {
             TextEditor t = new TextEditor();
             string highlightedText = "";
@@ -79,6 +96,8 @@ public class CustomTextAreaAttributeDrawer : PropertyDrawer
             t.text = AddTags("i", t, highlightedText, input);
             _newInput = t.text;
         }
+
+        GUILayout.Space(15);
 
         GUILayout.EndHorizontal();
 
@@ -99,7 +118,7 @@ public class CustomTextAreaAttributeDrawer : PropertyDrawer
         return t.SelectedText;
     }
 
-    private string AddTags(string tag, TextEditor textEditor ,string highlightedInput, string input , string useFont = null)
+    private string AddTags(string tag, TextEditor textEditor ,string highlightedInput, string input , string useFont = null, int fontSize = 0)
     {
         TextEditor t = textEditor;
         string highlighted = highlightedInput;
@@ -114,7 +133,7 @@ public class CustomTextAreaAttributeDrawer : PropertyDrawer
         string modifiedText = "";
         string newText = "";
 
-        if (tag != "font")
+        if (tag != "font" && tag != "size")
         {
             modifiedText = $"<{tag}>{highlighted}</{tag}>";
             newText = originalText.Substring(0, start)
@@ -124,6 +143,13 @@ public class CustomTextAreaAttributeDrawer : PropertyDrawer
         else if(tag == "font")
         {
             modifiedText = $"<font={useFont}>{highlighted}</font>";
+            newText = originalText.Substring(0, start)
+               + modifiedText
+               + originalText.Substring(end);
+        }
+        else if(tag == "size")
+        {
+            modifiedText = $"<size={fontSize}>{highlighted}</size>";
             newText = originalText.Substring(0, start)
                + modifiedText
                + originalText.Substring(end);

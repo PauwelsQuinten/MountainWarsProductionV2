@@ -1,8 +1,12 @@
 using NUnit;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEditor;
+using UnityEditor.TerrainTools;
 using UnityEngine;
+using UnityEngine.Windows;
 using static Codice.Client.BaseCommands.Import.Commit;
+using static UnityEngine.GraphicsBuffer;
 
 [CustomPropertyDrawer(typeof(CustomTextAreaAttribute))]
 public class CustomTextAreaAttributeDrawer : PropertyDrawer
@@ -10,6 +14,9 @@ public class CustomTextAreaAttributeDrawer : PropertyDrawer
     private float _textHeight;
 
     private string _newInput;
+
+    private TMP_FontAsset _newFont;
+    private int _tempFontSize;
     public override void OnGUI(Rect position, SerializedProperty prop, GUIContent label)
     {
         // make a rect of fixed height for text area.
@@ -35,36 +42,52 @@ public class CustomTextAreaAttributeDrawer : PropertyDrawer
         GUIContent guiContent = new GUIContent(prop.stringValue);
         _textHeight = style.CalcHeight(guiContent, EditorGUIUtility.currentViewWidth);
 
+        _newFont = (TMP_FontAsset)EditorGUILayout.ObjectField("New font", _newFont, typeof(TMP_FontAsset), false);
+
         GUILayout.BeginHorizontal();
 
-        EditorGUILayout.LabelField("Font Style");
+        EditorGUILayout.LabelField("Font Style", GUILayout.Width(50));
 
-        if(GUILayout.Button("B", GUILayout.Height(25)))
+        _tempFontSize = (int)EditorGUILayout.IntField("new Font Size", _tempFontSize, GUILayout.Width(100));
+
+        if (GUILayout.Button("Font", GUILayout.Height(25)))
         {
             TextEditor t = new TextEditor();
-            string highlighted = GetHighlighted(out t);
+            string highlightedText = "";
+            highlightedText = GetHighlighted(out t);
 
-            int start = Mathf.Min(t.selectIndex, t.cursorIndex);
-            int end = Mathf.Max(t.selectIndex, t.cursorIndex);
-
-            string originalText = "";
-
-            originalText = input;
-
-            string modifiedText = $"<b> {highlighted} </b>";
-            string newText = originalText.Substring(0, start)
-               + modifiedText
-               + originalText.Substring(end);
-
-            t.text = newText;
-            _newInput = newText;
+            t.text = AddTags("font", t, highlightedText, input, _newFont.name);
+            _newInput = t.text;
         }
+
+        if (GUILayout.Button("B", GUILayout.Height(25)))
+        {
+            TextEditor t = new TextEditor();
+            string highlightedText = "";
+            highlightedText = GetHighlighted(out t);
+
+            t.text = AddTags("b", t, highlightedText, input);
+            _newInput = t.text;
+        }
+
+        if (GUILayout.Button("I", GUILayout.Height(25)))
+        {
+            TextEditor t = new TextEditor();
+            string highlightedText = "";
+            highlightedText = GetHighlighted(out t);
+
+            t.text = AddTags("i", t, highlightedText, input);
+            _newInput = t.text;
+        }
+
+        GUILayout.EndHorizontal();
+
         if (EditorGUI.EndChangeCheck())
         {
             if (_newInput != null) prop.stringValue = _newInput;
             else prop.stringValue = input;
+            Debug.Log($"text { prop.stringValue}");
         }
-        GUILayout.EndHorizontal();
         EditorGUI.EndProperty();
     }
 
@@ -74,6 +97,38 @@ public class CustomTextAreaAttributeDrawer : PropertyDrawer
         var temp = field.GetValue(null);
         t = temp as TextEditor;
         return t.SelectedText;
+    }
+
+    private string AddTags(string tag, TextEditor textEditor ,string highlightedInput, string input , string useFont = null)
+    {
+        TextEditor t = textEditor;
+        string highlighted = highlightedInput;
+
+        int start = Mathf.Min(t.selectIndex, t.cursorIndex);
+        int end = Mathf.Max(t.selectIndex, t.cursorIndex);
+
+        string originalText = "";
+
+        originalText = input;
+
+        string modifiedText = "";
+        string newText = "";
+
+        if (tag != "font")
+        {
+            modifiedText = $"<{tag}>{highlighted}</{tag}>";
+            newText = originalText.Substring(0, start)
+               + modifiedText
+               + originalText.Substring(end);
+        }
+        else if(tag == "font")
+        {
+            modifiedText = $"<font={useFont}>{highlighted}</font>";
+            newText = originalText.Substring(0, start)
+               + modifiedText
+               + originalText.Substring(end);
+        }
+        return newText;
     }
 
     public override float GetPropertyHeight(SerializedProperty property, GUIContent label)

@@ -142,8 +142,8 @@ public class DialogueSystem : MonoBehaviour
 
         _text.transform.parent = _currentTextBalloon.transform;
         _text.transform.localPosition = Vector3.zero;
-        _text.fontSize = _currentLine.FontSize;
-        _text.font = _currentLine.Font;
+        _text.fontSize = _currentLine.BaseFontSize;
+        _text.font = _currentLine.BaseFont;
 
         foreach(Image image  in _textBalloonImages.Keys)
         {
@@ -231,13 +231,13 @@ public class DialogueSystem : MonoBehaviour
 
     private void DetermineTextBalloonSizeBasedOnText(int LetterCount, int linecount)
     {
-        if (_currentLine.Font == null)
+        if (_currentLine.BaseFont == null)
         {
             Debug.LogError("Font asset is null!");
             return;
         }
 
-        TMP_FontAsset fontAsset = _currentLine.Font;
+        TMP_FontAsset fontAsset = _currentLine.BaseFont;
 
         // Get character 'A' metrics
         float characterWidth = 0;
@@ -315,7 +315,7 @@ public class DialogueSystem : MonoBehaviour
     private float DetermineFontSizeMultiplier()
     {
         float baseSize = 36;
-        float currentSize = _currentLine.FontSize;
+        float currentSize = _currentLine.BaseFontSize;
 
         float multiplier = currentSize / baseSize;
 

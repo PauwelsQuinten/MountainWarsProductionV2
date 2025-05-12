@@ -12,13 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aebd895158945eb40b35fd978a0587ef, type: 3}
   m_Name: DialogueLine2
   m_EditorClassIdentifier: 
-  Text: Oh hey. Yeah she left me a couple of weeks ago.
+  Text: Oh hey. <font=ComicFontOutline>Yeah she left me a couple of weeks ago.</font>
   LineSpacing: 30
   CharacterSpacing: 1
   DisplaySpeed: 0.02
-  Font: {fileID: 11400000, guid: 33f18d3d0ea17354bb11a7ac3f2f34fc, type: 2}
-  FontSize: 36
-  Bold: 0
+  BaseFont: {fileID: 11400000, guid: 33f18d3d0ea17354bb11a7ac3f2f34fc, type: 2}
+  BaseFontSize: 36
   Images: []
   HasSecondLine: 0
   TextBalloon: {fileID: 2592667508800547744, guid: 2bac7fcd62ad2254ba0b5c6805ad7e98, type: 3}

@@ -14,8 +14,8 @@ public class DialogueLines : ScriptableObject
     [HideInInspector]
     public int CharacterSpacing = 0;
     public float DisplaySpeed;
-    public TMP_FontAsset Font;
-    public int FontSize = 36;
+    public TMP_FontAsset BaseFont;
+    public int BaseFontSize = 36;
 
     [Header("Images")]
     public List<GameObject> Images = new List<GameObject>();

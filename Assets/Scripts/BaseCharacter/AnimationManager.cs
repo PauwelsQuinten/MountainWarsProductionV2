@@ -77,6 +77,8 @@ public class AnimationManager : MonoBehaviour
         if (obj is bool)
         {
             bool useSpear = (bool)obj;
+            if (_animator ==null)
+                _animator = GetComponentInChildren<Animator>();
             _animator.SetBool("IsHoldingSpear", useSpear);
         }
         

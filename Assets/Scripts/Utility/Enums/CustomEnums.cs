@@ -69,7 +69,8 @@ namespace UnityEngine
         HorizontalSlashToLeft,
         HorizontalSlashToRight,
         ShieldBash,
-        None
+        None,
+        Charge
     }
 
     public enum BodyParts 
@@ -231,7 +232,8 @@ namespace UnityEngine
         ParrySwordRight,
         SheathWeapon,
         DrawWeapon,
-        DragShieldDown
+        DragShieldDown,
+        Charge
     }
 
     public enum ObjectTarget

@@ -70,14 +70,15 @@ public class Attacking : MonoBehaviour
         //if (args.AttackSignal != AttackSignal.Idle)
         //    PrintInput(args);
         
-        //Send signal to the animator if the current swing turns out not to be a feint
+        //All attack signals are by default feint = true, when the angle movement is bigger then the set min value
+        //it will sent a signal to set feint to false and continue the attck animation instead of cancelling it.
         if (!args.IsFeint )
         {
             _changeAnimation.Raise(this, new AnimationEventArgs { IsFeint = false });
             return;
         }
 
-            if (args.AttackSignal == AttackSignal.Idle )
+        if (args.AttackSignal == AttackSignal.Idle )
         {
             //Signal to blackboard
             if (gameObject.CompareTag(PLAYER))
@@ -172,6 +173,10 @@ public class Attacking : MonoBehaviour
         {
             _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Stab, AnimLayer = animLayer, DoResetIdle = true, Speed = 1.5f  });
         }
+        else if (_attackType == AttackType.Charge)
+        {
+            _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Charge, AnimLayer = animLayer, DoResetIdle = false, Speed = 4.5f  });
+        }
 
     }
         
@@ -227,6 +232,7 @@ public class Attacking : MonoBehaviour
     private AttackType DetermineAttack(AimingOutputArgs aimOutput)
     {
         if(aimOutput.AttackSignal == AttackSignal.Stab) return AttackType.Stab;
+        if(aimOutput.AttackSignal == AttackSignal.Charge) return AttackType.Charge;
         if (aimOutput.Direction == Direction.ToRight) return AttackType.HorizontalSlashToRight;
         return AttackType.HorizontalSlashToLeft;
     }

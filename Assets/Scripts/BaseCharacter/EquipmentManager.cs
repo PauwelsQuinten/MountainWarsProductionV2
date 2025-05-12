@@ -29,7 +29,7 @@ public class EquipmentManager : MonoBehaviour
     [SerializeField] private float _sideAngleToStart = 60f;
     
     [Header("EquipmentPosition")]
-    [SerializeField] private Quaternion _swordStartRotation = Quaternion.Euler(-32f, -116f, -195f);
+    //[SerializeField] private Quaternion _swordStartRotation = Quaternion.Euler(-32f, -116f, -195f);
     [SerializeField] private Quaternion _spearStartRotation = Quaternion.Euler(15f, -160f, -45);
     [Header("Blackboard")]
     [SerializeField]
@@ -71,8 +71,8 @@ public class EquipmentManager : MonoBehaviour
             else
             {
                 DisableAimingScript(_rightHand.EquipmentHand);
-                HeldEquipment[RIGHT_HAND].transform.localRotation = _swordStartRotation;
-                _changeAnimation.Raise(this, false);
+                HeldEquipment[RIGHT_HAND].transform.localRotation = Quaternion.identity;
+                _changeAnimation?.Raise(this, false);
                 _changeIKStance?.Raise(this, new ChangeIKStanceEventArgs { UseSpear = false });
             }
         }
@@ -81,6 +81,8 @@ public class EquipmentManager : MonoBehaviour
         {
             var equipment = Instantiate(_leftHand);
             EquipmentHelper.CreateAndEquip(HeldEquipment, equipment, LEFT_HAND, _leftHandSocket, transform);
+            HeldEquipment[LEFT_HAND].transform.localRotation = Quaternion.identity;
+
         }
 
         _stateManager = GetComponent<StateManager>();
@@ -244,7 +246,7 @@ public class EquipmentManager : MonoBehaviour
 
             else
             {
-                hand.transform.localRotation = _swordStartRotation;
+                hand.transform.localRotation = Quaternion.identity;
                 _changeAnimation.Raise(this, false);
                 _changeIKStance?.Raise(this, new ChangeIKStanceEventArgs { UseSpear = false });
             }
@@ -291,18 +293,18 @@ public class EquipmentManager : MonoBehaviour
         if (sender.gameObject != gameObject) return;
         if (HeldEquipment[RIGHT_HAND] == null) return;
 
-        float diffInRealOrientation = (int)_stateManager.Orientation - _stateManager.fOrientation;
-        bool rotate = (int)obj == 1? true : false;
-
-        if (rotate)
-        {
-            HeldEquipment[RIGHT_HAND].transform.localRotation = Quaternion.Euler(-26, -27, 50);
-            //HeldEquipment[RIGHT_HAND].transform.Rotate(Vector3.right, diffInRealOrientation);
-        }
-        else
-        {
-            HeldEquipment[RIGHT_HAND].transform.localRotation = _swordStartRotation;
-        }
+        //float diffInRealOrientation = (int)_stateManager.Orientation - _stateManager.fOrientation;
+        //bool rotate = (int)obj == 1? true : false;
+        //
+        //if (rotate)
+        //{
+        //    HeldEquipment[RIGHT_HAND].transform.localRotation = Quaternion.Euler(-26, -27, 50);
+        //    //HeldEquipment[RIGHT_HAND].transform.Rotate(Vector3.right, diffInRealOrientation);
+        //}
+        //else
+        //{
+        //    HeldEquipment[RIGHT_HAND].transform.localRotation = Quaternion.identity;
+        //}
 
     }
 

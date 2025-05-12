@@ -43,20 +43,22 @@ public class SpearAiming : MonoBehaviour
     {
         if (!_isActive) return;
 
-        if ( _newRotation != _aimTarget.transform.localRotation)
-            RotateSpear();
+        /*if ( _newRotation != _aimTarget.transform.localRotation)
+            RotateSpear();*/
     }
 
     public void SetActive(bool active, Equipment forward )
     {
         _isActive = active;
         _spear = forward;
-        if (_aimTarget)
+        if (_aimTarget && active)
         {
             _spearStartOrientation = _aimTarget.transform.localRotation;
             _newRotation = _spearStartOrientation;
+
+            //_spearIdlePosition = _aimTarget.transform.position;
         }
-            
+
     }
 
     private void OnSpearMovement(object sender, AimInputEventArgs e)

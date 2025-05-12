@@ -20,6 +20,8 @@ public class IKTransitionsToTarget : MonoBehaviour
     private GameObject _IKTargetLh;
     [SerializeField, Tooltip("the target of the Right hand IK 2 bone component")]
     private GameObject _IKTargetRh;
+    [SerializeField, Tooltip("the Right hand socket for where the target has to move to")]
+    private GameObject _targetScoket;
     private GameObject _aimTarget;
     [SerializeField, Tooltip("the height of the spear in idle pos compared with his up vector")]
     private float _spearheight = 0.65f;
@@ -58,7 +60,8 @@ public class IKTransitionsToTarget : MonoBehaviour
         if (_IKTargetRh)
         {
             _IKTargetRh.transform.position = startPos;
-            _IKTargetRh.transform.Rotate(Vector3.forward, _spearAngle);
+            //_IKTargetRh.transform.position = _targetScoket.transform.position;
+            //_IKTargetRh.transform.Rotate(Vector3.forward, _spearAngle);
             GetComponent<SpearAiming>()?.SetIdlePosition();
         }
     }
@@ -73,7 +76,7 @@ public class IKTransitionsToTarget : MonoBehaviour
                 Time.deltaTime * _lerpSpeedTorso);
         }
 
-        //the spear stance, holding the idle hand on the spear below
+        //the spear stance, holding the Left hand on the spear below
         if (_lhHoldingPosition && _IKTargetLh)
         {
             _IKTargetLh.transform.position = Vector3.Lerp(

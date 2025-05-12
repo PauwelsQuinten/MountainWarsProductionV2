@@ -70,7 +70,7 @@ namespace Geometry
             return Direction.Wrong;
         }
 
-        public static Direction CalculateFeintDirection(float orientation, Vector2 analogInput)
+        public static Direction CalculateFeintDirection(float orientation, Vector2 analogInput, float maxAngleToCenter)
         {
             //int orient = (int)orientation;
             int orient = (int)orientation;
@@ -78,10 +78,13 @@ namespace Geometry
             int diff = (int)input - orient;
             diff = diff < -180 ? 360 + diff : diff;
 
-            if (diff < 0 || diff > 180)                
+            //if (diff < 0 || diff > 180)                
+            if (diff < 0 && diff > -maxAngleToCenter)                
                 return Direction.ToLeft;
-            else 
+            if (diff > 0 && diff <  maxAngleToCenter)                
                 return Direction.ToRight;
+            else 
+                return Direction.Wrong;
         }
 
         public static Direction CalculateSwingDirection(float angleDegree, Vector2 analogInput, Vector2 previousInput, Vector2 StorredStartInput)

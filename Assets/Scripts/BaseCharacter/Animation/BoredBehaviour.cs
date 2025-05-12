@@ -36,23 +36,10 @@ public class BoredBehaviour : StateMachineBehaviour
             {
                 _isBored = true;
 
-                int tempInt = Random.Range(1, 4);
+                int tempInt = Random.Range(1, _numberOfBoredAnimations);
+                _boredAnimation = tempInt;
 
-                switch (tempInt)
-                {
-                    case 1:
-                        _boredAnimation = 2;
-                        break;
-                    case 2:
-                        _boredAnimation = 4;
-                        break;
-                    case 3:
-                        _boredAnimation = 6;
-                        break;
-                }
-
-
-                _animator.SetFloat("BoredAnimation", _boredAnimation - 1);
+                _animator.SetFloat("BoredAnimation", _boredAnimation );
             }
         }
         else if (stateInfo.normalizedTime % 1 > 0.98)

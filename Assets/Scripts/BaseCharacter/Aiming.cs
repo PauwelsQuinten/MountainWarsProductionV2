@@ -146,13 +146,18 @@ public class Aiming : MonoBehaviour
             StartCoroutine(ResetAttack(F_TIME_BETWEEN_STAB));
         }
 
-        else if ( inputLength > 0.9f && _swingDirection == Direction.Idle && _refAimingInput.variable.State == AttackState.Attack)
+        //Throw feint from direction you point to
+        else if ( inputLength > 0.9f && _swingDirection == Direction.Idle && (_refAimingInput.variable.State == AttackState.Attack || _refAimingInput.variable.State == AttackState.BlockAttack))
         {
-            _swingDirection = Geometry.Geometry.CalculateFeintDirection(_refAimingInput.variable.StateManager.fOrientation, _refAimingInput.variable.value);
-            _enmAttackSignal = AttackSignal.Swing;
+            var direction = Geometry.Geometry.CalculateFeintDirection(_refAimingInput.variable.StateManager.fOrientation, _refAimingInput.variable.value, _maxAllowedBlockAngle);
+                  
+            if (direction != Direction.Wrong)
+            {
+                _swingDirection = direction;
+                _enmAttackSignal = AttackSignal.Swing;
+                SendPackage(true);
+            }
             
-        
-            SendPackage(true);
         }
 
         //When it is not a Stab and input is big enough, set to moving
@@ -217,7 +222,7 @@ public class Aiming : MonoBehaviour
 
     private void CheckIfHoldingPosition()
     {
-        if (_enmAimingInput == AimingInputState.Moving && _fNotMovingTime >= F_MAX_TIME_NOT_MOVING)
+        if ((_enmAimingInput == AimingInputState.Moving || _enmAimingInput == AimingInputState.Idle) && _fNotMovingTime >= F_MAX_TIME_NOT_MOVING)
         {            
             //HoldEvents are for Holding block or charging
             //Can also be used to throw an atack by stop moving instead of releasing the analog stick
@@ -244,15 +249,19 @@ public class Aiming : MonoBehaviour
                     && Geometry.Geometry.AreVectorWithinAngle(-orient, _refAimingInput.variable.value, F_MIN_ACCEPTED_MOVEMENT_ANGLE))
                 {                                   
                     _enmAttackSignal = AttackSignal.Charge;
-                    SendPackage();                   
+                    Debug.Log("charging");
+                    SendPackage(true);                   
                 }
                 break;
 
             case AttackState.ShieldDefence:
             case AttackState.SwordDefence:
-                _enmAimingInput = AimingInputState.Hold;
-                _swingDirection = Direction.Wrong;//Put to wrong so the inputChanged function wont call a parry movement when switching block sides
-                SendPackage();
+                if (_enmAimingInput == AimingInputState.Moving)
+                {
+                    _enmAimingInput = AimingInputState.Hold;
+                    _swingDirection = Direction.Wrong;//Put to wrong so the inputChanged function wont call a parry movement when switching block sides
+                    SendPackage();
+                }             
                 break;
 
             default:
@@ -286,7 +295,7 @@ public class Aiming : MonoBehaviour
         return value;*/
     }
 
-    private void SendPackage(bool earlyMessage = false, bool isFeint = true )
+    private void SendPackage(bool isUninteruptedAnimation = false, bool isFeint = true )
     {
         var package = new AimingOutputArgs
         {
@@ -311,7 +320,7 @@ public class Aiming : MonoBehaviour
                 ,
             IsHoldingBlock = _refAimingInput.variable.StateManager.IsHoldingShield
                 ,
-            AnimationStart = earlyMessage
+            AnimationStart = isUninteruptedAnimation
                 ,
             IsFeint = isFeint
             //IsFeint = IsFeintMovement(_swingDirection)

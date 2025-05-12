@@ -16,7 +16,6 @@ public class DialogueLines : ScriptableObject
     public float DisplaySpeed;
     public TMP_FontAsset Font;
     public int FontSize = 36;
-    public bool Bold = false;
 
     [Header("Images")]
     public List<GameObject> Images = new List<GameObject>();

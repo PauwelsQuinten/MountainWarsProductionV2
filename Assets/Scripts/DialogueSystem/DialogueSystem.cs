@@ -145,10 +145,6 @@ public class DialogueSystem : MonoBehaviour
         _text.fontSize = _currentLine.FontSize;
         _text.font = _currentLine.Font;
 
-        if(_currentLine.Bold)
-            _text.fontStyle = FontStyles.Bold;
-        else _text.fontStyle = FontStyles.Normal;
-
         foreach(Image image  in _textBalloonImages.Keys)
         {
             image.color = new Color(image.color.r, image.color.g, image.color.b, 0);

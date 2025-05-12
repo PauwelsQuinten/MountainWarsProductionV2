@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class DialogueLines : ScriptableObject
 {
     [Header("Text")]
-    [TextArea]
+    [CustomTextArea(5,10)]
     public string Text;
     [HideInInspector]
     public int LineSpacing = 36;
@@ -24,8 +24,10 @@ public class DialogueLines : ScriptableObject
 
     [Header("Text Balloon")]
     public GameObject TextBalloon;
+    public GameObject Tail;
+    public float BorderSize = 0.2f;
     public bool FlipTextBalloon;
-    public Vector2 AddedScale;
+    public Vector2 Padding;
 
     [Header("Character Name")]
     public string _characterName;

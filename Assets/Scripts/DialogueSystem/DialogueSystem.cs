@@ -35,13 +35,14 @@ public class DialogueSystem : MonoBehaviour
     private bool _allowMovement;
 
     private GameObject _currentTextBalloon;
+    private GameObject _currentTail;
 
     private DialogueLines _currentLine;
 
     private List<GameObject> _activeImages = new List<GameObject>();
 
-    private int _LineSizeX;
-    private int _LineSizeY;
+    private Dictionary<Image, bool> _textBalloonImages = new Dictionary<Image, bool>();
+
 
     private void Start()
     {
@@ -81,16 +82,16 @@ public class DialogueSystem : MonoBehaviour
 
     private Vector2 GetTextBalloonPos()
     {
-        GameObject target = GameObject.Find(_dialogues[_currentDialogueIndex].Lines[_currentLineIndex]._characterName);
+        GameObject target = GameObject.Find(_currentLine._characterName);
         Vector3 targetPos = target.transform.position;
         targetPos.y += target.GetComponent<CapsuleCollider>().height * 0.5f;
 
         Vector2 TextballoonPos = _stateManager.CurrentCamera.WorldToScreenPoint(targetPos);
 
-        TextballoonPos.y += _dialogues[_currentDialogueIndex].Lines[_currentLineIndex].TextBalloon.GetComponent<Image>().rectTransform.rect.height * 0.5f;
+        TextballoonPos.y += _currentTextBalloon.GetComponent<Image>().rectTransform.rect.height * 0.5f;
 
-        float offsetX = _dialogues[_currentDialogueIndex].Lines[_currentLineIndex].TextBalloon.GetComponent<Image>().rectTransform.rect.width * 0.5f;
-        bool needsFlip = _dialogues[_currentDialogueIndex].Lines[_currentLineIndex].FlipTextBalloon;
+        float offsetX = _currentTextBalloon.GetComponent<Image>().rectTransform.rect.width * 0.5f;
+        bool needsFlip = _currentLine.FlipTextBalloon;
 
         if (needsFlip)
         {
@@ -107,19 +108,37 @@ public class DialogueSystem : MonoBehaviour
             return TextballoonPos;
     }
 
+    private Vector2 GetTailPosition()
+    {
+        float textBalloonWidth = _currentTextBalloon.GetComponent<Image>().rectTransform.rect.width;
+        float textBalloonHeight = _currentTextBalloon.GetComponent<Image>().rectTransform.rect.height;
+
+
+        float Ypos = (-textBalloonHeight * 0.5f) + (textBalloonHeight * 0.25f);
+        float Xpos = (-textBalloonWidth * 0.5f) + (textBalloonWidth * 0.25f);
+        return new Vector2(Xpos, Ypos);
+    }
+
     private IEnumerator EnableTextBalloon()
     {
         _allowMovement = true;
         _isTyping = true;
 
         _currentLine = _dialogues[_currentDialogueIndex].Lines[_currentLineIndex];
-        _currentTextBalloon = Instantiate(_currentLine.TextBalloon, _canvas.transform);
+        _currentTextBalloon = ConstructTextBalloon();
 
         string tempText = " ";
         if (_currentLine.Images.Count == 0) tempText = InsertLineBreaksByWord(_currentLine.Text, 5);
+        else
+        {
+            DistributeImages();
+            DetermineTextBalloonSizeBasedOnImages();
+        }
 
-        Vector2 pos = GetTextBalloonPos();
-        _currentTextBalloon.transform.position = new Vector3(pos.x, pos.y, 0);
+        Vector2 balloonPos = GetTextBalloonPos();
+        Vector2 Tailpos = GetTailPosition();
+        _currentTextBalloon.transform.position = new Vector3(balloonPos.x, balloonPos.y, 0);
+        _currentTail.transform.localPosition = new Vector3(Tailpos.x, Tailpos.y, 0);
 
         _text.transform.parent = _currentTextBalloon.transform;
         _text.transform.localPosition = Vector3.zero;
@@ -130,28 +149,52 @@ public class DialogueSystem : MonoBehaviour
             _text.fontStyle = FontStyles.Bold;
         else _text.fontStyle = FontStyles.Normal;
 
-        if (_currentLine.Images.Count > 0)
+        foreach(Image image  in _textBalloonImages.Keys)
         {
-            DistributeImages();
-            DetermineTextBalloonSizeBasedOnImages();
+            image.color = new Color(image.color.r, image.color.g, image.color.b, 0);
         }
 
-        Image balloon = _currentTextBalloon.GetComponent<Image>();
-        balloon.color = new Color(1, 1, 1, 0);
+        float transparacy = 0;
 
-        float time = 0;
-
-        while(balloon.color.a < 1)
+        while(transparacy < 1)
         {
-            time += Time.deltaTime * _fadeInSpeed;
+            transparacy += Time.deltaTime * _fadeInSpeed;
 
-            balloon.color = new Color(1, 1, 1, time);
+            foreach (Image image in _textBalloonImages.Keys)
+            {
+                image.color = new Color(image.color.r, image.color.g, image.color.b, transparacy);
+            }
+
             yield return null;
         }
 
-        balloon.color = Color.white;
-
+        foreach (Image image in _textBalloonImages.Keys)
+        {
+            image.color = new Color(image.color.r, image.color.g, image.color.b, 1);
+        }
         StartCoroutine(TypeText(tempText));
+    }
+
+    private GameObject ConstructTextBalloon()
+    {
+        GameObject textBalloonBorder = Instantiate(_currentLine.TextBalloon, _canvas.transform);
+        _textBalloonImages.Add(textBalloonBorder.GetComponent<Image>(), true);
+        textBalloonBorder.GetComponent<Image>().color = Color.black;
+
+        GameObject tailBorder = Instantiate(_currentLine.Tail, _canvas.transform);
+        _textBalloonImages.Add(tailBorder.GetComponent<Image>(), true);
+        tailBorder.transform.parent = textBalloonBorder.transform;
+        tailBorder.GetComponent<Image>().color = Color.black;
+        _currentTail = tailBorder;
+
+        GameObject textBalloon = Instantiate(_currentLine.TextBalloon, _canvas.transform);
+        _textBalloonImages.Add(textBalloon.GetComponent<Image>(), false);
+        textBalloon.transform.parent = textBalloonBorder.transform;
+
+        GameObject tail = Instantiate(_currentLine.Tail, _canvas.transform);
+        _textBalloonImages.Add(tail.GetComponent<Image>(), false);
+        tail.transform.parent = tailBorder.transform;
+        return textBalloonBorder;
     }
 
     private string InsertLineBreaksByWord(string text, int maxWordsPerLine)
@@ -218,12 +261,16 @@ public class DialogueSystem : MonoBehaviour
         float FontSizeMultiplier = DetermineFontSizeMultiplier();
 
         Vector2 size = new Vector2((((FontSizeMultiplier * characterWidth) + _currentLine.CharacterSpacing) * LetterCount), (((FontSizeMultiplier * characterHeight) + _currentLine.LineSpacing) * linecount));
-        size += _currentLine.AddedScale;
+        size += _currentLine.Padding;
 
         if (_currentTextBalloon != null)
         {
-            RectTransform balloonRect = _currentTextBalloon.GetComponent<Image>().rectTransform;
-            if (balloonRect != null) balloonRect.sizeDelta = size;
+            foreach(Image image in _textBalloonImages.Keys)
+            {
+                RectTransform balloonRect = image.rectTransform;
+                if (_textBalloonImages[image]) balloonRect.sizeDelta = new Vector2(size.x * (1 +((_currentLine.BorderSize * 0.25f))), size.y * (1 + _currentLine.BorderSize));
+                else balloonRect.sizeDelta = size;
+            }
         }
 
         if (_text != null)
@@ -258,9 +305,14 @@ public class DialogueSystem : MonoBehaviour
 
         float imagesOnFirstLine = Mathf.Ceil(_currentLine.Images.Count * 0.5f);
         Vector2 size = new Vector2((imageSizeX + imageSpacingX) * imagesOnFirstLine, (imagesSizeY + imageSpacingY) * 2);
-        size += _currentLine.AddedScale;
+        size += _currentLine.Padding;
 
-        _currentTextBalloon.GetComponent<Image>().rectTransform.sizeDelta = size;
+        foreach (Image image in _textBalloonImages.Keys)
+        {
+            RectTransform balloonRect = image.rectTransform;
+            if (_textBalloonImages[image]) balloonRect.sizeDelta = new Vector2(size.x * (1 + _currentLine.BorderSize), size.y * (1 + _currentLine.BorderSize));
+            else balloonRect.sizeDelta = size;
+        }
         _text.rectTransform.sizeDelta = size;
     }
 
@@ -346,7 +398,7 @@ public class DialogueSystem : MonoBehaviour
 
         // Calculate spacing based on desired cell size
         float spacingX = (balloonRect.rect.width - (desiredCellWidth * columns)) / (columns - 1);
-        float spacingY = spacingY = (balloonRect.rect.height - (desiredCellHeight * rows)) / (rows - 1);
+        float spacingY = (balloonRect.rect.height - (desiredCellHeight * rows)) / (rows - 1);
 
         // Use these calculated values for placement
         for (int i = 0; i < childCount; i++)
@@ -381,9 +433,21 @@ public class DialogueSystem : MonoBehaviour
     private IEnumerator TypeText(string text)
     {
         _text.text = "";
-        foreach (char letter in text)
+        int i = 0;
+        while (i < text.Length)
         {
-            _text.text += letter;
+            if (text[i] == '<')
+            {
+                int tagEnd = text.IndexOf('>', i);
+                if (tagEnd != -1)
+                {
+                    string tag = text.Substring(i, tagEnd - i + 1);
+                    _text.text += tag;
+                    i = tagEnd + 1;
+                    continue;
+                }
+            }
+            _text.text += text[i];
             if (_canSkip)
             {
                 _text.text = text;
@@ -391,6 +455,7 @@ public class DialogueSystem : MonoBehaviour
                 _isTyping = false;
                 break;
             }
+            i++;
             yield return new WaitForSeconds(_currentLine.DisplaySpeed);
         }
         _isTyping = false;
@@ -400,31 +465,41 @@ public class DialogueSystem : MonoBehaviour
     {
         Image balloon = _currentTextBalloon.GetComponent<Image>();
 
-        float time = 1;
+        float transparacy = 1;
 
-        while (balloon.color.a > 0)
+        while (transparacy > 0)
         {
-            time -= Time.deltaTime * _fadeInSpeed;
+            transparacy -= Time.deltaTime * _fadeInSpeed;
 
-            balloon.color = new Color(1, 1, 1, time);
-            _text.color = new Color(0, 0, 0, time);
+            foreach (Image image in _textBalloonImages.Keys)
+            {
+                image.color = new Color(image.color.r, image.color.g, image.color.b, transparacy);
+            }
+
+            _text.color = new Color(0, 0, 0, transparacy);
+
             if (_activeImages.Count != 0)
             {
                 foreach (GameObject image in _activeImages)
                 {
-                    image.GetComponent<Image>().color = new Color(0, 0, 0, time);
+                    image.GetComponent<Image>().color = new Color(0, 0, 0, transparacy);
                 }
             }
             yield return null;
         }
 
-        balloon.color = new Color(1, 1, 1, 0);
+        foreach (Image image in _textBalloonImages.Keys)
+        {
+            image.color = new Color(image.color.r, image.color.g, image.color.b, 0);
+        }
+
         _text.color = new Color(0, 0, 0, 0);
+
         if (_activeImages.Count != 0)
         {
             foreach (GameObject image in _activeImages)
             {
-                image.GetComponent<Image>().color = balloon.color = new Color(0, 0, 0, time);
+                image.GetComponent<Image>().color = balloon.color = new Color(0, 0, 0, 0);
                 GameObject.Destroy(image.gameObject);
             }
         }
@@ -433,6 +508,7 @@ public class DialogueSystem : MonoBehaviour
         _text.color = Color.black;
         _text.transform.parent = _canvas.transform;
         GameObject.Destroy(_currentTextBalloon);
+        _textBalloonImages = new Dictionary<Image, bool>();
         _allowMovement = false;
 
         if (_currentLineIndex < _dialogues[_currentDialogueIndex].Lines.Count - 1)

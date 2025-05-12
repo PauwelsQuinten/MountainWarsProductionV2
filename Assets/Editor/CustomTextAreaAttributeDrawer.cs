@@ -107,6 +107,7 @@ public class CustomTextAreaAttributeDrawer : PropertyDrawer
             else prop.stringValue = input;
             Debug.Log($"text { prop.stringValue}");
         }
+
         EditorGUI.EndProperty();
     }
 

@@ -7,7 +7,7 @@ public class IKTransitionsToTarget : MonoBehaviour
     [Header("Look at IK")]
     [SerializeField] private GameObject _animTarget;
     [SerializeField] private float _lerpSpeedTorso = 10f;
-    [SerializeField] private MultiAimConstraint _lookRig;
+    [SerializeField, Tooltip("Aiming constraint for the spine to aim more to the target")] private MultiAimConstraint _lookRig;
     [SerializeField, Tooltip("the weight of the spine rotation when holding a spear")] private float _torsoWeightSpear = 0.25f;
     [SerializeField, Tooltip("the weight of the spine rotation when holding a sword")] private float _torsoWeightSword = 0.65f;
 
@@ -115,7 +115,8 @@ public class IKTransitionsToTarget : MonoBehaviour
         }
         else
         {
-            _lookRig.weight = _torsoWeightSword;
+            if (_lookRig !=  null)
+                _lookRig.weight = _torsoWeightSword;
             _spearRig.weight = 0f;
         }
             

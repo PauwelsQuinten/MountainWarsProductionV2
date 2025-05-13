@@ -1574,17 +1574,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f8e524e8d99e7f94d8a5e751f78bcc07, type: 3}
---- !u!114 &456158331 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7744258860819555875, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
-  m_PrefabInstance: {fileID: 1438861116}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e3c430f382484144e925c097c2d33cfe, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &464471369
 GameObject:
   m_ObjectHideFlags: 0
@@ -3855,15 +3844,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2699498469009531425, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.92387956
       objectReference: {fileID: 0}
     - target: {fileID: 2699498469009531425, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: 0.38268343
       objectReference: {fileID: 0}
     - target: {fileID: 2699498469009531425, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
+      value: 45
       objectReference: {fileID: 0}
     - target: {fileID: 2701968354149610496, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
       propertyPath: m_Data.m_Mid
@@ -4279,7 +4268,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7744258860819555875, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
       propertyPath: m_Weight
-      value: 1
+      value: 0.526
+      objectReference: {fileID: 0}
+    - target: {fileID: 7744258860819555875, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7744258860819555875, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
       propertyPath: m_Data.m_MaxLimit
@@ -4316,7 +4309,7 @@ PrefabInstance:
     - target: {fileID: 7893246462861609223, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
       propertyPath: _lookRig
       value: 
-      objectReference: {fileID: 456158331}
+      objectReference: {fileID: 0}
     - target: {fileID: 7893246462861609223, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
       propertyPath: _heightStab
       value: 0.5
@@ -4465,6 +4458,7 @@ PrefabInstance:
     m_RemovedGameObjects:
     - {fileID: 7684831204715475138, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
     - {fileID: 7221909152342685877, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
+    - {fileID: 6659983875828715213, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 7813785884809550849, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
       insertIndex: 2

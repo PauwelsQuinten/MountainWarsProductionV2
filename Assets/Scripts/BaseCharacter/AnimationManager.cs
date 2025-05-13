@@ -32,7 +32,8 @@ public class AnimationManager : MonoBehaviour
             InteruptAnimation(false);
             return;
         }
-        InteruptAnimation(true);
+        else if (args.AnimState == AnimationState.SlashLeft || args.AnimState == AnimationState.SlashRight || args.AnimState == AnimationState.Stab)
+            InteruptAnimation(true);
 
         //For fluid block direction switches, else he will always first equip. looks really buggy
         if (_currentState == args.AnimState && args.AnimState != AnimationState.Idle && args.AnimState != AnimationState.Empty)
@@ -40,7 +41,7 @@ public class AnimationManager : MonoBehaviour
             if (args.BlockDirection != Direction.Default)
             {
                 _animator.SetFloat("fBlockDirection", (float)(int)args.BlockDirection);
-                _animator.SetInteger("BlockState", (int)args.BlockMedium);
+                _animator.SetInteger("BlockMedium", (int)args.BlockMedium);
             }
 
             return;
@@ -48,7 +49,7 @@ public class AnimationManager : MonoBehaviour
         else if (args.BlockDirection != Direction.Default)
         {
             _animator.SetFloat("fBlockDirection", (float)(int)args.BlockDirection);
-            _animator.SetInteger("BlockState", (int)args.BlockMedium);
+            _animator.SetInteger("BlockMedium", (int)args.BlockMedium);
         }
         
 
@@ -67,14 +68,17 @@ public class AnimationManager : MonoBehaviour
             {
                 case AnimationState.Stab:
                     _animator.SetBool("IsAttackHigh", args.IsAttackHigh);
+                    _animator.SetInteger("AttackMedium", (int)args.AttackMedium);
                     _animator.SetFloat("AttackState", 2f);
                     break;
                 case AnimationState.SlashLeft:
                     _animator.SetBool("IsAttackHigh", args.IsAttackHigh);
+                    _animator.SetInteger("AttackMedium", (int)args.AttackMedium);
                     _animator.SetFloat("AttackState", 0f);
                     break;
                 case AnimationState.SlashRight:
                     _animator.SetBool("IsAttackHigh", args.IsAttackHigh);
+                    _animator.SetInteger("AttackMedium", (int)args.AttackMedium);
                     _animator.SetFloat("AttackState", 1f);
                     break;
                 default:
@@ -103,7 +107,7 @@ public class AnimationManager : MonoBehaviour
                 _animator = GetComponentInChildren<Animator>();
             _animator.SetBool("IsHoldingSpear", useSpear);
         }
-        
+       
     }
 
     private void ResetAllLayers()

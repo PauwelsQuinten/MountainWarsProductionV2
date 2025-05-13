@@ -18,6 +18,10 @@ public class Attacking : MonoBehaviour
     private float _basePower;
     [SerializeField]
     private float _chargeSpeed;
+    [SerializeField]
+    private float _chargeDownSpeed;
+    [SerializeField]
+    private float _maxChargedPower = 20f;
 
     [Header("Attack")]
     [SerializeField]
@@ -40,16 +44,24 @@ public class Attacking : MonoBehaviour
     [SerializeField]
     private GameEvent _changeAnimation;
 
-    private float _chargePower;
-    private float _attackPower;
+    private float _chargePower = 0f;
+    [HideInInspector] public float ChargedPower
+    {
+        get { return _chargePower; }
+    }
+    private float _attackPower = 0f;
     private AttackType _attackType;
     private AttackHeight _attackHeight = AttackHeight.Torso;
 
     private bool _wasCharging;
     private float _startChargeTime;
-    private float _endChargeTime;
 
     private StateManager _stateManager;
+
+    private void Update()
+    {
+        UPdateChargePowerOnRelease();
+    }
 
     public void Attack(Component sender, object obj)
     {
@@ -86,7 +98,7 @@ public class Attacking : MonoBehaviour
                 foreach (var blackboard in _blackboardRefs)
                     blackboard.variable.TargetCurrentAttack = AttackType.None;
             }
-
+            CalculateChargePower(args);
             return;
         }
 
@@ -94,7 +106,8 @@ public class Attacking : MonoBehaviour
 
         _attackType = DetermineAttack(args);
         _attackRange = GetAttackMediumRange(args);
-        _attackPower = CalculatePower(args);
+        if (_attackType != AttackType.Charge)
+            _attackPower = CalculatePower(args);
         _attackHeight = args.AttackHeight;
         //Debug.Log($"charging : {_wasCharging}, power: {_attackPower}");
 
@@ -210,11 +223,26 @@ public class Attacking : MonoBehaviour
         }
         else if (args.AttackSignal != AttackSignal.Charge && _wasCharging)
         {
-            _endChargeTime = Time.time;
-            _chargePower = _chargeSpeed * (_endChargeTime - _startChargeTime);
             _startChargeTime = 0;
-            _endChargeTime = 0;
             _wasCharging = false;
+        }
+        
+    }
+
+    private void UPdateChargePowerOnRelease()
+    {
+        if (_startChargeTime != 0)
+        {
+            float _chargedTime = Time.time - _startChargeTime;
+            _chargePower = _chargeSpeed * _chargedTime + 1f;
+            if (_chargePower > _maxChargedPower)
+                _chargePower = _maxChargedPower;
+        }
+        
+        else if (_chargePower > 0 && _startChargeTime == 0)
+        {
+            float newTime = _chargePower - _chargeDownSpeed * Time.deltaTime;
+            _chargePower = (newTime > 0f) ? newTime : 0f;
         }
     }
 

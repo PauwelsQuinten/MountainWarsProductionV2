@@ -64,7 +64,9 @@ public class AnimationManager : MonoBehaviour
         //Lowerbody(2) should always transition even when stunnend
         if ((!_animator.GetBool("IsStunned") && !_animator.GetBool("GetHit")) || args.AnimLayer == 2)
         {
-            switch(args.AnimState)
+            _animator.SetFloat("ActionSpeed", args.Speed);
+
+            switch (args.AnimState)
             {
                 case AnimationState.Stab:
                     _animator.SetBool("IsAttackHigh", args.IsAttackHigh);
@@ -81,8 +83,8 @@ public class AnimationManager : MonoBehaviour
                     _animator.SetInteger("AttackMedium", (int)args.AttackMedium);
                     _animator.SetFloat("AttackState", 1f);
                     break;
-                default:
-                    _animator.SetFloat("AttackState", 3f);
+               default:
+                    //_animator.SetFloat("AttackState", 3f);
                     _animator.CrossFade(args.AnimState.ToString(), 0.2f, args.AnimLayer, 0f);
                     break;
             }
@@ -92,7 +94,6 @@ public class AnimationManager : MonoBehaviour
 
         if (args.DoResetIdle)
         {
-            _animator.SetFloat("ActionSpeed", args.Speed);
             _startAnimation.Raise(this, null);
         }
     }

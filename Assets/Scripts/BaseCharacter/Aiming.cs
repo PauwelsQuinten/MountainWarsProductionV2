@@ -176,15 +176,16 @@ public class Aiming : MonoBehaviour
                     _noFeintSignalSend = false;
                     break;
             }
-
-            /*if (_traversedAngle >= F_ACCEPTED_MIN_ANGLE && _swingDirection == Direction.Idle)
+            //To throw parry
+            if (_traversedAngle >= _minSwingAngle && _swingDirection == Direction.Idle)
             {
                 _swingDirection = Geometry.Geometry.CalculateSwingDirection(_traversedAngle, _refAimingInput.variable.value, _vec2previousDirection, _vec2Start);
                 _enmAttackSignal = AttackSignal.Swing;
 
                 SendPackage(true);
             }
-            else */if (_traversedAngle > _minSwingAngle && !_noFeintSignalSend)
+            //To finish the already executing attack
+            else if (_traversedAngle > _minSwingAngle && !_noFeintSignalSend)
             {
                 _noFeintSignalSend = true;
                 SendPackage(false, false);

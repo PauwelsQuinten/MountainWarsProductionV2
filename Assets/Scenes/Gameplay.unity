@@ -3980,12 +3980,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4198466305689752223, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
       propertyPath: Responses.Array.data[0].m_PersistentCalls.m_Calls.Array.size
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 4198466305689752223, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
       propertyPath: Responses.Array.data[0].m_PersistentCalls.m_Calls.Array.data[3].m_Target
       value: 
       objectReference: {fileID: 1438861117}
+    - target: {fileID: 4198466305689752223, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
+      propertyPath: Responses.Array.data[0].m_PersistentCalls.m_Calls.Array.data[4].m_Target
+      value: 
+      objectReference: {fileID: 1438861130}
     - target: {fileID: 4198466305689752223, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
       propertyPath: Responses.Array.data[0].m_PersistentCalls.m_Calls.Array.data[3].m_CallState
       value: 2
@@ -3995,8 +3999,16 @@ PrefabInstance:
       value: GrabShield
       objectReference: {fileID: 0}
     - target: {fileID: 4198466305689752223, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
+      propertyPath: Responses.Array.data[0].m_PersistentCalls.m_Calls.Array.data[4].m_MethodName
+      value: StartPatchUp
+      objectReference: {fileID: 0}
+    - target: {fileID: 4198466305689752223, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
       propertyPath: Responses.Array.data[0].m_PersistentCalls.m_Calls.Array.data[3].m_TargetAssemblyTypeName
       value: DragShieldDown, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 4198466305689752223, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
+      propertyPath: Responses.Array.data[0].m_PersistentCalls.m_Calls.Array.data[4].m_TargetAssemblyTypeName
+      value: PatchUp, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 4198466305689752223, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
       propertyPath: Responses.Array.data[0].m_PersistentCalls.m_Calls.Array.data[3].m_Arguments.m_ObjectArgumentAssemblyTypeName
@@ -4477,6 +4489,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7472a734b392b5f4f98a96f738392d83, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1438861130 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1093610526649920952, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
+  m_PrefabInstance: {fileID: 1438861116}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 167457055}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e06d959004c70242bff963ee66dbc17, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &1476468157 stripped
@@ -5345,6 +5368,10 @@ PrefabInstance:
       propertyPath: '_bodyParts.Array.data[5]'
       value: 
       objectReference: {fileID: 1206722934}
+    - target: {fileID: 7044637763604957616, guid: 354d33079198c404da349382719f82b2, type: 3}
+      propertyPath: _patchupDuration.variable
+      value: 
+      objectReference: {fileID: 11400000, guid: 007ebc2d48c8f954d85262351a7212a0, type: 2}
     - target: {fileID: 8476201131716011252, guid: 354d33079198c404da349382719f82b2, type: 3}
       propertyPath: m_Name
       value: UIManager
@@ -6210,6 +6237,7 @@ MonoBehaviour:
   _inParryZone: {fileID: 11400000, guid: 48b146ca432fdaf4a98acaef1bbf49a6, type: 2}
   _rotateShield: {fileID: 11400000, guid: 7f9e479aba9dadf4abc23c350fe51bba, type: 2}
   _dragShieldDown: {fileID: 11400000, guid: 8d2b611f4f77a104786e9f561ae6594a, type: 2}
+  _sheatSword: {fileID: 0}
 --- !u!1001 &7091105671762886603
 PrefabInstance:
   m_ObjectHideFlags: 0

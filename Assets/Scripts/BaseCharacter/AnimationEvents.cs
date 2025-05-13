@@ -18,6 +18,8 @@ public class AnimationEvents : MonoBehaviour
     private GameEvent _rotateShield;
     [SerializeField] 
     private GameEvent _dragShieldDown;
+    [SerializeField] 
+    private GameEvent _sheatSword;
 
     private int _storredDirection = 0;
     private void Start()
@@ -65,8 +67,12 @@ public class AnimationEvents : MonoBehaviour
     
     public void DragShield()
     {
-
         _dragShieldDown.Raise(this.transform.parent, null);
+    }
+     
+    public void SheatSword(int zeroForIn)
+    {
+        _sheatSword.Raise(this.transform.parent, null);
     }
 
 }

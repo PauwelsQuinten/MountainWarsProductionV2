@@ -16,12 +16,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private MovingInputReference _moveInputRef;
 
-    [Header("Healing")]
-    [SerializeField, Tooltip("How long it takes to patch up your bleeding")]
-    private FloatReference _patchUpDuration;
-    [SerializeField]
-    private GameEvent _patchUpEvent;
-
     [Header("Stamina")]
     [SerializeField]
     private StaminaManager _staminaManager;
@@ -60,10 +54,6 @@ public class PlayerController : MonoBehaviour
     private AttackState _storredAttackState = AttackState.Idle;
 
     private bool _isHoldingShield;
-
-    private float _patchTimer;
-    private float _patchStartTime;
-    private float _patchEndTime;
 
     private bool _wasSprinting;
     
@@ -329,10 +319,10 @@ public class PlayerController : MonoBehaviour
     public void ProssesPatchUpInput(InputAction.CallbackContext ctx)
     {
         if (Time.timeScale == 0) return;
-        //if (ctx.action.WasPressedThisFrame())
+        //This button will be used to sheat/unsheat sord when not bleeding
         if (ctx.action.WasPerformedThisFrame())
         {
-            if (!_stateManager.IsBleeding)
+           /* if (!_stateManager.IsBleeding)
             {
                 if (_stateManager.WeaponIsSheathed)
                 {
@@ -345,24 +335,15 @@ public class PlayerController : MonoBehaviour
                     //_stateManager.WeaponIsSheathed = true;
                 }
             }
-            else
-            {
-                _patchStartTime = Time.time;
-                _patchUpEvent.Raise(this, false);
-            }           
+            else*/
+            {               
+                _inQueue.Raise(this, new AimingOutputArgs { Special = SpecialInput.PatchUp, AnimationStart = true });
+            }
         }
 
-        if(ctx.action.WasReleasedThisFrame() && _patchStartTime != 0f)
-        {
-            _patchEndTime = Time.time;
-            _patchTimer = _patchEndTime - _patchStartTime;
-
-            if (_patchUpDuration.value >= _patchTimer) 
-                _patchUpEvent.Raise(this, true);
-            else _patchUpEvent.Raise(this, false);
-
-            _patchStartTime = 0;
-            _patchEndTime = 0;
+        if(ctx.action.WasReleasedThisFrame() )
+        {           
+            _inQueue.Raise(this, new AimingOutputArgs { Special = SpecialInput.PatchUp, AnimationStart = false });
         }
     }
 

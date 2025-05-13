@@ -233,7 +233,8 @@ namespace UnityEngine
         SheathWeapon,
         DrawWeapon,
         DragShieldDown,
-        Charge
+        Charge,
+        PatchUp
     }
 
     public enum ObjectTarget

@@ -12,14 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aebd895158945eb40b35fd978a0587ef, type: 3}
   m_Name: DialogueLine1
   m_EditorClassIdentifier: 
-  Text: Hello Paul. how is the wife these days?
+  Text:
+    FirstLine: Oh hey Paul! how's the wife doing these days.
+    SecondLine: 
   LineSpacing: 30
   CharacterSpacing: 1
   DisplaySpeed: 0.02
   BaseFont: {fileID: 11400000, guid: 33f18d3d0ea17354bb11a7ac3f2f34fc, type: 2}
   BaseFontSize: 36
   Images: []
-  HasSecondLine: 0
+  HasSecondImageLine: 0
   TextBalloon: {fileID: 2592667508800547744, guid: 2bac7fcd62ad2254ba0b5c6805ad7e98, type: 3}
   Tail: {fileID: 8216558290986259432, guid: 89ac598207ca10e43b46e0a3e1c6d86d, type: 3}
   BorderSize: 0.2

@@ -14,7 +14,9 @@ public class DialogueSystem : MonoBehaviour
     [SerializeField]
     private List<Dialogues> _dialogues = new List<Dialogues>();
     [SerializeField]
-    private TextMeshProUGUI _text;
+    private TextMeshProUGUI _textLineOne;
+    [SerializeField]
+    private TextMeshProUGUI _textLineTwo;
     [SerializeField]
     private BoolReference _isInDialogue;
 
@@ -97,13 +99,13 @@ public class DialogueSystem : MonoBehaviour
         {
             TextballoonPos = new Vector2(TextballoonPos.x - offsetX, TextballoonPos.y);
             _currentTextBalloon.transform.rotation = Quaternion.Euler(0, 180, 0);
-            _text.transform.localRotation = Quaternion.Euler(0, 180, 0);
+            _textLineOne.transform.localRotation = Quaternion.Euler(0, 180, 0);
         }
         else
         {
             TextballoonPos = new Vector2(TextballoonPos.x + offsetX, TextballoonPos.y);
             if(_currentTextBalloon != null)_currentTextBalloon.transform.rotation = Quaternion.Euler(0, 0, 0);
-            _text.transform.localRotation = Quaternion.Euler(0, 0, 0);
+            _textLineOne.transform.localRotation = Quaternion.Euler(0, 0, 0);
         }
             return TextballoonPos;
     }
@@ -125,10 +127,10 @@ public class DialogueSystem : MonoBehaviour
         _isTyping = true;
 
         _currentLine = _dialogues[_currentDialogueIndex].Lines[_currentLineIndex];
-        _currentTextBalloon = ConstructTextBalloon();
+        _currentTextBalloon = ConstructTextBalloon(true);
 
         string tempText = " ";
-        if (_currentLine.Images.Count == 0) tempText = InsertLineBreaksByWord(_currentLine.Text, 5);
+        if (_currentLine.Images.Count == 0) tempText = InsertLineBreaksByWord(_currentLine.Text.FirstLine, 5);
         else
         {
             DistributeImages();
@@ -140,10 +142,10 @@ public class DialogueSystem : MonoBehaviour
         _currentTextBalloon.transform.position = new Vector3(balloonPos.x, balloonPos.y, 0);
         _currentTail.transform.localPosition = new Vector3(Tailpos.x, Tailpos.y, 0);
 
-        _text.transform.parent = _currentTextBalloon.transform;
-        _text.transform.localPosition = Vector3.zero;
-        _text.fontSize = _currentLine.BaseFontSize;
-        _text.font = _currentLine.BaseFont;
+        _textLineOne.transform.parent = _currentTextBalloon.transform;
+        _textLineOne.transform.localPosition = Vector3.zero;
+        _textLineOne.fontSize = _currentLine.BaseFontSize;
+        _textLineOne.font = _currentLine.BaseFont;
 
         foreach(Image image  in _textBalloonImages.Keys)
         {
@@ -168,28 +170,64 @@ public class DialogueSystem : MonoBehaviour
         {
             image.color = new Color(image.color.r, image.color.g, image.color.b, 1);
         }
-        StartCoroutine(TypeText(tempText));
+        StartCoroutine(TypeText(tempText, _textLineOne));
+
+        if(_currentLine.Text.SecondLine != "")
+        {
+            yield return new WaitForSeconds(tempText.Length * (_currentLine.DisplaySpeed + 0.05f));
+
+            GameObject secondBalloon = ConstructTextBalloon(false);
+
+            Vector3 newPos = new Vector3(_currentTextBalloon.transform.position.x, _currentTextBalloon.transform.position.y, 0);
+            newPos.x += _currentTextBalloon.GetComponent<Image>().rectTransform.rect.width * 0.35f;
+            newPos.y -= _currentTextBalloon.GetComponent<Image>().rectTransform.rect.height * 0.35f;
+
+            secondBalloon.transform.position = newPos;
+
+            tempText = " ";
+            if (_currentLine.Images.Count == 0) tempText = InsertLineBreaksByWord(_currentLine.Text.SecondLine, 5);
+            else
+            {
+                DistributeImages();
+                DetermineTextBalloonSizeBasedOnImages();
+            }
+
+            _textLineTwo.transform.parent = secondBalloon.transform;
+            _textLineTwo.transform.localPosition = Vector3.zero;
+            _textLineTwo.fontSize = _currentLine.BaseFontSize;
+            _textLineTwo.font = _currentLine.BaseFont;
+
+            StartCoroutine(TypeText(tempText, _textLineTwo));
+        }
     }
 
-    private GameObject ConstructTextBalloon()
+    private GameObject ConstructTextBalloon(bool spawnTail)
     {
         GameObject textBalloonBorder = Instantiate(_currentLine.TextBalloon, _canvas.transform);
         _textBalloonImages.Add(textBalloonBorder.GetComponent<Image>(), true);
         textBalloonBorder.GetComponent<Image>().color = Color.black;
 
-        GameObject tailBorder = Instantiate(_currentLine.Tail, _canvas.transform);
-        _textBalloonImages.Add(tailBorder.GetComponent<Image>(), true);
-        tailBorder.transform.parent = textBalloonBorder.transform;
-        tailBorder.GetComponent<Image>().color = Color.black;
-        _currentTail = tailBorder;
+        GameObject tailBorder = null;
+
+        if (spawnTail)
+        {
+            tailBorder = Instantiate(_currentLine.Tail, _canvas.transform);
+            _textBalloonImages.Add(tailBorder.GetComponent<Image>(), true);
+            tailBorder.transform.parent = textBalloonBorder.transform;
+            tailBorder.GetComponent<Image>().color = Color.black;
+            _currentTail = tailBorder;
+        }
 
         GameObject textBalloon = Instantiate(_currentLine.TextBalloon, _canvas.transform);
         _textBalloonImages.Add(textBalloon.GetComponent<Image>(), false);
         textBalloon.transform.parent = textBalloonBorder.transform;
 
-        GameObject tail = Instantiate(_currentLine.Tail, _canvas.transform);
-        _textBalloonImages.Add(tail.GetComponent<Image>(), false);
-        tail.transform.parent = tailBorder.transform;
+        if (spawnTail)
+        {
+            GameObject tail = Instantiate(_currentLine.Tail, _canvas.transform);
+            _textBalloonImages.Add(tail.GetComponent<Image>(), false);
+            tail.transform.parent = tailBorder.transform;
+        }
         return textBalloonBorder;
     }
 
@@ -269,9 +307,9 @@ public class DialogueSystem : MonoBehaviour
             }
         }
 
-        if (_text != null)
+        if (_textLineOne != null)
         {
-            _text.rectTransform.sizeDelta = size;
+            _textLineOne.rectTransform.sizeDelta = size;
         }
     }
 
@@ -292,7 +330,7 @@ public class DialogueSystem : MonoBehaviour
             imageSpacingX = Vector3.Distance(_activeImages[0].transform.position, _activeImages[1].transform.position);
             imageSpacingX -= imageSizeX / _currentLine.Images.Count;
 
-            if (_currentLine.HasSecondLine)
+            if (_currentLine.HasSecondImageLine)
             {
                 imageSpacingY = Vector3.Distance(_activeImages[0].transform.position, _activeImages[(int)Mathf.Ceil(_currentLine.Images.Count * 0.5f)].transform.position);
                 imageSpacingY -= imagesSizeY / 2;
@@ -309,7 +347,7 @@ public class DialogueSystem : MonoBehaviour
             if (_textBalloonImages[image]) balloonRect.sizeDelta = new Vector2(size.x * (1 + _currentLine.BorderSize), size.y * (1 + _currentLine.BorderSize));
             else balloonRect.sizeDelta = size;
         }
-        _text.rectTransform.sizeDelta = size;
+        _textLineOne.rectTransform.sizeDelta = size;
     }
 
     private float DetermineFontSizeMultiplier()
@@ -400,7 +438,7 @@ public class DialogueSystem : MonoBehaviour
         for (int i = 0; i < childCount; i++)
         {
             int row = 0;
-            if (_currentLine.HasSecondLine) row = i / columns;
+            if (_currentLine.HasSecondImageLine) row = i / columns;
             else row = 1;
             int col = i % columns;
             GameObject newImage = (Instantiate(_currentLine.Images[i], _currentTextBalloon.transform));
@@ -426,9 +464,9 @@ public class DialogueSystem : MonoBehaviour
         }
     }
 
-    private IEnumerator TypeText(string text)
+    private IEnumerator TypeText(string text, TextMeshProUGUI textObject)
     {
-        _text.text = "";
+        textObject.text = "";
         int i = 0;
         while (i < text.Length)
         {
@@ -438,15 +476,15 @@ public class DialogueSystem : MonoBehaviour
                 if (tagEnd != -1)
                 {
                     string tag = text.Substring(i, tagEnd - i + 1);
-                    _text.text += tag;
+                    textObject.text += tag;
                     i = tagEnd + 1;
                     continue;
                 }
             }
-            _text.text += text[i];
+            textObject.text += text[i];
             if (_canSkip)
             {
-                _text.text = text;
+                textObject.text = text;
                 _canSkip = false;
                 _isTyping = false;
                 break;
@@ -472,7 +510,7 @@ public class DialogueSystem : MonoBehaviour
                 image.color = new Color(image.color.r, image.color.g, image.color.b, transparacy);
             }
 
-            _text.color = new Color(0, 0, 0, transparacy);
+            _textLineOne.color = new Color(0, 0, 0, transparacy);
 
             if (_activeImages.Count != 0)
             {
@@ -489,7 +527,7 @@ public class DialogueSystem : MonoBehaviour
             image.color = new Color(image.color.r, image.color.g, image.color.b, 0);
         }
 
-        _text.color = new Color(0, 0, 0, 0);
+        _textLineOne.color = new Color(0, 0, 0, 0);
 
         if (_activeImages.Count != 0)
         {
@@ -500,9 +538,9 @@ public class DialogueSystem : MonoBehaviour
             }
         }
 
-        _text.text = "";
-        _text.color = Color.black;
-        _text.transform.parent = _canvas.transform;
+        _textLineOne.text = "";
+        _textLineOne.color = Color.black;
+        _textLineOne.transform.parent = _canvas.transform;
         GameObject.Destroy(_currentTextBalloon);
         _textBalloonImages = new Dictionary<Image, bool>();
         _allowMovement = false;

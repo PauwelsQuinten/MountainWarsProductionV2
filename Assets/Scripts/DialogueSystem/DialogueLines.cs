@@ -8,7 +8,7 @@ public class DialogueLines : ScriptableObject
 {
     [Header("Text")]
     [CustomTextArea(5,10)]
-    public string Text;
+    public MultiLineText Text;
     [HideInInspector]
     public int LineSpacing = 36;
     [HideInInspector]
@@ -19,7 +19,7 @@ public class DialogueLines : ScriptableObject
 
     [Header("Images")]
     public List<GameObject> Images = new List<GameObject>();
-    public bool HasSecondLine;
+    public bool HasSecondImageLine;
 
     [Header("Text Balloon")]
     public GameObject TextBalloon;

@@ -322,20 +322,18 @@ public class PlayerController : MonoBehaviour
         //This button will be used to sheat/unsheat sord when not bleeding
         if (ctx.action.WasPerformedThisFrame())
         {
-           /* if (!_stateManager.IsBleeding)
+            if (!_stateManager.IsBleeding)
             {
                 if (_stateManager.WeaponIsSheathed)
                 {
-                    _sheathWeapon.Raise(this, EventArgs.Empty);
-                    //_stateManager.WeaponIsSheathed = false;
+                    _inQueue.Raise(this, new AimingOutputArgs { Special = SpecialInput.UnSheatSword, AnimationStart = true });
                 }
                 else if (!_stateManager.WeaponIsSheathed)
                 {
-                    _sheathWeapon.Raise(this, EventArgs.Empty);
-                    //_stateManager.WeaponIsSheathed = true;
+                    _inQueue.Raise(this, new AimingOutputArgs { Special = SpecialInput.SheatSword, AnimationStart = true });
                 }
             }
-            else*/
+            else
             {               
                 _inQueue.Raise(this, new AimingOutputArgs { Special = SpecialInput.PatchUp, AnimationStart = true });
             }

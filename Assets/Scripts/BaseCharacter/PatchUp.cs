@@ -19,7 +19,7 @@ public class PatchUp : MonoBehaviour
     {
         if (sender.gameObject != gameObject) return;
         var args = obj as AimingOutputArgs;
-        if (args == null || args.Special! != SpecialInput.PatchUp) return;
+        if (args == null || args.Special != SpecialInput.PatchUp) return;
 
 
         if (args.AnimationStart)

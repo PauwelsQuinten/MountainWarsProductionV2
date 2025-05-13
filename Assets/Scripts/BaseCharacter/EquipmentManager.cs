@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Net.Sockets;
 using System.Runtime;
 using UnityEngine;
 
@@ -288,26 +289,18 @@ public class EquipmentManager : MonoBehaviour
 
     }
 
-    public void RotateSword(Component sender, object obj)
+    public void SheathWeapon(Component sender, object obj)
     {
         if (sender.gameObject != gameObject) return;
         if (HeldEquipment[RIGHT_HAND] == null) return;
+        bool isSheating = (bool)obj;
 
-        //float diffInRealOrientation = (int)_stateManager.Orientation - _stateManager.fOrientation;
-        //bool rotate = (int)obj == 1? true : false;
-        //
-        //if (rotate)
-        //{
-        //    HeldEquipment[RIGHT_HAND].transform.localRotation = Quaternion.Euler(-26, -27, 50);
-        //    //HeldEquipment[RIGHT_HAND].transform.Rotate(Vector3.right, diffInRealOrientation);
-        //}
-        //else
-        //{
-        //    HeldEquipment[RIGHT_HAND].transform.localRotation = Quaternion.identity;
-        //}
-
+        if (isSheating)
+            SetWeaponActive(isSheating, _sheathSocket.gameObject);
+       
+        else
+            SetWeaponActive(isSheating, _rightHandSocket.gameObject);
     }
-
 
     public bool HasFullEquipment()
     {
@@ -353,7 +346,6 @@ public class EquipmentManager : MonoBehaviour
         return HeldEquipment[RIGHT_HAND] == null && HeldEquipment[LEFT_HAND] == null;
     }
    
-
     public float GetEquipmentPower()
     {
         if (HeldEquipment[RIGHT_HAND])
@@ -378,32 +370,12 @@ public class EquipmentManager : MonoBehaviour
             return HeldEquipment[index].GetDurabilityPercentage();
         return 0f;
     }
-
-    public void SheathWeapon(Component sender, object obj)
+ 
+    private void SetWeaponActive(bool isSheating, GameObject socket)
     {
-        if (sender.gameObject != gameObject) return;
-        if (HeldEquipment[RIGHT_HAND] == null) return;
-        if (_stateManager.WeaponIsSheathed)
-        {
-            HeldEquipment[RIGHT_HAND].gameObject.transform.parent = _rightHandSocket.transform;
-            HeldEquipment[RIGHT_HAND].gameObject.transform.localPosition = Vector3.zero;
-            HeldEquipment[RIGHT_HAND].gameObject.transform.localRotation = Quaternion.Euler(new Vector3(48, 108, 194));
-            _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.DrawWeapon, AnimLayer = 3, DoResetIdle = true });
-            _stateManager.WeaponIsSheathed = false;
-        }
-        else
-        {
-            StartCoroutine(SetWeaponActive(34f / 30f, _sheathSocket.gameObject));
-            _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.SheathWeapon, AnimLayer = 3, DoResetIdle = true });
-            _stateManager.WeaponIsSheathed = true;
-        }
-    }
-   
-    private IEnumerator SetWeaponActive(float duration, GameObject socket)
-    {
-        yield return new WaitForSeconds(duration);
         HeldEquipment[RIGHT_HAND].gameObject.transform.parent = socket.transform;
         HeldEquipment[RIGHT_HAND].gameObject.transform.localPosition = Vector3.zero;
         HeldEquipment[RIGHT_HAND].gameObject.transform.localRotation = Quaternion.identity;
+        _stateManager.WeaponIsSheathed = isSheating;
     }
 }

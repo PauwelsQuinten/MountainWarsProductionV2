@@ -277,7 +277,9 @@ namespace UnityEngine
         Default,
         ShieldGrab,
         PatchUp,
-        PickUp
+        PickUp,
+        SheatSword,
+        UnSheatSword
     }
 
 

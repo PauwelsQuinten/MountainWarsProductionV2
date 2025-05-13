@@ -72,7 +72,8 @@ public class AnimationEvents : MonoBehaviour
      
     public void SheatSword(int zeroForIn)
     {
-        _sheatSword.Raise(this.transform.parent, null);
+        bool isSheating = zeroForIn == 0? true : false;
+        _sheatSword.Raise(this.transform.parent, isSheating);
     }
 
 }

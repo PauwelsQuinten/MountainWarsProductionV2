@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using FMOD.Studio;
 using FMODUnity;
 using UnityEngine;
@@ -106,7 +107,7 @@ public class Music : MonoBehaviour
         }
 
         SetGlobalParameterID(_musiczoneID, _musiczoneIDValue);
-        _musicInstance.start();
+        //_musicInstance.start();
 
     }
 
@@ -158,7 +159,7 @@ public class Music : MonoBehaviour
             SetGlobalParameterID(_combatLevelID, _combatLevelIDValue);
         }
     }
-    
+
     private void OnDestroy()
     {
         _musicInstance.stop(STOP_MODE.ALLOWFADEOUT);

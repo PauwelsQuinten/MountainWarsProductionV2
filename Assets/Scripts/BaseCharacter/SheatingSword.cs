@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class SheatingSword : MonoBehaviour
 {
-    [SerializeField] private GameEvent _sheathWeapon;
     [SerializeField] private GameEvent _changeAnimation;
 
     private EquipmentManager _equipmentManager;
@@ -24,11 +23,9 @@ public class SheatingSword : MonoBehaviour
         switch(args.Special)
         {
             case SpecialInput.SheatSword:
-                //_sheathWeapon.Raise(this, true);
                 _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.SheathWeapon, AnimLayer = 3, DoResetIdle = true });
                 break;
             case SpecialInput.UnSheatSword:
-                //_sheathWeapon.Raise(this, false);
                 _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.DrawWeapon, AnimLayer = 3, DoResetIdle = true });
                 break;
             default:

@@ -42,11 +42,13 @@ public class AnimationEvents : MonoBehaviour
     {
         _recieveAttackEvent.Raise(this.transform.parent, null);
     }
+
     public void EndAnimation()
     {
         if ( _endAnimation ) 
             _endAnimation.Raise(this.transform.parent, null);
     }
+
     public void SetInParryZone(int InZone)
     {
         bool zone = InZone == 0? true : false;

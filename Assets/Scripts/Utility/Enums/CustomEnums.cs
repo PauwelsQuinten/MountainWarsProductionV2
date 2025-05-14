@@ -14,8 +14,8 @@ namespace UnityEngine
 
     public enum AttackHeight
     {
-        Head,
-        Torso
+        Head = 0,
+        Torso = 1
     }
 
 

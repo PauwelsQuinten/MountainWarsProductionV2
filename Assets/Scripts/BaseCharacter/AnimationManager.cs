@@ -111,20 +111,6 @@ public class AnimationManager : MonoBehaviour
        
     }
 
-    private void ResetAllLayers()
-    {
-        // Reset all layers to weight 0 first
-        //_animator.SetLayerWeight(BASE_LAYER, 0);
-        //_animator.SetLayerWeight(UPPER_BODY_LAYER, 0);
-        //_animator.SetLayerWeight(LOWER_BODY_LAYER, 0);
-
-        // Optional: Force all layers to their default state
-        //if (_currentAnimLayer != 1) return;
-        //_animator.Play("Empty", BASE_LAYER);
-        //_animator.Play("Empty", UPPER_BODY_LAYER);
-        //_animator.Play("Empty", LOWER_BODY_LAYER);
-    }
-
     private void InteruptAnimation(bool isFeint)
     {
         if(isFeint) 
@@ -145,8 +131,12 @@ public class AnimationManager : MonoBehaviour
     public void GetHit(Component Sender, object obj)
     {
         if (Sender.gameObject != gameObject) return;
+        AttackEventArgs args = obj as AttackEventArgs;
+        if (args == null) 
+            return;
 
         _animator.speed = 1;
+        _animator.SetFloat("HitHeight", (float)(int)args.AttackHeight);
         _animator.SetTrigger("GetHit");
     }
 

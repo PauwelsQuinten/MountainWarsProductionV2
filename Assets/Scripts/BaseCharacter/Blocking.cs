@@ -8,7 +8,7 @@ public class Blocking : MonoBehaviour
     [SerializeField] private List<BlackboardReference> _blackboards;
 
     [Header("Events")]
-    [SerializeField] private GameEvent _succesfullBlockevent;
+    [SerializeField] private GameEvent _stunFeedbackEvent;
     [SerializeField] private GameEvent _equipmentUpdate;
     [SerializeField] private GameEvent _succesfullHitEvent;
     [SerializeField] private GameEvent _changeAnimation;
@@ -18,6 +18,9 @@ public class Blocking : MonoBehaviour
     private FloatReference _staminaCost;
     [SerializeField]
     private GameEvent _loseStamina;
+
+    [Header("StunFeedback")]
+    [SerializeField] StunVariablesReference _stunValues;
 
     private StateManager _stateManager;
     private Direction _blockDirection;
@@ -44,17 +47,7 @@ public class Blocking : MonoBehaviour
         //Make sure that it will always be a vallid Block, even after recovering from Stun
         if (args.IsHoldingBlock && args.AttackState == AttackState.BlockAttack)
         {
-            //_aimingInputState = AimingInputState.Hold;
-            //_blockMedium = Blocking.GetBlockMedium(args);
-            //
-            ////Set this storred value by event when he gets stunned during holding Block
-            //if (_storredHoldDirection != Direction.Idle)
-            //{
-            //    _blockDirection = _storredHoldDirection;
-            //    _storredHoldDirection = Direction.Idle;
-            //}
-            //else if (_blockDirection == Direction.Wrong)
-            //    _blockDirection = args.BlockDirection;
+           
             UpdateBlackboard(args);
             return;
         }
@@ -109,7 +102,6 @@ public class Blocking : MonoBehaviour
         }
     }
 
-
     public void CheckBlock(Component sender, object obj)
     {
         //Check for vallid signal
@@ -160,7 +152,8 @@ public class Blocking : MonoBehaviour
         if (blockResult == BlockResult.Hit)
         {
             _succesfullHitEvent.Raise(this, args);
-            _succesfullBlockevent.Raise(this, new StunEventArgs { StunDuration = 2f, ComesFromEnemy = false});
+            _stunFeedbackEvent.Raise(this, new StunEventArgs
+            { StunDuration = _stunValues.variable.StunOnHit, ComesFromEnemy = false});
 
         }
         else
@@ -169,22 +162,25 @@ public class Blocking : MonoBehaviour
             {
                 case BlockResult.FullyBlocked:
                     _loseStamina.Raise(this, new StaminaEventArgs { StaminaCost = _staminaCost.value});
-                    _succesfullBlockevent.Raise(this, new StunEventArgs { StunDuration = 2f, ComesFromEnemy = true });
+                    _stunFeedbackEvent.Raise(this, new StunEventArgs 
+                    { StunDuration = _stunValues.variable.StunWhenGettingFullyBlocked, ComesFromEnemy = true });
                     break;
                 case BlockResult.HalfBlocked:
                     _loseStamina.Raise(this, new StaminaEventArgs { StaminaCost = _staminaCost.value * 1.5f});
-                    _succesfullBlockevent.Raise(this, new StunEventArgs { StunDuration = 1f, ComesFromEnemy = true });
+                    _stunFeedbackEvent.Raise(this, new StunEventArgs 
+                    { StunDuration = _stunValues.variable.StunWhenGettingPartiallyBlocked, ComesFromEnemy = true });
                     break;
                 case BlockResult.SwordBlock:
                     _loseStamina.Raise(this, new StaminaEventArgs { StaminaCost = _staminaCost.value * 0.5f });
-                    _succesfullBlockevent.Raise(this, new StunEventArgs { StunDuration = 0.75f, ComesFromEnemy = true });
+                    _stunFeedbackEvent.Raise(this, new StunEventArgs
+                    { StunDuration = _stunValues.variable.StunWhenGettingFullyBlockedBySword, ComesFromEnemy = true });
 
                     break;
                 case BlockResult.SwordHalfBlock:
                     _loseStamina.Raise(this, new StaminaEventArgs { StaminaCost = _staminaCost.value * 0.75f });
-                    _succesfullBlockevent.Raise(this, new StunEventArgs { StunDuration = 0.5f, ComesFromEnemy = true });
+                    _stunFeedbackEvent.Raise(this, new StunEventArgs 
+                    { StunDuration =_stunValues.variable.StunWhenGettingPartiallyBlockedBySword, ComesFromEnemy = true });
                     //_succesfullHitEvent.Raise(this, args);
-
                     break;
             }
                        

@@ -160,8 +160,10 @@ public class AnimationManager : MonoBehaviour
 
     public void BlockHit(Component sender, object obj)
     {
-        if (sender.gameObject != gameObject) return;
-        _animator.SetTrigger("BlockedHit");
+        var args = obj as AttackEventArgs;
+        if (args == null) return;
+        if (args.Attacker == gameObject || args.Defender == gameObject)
+            _animator.SetTrigger("BlockedHit");
     }
 
 

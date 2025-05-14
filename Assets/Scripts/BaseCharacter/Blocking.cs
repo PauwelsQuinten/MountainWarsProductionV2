@@ -184,8 +184,10 @@ public class Blocking : MonoBehaviour
                     //_succesfullHitEvent.Raise(this, args);
                     break;
             }
+            //Sent feedback animation to blockr and attacker
             if (_blockAnimation)
-                _blockAnimation.Raise(this, null);       
+                _blockAnimation.Raise(this, args);       
+            //Sent to equipment to deal with the damage to used equipment
             if (_equipmentUpdate)
                 _equipmentUpdate.Raise(this, defenceEventArgs);
         }

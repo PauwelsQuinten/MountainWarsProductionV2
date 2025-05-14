@@ -12,6 +12,7 @@ public class Blocking : MonoBehaviour
     [SerializeField] private GameEvent _equipmentUpdate;
     [SerializeField] private GameEvent _succesfullHitEvent;
     [SerializeField] private GameEvent _changeAnimation;
+    [SerializeField] private GameEvent _blockAnimation;
 
     [Header("Stamina")]
     [SerializeField]
@@ -183,8 +184,10 @@ public class Blocking : MonoBehaviour
                     //_succesfullHitEvent.Raise(this, args);
                     break;
             }
-                       
-            _equipmentUpdate.Raise(this, defenceEventArgs);
+            if (_blockAnimation)
+                _blockAnimation.Raise(this, null);       
+            if (_equipmentUpdate)
+                _equipmentUpdate.Raise(this, defenceEventArgs);
         }
 
     }

@@ -158,6 +158,13 @@ public class AnimationManager : MonoBehaviour
         _animator.SetBool("IsStunned", true);
     }
 
+    public void BlockHit(Component sender, object obj)
+    {
+        if (sender.gameObject != gameObject) return;
+        _animator.SetTrigger("BlockedHit");
+    }
+
+
     public void RecoverStunned(Component Sender, object obj)
     {
         if (Sender.gameObject != gameObject) return;

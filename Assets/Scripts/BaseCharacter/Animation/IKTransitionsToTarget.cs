@@ -20,8 +20,8 @@ public class IKTransitionsToTarget : MonoBehaviour
     private GameObject _IKTargetLh;
     [SerializeField, Tooltip("the target of the Right hand IK 2 bone component")]
     private GameObject _IKTargetRh;
-    [SerializeField, Tooltip("the Right hand socket for where the target has to move to")]
-    private GameObject _targetScoket;
+    //[SerializeField, Tooltip("the Right hand socket for where the target has to move to")]
+    //private GameObject _targetScoket;
     private GameObject _aimTarget;
     [SerializeField, Tooltip("the height of the spear in idle pos compared with his up vector")]
     private float _spearheight = 0.65f;
@@ -109,7 +109,8 @@ public class IKTransitionsToTarget : MonoBehaviour
 
         if (args.UseSpear)
         {
-            _lookRig.weight = _torsoWeightSpear;
+            if (_lookRig != null)
+                _lookRig.weight = _torsoWeightSpear;
             _lhHoldingPosition = args.LHSocket;
             _spearRig.weight = 1f;
         }

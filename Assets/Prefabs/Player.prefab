@@ -161,6 +161,22 @@ MonoBehaviour:
       position: {x: 0, y: 0, z: 0}
       rotation: {x: 0, y: 0, z: 0}
     m_Visible: 1
+  - m_Transform: {fileID: 6896391583242926261}
+    m_Style:
+      shape: {fileID: 4300000, guid: 687b70eb9c49243639f9379f6965034f, type: 2}
+      color: {r: 1, g: 0, b: 0, a: 0.5}
+      size: 0.1
+      position: {x: 0, y: 0, z: 0}
+      rotation: {x: 0, y: 0, z: 0}
+    m_Visible: 1
+  - m_Transform: {fileID: 5051970627575961954}
+    m_Style:
+      shape: {fileID: 4300000, guid: e050c2b16fe384bd994474655a4b4968, type: 2}
+      color: {r: 1, g: 0, b: 0, a: 0.5}
+      size: 0.1
+      position: {x: 0, y: 0, z: 0}
+      rotation: {x: 0, y: 0, z: 0}
+    m_Visible: 1
 --- !u!1 &1772402608753542710
 GameObject:
   m_ObjectHideFlags: 0
@@ -624,7 +640,7 @@ Transform:
   m_GameObject: {fileID: 5032585193063224557}
   serializedVersion: 2
   m_LocalRotation: {x: 0.60394603, y: -0.21297833, z: -0.61002034, w: -0.46665266}
-  m_LocalPosition: {x: 1.2457876, y: -3.2419019, z: -0.48074484}
+  m_LocalPosition: {x: 0.3, y: -0.78, z: -0.17}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -677,9 +693,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Weight: 1
   m_Data:
-    m_Root: {fileID: 0}
-    m_Mid: {fileID: 0}
-    m_Tip: {fileID: 0}
+    m_Root: {fileID: 2119988215538815965}
+    m_Mid: {fileID: 405270301959074143}
+    m_Tip: {fileID: 253755226715097570}
     m_Target: {fileID: 6896391583242926261}
     m_Hint: {fileID: 5051970627575961954}
     m_TargetPositionWeight: 1
@@ -1183,8 +1199,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8566021021764608479}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.603946, y: 0.21297833, z: 0.6100203, w: -0.46665266}
-  m_LocalPosition: {x: -0.59954995, y: 18.26236, z: 25.219833}
+  m_LocalRotation: {x: -0.78323364, y: -0.0075238943, z: 0.54776174, w: -0.29401627}
+  m_LocalPosition: {x: -0.7287245, y: 18.473267, z: 25.240044}
   m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3255,9 +3271,19 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2412161367050800168, guid: dd604a2ee8375f344bd5bbdf22db0362, type: 3}
   m_PrefabInstance: {fileID: 2520945912486512074}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &405270301959074143 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2838391200542782613, guid: dd604a2ee8375f344bd5bbdf22db0362, type: 3}
+  m_PrefabInstance: {fileID: 2520945912486512074}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1420148284522244637 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -5671910290767253545, guid: dd604a2ee8375f344bd5bbdf22db0362, type: 3}
+  m_PrefabInstance: {fileID: 2520945912486512074}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &2119988215538815965 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4582277379452294679, guid: dd604a2ee8375f344bd5bbdf22db0362, type: 3}
   m_PrefabInstance: {fileID: 2520945912486512074}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &2699498469009531425 stripped

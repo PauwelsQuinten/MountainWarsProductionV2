@@ -49,6 +49,7 @@ public class Attacking : MonoBehaviour
     {
         get { return _chargePower; }
     }
+    public bool ChargePowerUsed = false;
     private float _attackPower = 0f;
     private AttackType _attackType;
     private AttackHeight _attackHeight = AttackHeight.Torso;
@@ -220,6 +221,7 @@ public class Attacking : MonoBehaviour
         {
             _wasCharging = true;
             _startChargeTime = Time.time;
+            ChargePowerUsed = false;
         }
         else if (args.AttackSignal != AttackSignal.Charge && _wasCharging)
         {
@@ -253,6 +255,7 @@ public class Attacking : MonoBehaviour
         if (aimOutput.Speed != 0) power += _basePower * aimOutput.Speed + _chargePower;
         else power += _basePower + _chargePower;
         _chargePower = 0f;
+        ChargePowerUsed = true;
         return swingAngle + power;
     }
 

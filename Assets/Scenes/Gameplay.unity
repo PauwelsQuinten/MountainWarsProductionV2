@@ -4102,6 +4102,10 @@ PrefabInstance:
       propertyPath: _lockonEvent
       value: 
       objectReference: {fileID: 11400000, guid: d92c25f84e9ed4c4f9490fccdf017560, type: 2}
+    - target: {fileID: 4527190780918245193, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
+      propertyPath: _timewithoutTarget
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 4639080165276395507, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
       propertyPath: m_Mass
       value: 70
@@ -5876,6 +5880,10 @@ PrefabInstance:
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: e72b2532fba64c3438e12f46dbf98915, type: 2}
+    - target: {fileID: 3140900734903062927, guid: e9651b4801f36d14e86c1cb82aa75d59, type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3624036471692547420, guid: e9651b4801f36d14e86c1cb82aa75d59, type: 3}
       propertyPath: m_Name
       value: Armature
@@ -5891,6 +5899,10 @@ PrefabInstance:
     - target: {fileID: 4534196890739655879, guid: e9651b4801f36d14e86c1cb82aa75d59, type: 3}
       propertyPath: m_UseGravity
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4638204998296388733, guid: e9651b4801f36d14e86c1cb82aa75d59, type: 3}
+      propertyPath: _timewithoutTarget
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 4957922247227371947, guid: e9651b4801f36d14e86c1cb82aa75d59, type: 3}
       propertyPath: Events.Array.size

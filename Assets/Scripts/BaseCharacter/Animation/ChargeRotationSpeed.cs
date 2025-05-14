@@ -19,10 +19,13 @@ public class ChargeRotationSpeed : StateMachineBehaviour
         if (character != null )
         {
             var comp = character.GetComponent<Attacking>();
-            if (comp != null)
+            if (comp != null && !comp.ChargePowerUsed)
+            {
                 animator.SetFloat("ActionSpeed", comp.ChargedPower * _powerToSpeedRatio);
+                _speed = animator.GetFloat("ActionSpeed");
 
-            _speed = animator.GetFloat("ActionSpeed");
+            }
+
         }
     }
 

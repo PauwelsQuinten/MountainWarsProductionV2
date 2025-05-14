@@ -343,25 +343,23 @@ public class BlackboardVariable : ScriptableObject
     }
     private AttackType EvaluateAttackCount(AttackType addedAttack)
     {
-        int highestCount = 0;
-        AttackType attackType = AttackType.None;
-        foreach(KeyValuePair<AttackType, int> att in StorredAttacks)
-        {
-            
-            if (att.Value > highestCount)
-            {
-                highestCount = att.Value;
-                attackType = att.Key;
-            }
-        }
-        
-        
         foreach (var key in StorredAttacks.Keys.ToList())
         {
             if (key != addedAttack)
                 StorredAttacks[key] -= StorredAttacks[key] > 0 ? 1 : 0;
             else
                 StorredAttacks[key] -= StorredAttacks[key] > _numOfAttacksSeen ? 1 : 0;
+        }
+                
+        int highestCount = 0;
+        AttackType attackType = AttackType.None;
+        foreach(KeyValuePair<AttackType, int> att in StorredAttacks)
+        {            
+            if (att.Value > highestCount)
+            {
+                highestCount = att.Value;
+                attackType = att.Key;
+            }
         }
            
         return highestCount >= _numOfAttacksSeen ? attackType : AttackType.None;

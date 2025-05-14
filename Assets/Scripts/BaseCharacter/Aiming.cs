@@ -3,9 +3,12 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using Geometry;
+using UnityEngine.InputSystem;
 
 public class Aiming : MonoBehaviour
 {
+    private bool _isActive = true;
+
     [Header("InputVariable")]
     [SerializeField] private AimingInputReference _refAimingInput;
 
@@ -26,13 +29,16 @@ public class Aiming : MonoBehaviour
     [SerializeField, Tooltip("This will determine the animation speed of block and attack, the attack power will also be influenced by this")]
     [Range(1.1f, 2f)]
     private float _maxSwingSpeed = 2f;
+    [SerializeField, Tooltip("the minimum angle your analog stick needs to travel to consider the attack not to be a feint")]
+    [Range(F_ACCEPTED_MIN_ANGLE, 180f)]
+    private float _minSwingAngle = 60f;
 
     private Vector2 _vec2previousDirection = Vector2.zero;
     private Vector2 _vec2Start = Vector2.zero;
     private AttackState _enmCurrentState = AttackState.Idle;
     private AimingInputState _enmAimingInput = AimingInputState.Idle;
     private AttackSignal _enmAttackSignal = AttackSignal.Swing;
-    private const float F_MIN_DIFF_BETWEEN_INPUT = 0.04f;
+    private const float F_MIN_DIFF_BETWEEN_INPUT = 0.03f;
     private const float F_MAX_TIME_NOT_MOVING = 0.1f;
     private const float F_MIN_ACCEPTED_VALUE = 0.40f;
     private const float F_TIME_BETWEEN_SWING = 0.40f;
@@ -47,17 +53,36 @@ public class Aiming : MonoBehaviour
     private float _previousLength = 0f;
     private float _traversedAngle = 0f;
     private Direction _swingDirection = Direction.Idle;
-    
+    private bool _noFeintSignalSend = false;
+
+    //private InputAction _moveAction;
+
+    public void SetActive(bool active)
+    {
+        _isActive = active;
+    }
+
     void Start()
     {
         _enmAimingInput = AimingInputState.Idle;
         _refAimingInput.variable.ValueChanged += Variable_ValueChanged;
+
+        //PlayerInput playerInput = GetComponent<PlayerInput>();
+        //_moveAction = playerInput.actions["Aim"];
+
     }
 
     void Update()
     {
+        if (!_isActive) return; 
+
         CheckIfHoldingPosition();
         _fMovingTime += Time.deltaTime;
+
+        //Vector2 moveVector = _moveAction.ReadValue<Vector2>();
+        //_traversedAngle += Vector2.Angle(_vec2previousDirection, moveVector);
+        //_vec2previousDirection = moveVector;
+
     }
 
     private void OnDestroy()
@@ -67,7 +92,9 @@ public class Aiming : MonoBehaviour
 
     private void Variable_ValueChanged(object sender, AimInputEventArgs e)
     {
-        switch(e.ThisChanged)
+        if (!_isActive) return;
+
+        switch (e.ThisChanged)
         {
             case AimInputEventArgs.WhatChanged.State:
                 OnStateChanged();
@@ -119,8 +146,22 @@ public class Aiming : MonoBehaviour
             StartCoroutine(ResetAttack(F_TIME_BETWEEN_STAB));
         }
 
+        //Throw feint from direction you point to
+        else if ( inputLength > 0.9f && _swingDirection == Direction.Idle && (_refAimingInput.variable.State == AttackState.Attack || _refAimingInput.variable.State == AttackState.BlockAttack))
+        {
+            var direction = Geometry.Geometry.CalculateFeintDirection(_refAimingInput.variable.StateManager.fOrientation, _refAimingInput.variable.value, _maxAllowedBlockAngle);
+                  
+            if (direction != Direction.Wrong)
+            {
+                _swingDirection = direction;
+                _enmAttackSignal = AttackSignal.Swing;
+                SendPackage(true);
+            }
+            
+        }
+
         //When it is not a Stab and input is big enough, set to moving
-        else if (DetectAnalogMovement())
+        else if (DetectAnalogMovement() || _traversedAngle > F_ACCEPTED_MIN_ANGLE)
         {
             _fNotMovingTime = 0f;
             switch (_enmAimingInput)
@@ -130,16 +171,25 @@ public class Aiming : MonoBehaviour
                     _vec2Start = _refAimingInput.variable.value;
                     _enmAimingInput = AimingInputState.Moving;
                     _vec2previousDirection = Vector2.zero;
-                    _fMovingTime = 0f;                    
+                    _fMovingTime = 0f;
+                    //_traversedAngle = 0f;
+                    _noFeintSignalSend = false;
                     break;
             }
-
-            if (_traversedAngle >= F_ACCEPTED_MIN_ANGLE && _swingDirection == Direction.Idle)
+            //To throw parry
+            if (_traversedAngle >= _minSwingAngle && _swingDirection == Direction.Idle)
             {
                 _swingDirection = Geometry.Geometry.CalculateSwingDirection(_traversedAngle, _refAimingInput.variable.value, _vec2previousDirection, _vec2Start);
                 _enmAttackSignal = AttackSignal.Swing;
 
                 SendPackage(true);
+            }
+            //To finish the already executing attack
+            else if (_traversedAngle > _minSwingAngle && !_noFeintSignalSend)
+            {
+                _noFeintSignalSend = true;
+                SendPackage(false, false);
+                Debug.Log($"angle travelled = {_traversedAngle}");
             }
         }
         //Store measured length to use as comparision for the IsStabMovement
@@ -173,7 +223,7 @@ public class Aiming : MonoBehaviour
 
     private void CheckIfHoldingPosition()
     {
-        if (_enmAimingInput == AimingInputState.Moving && _fNotMovingTime >= F_MAX_TIME_NOT_MOVING)
+        if ((_enmAimingInput == AimingInputState.Moving || _enmAimingInput == AimingInputState.Idle) && _fNotMovingTime >= F_MAX_TIME_NOT_MOVING)
         {            
             //HoldEvents are for Holding block or charging
             //Can also be used to throw an atack by stop moving instead of releasing the analog stick
@@ -200,15 +250,19 @@ public class Aiming : MonoBehaviour
                     && Geometry.Geometry.AreVectorWithinAngle(-orient, _refAimingInput.variable.value, F_MIN_ACCEPTED_MOVEMENT_ANGLE))
                 {                                   
                     _enmAttackSignal = AttackSignal.Charge;
-                    SendPackage();                   
+                    Debug.Log("charging");
+                    SendPackage(true);                   
                 }
                 break;
 
             case AttackState.ShieldDefence:
             case AttackState.SwordDefence:
-                _enmAimingInput = AimingInputState.Hold;
-                _swingDirection = Direction.Wrong;//Put to wrong so the inputChanged function wont call a parry movement when switching block sides
-                SendPackage();
+                if (_enmAimingInput == AimingInputState.Moving)
+                {
+                    _enmAimingInput = AimingInputState.Hold;
+                    _swingDirection = Direction.Wrong;//Put to wrong so the inputChanged function wont call a parry movement when switching block sides
+                    SendPackage();
+                }             
                 break;
 
             default:
@@ -221,7 +275,8 @@ public class Aiming : MonoBehaviour
     {
         var diff = _vec2previousDirection - _refAimingInput.variable.value;
         bool value = diff.magnitude > F_MIN_DIFF_BETWEEN_INPUT;
-        
+
+        //_traversedAngle = Vector2.Angle(_vec2Start, _refAimingInput.variable.value);
         _traversedAngle += Vector2.Angle(_vec2previousDirection, _refAimingInput.variable.value);
         _vec2previousDirection = _refAimingInput.variable.value;
         
@@ -241,7 +296,7 @@ public class Aiming : MonoBehaviour
         return value;*/
     }
 
-    private void SendPackage(bool earlyMessage = false)
+    private void SendPackage(bool isUninteruptedAnimation = false, bool isFeint = true )
     {
         var package = new AimingOutputArgs
         {
@@ -266,9 +321,10 @@ public class Aiming : MonoBehaviour
                 ,
             IsHoldingBlock = _refAimingInput.variable.StateManager.IsHoldingShield
                 ,
-            AnimationStart = earlyMessage
+            AnimationStart = isUninteruptedAnimation
                 ,
-            IsFeint = IsFeintMovement(_swingDirection)
+            IsFeint = isFeint
+            //IsFeint = IsFeintMovement(_swingDirection)
 
         };
         //Debug.Log($"Send package: {package.AttackState}, {package.AttackSignal}, {_enmAimingInput}, angle : {_traversedAngle}, swing direction: {package.Direction}, block direction: {package.BlockDirection} holding = {package.IsHoldingBlock}");

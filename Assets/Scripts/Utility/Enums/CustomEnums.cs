@@ -69,7 +69,8 @@ namespace UnityEngine
         HorizontalSlashToLeft,
         HorizontalSlashToRight,
         ShieldBash,
-        None
+        None,
+        Charge
     }
 
     public enum BodyParts 
@@ -119,6 +120,13 @@ namespace UnityEngine
         Ranged,
         Shield,
         Fist
+    }
+    
+    public enum EquipmentHand
+    {
+       LeftHand = 0,
+       RightHand = 1,
+       TwoHanded = 2
     }
 
 
@@ -224,7 +232,9 @@ namespace UnityEngine
         ParrySwordRight,
         SheathWeapon,
         DrawWeapon,
-        DragShieldDown
+        DragShieldDown,
+        Charge,
+        PatchUp
     }
 
     public enum ObjectTarget
@@ -267,7 +277,9 @@ namespace UnityEngine
         Default,
         ShieldGrab,
         PatchUp,
-        PickUp
+        PickUp,
+        SheatSword,
+        UnSheatSword
     }
 
 

@@ -33,7 +33,12 @@ public class ActionQueue : MonoBehaviour
                 _actionCount--;
             var package = _inputQueue.Dequeue();
             _activateAction.Raise(this, package.Package);
+
         }
+
+        //Call next element imediatly if its about the feint signal, this is to continue the attack
+        if (_inputQueue.Count > 0 && !_inputQueue.Peek().Package.IsFeint)
+            _activateAction.Raise(this, _inputQueue.Dequeue().Package);
 
         if (IsOldestElementInQueueToLong(_maxTimeInQueue))
         {
@@ -55,7 +60,6 @@ public class ActionQueue : MonoBehaviour
             if (args.AnimationStart) _actionCount++;
             _inputQueue.Enqueue(new TimedPackage(args, Time.time));
         }
-
 
     }
 

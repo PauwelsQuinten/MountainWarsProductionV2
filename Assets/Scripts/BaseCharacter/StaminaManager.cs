@@ -86,4 +86,9 @@ public class StaminaManager : MonoBehaviour
 
         _canRegen = true;
     }
+
+    public float GetStaminaPercentage()
+    {
+        return CurrentStamina / _maxStamina;
+    }
 }

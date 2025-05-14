@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class HealthManager : MonoBehaviour
@@ -36,12 +35,8 @@ public class HealthManager : MonoBehaviour
     private float _damageIncreaseWhenStunned = 1.25f;
 
     [Header("Healing")]
-    [SerializeField, Tooltip("How long it takes to patch up your bleeding")]
-    private FloatReference _patchUpSpeed;
     [SerializeField]
     private float _timeBeforeRegerating = 2f;
-    [SerializeField]
-    private GameEvent _patchUp;
     [SerializeField, Tooltip("The amount of health you will recover after succesfully patching yourself up")]
     private float _healAmount = 100f;
 
@@ -317,10 +312,9 @@ public class HealthManager : MonoBehaviour
 
         if (!(bool)canRegen)
         {
-            if (_patchUpRoutine == null)
-                _patchUpRoutine = StartCoroutine(PatchUp());
             return;
         }
+            
         _bleedOutRate = 0;
         _isBleeding = false;
         _stateManager.IsBleeding = _isBleeding;
@@ -353,9 +347,4 @@ public class HealthManager : MonoBehaviour
         }
     }
 
-    private IEnumerator PatchUp()
-    {
-        yield return new WaitForSeconds(_patchUpSpeed.value);
-        PatchUpBleeding(this, true);
-    }
 }

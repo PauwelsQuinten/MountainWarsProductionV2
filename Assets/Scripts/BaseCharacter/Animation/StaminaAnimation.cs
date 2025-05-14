@@ -16,8 +16,7 @@ public class StaminaAnimation : StateMachineBehaviour
 
     public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        
-    
+        animator.SetFloat("Stamina", _staminaComp.GetStaminaPercentage());
     }
 
 }

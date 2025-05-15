@@ -1,6 +1,7 @@
 using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
+using static UnityEngine.Rendering.DebugUI;
 
 public class SpearAiming : MonoBehaviour
 {
@@ -88,7 +89,8 @@ public class SpearAiming : MonoBehaviour
             _outputLength = _refAimingInput.variable.value.x * transform.forward.x + _refAimingInput.variable.value.y * transform.forward.z;
 
         //Clamp angle
-        float clampedAngle = ClampAngle(angle);
+        //float clampedAngle = ClampAngle(angle);
+        float clampedAngle = CalculateSpearAngle(angle);
         if (IsNegativeAngle(clampedAngle))
             clampedAngle *= -1;
 
@@ -131,5 +133,19 @@ public class SpearAiming : MonoBehaviour
         _shoulderIdlePosition = _rShoulderTarget.transform.localPosition ;
     }
 
+    private float CalculateSpearAngle(float inputAngle)
+    {
+        float angle = inputAngle;
+        float sign = Mathf.Sign(inputAngle);
+        float absAngle = Mathf.Abs(angle);
+
+        if (absAngle > _maxAngle)
+        {
+            float newAngle = _maxAngle - (absAngle - _maxAngle);
+            angle = (newAngle >= 0f)? sign * newAngle : 0f;
+        }
+
+        return angle;
+    }
 
 }

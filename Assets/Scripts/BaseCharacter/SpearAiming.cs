@@ -1,3 +1,4 @@
+using NUnit.Framework.Constraints;
 using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -35,6 +36,8 @@ public class SpearAiming : MonoBehaviour
     private GameObject _aimTarget;
     [SerializeField, Tooltip("IK Right shoulder target")]
     private GameObject _rShoulderTarget;
+    [SerializeField, Tooltip("IK spine rotation target")]
+    private GameObject _spineRotationTarget;
     
     private float _outputLength = 0f;
     private Vector3 _spearIdlePosition = Vector3.zero;
@@ -61,10 +64,9 @@ public class SpearAiming : MonoBehaviour
         _spear = forward;
         if (_aimTarget && active)
         {
-            _spearStartOrientation = _aimTarget.transform.localRotation;
+            _spearStartOrientation = _spineRotationTarget.transform.localRotation;
             _newRotation = _spearStartOrientation;
         }
-
     }
 
     private void OnSpearMovement(object sender, AimInputEventArgs e)
@@ -72,24 +74,19 @@ public class SpearAiming : MonoBehaviour
         if (!_isActive) return;
 
         _outputLength = _refAimingInput.variable.value.magnitude;
-
         MoveSpearAimingPoint();
     }
 
     private void MoveSpearAimingPoint()
     {
-        //var offset = new Vector3(_refAimingInput.variable.value.x, 0f, _refAimingInput.variable.value.y) * _moveDistance;
-        //var offset = _spear.transform.up * _outputLength * _moveDistance;
-
-        //Back or forwards movement
+       //Back or forwards movement
         float angle = Vector3.Angle(new Vector3(_refAimingInput.variable.value.x, 0f, _refAimingInput.variable.value.y), transform.forward);
         if (angle > 90f)
             _outputLength = 0;
         else
             _outputLength = _refAimingInput.variable.value.x * transform.forward.x + _refAimingInput.variable.value.y * transform.forward.z;
 
-        //Clamp angle
-        //float clampedAngle = ClampAngle(angle);
+        //Slashing angle
         float clampedAngle = CalculateSpearAngle(angle);
         if (IsNegativeAngle(clampedAngle))
             clampedAngle *= -1;
@@ -100,19 +97,9 @@ public class SpearAiming : MonoBehaviour
         _aimTarget.transform.localPosition = _spearIdlePosition + rotation * offset;
         _rShoulderTarget.transform.localPosition = _shoulderIdlePosition + rotation * offset * _ratioShoulderHand;
 
-        //Rotation for swing
-        _newRotation = _spearStartOrientation * Quaternion.Euler(0f, 0f, clampedAngle);
+        //Set new rotation for swing
+        _newRotation = _spearStartOrientation * Quaternion.Euler(0f, -clampedAngle, 0f);
 
-        Debug.Log($"angle: {angle}, clamped angle: {clampedAngle}, input :{_refAimingInput.Value}, forward: {transform.forward}");
-    }
-
-    private float ClampAngle(float angle)
-    {
-        float clampedAngle = 0f;
-        if (angle > 1f)
-            clampedAngle = (angle / 180f) * _maxAngle;
-
-        return clampedAngle;
     }
 
     private bool IsNegativeAngle( float angle )
@@ -124,7 +111,8 @@ public class SpearAiming : MonoBehaviour
     private void RotateSpear()
     {
         float t = Time.deltaTime * _rotationSpeed;
-        _aimTarget.transform.localRotation = Quaternion.Slerp(_aimTarget.transform.localRotation, _newRotation, t);
+        _spineRotationTarget.transform.localRotation = Quaternion.Slerp(_spineRotationTarget.transform.localRotation, _newRotation, t);
+        //if (Quaternion.Dot(a, b) > 1.0f - tolerance)
     }
 
     public void SetIdlePosition()

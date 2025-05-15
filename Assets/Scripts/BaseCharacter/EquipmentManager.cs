@@ -21,6 +21,7 @@ public class EquipmentManager : MonoBehaviour
     [Header("Sockets"), Tooltip("These are the sockets that will hold the equipment")]
     [SerializeField] private Transform _leftHandSocket;
     [SerializeField] private Transform _rightHandSocket;
+    //[SerializeField] private Transform _spearSocket;
     [SerializeField] private Transform _sheathSocket;
     [Header("Item")]
     [SerializeField] private LayerMask _itemMask;
@@ -56,10 +57,11 @@ public class EquipmentManager : MonoBehaviour
         if (_rightHand && _rightHand.EquipmentHand == EquipmentHand.RightHand)
         {
             var equipment = Instantiate(_rightHand);
-            EquipmentHelper.CreateAndEquip(HeldEquipment, equipment, RIGHT_HAND, _rightHandSocket, transform);
 
+            EquipmentHelper.CreateAndEquip(HeldEquipment, equipment, RIGHT_HAND, _rightHandSocket, transform);
             if (_rightHand.EquipmentHand == EquipmentHand.TwoHanded)
             {
+
                 HeldEquipment[RIGHT_HAND].transform.localRotation = _spearStartRotation;
                 DisableAimingScript(_rightHand.EquipmentHand);
                 _changeAnimation.Raise(this, true);

@@ -12,9 +12,10 @@ public class IKSpearMovement : MonoBehaviour
     private GameObject _IKTargetLh;
     [SerializeField, Tooltip("the target of the Right hand IK 2 bone component")]
     private GameObject _IKTargetRh;
-    [SerializeField, Tooltip("the startposition for the IK RH target to be")]
-    private Vector3 _spearStartPositionRH;
-    [SerializeField, Tooltip("the speed of the Left hand following the hanle on spear")]
+    [SerializeField, Tooltip("IK Right shoulder target")]
+    private GameObject _rShoulderTarget;
+
+    
     private float _lerpLHSpeed;
 
     private GameObject _aimTarget;
@@ -23,23 +24,23 @@ public class IKSpearMovement : MonoBehaviour
 
     private void Start()
     {
-        if (_IKTargetRh)
-        {           
-            //_IKTargetRh.transform.localPosition = _spearStartPositionRH;
+        if (_IKTargetRh && _rShoulderTarget)
+        {
             GetComponent<SpearAiming>()?.SetIdlePosition();
         }
     }
 
     private void Update()
     {
-        //the spear stance, holding the Left hand on the spear below
-        if (_lhHoldingPosition && _IKTargetLh)
-        {
-            _IKTargetLh.transform.position = Vector3.Lerp(
-                _IKTargetLh.transform.position,
-                _lhHoldingPosition.transform.position,
-                Time.deltaTime * _lerpLHSpeed);
-        }
+        _IKTargetLh.transform.position = _lhHoldingPosition.transform.position;
+        ////the spear stance, holding the Left hand on the spear below
+        //if (_lhHoldingPosition && _IKTargetLh)
+        //{
+        //    _IKTargetLh.transform.position = Vector3.Lerp(
+        //        _IKTargetLh.transform.position,
+        //        _lhHoldingPosition.transform.position,
+        //        Time.deltaTime * _lerpLHSpeed);
+        //}
 
     }
 
@@ -67,6 +68,11 @@ public class IKSpearMovement : MonoBehaviour
         {            
             _lhHoldingPosition = args.LHSocket;
             _spearRig.weight = 1f;
+            //var rotation = _IKTargetLh.transform.rotation;
+            //_IKTargetLh.transform.parent = _lhHoldingPosition.transform;
+            //_IKTargetLh.transform.localPosition = Vector3.zero;
+            //_IKTargetLh.transform.rotation = rotation;
+
         }
         else
         {          

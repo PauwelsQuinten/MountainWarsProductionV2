@@ -12,6 +12,8 @@ public class StateManager : MonoBehaviour
     [SerializeField] List<BlackboardReference> _blackboardRefs = new List<BlackboardReference>();
     [SerializeField]
     public BoolReference IsInDialogue;
+    [SerializeField]
+    public BoolReference IsInStaticDialogue;
     [Header("Values")]
     [HideInInspector]
     public AttackState AttackState = AttackState.Idle;

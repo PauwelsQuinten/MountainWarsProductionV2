@@ -4073,6 +4073,14 @@ PrefabInstance:
       propertyPath: AttackHeight
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3982304234417609198, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
+      propertyPath: IsInDialogue.variable
+      value: 
+      objectReference: {fileID: 11400000, guid: b4d55fcfd48340444ac77031d3fa370d, type: 2}
+    - target: {fileID: 3982304234417609198, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
+      propertyPath: IsInStaticDialogue.variable
+      value: 
+      objectReference: {fileID: 11400000, guid: f6083cd36ce3da147a3dbea5bc725bb7, type: 2}
     - target: {fileID: 4195089934163903794, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
       propertyPath: m_Data.m_Offset.y
       value: 0
@@ -4921,7 +4929,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7504157853857913847, guid: ebda3d553a834264ebd7b3df69ac6dd3, type: 3}
       propertyPath: _nextDialogueIndex
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8319330883209865449, guid: ebda3d553a834264ebd7b3df69ac6dd3, type: 3}
       propertyPath: m_Size.x
@@ -4930,67 +4938,6 @@ PrefabInstance:
     - target: {fileID: 8319330883209865449, guid: ebda3d553a834264ebd7b3df69ac6dd3, type: 3}
       propertyPath: m_Size.z
       value: 3.78
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: ebda3d553a834264ebd7b3df69ac6dd3, type: 3}
---- !u!1001 &1805879958
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 2558226449797897312, guid: ebda3d553a834264ebd7b3df69ac6dd3, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 16.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2558226449797897312, guid: ebda3d553a834264ebd7b3df69ac6dd3, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 11.018021
-      objectReference: {fileID: 0}
-    - target: {fileID: 2558226449797897312, guid: ebda3d553a834264ebd7b3df69ac6dd3, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 20.29
-      objectReference: {fileID: 0}
-    - target: {fileID: 2558226449797897312, guid: ebda3d553a834264ebd7b3df69ac6dd3, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.9999319
-      objectReference: {fileID: 0}
-    - target: {fileID: 2558226449797897312, guid: ebda3d553a834264ebd7b3df69ac6dd3, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2558226449797897312, guid: ebda3d553a834264ebd7b3df69ac6dd3, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0.011677517
-      objectReference: {fileID: 0}
-    - target: {fileID: 2558226449797897312, guid: ebda3d553a834264ebd7b3df69ac6dd3, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2558226449797897312, guid: ebda3d553a834264ebd7b3df69ac6dd3, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2558226449797897312, guid: ebda3d553a834264ebd7b3df69ac6dd3, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2558226449797897312, guid: ebda3d553a834264ebd7b3df69ac6dd3, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6168163967946298814, guid: ebda3d553a834264ebd7b3df69ac6dd3, type: 3}
-      propertyPath: m_Name
-      value: DialogueTrigger (1)
-      objectReference: {fileID: 0}
-    - target: {fileID: 8319330883209865449, guid: ebda3d553a834264ebd7b3df69ac6dd3, type: 3}
-      propertyPath: m_Size.z
-      value: 5.3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -5386,12 +5333,16 @@ PrefabInstance:
       objectReference: {fileID: 1358587926}
     - target: {fileID: 8171449612649151243, guid: 1352057bfd5cc2d4eb63063de6768533, type: 3}
       propertyPath: _dialogues.Array.size
-      value: 4
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8171449612649151243, guid: 1352057bfd5cc2d4eb63063de6768533, type: 3}
       propertyPath: _isInDialogue.variable
       value: 
-      objectReference: {fileID: 11400000, guid: f6083cd36ce3da147a3dbea5bc725bb7, type: 2}
+      objectReference: {fileID: 11400000, guid: b4d55fcfd48340444ac77031d3fa370d, type: 2}
+    - target: {fileID: 8171449612649151243, guid: 1352057bfd5cc2d4eb63063de6768533, type: 3}
+      propertyPath: '_dialogues.Array.data[0]'
+      value: 
+      objectReference: {fileID: 11400000, guid: e66fd7105a3e1414a9619febf703a143, type: 2}
     - target: {fileID: 8171449612649151243, guid: 1352057bfd5cc2d4eb63063de6768533, type: 3}
       propertyPath: '_dialogues.Array.data[2]'
       value: 
@@ -5400,6 +5351,10 @@ PrefabInstance:
       propertyPath: '_dialogues.Array.data[3]'
       value: 
       objectReference: {fileID: 11400000, guid: 4d368a1291a7887428eadacdf3411a3f, type: 2}
+    - target: {fileID: 8171449612649151243, guid: 1352057bfd5cc2d4eb63063de6768533, type: 3}
+      propertyPath: _isInStaticDialogue.variable
+      value: 
+      objectReference: {fileID: 11400000, guid: f6083cd36ce3da147a3dbea5bc725bb7, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -5767,6 +5722,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: villageElder
       objectReference: {fileID: 0}
+    - target: {fileID: 819167929568823012, guid: 2afb5e9156a620142b1a82f41b284732, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 835313126055176853, guid: 2afb5e9156a620142b1a82f41b284732, type: 3}
       propertyPath: _cameraToLookAt
       value: 
@@ -5775,6 +5734,14 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4253691276873583013, guid: 2afb5e9156a620142b1a82f41b284732, type: 3}
+      propertyPath: IsInDialogue.variable
+      value: 
+      objectReference: {fileID: 11400000, guid: b4d55fcfd48340444ac77031d3fa370d, type: 2}
+    - target: {fileID: 4253691276873583013, guid: 2afb5e9156a620142b1a82f41b284732, type: 3}
+      propertyPath: IsInStaticDialogue.variable
+      value: 
+      objectReference: {fileID: 11400000, guid: f6083cd36ce3da147a3dbea5bc725bb7, type: 2}
     - target: {fileID: 4529990203394775604, guid: 2afb5e9156a620142b1a82f41b284732, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -5908,6 +5875,14 @@ PrefabInstance:
       propertyPath: '_allActionPrefabs.Array.data[17]'
       value: 
       objectReference: {fileID: 6572297913649188877, guid: a52db103a6e074e4e86a2274f0ce5ef3, type: 3}
+    - target: {fileID: 5318217082051312346, guid: e9651b4801f36d14e86c1cb82aa75d59, type: 3}
+      propertyPath: IsInDialogue.variable
+      value: 
+      objectReference: {fileID: 11400000, guid: b4d55fcfd48340444ac77031d3fa370d, type: 2}
+    - target: {fileID: 5318217082051312346, guid: e9651b4801f36d14e86c1cb82aa75d59, type: 3}
+      propertyPath: IsInStaticDialogue.variable
+      value: 
+      objectReference: {fileID: 11400000, guid: f6083cd36ce3da147a3dbea5bc725bb7, type: 2}
     - target: {fileID: 6537927211617022330, guid: e9651b4801f36d14e86c1cb82aa75d59, type: 3}
       propertyPath: m_Data.m_ConstrainedObject
       value: 
@@ -6008,4 +5983,3 @@ SceneRoots:
   - {fileID: 2077399781}
   - {fileID: 589037127}
   - {fileID: 1788926398}
-  - {fileID: 1805879958}

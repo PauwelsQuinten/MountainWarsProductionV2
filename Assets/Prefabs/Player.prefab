@@ -3050,19 +3050,22 @@ PrefabInstance:
       insertIndex: 5
       addedObject: {fileID: 6131864086219467642}
     - targetCorrespondingSourceObject: {fileID: 691636631868949397, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
-      insertIndex: 8
-      addedObject: {fileID: 3245208991503616836}
+      insertIndex: 7
+      addedObject: {fileID: 1354447419495383904}
     - targetCorrespondingSourceObject: {fileID: 691636631868949397, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
       insertIndex: 9
+      addedObject: {fileID: 3245208991503616836}
+    - targetCorrespondingSourceObject: {fileID: 691636631868949397, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
+      insertIndex: 10
       addedObject: {fileID: 4260960683829066258}
     - targetCorrespondingSourceObject: {fileID: 691636631868949397, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
-      insertIndex: 15
+      insertIndex: 16
       addedObject: {fileID: 1093610526649920952}
     - targetCorrespondingSourceObject: {fileID: 691636631868949397, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
-      insertIndex: 16
+      insertIndex: 17
       addedObject: {fileID: 6736166383722776130}
     - targetCorrespondingSourceObject: {fileID: 691636631868949397, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
-      insertIndex: 23
+      insertIndex: 24
       addedObject: {fileID: 3843189898394593881}
     - targetCorrespondingSourceObject: {fileID: 691636631868949397, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
       insertIndex: -1
@@ -3357,6 +3360,20 @@ MonoBehaviour:
   _pauseGame: {fileID: 11400000, guid: bf3787e3bed049f438794fa3beafbf1a, type: 2}
   _sheathWeapon: {fileID: 11400000, guid: 40551c3801499a64ea4751aa179ac61e, type: 2}
   _inQueue: {fileID: 11400000, guid: 5bbe9fe65ae2c8546a64169ae42e8a8a, type: 2}
+--- !u!114 &1354447419495383904
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 510487665369618095}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 28a5b80b6aa8d7a48aeef0e145ed95d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _mxWalkAngle: 60
+  _isGrounded: 0
 --- !u!114 &3245208991503616836
 MonoBehaviour:
   m_ObjectHideFlags: 0

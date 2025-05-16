@@ -128,9 +128,9 @@ public class SpearAiming : MonoBehaviour
         float angle = inputAngle;
         float sign = Mathf.Sign(inputAngle);
         float absAngle = Mathf.Abs(angle);
-        float deadAngle = 90f - absAngle;
+        float deadAngle = 90f - _maxAngle;
 
-        if (absAngle > _maxAngle + 2 * deadAngle)
+        if (absAngle > 90 + deadAngle)
         {
             //float newAngle = _maxAngle - (absAngle - _maxAngle);
             //angle = (newAngle >= 0f)? sign * newAngle : 0f;
@@ -138,7 +138,7 @@ public class SpearAiming : MonoBehaviour
         }
         else if (absAngle > _maxAngle)
         {
-            angle = _maxAngle;
+            angle = sign * _maxAngle;
         }
         return angle;
     }

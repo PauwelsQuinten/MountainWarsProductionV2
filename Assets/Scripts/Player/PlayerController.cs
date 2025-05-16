@@ -7,6 +7,10 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
 {
     [Header("State Manager")]
+    [SerializeField] private bool _wantToSeePatchingAnim = false;
+
+
+    [Header("State Manager")]
     [SerializeField]
     private StateManager _stateManager;
 
@@ -322,7 +326,7 @@ public class PlayerController : MonoBehaviour
         //This button will be used to sheat/unsheat sord when not bleeding
         if (ctx.action.WasPerformedThisFrame())
         {
-            if (!_stateManager.IsBleeding)
+            if (!_stateManager.IsBleeding && !_wantToSeePatchingAnim)
             {
                 if (_stateManager.WeaponIsSheathed)
                 {

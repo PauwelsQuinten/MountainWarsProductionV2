@@ -2501,6 +2501,11 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 6562278570266927764, guid: 612450168a7df0444a258ec2be0a03ee, type: 3}
   m_PrefabInstance: {fileID: 198328955}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &1184184492 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8207284818699397759, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
+  m_PrefabInstance: {fileID: 1438861116}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1198075102 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2442642646610035498, guid: 354d33079198c404da349382719f82b2, type: 3}
@@ -3871,6 +3876,14 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5257777598598541850, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
+      propertyPath: m_Weight
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5257777598598541850, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5257777598598541850, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
       propertyPath: m_Data.m_MaintainTargetRotationOffset
       value: 0
       objectReference: {fileID: 0}
@@ -4082,6 +4095,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: -2.707
       objectReference: {fileID: 0}
+    - target: {fileID: 8826520090242184820, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
+      propertyPath: m_Weight
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8826520090242184820, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8826520090242184820, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
+      propertyPath: m_Data.m_ConstrainedObject
+      value: 
+      objectReference: {fileID: 272804586}
     - target: {fileID: 9003867362043271821, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.0608
@@ -4103,8 +4128,70 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7813785884809550849, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
       insertIndex: 3
       addedObject: {fileID: 185135867}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2869367221385910395, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1456322476}
   m_SourcePrefab: {fileID: 100100000, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
+--- !u!1 &1456322472 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2869367221385910395, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
+  m_PrefabInstance: {fileID: 1438861116}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1456322476
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1456322472}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3c430f382484144e925c097c2d33cfe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Weight: 0
+  m_Data:
+    m_ConstrainedObject: {fileID: 272804586}
+    m_SourceObjects:
+      m_Length: 1
+      m_Item0:
+        transform: {fileID: 1184184492}
+        weight: 1
+      m_Item1:
+        transform: {fileID: 0}
+        weight: 0
+      m_Item2:
+        transform: {fileID: 0}
+        weight: 0
+      m_Item3:
+        transform: {fileID: 0}
+        weight: 0
+      m_Item4:
+        transform: {fileID: 0}
+        weight: 0
+      m_Item5:
+        transform: {fileID: 0}
+        weight: 0
+      m_Item6:
+        transform: {fileID: 0}
+        weight: 0
+      m_Item7:
+        transform: {fileID: 0}
+        weight: 0
+    m_Offset: {x: 0, y: 0, z: 0}
+    m_MinLimit: -116
+    m_MaxLimit: 101
+    m_AimAxis: 4
+    m_UpAxis: 2
+    m_WorldUpType: 0
+    m_WorldUpObject: {fileID: 0}
+    m_WorldUpAxis: 2
+    m_MaintainOffset: 0
+    m_ConstrainedAxes:
+      x: 0
+      y: 1
+      z: 0
 --- !u!114 &1476468157 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5488412439865268186, guid: 9d4495409a27e5c449d7b5cd2051c85a, type: 3}

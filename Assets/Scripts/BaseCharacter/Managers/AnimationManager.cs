@@ -99,19 +99,23 @@ public class AnimationManager : MonoBehaviour
     {
         float XVelocity = 0f;
         float YVelocity = 0f;
+        float GotTarget = 0f;
         if (walkArgs.IsLockon)
         {
-
+            float angleDiff = Geometry.Geometry.CalculateAngleRadOfInput(walkArgs.WalkDirection) - walkArgs.Orientation;
+            float speed = walkArgs.WalkDirection.magnitude;
+            Vector2 animInput = Geometry.Geometry.CalculateVectorFromfOrientation(angleDiff) * speed;
+            XVelocity = animInput.x;
+            YVelocity = animInput.y;
+            GotTarget = 1f;
         }
         else
         {
-
             XVelocity = walkArgs.WalkDirection.magnitude;
-            YVelocity = 0;
         }
+        _animator.SetFloat("OnTarget", GotTarget);
         _animator.SetFloat("Xmovement", XVelocity);
         _animator.SetFloat("Ymovement", YVelocity);
-        //_animator.CrossFade(AnimationState.Walk.ToString(), 0.2f, 2, 0f);
 
         ResetBoredTime();
     }

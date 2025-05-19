@@ -38,6 +38,10 @@ namespace Geometry
             float angle = (int)orientation * Mathf.Deg2Rad;
             return new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
         }
+         public static Vector2 CalculateVectorFromfOrientation(float orientation)
+        {
+            return new Vector2(Mathf.Cos(orientation), Mathf.Sin(orientation));
+        }
 
         public static float CalculateSwingSpeed(float length, float currentTime, float minResult, float maxResult)
         {

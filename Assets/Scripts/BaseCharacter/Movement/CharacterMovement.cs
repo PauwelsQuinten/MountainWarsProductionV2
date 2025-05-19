@@ -94,7 +94,8 @@ public class CharacterMovement : MonoBehaviour
             _movedirection = new Vector3(input.x, 0f, input.y);
 
 
-        _changeAnimation.Raise(this, new WalkingEventArgs { WalkDirection = input * speedMultiplier, IsLockon = _stateManager.Target != null });
+        _changeAnimation.Raise(this, new WalkingEventArgs 
+        { WalkDirection = input * speedMultiplier, IsLockon = _stateManager.Target != null, Orientation = _stateManager.fOrientation });
         //if (input != Vector2.zero)
         //{
         //}

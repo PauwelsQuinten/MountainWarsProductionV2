@@ -5,7 +5,7 @@ namespace UnityEngine
     public class WalkingEventArgs : EventArgs
     {
         public Vector2 WalkDirection;
-        public Orientation Orientation;
+        public float Orientation;
         public bool IsLockon = false;
     }
 

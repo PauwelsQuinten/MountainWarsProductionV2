@@ -153,7 +153,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Weight: 1
   m_Data:
-    m_ConstrainedObject: {fileID: 0}
+    m_ConstrainedObject: {fileID: 2230635208304404949}
     m_SourceObjects:
       m_Length: 1
       m_Item0:
@@ -1169,7 +1169,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Weight: 0
   m_Data:
-    m_ConstrainedObject: {fileID: 0}
+    m_ConstrainedObject: {fileID: 6594847385599500342}
     m_SourceObjects:
       m_Length: 1
       m_Item0:
@@ -1199,8 +1199,8 @@ MonoBehaviour:
     m_Offset: {x: 0, y: 0, z: 0}
     m_MinLimit: -81
     m_MaxLimit: 87
-    m_AimAxis: 2
-    m_UpAxis: 1
+    m_AimAxis: 1
+    m_UpAxis: 3
     m_WorldUpType: 0
     m_WorldUpObject: {fileID: 0}
     m_WorldUpAxis: 2
@@ -2969,6 +2969,11 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 4163330903285941387}
   m_SourcePrefab: {fileID: 100100000, guid: dd604a2ee8375f344bd5bbdf22db0362, type: 3}
+--- !u!4 &2230635208304404949 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7208261743932278219, guid: dd604a2ee8375f344bd5bbdf22db0362, type: 3}
+  m_PrefabInstance: {fileID: 8862007894852873246}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2849483000578574759 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6734931530170869177, guid: dd604a2ee8375f344bd5bbdf22db0362, type: 3}

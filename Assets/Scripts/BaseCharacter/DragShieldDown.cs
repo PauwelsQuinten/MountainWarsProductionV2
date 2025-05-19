@@ -21,7 +21,7 @@ public class DragShieldDown : MonoBehaviour
         var args = obj as AimingOutputArgs;
         if (args.Special != SpecialInput.ShieldGrab) return;
 
-        _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.DragShieldDown, AnimLayer = 3, DoResetIdle = true});
+        _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.DragShieldDown, AnimLayer = { 2,3 }, DoResetIdle = true});
         _loseStamina.Raise(this, new StaminaEventArgs { StaminaCost = _staminaCost.value });
     }
 

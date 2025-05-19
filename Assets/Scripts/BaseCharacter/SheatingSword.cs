@@ -23,10 +23,10 @@ public class SheatingSword : MonoBehaviour
         switch(args.Special)
         {
             case SpecialInput.SheatSword:
-                _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.SheathWeapon, AnimLayer = 3, DoResetIdle = true });
+                _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.SheathWeapon, AnimLayer = { 3 }, DoResetIdle = true });
                 break;
             case SpecialInput.UnSheatSword:
-                _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.DrawWeapon, AnimLayer = 3, DoResetIdle = true });
+                _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.DrawWeapon, AnimLayer = { 3 }, DoResetIdle = true });
                 break;
             default:
                 return;

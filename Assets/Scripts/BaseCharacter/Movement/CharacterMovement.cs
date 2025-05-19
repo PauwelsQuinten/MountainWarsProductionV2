@@ -94,39 +94,15 @@ public class CharacterMovement : MonoBehaviour
             _movedirection = new Vector3(input.x, 0f, input.y);
 
 
-        if (input != Vector2.zero)
-        {
-            if (speedMultiplier > 1)
-            {
-                Animator animator = GetComponentInChildren<Animator>();
-                var clipInfo = animator.GetCurrentAnimatorClipInfo(2);
-                if (clipInfo.Length > 0)
-                {
-                    if (clipInfo[clipInfo.Length - 1].clip.name != "Run")
-                        _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Run, AnimLayer = 2, DoResetIdle = false });
-                }
-                else _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Run, AnimLayer = 2, DoResetIdle = false});
-            }
-            else
-            {
-                /*Animator animator = GetComponentInChildren<Animator>();
-                AnimatorClipInfo[] clipInfo = null;
-                if (animator != null)
-                    clipInfo = animator.GetCurrentAnimatorClipInfo(2);
-                if (clipInfo != null && clipInfo.Length > 0)
-                {
-                    if (clipInfo[clipInfo.Length - 1].clip.name != "Walk")
-                        _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Walk, AnimLayer = 2, DoResetIdle = false, Interupt = false });
-                    
-                }
-                else */_changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Walk, AnimLayer = 2, DoResetIdle = false});
-            }
-        }
-        else
-        {
-            _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Idle, AnimLayer = 1, DoResetIdle = false });
-            _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Empty, AnimLayer = 2, DoResetIdle = false });
-        }
+        _changeAnimation.Raise(this, new WalkingEventArgs { WalkDirection = input * speedMultiplier, IsLockon = _stateManager.Target != null });
+        //if (input != Vector2.zero)
+        //{
+        //}
+        //else
+        //{
+        //    _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Idle, AnimLayer = { 1 }, DoResetIdle = false });
+        //    _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Empty, AnimLayer = { 2 }, DoResetIdle = false });
+        //}
 
         if (_stateManager.Target == null)
             UpdateOrientation();
@@ -197,11 +173,11 @@ public class CharacterMovement : MonoBehaviour
         }
     }
 
-    private void OnDisable()
+    private void OnDisable()    
     {
         if(_changeAnimation == null) return;
-        _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Idle, AnimLayer = 1, DoResetIdle = false });
-        _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Empty, AnimLayer = 2, DoResetIdle = false });
+        _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Idle, AnimLayer = { 1 }, DoResetIdle = false });
+        _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Empty, AnimLayer = { 2 }, DoResetIdle = false });
     }
 
     private void OnDestroy()

@@ -59,6 +59,7 @@ namespace Geometry
             float input = CalculateAngleRadOfInput(analogInput) * Mathf.Rad2Deg;
             int diff = (int)input - orient;
             diff = diff < -180 ? 360 + diff : diff;
+            diff = diff > 180 ? diff - 360 : diff;
 
 
             if (diff > -centerAngle && diff < centerAngle)

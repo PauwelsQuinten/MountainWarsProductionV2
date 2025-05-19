@@ -207,7 +207,7 @@ public class PlayerController : MonoBehaviour
         else if (ctx.performed)
         {
             _stateManager.AttackState = AttackState.ShieldDefence;
-            _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.ShieldEquip, AnimLayer = 4, DoResetIdle = false });
+            _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.ShieldEquip, AnimLayer = { 4 }, DoResetIdle = false });
             _isHoldingShield = false;
             _stateManager.IsHoldingShield = _isHoldingShield;
         }

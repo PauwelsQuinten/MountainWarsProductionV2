@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
+using static UnityEditor.Experimental.GraphView.GraphView;
 using static UnityEngine.Rendering.GPUSort;
 
 public class AnimationManager : MonoBehaviour
@@ -11,58 +13,46 @@ public class AnimationManager : MonoBehaviour
     [SerializeField] private GameEvent _endAnimation;
     [SerializeField] private GameEvent _startAnimation;
 
+    WalkBehaviour _walkBehaviour;
     //private bool _canResetIdle = true;
     //private Coroutine _animCoroutine;
 
     private void Start()
     {
         _animator = GetComponentInChildren<Animator>();
+        _walkBehaviour = _animator.GetBehaviour<WalkBehaviour>();
         _animator.SetFloat("AttackState", 3f);
+
     }
 
     public void ChangeAnimationState(Component sender, object obj)
     {
         if (sender.gameObject != gameObject) return;
+        WalkingEventArgs walkArgs = obj as WalkingEventArgs;
+        if (walkArgs != null)
+        {
+            SetWalkingState(walkArgs);
+            return;
+        }
         AnimationEventArgs args = obj as AnimationEventArgs;
         if (args == null) return;
 
         //Reset signal to make sure the swing will not be interupted, this is only for reseting the trigger and nothing else
-        if (!args.IsFeint)
-        {
-            InteruptAnimation(false);
+        if (ResetFeintSignal(args))
             return;
-        }
-        else if (args.AnimState == AnimationState.SlashLeft || args.AnimState == AnimationState.SlashRight || args.AnimState == AnimationState.Stab)
-            InteruptAnimation(true);
 
         //For fluid block direction switches, else he will always first equip. looks really buggy
-        if (_currentState == args.AnimState && args.AnimState != AnimationState.Idle && args.AnimState != AnimationState.Empty)
-        {
-            if (args.BlockDirection != Direction.Default)
-            {
-                _animator.SetFloat("fBlockDirection", (float)(int)args.BlockDirection);
-                _animator.SetInteger("BlockMedium", (int)args.BlockMedium);
-            }
-
+        if (SetBlockDirection(args))
             return;
-        }
-        else if (args.BlockDirection != Direction.Default)
-        {
-            _animator.SetFloat("fBlockDirection", (float)(int)args.BlockDirection);
-            _animator.SetInteger("BlockMedium", (int)args.BlockMedium);
-        }
-        
 
-        if(args.AnimState != AnimationState.Idle)
+        //Reset bored timer when doing an action
+        if (args.AnimState != AnimationState.Idle)
         {
-                BoredBehaviour bored = _animator.GetBehaviour<BoredBehaviour>();
-                if (bored != null) bored.IdleExit();
-                //else Debug.Log("Bored is null");
+            ResetBoredTime();
         }
-        // Crossfade with normalized transition offset
 
         //Lowerbody(2) should always transition even when stunnend
-        if ((!_animator.GetBool("IsStunned") && !_animator.GetBool("GetHit")) || args.AnimLayer == 2)
+        if ((!_animator.GetBool("IsStunned") && !_animator.GetBool("GetHit")) || (args.AnimLayer.Count == 1 && args.AnimLayer.Contains(2)))
         {
             _animator.SetFloat("ActionSpeed", args.Speed);
 
@@ -83,19 +73,79 @@ public class AnimationManager : MonoBehaviour
                     _animator.SetInteger("AttackMedium", (int)args.AttackMedium);
                     _animator.SetFloat("AttackState", 1f);
                     break;
-               default:
-                    //_animator.SetFloat("AttackState", 3f);
-                    _animator.CrossFade(args.AnimState.ToString(), 0.2f, args.AnimLayer, 0f);
+                default:
+                    foreach (int layer in args.AnimLayer)
+                        _animator.CrossFade(args.AnimState.ToString(), 0.2f, layer, 0f);
                     break;
             }
         }
 
         _currentState = args.AnimState;
 
+        //Set a bool to prevent the actionqueue from executing another action before current is finished 
         if (args.DoResetIdle)
         {
             _startAnimation.Raise(this, null);
         }
+    }
+
+    private void ResetBoredTime()
+    {
+        BoredBehaviour bored = _animator.GetBehaviour<BoredBehaviour>();
+        if (bored != null) bored.IdleExit();
+    }
+
+    private void SetWalkingState(WalkingEventArgs walkArgs)
+    {
+        float XVelocity = 0f;
+        float YVelocity = 0f;
+        if (walkArgs.IsLockon)
+        {
+
+        }
+        else
+        {
+
+            XVelocity = walkArgs.WalkDirection.magnitude;
+            YVelocity = 0;
+        }
+        _animator.SetFloat("Xmovement", XVelocity);
+        _animator.SetFloat("Ymovement", YVelocity);
+        //_animator.CrossFade(AnimationState.Walk.ToString(), 0.2f, 2, 0f);
+
+        ResetBoredTime();
+    }
+
+    private bool SetBlockDirection(AnimationEventArgs args)
+    {
+        if (_currentState == args.AnimState && args.AnimState != AnimationState.Idle && args.AnimState != AnimationState.Empty)
+        {
+            if (args.BlockDirection != Direction.Default)
+            {
+                _animator.SetFloat("fBlockDirection", (float)(int)args.BlockDirection);
+                _animator.SetInteger("BlockMedium", (int)args.BlockMedium);
+            }
+
+            return true;
+        }
+        else if (args.BlockDirection != Direction.Default)
+        {
+            _animator.SetFloat("fBlockDirection", (float)(int)args.BlockDirection);
+            _animator.SetInteger("BlockMedium", (int)args.BlockMedium);
+        }
+        return false;
+    }
+
+    private bool ResetFeintSignal(AnimationEventArgs args)
+    {
+        if (!args.IsFeint)
+        {
+            InteruptAnimation(false);
+            return true;
+        }
+        else if (args.AnimState == AnimationState.SlashLeft || args.AnimState == AnimationState.SlashRight || args.AnimState == AnimationState.Stab)
+            InteruptAnimation(true);
+        return false;
     }
 
     public void SwitchWeaponStance(Component sender, object obj)
@@ -109,6 +159,18 @@ public class AnimationManager : MonoBehaviour
             _animator.SetBool("IsHoldingSpear", useSpear);
         }
        
+    }
+
+    public void UpdateWalingSpeed(Component sender, object obj)
+    {
+        if (sender.gameObject != gameObject) return;
+        WalkingEventArgs args = obj as WalkingEventArgs;
+        if (args != null) return;
+
+        if (_walkBehaviour != null)
+        {
+            _walkBehaviour.Velocity = args.WalkDirection;
+        }
     }
 
     private void InteruptAnimation(bool isFeint)

@@ -174,26 +174,27 @@ public class Attacking : MonoBehaviour
     private void StartAnimation(float speed, bool useRightArm, bool isAttackHigh)
     {
         int animLayer = useRightArm ? 3 : 4;
+        List<int> animLayers = new List<int>() { 2, animLayer};
         BlockMedium attackMedium = useRightArm ? BlockMedium.Sword : BlockMedium.Shield;
 
         if (_attackType == AttackType.HorizontalSlashToLeft)
         {
             _changeAnimation.Raise(this, new AnimationEventArgs 
-            { AnimState = AnimationState.SlashLeft, AnimLayer = animLayer, DoResetIdle = true, Speed = 1.5f, IsAttackHigh = isAttackHigh, AttackMedium = attackMedium });
+            { AnimState = AnimationState.SlashLeft, AnimLayer = animLayers, DoResetIdle = true, Speed = 1.5f, IsAttackHigh = isAttackHigh, AttackMedium = attackMedium });
         }
         else if (_attackType == AttackType.HorizontalSlashToRight)
         {
             _changeAnimation.Raise(this, new AnimationEventArgs 
-            { AnimState = AnimationState.SlashRight, AnimLayer = animLayer, DoResetIdle = true, Speed = 1.5f, IsAttackHigh = isAttackHigh, AttackMedium = attackMedium });
+            { AnimState = AnimationState.SlashRight, AnimLayer = animLayers, DoResetIdle = true, Speed = 1.5f, IsAttackHigh = isAttackHigh, AttackMedium = attackMedium });
         }
         else if (_attackType == AttackType.Stab)
         {
             _changeAnimation.Raise(this, new AnimationEventArgs 
-            { AnimState = AnimationState.Stab, AnimLayer = animLayer, DoResetIdle = true, Speed = 1.5f, IsAttackHigh = isAttackHigh, AttackMedium = attackMedium });
+            { AnimState = AnimationState.Stab, AnimLayer = animLayers, DoResetIdle = true, Speed = 1.5f, IsAttackHigh = isAttackHigh, AttackMedium = attackMedium });
         }
         else if (_attackType == AttackType.Charge)
         {
-            _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Charge, AnimLayer = animLayer, DoResetIdle = false, Speed = 4.5f  });
+            _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Charge, AnimLayer = animLayers, DoResetIdle = false, Speed = 4.5f  });
         }
 
     }

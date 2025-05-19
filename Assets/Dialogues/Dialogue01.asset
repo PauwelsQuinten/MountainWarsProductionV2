@@ -18,13 +18,14 @@ MonoBehaviour:
   hasSecondImageLine: 0
   text: Oh hello there Paul. how's the wife doing these days?
   CharacterName: Player
+  textDisplaySpeed: 0.01
   hasSecondaryLine: 0
   newFont: {fileID: 0}
   newTextSize: 0
   balloonObject: {fileID: 2592667508800547744, guid: 2bac7fcd62ad2254ba0b5c6805ad7e98, type: 3}
   tailObject: {fileID: 8216558290986259432, guid: 89ac598207ca10e43b46e0a3e1c6d86d, type: 3}
-  borderSize: 20
-  sizePadding: {x: 10, y: 10}
+  borderSize: 1.2
+  sizePadding: {x: -10, y: 70}
   needsToBeFlipped: 0
   children:
   - ad2acf9c-81c3-4f71-9d35-e5e221b7a28f
@@ -33,7 +34,7 @@ MonoBehaviour:
     x: 38.399994
     y: 52.8
     width: 200
-    height: 605.38
+    height: 625.38
   onEnterAction: 
   onExitAction: 
   condition:
@@ -56,14 +57,15 @@ MonoBehaviour:
   hasSecondImageLine: 0
   text: Hi Friend. Whell she left me a couple of weeks ago.
   CharacterName: Paul
+  textDisplaySpeed: 0.01
   hasSecondaryLine: 0
   newFont: {fileID: 0}
   newTextSize: 0
   balloonObject: {fileID: 2592667508800547744, guid: 2bac7fcd62ad2254ba0b5c6805ad7e98, type: 3}
   tailObject: {fileID: 8216558290986259432, guid: 89ac598207ca10e43b46e0a3e1c6d86d, type: 3}
-  borderSize: 20
-  sizePadding: {x: 10, y: 10}
-  needsToBeFlipped: 0
+  borderSize: 1.2
+  sizePadding: {x: -10, y: 100}
+  needsToBeFlipped: 1
   children:
   - 34e63512-100c-4bb8-8ece-3ba38bb83575
   rect:
@@ -71,7 +73,7 @@ MonoBehaviour:
     x: 292.39996
     y: 89.60002
     width: 200
-    height: 605.37
+    height: 625.37
   onEnterAction: 
   onExitAction: 
   condition:
@@ -94,22 +96,23 @@ MonoBehaviour:
   hasSecondImageLine: 0
   text: Oh no! So sad Paul.
   CharacterName: Player
+  textDisplaySpeed: 0.01
   hasSecondaryLine: 1
   newFont: {fileID: 0}
   newTextSize: 0
   balloonObject: {fileID: 2592667508800547744, guid: 2bac7fcd62ad2254ba0b5c6805ad7e98, type: 3}
   tailObject: {fileID: 8216558290986259432, guid: 89ac598207ca10e43b46e0a3e1c6d86d, type: 3}
-  borderSize: 20
-  sizePadding: {x: 10, y: 10}
+  borderSize: 1.2
+  sizePadding: {x: -10, y: 60}
   needsToBeFlipped: 0
   children:
   - cd1da861-d3e8-430a-ba85-205749486f43
   rect:
     serializedVersion: 2
-    x: 550.40015
-    y: 108.800026
+    x: 560.0001
+    y: 101.60002
     width: 200
-    height: 460.14
+    height: 480.14
   onEnterAction: 
   onExitAction: 
   condition:
@@ -133,7 +136,7 @@ MonoBehaviour:
   - {fileID: 2262670474335264596}
   newNodeOffset: {x: 250, y: 0}
   isStaticDialogue: 0
-  isStarted: 1
+  isStarted: 0
 --- !u!114 &2262670474335264596
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -147,18 +150,19 @@ MonoBehaviour:
   m_Name: cd1da861-d3e8-430a-ba85-205749486f43
   m_EditorClassIdentifier: 
   isPlayerSpeaking: 1
-  hasImageSupport: 1
+  hasImageSupport: 0
   shoutingImages: []
   hasSecondImageLine: 0
   text: Anyway Bye!
   CharacterName: Player
+  textDisplaySpeed: 0.01
   hasSecondaryLine: 0
   newFont: {fileID: 0}
   newTextSize: 0
   balloonObject: {fileID: 2592667508800547744, guid: 2bac7fcd62ad2254ba0b5c6805ad7e98, type: 3}
   tailObject: {fileID: 8216558290986259432, guid: 89ac598207ca10e43b46e0a3e1c6d86d, type: 3}
-  borderSize: 20
-  sizePadding: {x: 10, y: 10}
+  borderSize: 1.2
+  sizePadding: {x: -10, y: 50}
   needsToBeFlipped: 0
   children: []
   rect:
@@ -166,7 +170,7 @@ MonoBehaviour:
     x: 780.7999
     y: 96.00002
     width: 200
-    height: 380
+    height: 451.1
   onEnterAction: 
   onExitAction: 
   condition:

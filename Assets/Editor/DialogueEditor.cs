@@ -218,9 +218,9 @@ public class DialogueEditor : EditorWindow
             so.ApplyModifiedProperties();
             if(node.GetShoutingImages().Count != 0)
             {
-                node.SetHeight(380 + (60 * (node.GetShoutingImages().Count - 1)));
+                node.SetHeight(400 + (60 * (node.GetShoutingImages().Count - 1)));
             }
-            else node.SetHeight(380);
+            else node.SetHeight(400);
 
             GUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("Has second image line", GUILayout.Width(142.5f));
@@ -239,7 +239,7 @@ public class DialogueEditor : EditorWindow
 
             float previewHeight = previewStyle.CalcHeight(guiContent, availableWidth);
 
-            node.SetHeight(textHeight + 370 + previewHeight);
+            node.SetHeight(textHeight + 390 + previewHeight);
 
 
             EditorGUILayout.LabelField("-Text-", labelStyle);
@@ -251,6 +251,11 @@ public class DialogueEditor : EditorWindow
             GUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("Text", GUILayout.Width(60));
             node.SetText(EditorGUILayout.TextArea(node.GetText(), textStyle));
+            GUILayout.EndHorizontal();
+
+            GUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField("Text Display Speed", GUILayout.Width(115));
+            node.SetTextDisplaySpeed(EditorGUILayout.FloatField(node.GetTextDisplaySpeed(), GUILayout.Width(40)));
             GUILayout.EndHorizontal();
 
             GUILayout.BeginHorizontal();

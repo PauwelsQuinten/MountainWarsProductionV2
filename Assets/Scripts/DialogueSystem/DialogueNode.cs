@@ -21,6 +21,8 @@ public class DialogueNode : ScriptableObject
     [SerializeField]
     string CharacterName;
     [SerializeField]
+    float textDisplaySpeed;
+    [SerializeField]
     bool hasSecondaryLine = false;
     [SerializeField]
     TMP_FontAsset newFont;
@@ -77,6 +79,10 @@ public class DialogueNode : ScriptableObject
     public string GetCharacterName()
     {
         return CharacterName;
+    }
+    public float GetTextDisplaySpeed()
+    {
+        return textDisplaySpeed;
     }
 
     public bool GetHasSecondaryLine()
@@ -205,6 +211,17 @@ public class DialogueNode : ScriptableObject
             Undo.RecordObject(this, " Update Dialogue Character Name ");
 
             CharacterName = newCharacterName;
+            EditorUtility.SetDirty(this);
+        }
+    }
+
+    public void SetTextDisplaySpeed(float newTextDisplaySpeed)
+    {
+        if (newTextDisplaySpeed != textDisplaySpeed)
+        {
+            Undo.RecordObject(this, " Update Text Display Speed ");
+
+            textDisplaySpeed = newTextDisplaySpeed;
             EditorUtility.SetDirty(this);
         }
     }

@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.Windows;
 
 public class CharacterMovement : MonoBehaviour
 {
@@ -165,8 +166,8 @@ public class CharacterMovement : MonoBehaviour
     private void OnDisable()    
     {
         if(_changeAnimation == null) return;
-        _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Idle, AnimLayer = { 1 }, DoResetIdle = false });
-        _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Empty, AnimLayer = { 2 }, DoResetIdle = false });
+        _changeAnimation.Raise(this, new WalkingEventArgs
+        { WalkDirection = Vector2.zero, Speed = 0f, IsLockon = _stateManager.Target != null, Orientation = _stateManager.fOrientation });
     }
 
     private void OnDestroy()

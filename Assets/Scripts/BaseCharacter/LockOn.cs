@@ -7,7 +7,7 @@ public class LockOn : MonoBehaviour
     private GameObject _lockonTarget;
     [Header("Events")]
     [SerializeField] private GameEvent _lockonEvent;
-    [SerializeField] private GameEvent _sheathWeapon;
+    [SerializeField] private GameEvent _inQueue;
 
     [Header("Animation")]
     [SerializeField] private GameEvent _changePanel;
@@ -135,14 +135,16 @@ public class LockOn : MonoBehaviour
     private bool IsOrientationChanged(Orientation newOrientation, float orientation)
     {
         return Mathf.Abs(_storedfOrientation - orientation) > _minAngleBeforeSendEvent;
-        //return newOrientation != _storedOrientation;
     }
 
     private IEnumerator SheathWeapon(float duration, bool sheat)
     {
         _sheathing = true;
         yield return new WaitForSeconds(duration);
-        _sheathWeapon.Raise(this, sheat);
+        if (sheat)
+            _inQueue.Raise(this, new AimingOutputArgs { Special = SpecialInput.SheatSword, AnimationStart = true });
+        else    
+            _inQueue.Raise(this, new AimingOutputArgs { Special = SpecialInput.UnSheatSword, AnimationStart = true });
         _sheathing = false;
     }
 }

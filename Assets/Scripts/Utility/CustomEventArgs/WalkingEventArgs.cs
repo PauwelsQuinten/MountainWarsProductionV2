@@ -6,6 +6,7 @@ namespace UnityEngine
     {
         public Vector2 WalkDirection;
         public float Orientation;
+        public float Speed;
         public bool IsLockon = false;
     }
 

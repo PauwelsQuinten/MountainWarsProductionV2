@@ -234,7 +234,8 @@ namespace UnityEngine
         DrawWeapon,
         DragShieldDown,
         Charge,
-        PatchUp
+        PatchUp,
+        TurnAround
     }
 
     public enum ObjectTarget
@@ -279,7 +280,8 @@ namespace UnityEngine
         PatchUp,
         PickUp,
         SheatSword,
-        UnSheatSword
+        UnSheatSword,
+        
     }
 
 

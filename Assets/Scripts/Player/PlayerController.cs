@@ -19,6 +19,8 @@ public class PlayerController : MonoBehaviour
     private AimingInputReference _aimInputRef;
     [SerializeField]
     private MovingInputReference _moveInputRef;
+    [SerializeField]
+    private float _speedMultiplier = 1.5f;
 
     [Header("Stamina")]
     [SerializeField]
@@ -258,7 +260,7 @@ public class PlayerController : MonoBehaviour
             if (ctx.performed)
         {
             _wasSprinting = true;
-            _moveInputRef.variable.SpeedMultiplier = 1.5f;
+            _moveInputRef.variable.SpeedMultiplier = _speedMultiplier;
         }
         if (ctx.canceled)
         {

@@ -13,16 +13,22 @@ public class AnimationManager : MonoBehaviour
     [SerializeField] private GameEvent _endAnimation;
     [SerializeField] private GameEvent _startAnimation;
 
-    WalkBehaviour _walkBehaviour;
-    //private bool _canResetIdle = true;
-    //private Coroutine _animCoroutine;
+    private float _XVelocity = 0f;
+    private float _YVelocity = 0f;
+    private float _GotTarget = 0f;
+    private float _movementSpeed = 1f;
+    private float _attBlend = 0f;
 
     private void Start()
     {
         _animator = GetComponentInChildren<Animator>();
-        _walkBehaviour = _animator.GetBehaviour<WalkBehaviour>();
         _animator.SetFloat("AttackState", 3f);
 
+    }
+
+    private void Update()
+    {
+        UpdateAnimatorValues(_XVelocity, _YVelocity, _GotTarget, _movementSpeed, _attBlend);
     }
 
     public void ChangeAnimationState(Component sender, object obj)
@@ -62,16 +68,19 @@ public class AnimationManager : MonoBehaviour
                     _animator.SetBool("IsAttackHigh", args.IsAttackHigh);
                     _animator.SetInteger("AttackMedium", (int)args.AttackMedium);
                     _animator.SetFloat("AttackState", 2f);
+                    _attBlend = 1f;
                     break;
                 case AnimationState.SlashLeft:
                     _animator.SetBool("IsAttackHigh", args.IsAttackHigh);
                     _animator.SetInteger("AttackMedium", (int)args.AttackMedium);
                     _animator.SetFloat("AttackState", 0f);
+                    _attBlend = 1f;
                     break;
                 case AnimationState.SlashRight:
                     _animator.SetBool("IsAttackHigh", args.IsAttackHigh);
                     _animator.SetInteger("AttackMedium", (int)args.AttackMedium);
                     _animator.SetFloat("AttackState", 1f);
+                    _attBlend = 1f;
                     break;
                 default:
                     foreach (int layer in args.AnimLayer)
@@ -97,25 +106,25 @@ public class AnimationManager : MonoBehaviour
 
     private void SetWalkingState(WalkingEventArgs walkArgs)
     {
-        float XVelocity = 0f;
-        float YVelocity = 0f;
-        float GotTarget = 0f;
+        _YVelocity = 0f;
+        _GotTarget = 0f;
+        _movementSpeed = walkArgs.WalkDirection.magnitude * walkArgs.Speed;
+
         if (walkArgs.IsLockon)
         {
-            float angleDiff = Geometry.Geometry.CalculateAngleRadOfInput(walkArgs.WalkDirection) - walkArgs.Orientation;
-            float speed = walkArgs.WalkDirection.magnitude;
-            Vector2 animInput = Geometry.Geometry.CalculateVectorFromfOrientation(angleDiff) * speed;
-            XVelocity = animInput.x;
-            YVelocity = animInput.y;
-            GotTarget = 1f;
+            float input = Geometry.Geometry.CalculateAngleRadOfInput(walkArgs.WalkDirection);
+            float angleDiff = input - walkArgs.Orientation * Mathf.Deg2Rad;
+            Vector2 animInput = Geometry.Geometry.CalculateVectorFromfOrientation(angleDiff) * _movementSpeed;
+            _XVelocity = animInput.x;
+            _YVelocity = animInput.y;
+            _GotTarget = 1f;
         }
         else
         {
-            XVelocity = walkArgs.WalkDirection.magnitude;
+            float sign = Mathf.Sign(walkArgs.WalkDirection.x);
+            _XVelocity = _movementSpeed * sign;
         }
-        _animator.SetFloat("OnTarget", GotTarget);
-        _animator.SetFloat("Xmovement", XVelocity);
-        _animator.SetFloat("Ymovement", YVelocity);
+
 
         ResetBoredTime();
     }
@@ -165,16 +174,13 @@ public class AnimationManager : MonoBehaviour
        
     }
 
-    public void UpdateWalingSpeed(Component sender, object obj)
+    private void UpdateAnimatorValues(float XVelocity, float YVelocity, float GotTarget, float speed, float attBlend)
     {
-        if (sender.gameObject != gameObject) return;
-        WalkingEventArgs args = obj as WalkingEventArgs;
-        if (args != null) return;
-
-        if (_walkBehaviour != null)
-        {
-            _walkBehaviour.Velocity = args.WalkDirection;
-        }
+        _animator.SetFloat("OnTarget", GotTarget, 0.1f, Time.deltaTime);
+        _animator.SetFloat("Xmovement", XVelocity, 0.1f, Time.deltaTime);
+        _animator.SetFloat("Ymovement", YVelocity, 0.1f, Time.deltaTime);
+        _animator.SetFloat("SpeedMultiplier", speed, 0.1f, Time.deltaTime);
+        //_animator.SetFloat("AttackBlend", attBlend, 0.1f, Time.deltaTime);
     }
 
     private void InteruptAnimation(bool isFeint)
@@ -192,6 +198,7 @@ public class AnimationManager : MonoBehaviour
         if (Sender.gameObject != gameObject) return;
 
         _currentState = AnimationState.Idle;
+        _attBlend = 0f;
     }
 
     public void GetHit(Component Sender, object obj)

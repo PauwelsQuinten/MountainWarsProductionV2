@@ -8,9 +8,11 @@ public class StateManager : MonoBehaviour
     [Header("Events")]
     //[SerializeField] GameEvent _OnKnockbackRecovery;
     [SerializeField] GameEvent _OnStunRecovery;
+    [SerializeField] GameEvent _chancheAnim;
     [Header("Refrence")]
     [SerializeField] List<BlackboardReference> _blackboardRefs = new List<BlackboardReference>();
     [Header("Values")]
+    [SerializeField] private float _rotationSpeed = 5.0f;
     [HideInInspector]
     public AttackState AttackState = AttackState.Idle;
     [HideInInspector]
@@ -56,6 +58,13 @@ public class StateManager : MonoBehaviour
             StartCoroutine(InitBlackboard());         
         }
     }
+
+    private void FixedUpdate()
+    {
+        Quaternion targetRotation = Quaternion.Euler(new Vector3(0, -(int)Orientation + 90, 0));
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
+    }
+
     public void SetTarget(Component sender, object obj)
     {
         if(sender.gameObject != gameObject) return;
@@ -85,9 +94,9 @@ public class StateManager : MonoBehaviour
         var args = obj as OrientationEventArgs;
         if (args == null) return;
 
+        
         Orientation = args.NewOrientation;
         fOrientation = args.NewFOrientation;
-        transform.rotation = Quaternion.Euler(new Vector3(0, -(int)Orientation + 90, 0));
 
 
         if (!gameObject.CompareTag(PLAYER))

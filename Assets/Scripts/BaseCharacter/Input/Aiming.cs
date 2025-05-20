@@ -26,7 +26,7 @@ public class Aiming : MonoBehaviour
     [Range(90, 180f)]
     private float _feintAngle = 100f;
     private float _minSwingSpeed = 1f;
-    [SerializeField, Tooltip("This will determine the animation speed of block and attack, the attack power will also be influenced by this")]
+    [SerializeField, Tooltip("This will determine the animation _movementSpeed of block and attack, the attack power will also be influenced by this")]
     [Range(1.1f, 2f)]
     private float _maxSwingSpeed = 2f;
     [SerializeField, Tooltip("the minimum angle your analog stick needs to travel to consider the attack not to be a feint")]

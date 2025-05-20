@@ -39,9 +39,9 @@ public class OnHillMovement : MonoBehaviour
                 Debug.DrawRay(contact.point, contact.normal, Color.green);
                 break;
             }
-
         }
-
+        if (!_isGrounded)
+            Debug.Log("no ground");
     }
 
     private void RotateOnHill()
@@ -51,7 +51,7 @@ public class OnHillMovement : MonoBehaviour
         Quaternion targetRotation = Quaternion.FromToRotation(transform.up, _groundNormal) * transform.rotation;
 
         // Optionally smooth the rotation
-        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 5f);
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime);
 
     }
 

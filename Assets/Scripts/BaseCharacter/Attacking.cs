@@ -114,7 +114,7 @@ public class Attacking : MonoBehaviour
 
         if (args.AnimationStart)
         {
-            //Debug.Log($"speed: {args.Speed}");
+            //Debug.Log($"_movementSpeed: {args.Speed}");
             bool useRightArm = args.EquipmentManager.HasEquipmentInHand(true) || args.EquipmentManager.HasNoneInHand();
             StartAnimation(args.Speed, useRightArm, args.AttackHeight == AttackHeight.Head);
         }

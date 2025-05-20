@@ -2838,6 +2838,10 @@ PrefabInstance:
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 5547100133384318507, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
+      propertyPath: _speed.variable
+      value: 
+      objectReference: {fileID: 11400000, guid: ed242bb74f35d73409bbf7e2794f988f, type: 2}
+    - target: {fileID: 5547100133384318507, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
       propertyPath: _moveInput.variable
       value: 
       objectReference: {fileID: 11400000, guid: c55f2ba539c90fe47aa63c8b3747c837, type: 2}
@@ -3334,6 +3338,7 @@ MonoBehaviour:
     useConstant: 0
     constantValue: {x: 0, y: 0}
     variable: {fileID: 11400000, guid: c55f2ba539c90fe47aa63c8b3747c837, type: 2}
+  _speedMultiplier: 1.5
   _staminaManager: {fileID: 2641484102057671430}
   _dodgeCost:
     useConstant: 0
@@ -3373,7 +3378,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _mxWalkAngle: 60
-  _isGrounded: 0
 --- !u!114 &3245208991503616836
 MonoBehaviour:
   m_ObjectHideFlags: 0

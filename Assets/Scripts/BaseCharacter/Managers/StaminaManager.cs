@@ -57,13 +57,15 @@ public class StaminaManager : MonoBehaviour
         if (staminaLos == null) return;
 
         if (CurrentStamina > staminaLos.StaminaCost)
-        {
             CurrentStamina -= staminaLos.StaminaCost;
-            _changedStamina.Raise(this, new StaminaEventArgs { CurrentStamina = CurrentStamina, MaxStamina = _maxStamina });
+        else
+            CurrentStamina = 0f;
+       
+        _changedStamina.Raise(this, new StaminaEventArgs { CurrentStamina = CurrentStamina, MaxStamina = _maxStamina });
 
-            UpdateBlackboard();
-            _canRegen = false;
-        }
+        UpdateBlackboard();
+        _canRegen = false;
+        
 
         if (_resetRegen != null) StopCoroutine(_resetRegen);
         _resetRegen = StartCoroutine(ResetCanRegen());

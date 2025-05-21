@@ -38,6 +38,7 @@ public class EquipmentManager : MonoBehaviour
     private List<BlackboardReference> _blackboards;
 
     private List<Equipment> HeldEquipment = new List<Equipment> {null, null, null };
+    Collider[] _hitColliders;
 
     private const int LEFT_HAND = 0;
     private const int RIGHT_HAND = 1;
@@ -219,14 +220,20 @@ public class EquipmentManager : MonoBehaviour
         }
     }
 
+    public bool CloseToEquipment()
+    {
+        _hitColliders = Physics.OverlapSphere(transform.position, _itemPickupRadius, _itemMask);
+        if (_hitColliders.Length == 0)
+            return false;
+        return true;
+
+    }
+
     public void PickupEquipment(Component sender, object obj)
     {
         if (sender.gameObject != gameObject) return;
 
-        Collider[] hitColliders = Physics.OverlapSphere(transform.position, _itemPickupRadius, _itemMask);
-        if (hitColliders.Length == 0) return; 
-
-        foreach (var hitCollider in hitColliders)
+        foreach (var hitCollider in _hitColliders)
         {
             var newEquip = hitCollider.gameObject.GetComponent<Equipment>();
             if (newEquip && newEquip.transform.parent == null)

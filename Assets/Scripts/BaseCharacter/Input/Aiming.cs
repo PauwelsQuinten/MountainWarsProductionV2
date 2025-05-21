@@ -67,9 +67,6 @@ public class Aiming : MonoBehaviour
         _enmAimingInput = AimingInputState.Idle;
         _refAimingInput.variable.ValueChanged += Variable_ValueChanged;
 
-        //PlayerInput playerInput = GetComponent<PlayerInput>();
-        //_moveAction = playerInput.actions["Aim"];
-
     }
 
     void Update()
@@ -78,10 +75,6 @@ public class Aiming : MonoBehaviour
 
         CheckIfHoldingPosition();
         _fMovingTime += Time.deltaTime;
-
-        //Vector2 moveVector = _moveAction.ReadValue<Vector2>();
-        //_traversedAngle += Vector2.Angle(_vec2previousDirection, moveVector);
-        //_vec2previousDirection = moveVector;
 
     }
 
@@ -116,6 +109,7 @@ public class Aiming : MonoBehaviour
         {
             if (inputLength < F_MIN_ACCEPTED_VALUE)
                 _vec2Start = Vector2.zero;
+            Debug.Log($"cooldown blocking input");
 
             _previousLength = 1.1f;
             return;
@@ -138,8 +132,8 @@ public class Aiming : MonoBehaviour
         else if (IsStabMovement(inputLength))
         {
             _enmAttackSignal = AttackSignal.Stab;
-            //_refAimingInput.variable.StateManager.AttackState = AttackState.Attack;
             SendPackage(true);
+            Debug.Log("Stab");
 
             ResetValues();
             _enmAimingInput = AimingInputState.Cooldown;
@@ -147,7 +141,10 @@ public class Aiming : MonoBehaviour
         }
 
         //Throw feint from direction you point to
-        else if ( inputLength > 0.9f && _swingDirection == Direction.Idle && (_refAimingInput.variable.State == AttackState.Attack || _refAimingInput.variable.State == AttackState.BlockAttack))
+        else if ( inputLength > 0.9f 
+            && _swingDirection == Direction.Idle 
+            && (_refAimingInput.variable.State == AttackState.Attack || _refAimingInput.variable.State == AttackState.BlockAttack)
+            && _previousLength < inputLength)
         {
             var direction = Geometry.Geometry.CalculateFeintDirection(_refAimingInput.variable.StateManager.fOrientation, _refAimingInput.variable.value, _maxAllowedBlockAngle);
                   
@@ -156,6 +153,7 @@ public class Aiming : MonoBehaviour
                 _swingDirection = direction;
                 _enmAttackSignal = AttackSignal.Swing;
                 SendPackage(true);
+                Debug.Log("feint attack");
             }
             
         }
@@ -285,15 +283,14 @@ public class Aiming : MonoBehaviour
 
     private bool IsStabMovement(float inputLength)
     {
-        return (inputLength >= 0.9f && inputLength > _previousLength + 0.01f
+        bool value = (inputLength >= 0.9f && inputLength > _previousLength + 0.01f
                     && Geometry.Geometry.IsInputInFrontOfOrientation(_refAimingInput.variable.value, _stabAcceptedRange, _refAimingInput.variable.StateManager.fOrientation)
-                    //&& (_refAimingInput.variable.State == AttackState.Attack || _refAimingInput.variable.State == AttackState.BlockAttack)
                     && (_refAimingInput.variable.State != AttackState.SwordDefence && _refAimingInput.variable.State != AttackState.ShieldDefence)
                     && _enmAttackSignal == AttackSignal.Idle
                     && _traversedAngle < F_MAX_ALLOWED_ANGLE_ON_ORIENTATION) ;
-        /*if (!value)
+        if (!value)
             Debug.Log($"inputlength = {inputLength}, previousLength = {_previousLength}, state = {_refAimingInput.variable.State}, signal = {_enmAttackSignal}, angle = {_traversedAngle}");
-        return value;*/
+        return value;
     }
 
     private void SendPackage(bool isUninteruptedAnimation = false, bool isFeint = true )

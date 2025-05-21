@@ -295,8 +295,8 @@ public class PlayerController : MonoBehaviour
             _pickupEvent.Raise(this);
         else if (_stateManager.IsNearHidingSpot)
             _hide.Raise(this, EventArgs.Empty);
-        else
-            _pickupEvent.Raise(this);
+        else if (_stateManager.EquipmentManager.CloseToEquipment())
+            _inQueue.Raise(this, new AimingOutputArgs { Special = SpecialInput.PickUp, AnimationStart = true });
 
     }
 

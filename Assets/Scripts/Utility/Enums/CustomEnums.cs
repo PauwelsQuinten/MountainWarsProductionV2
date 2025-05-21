@@ -235,7 +235,8 @@ namespace UnityEngine
         DragShieldDown,
         Charge,
         PatchUp,
-        TurnAround
+        PickUp,
+
     }
 
     public enum ObjectTarget

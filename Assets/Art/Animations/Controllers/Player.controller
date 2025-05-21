@@ -5421,30 +5421,6 @@ BlendTree:
   m_Name: WalkIdle
   m_Childs:
   - serializedVersion: 2
-    m_Motion: {fileID: 9174857351544729310, guid: 21df165fb9c51244bbcabf0874289497, type: 3}
-    m_Threshold: -1.5
-    m_Position: {x: 0, y: 0}
-    m_TimeScale: 1.5
-    m_CycleOffset: 0
-    m_DirectBlendParameter: BoredAnimation
-    m_Mirror: 0
-  - serializedVersion: 2
-    m_Motion: {fileID: 9174857351544729310, guid: 21df165fb9c51244bbcabf0874289497, type: 3}
-    m_Threshold: -1
-    m_Position: {x: 0, y: 0}
-    m_TimeScale: 1
-    m_CycleOffset: 0
-    m_DirectBlendParameter: BoredAnimation
-    m_Mirror: 0
-  - serializedVersion: 2
-    m_Motion: {fileID: 9174857351544729310, guid: 21df165fb9c51244bbcabf0874289497, type: 3}
-    m_Threshold: -0.5
-    m_Position: {x: 0, y: 0}
-    m_TimeScale: 0.5
-    m_CycleOffset: 0
-    m_DirectBlendParameter: BoredAnimation
-    m_Mirror: 0
-  - serializedVersion: 2
     m_Motion: {fileID: 2789604289822619476, guid: df0c0401e2a00c841847379e194d290a, type: 3}
     m_Threshold: 0
     m_Position: {x: 0, y: 0}
@@ -5456,7 +5432,7 @@ BlendTree:
     m_Motion: {fileID: -4918237218405727078, guid: 21df165fb9c51244bbcabf0874289497, type: 3}
     m_Threshold: 0.5
     m_Position: {x: 0, y: 0}
-    m_TimeScale: 0.5
+    m_TimeScale: 0.75
     m_CycleOffset: 0
     m_DirectBlendParameter: BoredAnimation
     m_Mirror: 0
@@ -5464,7 +5440,7 @@ BlendTree:
     m_Motion: {fileID: -4918237218405727078, guid: 21df165fb9c51244bbcabf0874289497, type: 3}
     m_Threshold: 1
     m_Position: {x: 0, y: 0}
-    m_TimeScale: 1
+    m_TimeScale: 1.5
     m_CycleOffset: 0
     m_DirectBlendParameter: BoredAnimation
     m_Mirror: 0
@@ -5472,13 +5448,13 @@ BlendTree:
     m_Motion: {fileID: 5522812681064789136, guid: 21df165fb9c51244bbcabf0874289497, type: 3}
     m_Threshold: 1.5
     m_Position: {x: 0, y: 0}
-    m_TimeScale: 1.5
+    m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: BoredAnimation
     m_Mirror: 0
   m_BlendParameter: Xmovement
   m_BlendParameterY: Blend
-  m_MinThreshold: -1.5
+  m_MinThreshold: 0
   m_MaxThreshold: 1.5
   m_UseAutomaticThresholds: 1
   m_NormalizedBlendValues: 0
@@ -6168,7 +6144,7 @@ BlendTree:
   - serializedVersion: 2
     m_Motion: {fileID: 1671312553167048998, guid: 21df165fb9c51244bbcabf0874289497, type: 3}
     m_Threshold: 0.083333336
-    m_Position: {x: 0, y: 1}
+    m_Position: {x: 0, y: -1}
     m_TimeScale: 1.5
     m_CycleOffset: 0
     m_DirectBlendParameter: BoredAnimation
@@ -6184,7 +6160,7 @@ BlendTree:
   - serializedVersion: 2
     m_Motion: {fileID: -1439395797136352278, guid: 21df165fb9c51244bbcabf0874289497, type: 3}
     m_Threshold: 0.25
-    m_Position: {x: 0, y: -1}
+    m_Position: {x: 0, y: 1}
     m_TimeScale: 1.5
     m_CycleOffset: 0
     m_DirectBlendParameter: BoredAnimation
@@ -6200,7 +6176,7 @@ BlendTree:
   - serializedVersion: 2
     m_Motion: {fileID: 1671312553167048998, guid: 21df165fb9c51244bbcabf0874289497, type: 3}
     m_Threshold: 0.41666666
-    m_Position: {x: 0, y: 0.1}
+    m_Position: {x: 0, y: -0.1}
     m_TimeScale: 0.75
     m_CycleOffset: 0
     m_DirectBlendParameter: BoredAnimation
@@ -6216,7 +6192,7 @@ BlendTree:
   - serializedVersion: 2
     m_Motion: {fileID: -1439395797136352278, guid: 21df165fb9c51244bbcabf0874289497, type: 3}
     m_Threshold: 0.5833333
-    m_Position: {x: 0, y: -0.1}
+    m_Position: {x: 0, y: 0.1}
     m_TimeScale: 0.75
     m_CycleOffset: 0
     m_DirectBlendParameter: BoredAnimation
@@ -6232,7 +6208,7 @@ BlendTree:
   - serializedVersion: 2
     m_Motion: {fileID: 1671312553167048998, guid: 21df165fb9c51244bbcabf0874289497, type: 3}
     m_Threshold: 0.75
-    m_Position: {x: 0, y: 1.5}
+    m_Position: {x: 0, y: -1.5}
     m_TimeScale: 1.5
     m_CycleOffset: 0
     m_DirectBlendParameter: BoredAnimation
@@ -6248,7 +6224,7 @@ BlendTree:
   - serializedVersion: 2
     m_Motion: {fileID: -1439395797136352278, guid: 21df165fb9c51244bbcabf0874289497, type: 3}
     m_Threshold: 0.9166667
-    m_Position: {x: 0, y: -1.5}
+    m_Position: {x: 0, y: 1.5}
     m_TimeScale: 1.5
     m_CycleOffset: 0
     m_DirectBlendParameter: BoredAnimation

@@ -121,8 +121,7 @@ public class AnimationManager : MonoBehaviour
         }
         else
         {
-            float sign = Mathf.Sign(walkArgs.WalkDirection.x);
-            _XVelocity = _movementSpeed * sign;
+            _XVelocity = _movementSpeed;
         }
 
 

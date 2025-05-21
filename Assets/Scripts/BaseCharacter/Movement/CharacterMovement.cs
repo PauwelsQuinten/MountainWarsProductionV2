@@ -1,6 +1,5 @@
 using System;
 using UnityEngine;
-using UnityEngine.Windows;
 
 public class CharacterMovement : MonoBehaviour
 {
@@ -47,7 +46,8 @@ public class CharacterMovement : MonoBehaviour
             _rb.Move(new Vector3(transform.position.x, transform.position.y,transform.position.z) + (_movedirection * (_speed.value * _moveInput.variable.SpeedMultiplier)) * Time.deltaTime, transform.rotation);
         _rb.AddForce(Vector3.down * 9.81f * 300, ForceMode.Force);
 
-        transform.rotation = Quaternion.Slerp(transform.rotation, _targetRotation, _rotationSpeed * Time.deltaTime);
+        if (_stateManager.Target == null)
+            transform.rotation = Quaternion.Slerp(transform.rotation, _targetRotation, _rotationSpeed * Time.deltaTime);
     }
 
     private void MoveInput_ValueChanged(object sender, EventArgs e)
@@ -102,15 +102,7 @@ public class CharacterMovement : MonoBehaviour
 
         _changeAnimation.Raise(this, new WalkingEventArgs 
         { WalkDirection = input, Speed = speedMultiplier, IsLockon = _stateManager.Target != null, Orientation = _stateManager.fOrientation });
-        //if (input != Vector2.zero)
-        //{
-        //}
-        //else
-        //{
-        //    _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Idle, AnimLayer = { 1 }, DoResetIdle = false });
-        //    _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Empty, AnimLayer = { 2 }, DoResetIdle = false });
-        //}
-
+        
         if (_stateManager.Target == null)
             UpdateOrientation();
     }

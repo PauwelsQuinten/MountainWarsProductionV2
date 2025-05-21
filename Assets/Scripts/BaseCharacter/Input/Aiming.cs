@@ -109,7 +109,6 @@ public class Aiming : MonoBehaviour
         {
             if (inputLength < F_MIN_ACCEPTED_VALUE)
                 _vec2Start = Vector2.zero;
-            Debug.Log($"cooldown blocking input");
 
             _previousLength = 1.1f;
             return;
@@ -133,7 +132,6 @@ public class Aiming : MonoBehaviour
         {
             _enmAttackSignal = AttackSignal.Stab;
             SendPackage(true);
-            Debug.Log("Stab");
 
             ResetValues();
             _enmAimingInput = AimingInputState.Cooldown;
@@ -153,7 +151,6 @@ public class Aiming : MonoBehaviour
                 _swingDirection = direction;
                 _enmAttackSignal = AttackSignal.Swing;
                 SendPackage(true);
-                Debug.Log("feint attack");
             }
             
         }
@@ -248,7 +245,6 @@ public class Aiming : MonoBehaviour
                     && Geometry.Geometry.AreVectorWithinAngle(-orient, _refAimingInput.variable.value, F_MIN_ACCEPTED_MOVEMENT_ANGLE))
                 {                                   
                     _enmAttackSignal = AttackSignal.Charge;
-                    Debug.Log("charging");
                     SendPackage(true);                   
                 }
                 break;
@@ -258,6 +254,8 @@ public class Aiming : MonoBehaviour
                 if (_enmAimingInput == AimingInputState.Moving)
                 {
                     _enmAimingInput = AimingInputState.Hold;
+                    Debug.Log("Block");
+
                     _swingDirection = Direction.Wrong;//Put to wrong so the inputChanged function wont call a parry movement when switching block sides
                     SendPackage();
                 }             
@@ -283,14 +281,14 @@ public class Aiming : MonoBehaviour
 
     private bool IsStabMovement(float inputLength)
     {
-        bool value = (inputLength >= 0.9f && inputLength > _previousLength + 0.01f
+        return (inputLength >= 0.9f && inputLength > _previousLength + 0.01f
                     && Geometry.Geometry.IsInputInFrontOfOrientation(_refAimingInput.variable.value, _stabAcceptedRange, _refAimingInput.variable.StateManager.fOrientation)
                     && (_refAimingInput.variable.State != AttackState.SwordDefence && _refAimingInput.variable.State != AttackState.ShieldDefence)
                     && _enmAttackSignal == AttackSignal.Idle
                     && _traversedAngle < F_MAX_ALLOWED_ANGLE_ON_ORIENTATION) ;
-        if (!value)
+        /*if (!value)
             Debug.Log($"inputlength = {inputLength}, previousLength = {_previousLength}, state = {_refAimingInput.variable.State}, signal = {_enmAttackSignal}, angle = {_traversedAngle}");
-        return value;
+        return value;*/
     }
 
     private void SendPackage(bool isUninteruptedAnimation = false, bool isFeint = true )

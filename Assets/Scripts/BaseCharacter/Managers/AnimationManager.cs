@@ -18,6 +18,7 @@ public class AnimationManager : MonoBehaviour
     private float _GotTarget = 0f;
     private float _movementSpeed = 1f;
     private float _attBlend = 0f;
+    private float _newBlockDirection = 0f;
 
     private void Start()
     {
@@ -29,6 +30,15 @@ public class AnimationManager : MonoBehaviour
     private void Update()
     {
         UpdateAnimatorValues(_XVelocity, _YVelocity, _GotTarget, _movementSpeed, _attBlend);
+
+        float current = _animator.GetFloat("fBlockDirection");
+        if (!Mathf.Approximately(current, _newBlockDirection))
+        {
+            BockDirectionUpdate(true);
+        }
+        else
+            BockDirectionUpdate(false);
+
     }
 
     public void ChangeAnimationState(Component sender, object obj)
@@ -123,8 +133,6 @@ public class AnimationManager : MonoBehaviour
         {
             _XVelocity = _movementSpeed;
         }
-
-
         ResetBoredTime();
     }
 
@@ -132,20 +140,49 @@ public class AnimationManager : MonoBehaviour
     {
         if (_currentState == args.AnimState && args.AnimState != AnimationState.Idle && args.AnimState != AnimationState.Empty)
         {
-            if (args.BlockDirection != Direction.Default)
+            if (_newBlockDirection == (float)(int)Direction.Wrong && _newBlockDirection != (float)(int)args.BlockDirection)
             {
-                _animator.SetFloat("fBlockDirection", (float)(int)args.BlockDirection);
-                _animator.SetInteger("BlockMedium", (int)args.BlockMedium);
+                _newBlockDirection = (float)(int)args.BlockDirection;
+                BockDirectionUpdate(false);
+                return true;
             }
 
+            if (args.BlockDirection != Direction.Default)
+            {
+                _newBlockDirection = (float)(int)args.BlockDirection;
+                _animator.SetInteger("BlockMedium", (int)args.BlockMedium);
+            }
+            if (args.BlockDirection == Direction.Wrong)
+            {
+                //imediatly set to wrong since this is putting down instead of transitioning
+                _animator.SetFloat("fBlockDirection", (float)(int)args.BlockDirection);
+            }
             return true;
         }
         else if (args.BlockDirection != Direction.Default)
         {
-            _animator.SetFloat("fBlockDirection", (float)(int)args.BlockDirection);
+            if (_newBlockDirection == (float)(int)Direction.Wrong && _newBlockDirection != (float)(int)args.BlockDirection)
+            {
+                _newBlockDirection = (float)(int)args.BlockDirection;
+                BockDirectionUpdate(false);
+            }
+            _newBlockDirection = (float)(int)args.BlockDirection;
             _animator.SetInteger("BlockMedium", (int)args.BlockMedium);
         }
+        if (args.BlockDirection == Direction.Wrong)
+        {
+            //imediatly set to wrong since this is putting down instead of transitioning
+            _animator.SetFloat("fBlockDirection", (float)(int)args.BlockDirection);          
+        }
         return false;
+    }
+
+    private void BockDirectionUpdate(bool smoothly)
+    {
+        if (smoothly) 
+            _animator.SetFloat("fBlockDirection", _newBlockDirection, 0.1f, Time.deltaTime);
+        else
+            _animator.SetFloat("fBlockDirection", _newBlockDirection);
     }
 
     private bool ResetFeintSignal(AnimationEventArgs args)

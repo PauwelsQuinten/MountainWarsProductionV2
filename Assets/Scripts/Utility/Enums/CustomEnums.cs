@@ -46,11 +46,11 @@ namespace UnityEngine
 
     public enum Direction
     {
-        Idle, //no specific direction
-        ToRight,
-        ToLeft, 
-        ToCenter,
-        Wrong,//aimed to a bad direction, like for an invallid block
+        Idle = 0, //no specific direction
+        ToRight = 1,
+        ToCenter = 2,
+        ToLeft = 3, 
+        Wrong = 4,//aimed to a bad direction, like for an invallid block
         Default // used for sending signal, on default dont change current direction in animator 
     }
 

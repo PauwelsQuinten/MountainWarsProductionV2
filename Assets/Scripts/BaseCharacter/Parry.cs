@@ -158,7 +158,7 @@ public class Parry : MonoBehaviour
     private void OnSuccesfullParry(AttackEventArgs attackValues)
     {
         _loseStamina.Raise(this, new StaminaEventArgs { StaminaCost = _staminaCost.value });
-        _succesfullParryEvent.Raise(this, new StunEventArgs {StunDuration = 2, ComesFromEnemy = true, Attacker = attackValues.Attacker, Defender = attackValues.Defender});
+        _succesfullParryEvent.Raise(this, new StunEventArgs {StunDuration = 2, StunTarget = attackValues.Attacker});
         Debug.Log("succesfullParry");
 
         _tryDisarm = true;

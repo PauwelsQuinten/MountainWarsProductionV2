@@ -154,7 +154,7 @@ public class Blocking : MonoBehaviour
         {
             _succesfullHitEvent.Raise(this, args);
             _stunFeedbackEvent.Raise(this, new StunEventArgs
-            { StunDuration = _stunValues.variable.StunOnHit, ComesFromEnemy = false});
+            { StunDuration = _stunValues.variable.StunOnHit, StunTarget = gameObject });
 
         }
         else
@@ -164,23 +164,23 @@ public class Blocking : MonoBehaviour
                 case BlockResult.FullyBlocked:
                     _loseStamina.Raise(this, new StaminaEventArgs { StaminaCost = _staminaCost.value});
                     _stunFeedbackEvent.Raise(this, new StunEventArgs 
-                    { StunDuration = _stunValues.variable.StunWhenGettingFullyBlocked, ComesFromEnemy = true });
+                    { StunDuration = _stunValues.variable.StunWhenGettingFullyBlocked, StunTarget = args.Attacker });
                     break;
                 case BlockResult.HalfBlocked:
                     _loseStamina.Raise(this, new StaminaEventArgs { StaminaCost = _staminaCost.value * 1.5f});
                     _stunFeedbackEvent.Raise(this, new StunEventArgs 
-                    { StunDuration = _stunValues.variable.StunWhenGettingPartiallyBlocked, ComesFromEnemy = true });
+                    { StunDuration = _stunValues.variable.StunWhenGettingPartiallyBlocked, StunTarget = args.Attacker });
                     break;
                 case BlockResult.SwordBlock:
                     _loseStamina.Raise(this, new StaminaEventArgs { StaminaCost = _staminaCost.value * 0.5f });
                     _stunFeedbackEvent.Raise(this, new StunEventArgs
-                    { StunDuration = _stunValues.variable.StunWhenGettingFullyBlockedBySword, ComesFromEnemy = true });
+                    { StunDuration = _stunValues.variable.StunWhenGettingFullyBlockedBySword, StunTarget = args.Attacker });
 
                     break;
                 case BlockResult.SwordHalfBlock:
                     _loseStamina.Raise(this, new StaminaEventArgs { StaminaCost = _staminaCost.value * 0.75f });
                     _stunFeedbackEvent.Raise(this, new StunEventArgs 
-                    { StunDuration =_stunValues.variable.StunWhenGettingPartiallyBlockedBySword, ComesFromEnemy = true });
+                    { StunDuration =_stunValues.variable.StunWhenGettingPartiallyBlockedBySword, StunTarget = args.Attacker });
                     //_succesfullHitEvent.Raise(this, args);
                     break;
             }

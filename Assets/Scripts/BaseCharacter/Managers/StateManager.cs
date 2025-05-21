@@ -133,15 +133,8 @@ public class StateManager : MonoBehaviour
             SetStun(2f);
         }
 
-        else if (args != null )
+        else if (args != null && args.StunTarget == gameObject)
         {
-            if (args.ComesFromEnemy)
-            {
-                if (sender.gameObject == gameObject && args.Attacker != gameObject) return;
-            }
-            else if (sender.gameObject != gameObject) return;
-
-            //Debug.Log($"Stuned {gameObject.name}");
             SetStun(args.StunDuration);
         }
         

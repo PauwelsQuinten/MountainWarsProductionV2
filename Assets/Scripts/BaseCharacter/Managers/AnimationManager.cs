@@ -260,8 +260,7 @@ public class AnimationManager : MonoBehaviour
 
         var args = obj as StunEventArgs;
         if (args == null)return;
-        if (args.ComesFromEnemy && sender.gameObject == gameObject)return;
-        else if (!args.ComesFromEnemy && sender.gameObject != gameObject) return;
+        if (args.StunTarget != gameObject)return;
         
         _animator.speed = 1;
         _animator.SetBool("IsStunned", true);

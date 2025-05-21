@@ -55,8 +55,7 @@ public class AIController : MonoBehaviour
 
         var args = obj as StunEventArgs;
         if (args == null) return;
-        if (args.ComesFromEnemy && sender.gameObject == gameObject) return;
-        else if (!args.ComesFromEnemy && sender.gameObject != gameObject) return;
+        if (args.StunTarget != gameObject) return;
 
         _storredAttackState =
             _stateManager.AttackState == AttackState.Stun ? AttackState.Idle : _stateManager.AttackState;

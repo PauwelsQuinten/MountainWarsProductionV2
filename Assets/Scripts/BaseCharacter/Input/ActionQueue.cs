@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using static UnityEngine.Rendering.GPUSort;
+using static UnityEngine.Rendering.ReloadAttribute;
 
 public class ActionQueue : MonoBehaviour
 {
@@ -34,42 +35,49 @@ public class ActionQueue : MonoBehaviour
                 _actionCount--;
             var package = _inputQueue.Dequeue();
             _activateAction.Raise(this, package.Package);
-            Debug.Log($"{package.Package.Special},InAnim= {package.Package.AnimationStart},attState= {package.Package.AttackState},attSignal= {package.Package.AttackSignal},feint= {package.Package.IsFeint}");
         }
 
         //Call next element imediatly if its about the feint signal, this is to continue the attack
         if (_inputQueue.Count > 0 && !_inputQueue.Peek().Package.IsFeint)
+        {
             _activateAction.Raise(this, _inputQueue.Dequeue().Package);
-
+        }
         if (IsOldestElementInQueueToLong(_maxTimeInQueue))
         {
             if (_inputQueue.Peek().Package.AnimationStart && _actionCount > 0)
                 _actionCount--;
             _inputQueue.Dequeue();
         }
-
     }
-
     public void SendAction(Component sender, object obj)
     {
         if (sender.gameObject != gameObject) return;
         var args = (AimingOutputArgs)obj;
         if (args == null) return;
-
         if (_actionCount < _maxQueueSize)
         {
             if (args.AnimationStart) _actionCount++;
             _inputQueue.Enqueue(new TimedPackage(args, Time.time));
         }
-
     }
-
     public void ClearQueue(Component sender, object obj)
     {
-        if (sender.gameObject != gameObject) return;
+        //Event from Sheating sword
+        if (obj is bool && sender.gameObject == gameObject)
+        {
+            _inputQueue.Clear();
+            _actionCount = 0;
+            return;
+        }
+
+        //Event from Stun
+        StunEventArgs args = (StunEventArgs)obj;
+        if (args == null) return;
+        if (args.StunTarget != gameObject) return;
 
         _inputQueue.Clear();
         _actionCount = 0;
+
     }
 
     private bool IsOldestElementInQueueToLong(float maxTime)
@@ -78,5 +86,6 @@ public class ActionQueue : MonoBehaviour
         var element = _inputQueue.Peek();
         return Time.time - element.TimeOfInsterted > maxTime;
     }
+
 
 }

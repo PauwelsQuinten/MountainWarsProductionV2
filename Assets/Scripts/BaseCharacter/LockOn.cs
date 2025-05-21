@@ -25,7 +25,6 @@ public class LockOn : MonoBehaviour
     private Coroutine _sheathingCoroutine;
     private bool _sheathing;
 
-    private bool _canResheath;
 
     private StateManager _stateManager;
 
@@ -88,7 +87,6 @@ public class LockOn : MonoBehaviour
         if(sender == this) return;
         if(_sheathingCoroutine != null)StopCoroutine(_sheathingCoroutine);
         _sheathing = false;
-        _canResheath = false;
     }
 
     private void SheatSword()
@@ -97,10 +95,9 @@ public class LockOn : MonoBehaviour
         {
             if (!_stateManager.WeaponIsSheathed)
             {
-                if (!_sheathing && _canResheath)
+                if (!_sheathing )
                 {
                     _sheathingCoroutine = StartCoroutine(SheathWeapon(_timewithoutTarget, true));
-                    _canResheath = false;
                 }
             }
         }
@@ -112,11 +109,9 @@ public class LockOn : MonoBehaviour
             {
                 if (!_sheathing)
                 {
-                    _canResheath = true;
                     _sheathingCoroutine = StartCoroutine(SheathWeapon(0.1f, false));
                 }
             }
-            else _canResheath = true;
         }
     }
 

@@ -196,7 +196,6 @@ public class EquipmentManager : MonoBehaviour
         }        
     }
 
-
     private void UpdateBlackboard()
     {
         //Update blackboard
@@ -270,32 +269,6 @@ public class EquipmentManager : MonoBehaviour
             ShieldDurability = GetDurabilityPercentage(LEFT_HAND),
             WeaponDurability = GetDurabilityPercentage(RIGHT_HAND)
         });
-    }
-
-    public void RotateShield(Component sender, object obj)
-    {
-        if (sender.gameObject != gameObject) return;
-        if (HeldEquipment[LEFT_HAND] == null) return;
-
-        Direction blockDirection = (Direction)obj;
-
-        float diffInRealOrientation = (int)_stateManager.Orientation - _stateManager.fOrientation;
-        switch (blockDirection)
-        {
-            case Direction.Idle:
-            case Direction.Wrong:
-            case Direction.ToCenter:
-                HeldEquipment[LEFT_HAND].transform.localRotation = Quaternion.Euler(_startAngle + diffInRealOrientation, 0f, 0f);
-                break;
-            case Direction.ToRight:
-                HeldEquipment[LEFT_HAND].transform.localRotation = Quaternion.Euler(_startAngle + _sideAngleToStart + diffInRealOrientation, 0f, 0f);
-                break;
-            case Direction.ToLeft:
-                HeldEquipment[LEFT_HAND].transform.localRotation = Quaternion.Euler(_startAngle - _sideAngleToStart + diffInRealOrientation, 0f, 0f);
-                break;
-        }
-
-
     }
 
     public void SheathWeapon(Component sender, object obj)

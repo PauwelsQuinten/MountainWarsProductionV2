@@ -81,7 +81,7 @@ public class PlayerController : MonoBehaviour
         StartCoroutine(CheckSurrounding());
     }
 
-    //This OnStun is purely for storing his attackstate for if he is hilding shield or not
+    //This ClearQueue is purely for storing his attackstate for if he is hilding shield or not
     //!! its important that this event is called before the statemanager stunEvent!!!
     public void GetStun(Component sender, object obj)
     {

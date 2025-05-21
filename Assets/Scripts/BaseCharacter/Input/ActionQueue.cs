@@ -64,7 +64,7 @@ public class ActionQueue : MonoBehaviour
 
     }
 
-    public void OnStun(Component sender, object obj)
+    public void ClearQueue(Component sender, object obj)
     {
         if (sender.gameObject != gameObject) return;
 

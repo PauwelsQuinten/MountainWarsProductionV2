@@ -141,7 +141,7 @@ public class Aiming : MonoBehaviour
         //Throw feint from direction you point to
         else if ( inputLength > 0.9f 
             && _swingDirection == Direction.Idle 
-            && (_refAimingInput.variable.State == AttackState.Attack || _refAimingInput.variable.State == AttackState.BlockAttack)
+            && (_refAimingInput.variable.State == AttackState.Idle || _refAimingInput.variable.State == AttackState.Attack || _refAimingInput.variable.State == AttackState.BlockAttack)
             && _previousLength < inputLength)
         {
             var direction = Geometry.Geometry.CalculateFeintDirection(_refAimingInput.variable.StateManager.fOrientation, _refAimingInput.variable.value, _maxAllowedBlockAngle);

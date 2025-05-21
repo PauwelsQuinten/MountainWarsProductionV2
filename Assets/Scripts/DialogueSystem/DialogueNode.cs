@@ -25,6 +25,8 @@ public class DialogueNode : ScriptableObject
     [SerializeField]
     bool hasSecondaryLine = false;
     [SerializeField]
+    bool isShouting = false;
+    [SerializeField]
     TMP_FontAsset newFont;
     [SerializeField]
     int newTextSize;
@@ -88,6 +90,11 @@ public class DialogueNode : ScriptableObject
     public bool GetHasSecondaryLine()
     {
         return hasSecondaryLine;
+    }
+
+    public bool GetIsShouting()
+    {
+        return isShouting;
     }
 
     public TMP_FontAsset GetNewFont()
@@ -233,6 +240,17 @@ public class DialogueNode : ScriptableObject
             Undo.RecordObject(this, " Update Dialogue Has Secondary Line ");
 
             hasSecondaryLine = newHasSecondaryLine;
+            EditorUtility.SetDirty(this);
+        }
+    }
+
+    public void SetIsShouting(bool newIsShouting)
+    {
+        if (newIsShouting != isShouting)
+        {
+            Undo.RecordObject(this, " Update Dialogue Has Secondary Line ");
+
+            isShouting = newIsShouting;
             EditorUtility.SetDirty(this);
         }
     }

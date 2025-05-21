@@ -239,7 +239,7 @@ public class DialogueEditor : EditorWindow
 
             float previewHeight = previewStyle.CalcHeight(guiContent, availableWidth);
 
-            node.SetHeight(textHeight + 390 + previewHeight);
+            node.SetHeight(textHeight + 430 + previewHeight);
 
 
             EditorGUILayout.LabelField("-Text-", labelStyle);
@@ -261,6 +261,11 @@ public class DialogueEditor : EditorWindow
             GUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("Has secondary Dialogue", GUILayout.Width(142.5f));
             node.SetHasSecondaryLine(EditorGUILayout.Toggle(node.GetHasSecondaryLine()));
+            GUILayout.EndHorizontal();
+
+            GUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField("Is Shouting", GUILayout.Width(142.5f));
+            node.SetIsShouting(EditorGUILayout.Toggle(node.GetIsShouting()));
             GUILayout.EndHorizontal();
 
             EditorGUILayout.LabelField("-Preview-", labelStyle);

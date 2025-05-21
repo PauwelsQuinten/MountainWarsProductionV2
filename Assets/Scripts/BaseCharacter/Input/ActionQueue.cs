@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.Rendering.GPUSort;
 
 public class ActionQueue : MonoBehaviour
 {
@@ -33,7 +34,7 @@ public class ActionQueue : MonoBehaviour
                 _actionCount--;
             var package = _inputQueue.Dequeue();
             _activateAction.Raise(this, package.Package);
-
+            Debug.Log($"{package.Package.Special},InAnim= {package.Package.AnimationStart},attState= {package.Package.AttackState},attSignal= {package.Package.AttackSignal},feint= {package.Package.IsFeint}");
         }
 
         //Call next element imediatly if its about the feint signal, this is to continue the attack

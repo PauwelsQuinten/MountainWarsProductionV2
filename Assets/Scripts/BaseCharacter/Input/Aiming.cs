@@ -184,7 +184,6 @@ public class Aiming : MonoBehaviour
             {
                 _noFeintSignalSend = true;
                 SendPackage(false, false);
-                Debug.Log($"angle travelled = {_traversedAngle}");
             }
         }
         //Store measured length to use as comparision for the IsStabMovement

@@ -4091,6 +4091,10 @@ PrefabInstance:
       propertyPath: StartCamera
       value: 
       objectReference: {fileID: 154107438}
+    - target: {fileID: 4009254596964182378, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
+      propertyPath: _queueEvent
+      value: 
+      objectReference: {fileID: 11400000, guid: 5bbe9fe65ae2c8546a64169ae42e8a8a, type: 2}
     - target: {fileID: 4090168133510927123, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
       propertyPath: m_IsActive
       value: 1
@@ -4341,7 +4345,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4219942789422500819, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
       propertyPath: _useDynamicBlock
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4232928035316343530, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
       propertyPath: m_Data.m_SourceObjects.m_Item1.weight

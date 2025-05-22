@@ -13,10 +13,7 @@ public class Parry : MonoBehaviour
 
     [Header("ParryValues")]
     [SerializeField] private float _disarmTime = 2.5f;
-    //[SerializeField] private float _minParrySwingAngle = 100f;
-    //[SerializeField] private float _minParryStabAngle = 60f;
-    //[SerializeField] private float _timeForParryingSwing = 1f;
-    //[SerializeField] private float _timeForParryingStab = 0.4f;
+    [SerializeField] private float _parrySpeed = 1.5f;
 
     [Header("Stamina")]
     [SerializeField]
@@ -29,7 +26,6 @@ public class Parry : MonoBehaviour
     private Coroutine _disarmRoutine;
     private bool _tryDisarm = false;
     private BlockMedium _parryMedium;
-
     private bool _InParryZone = false;
     private AttackType _opponentsAttack = AttackType.None;
 
@@ -187,29 +183,29 @@ public class Parry : MonoBehaviour
     
     private void StartAnimation(AimingOutputArgs args, BlockMedium parryMedium)
     {
-        float speed = args.Speed < 2.5f ? 2.5f : args.Speed;
+        //float _parrySpeed = args.Speed < 2.5f ? 2.5f : args.Speed;
         if (args.Direction == Direction.ToLeft)
         {
             if (parryMedium == BlockMedium.Shield)
-                _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.ParryShieldLeft, AnimLayer = { 2,4 }, DoResetIdle = true, Speed = speed });
+                _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.ParryShieldLeft, AnimLayer = { 2,4 }, DoResetIdle = true, Speed = _parrySpeed });
             else if (parryMedium == BlockMedium.Sword)
             {
                 
                 if (_tryDisarm)
-                    speed = 4f;
-                _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.ParrySwordLeft, AnimLayer = { 2,3 }, DoResetIdle = true, Speed = speed });
+                    _parrySpeed = 4f;
+                _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.ParrySwordLeft, AnimLayer = { 2,3 }, DoResetIdle = true, Speed = _parrySpeed });
             }
         
         }
         else if (args.Direction == Direction.ToRight)
         {
             if (parryMedium == BlockMedium.Shield)
-                _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.ParryShieldRight, AnimLayer = { 2,4 }, DoResetIdle = true, Speed = speed });
+                _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.ParryShieldRight, AnimLayer = { 2,4 }, DoResetIdle = true, Speed = _parrySpeed });
             else if (parryMedium == BlockMedium.Sword)
             {
                 if (_tryDisarm)
-                    speed = 4f;
-                _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.ParrySwordRight, AnimLayer = { 2,3 }, DoResetIdle = true, Speed = speed });
+                    _parrySpeed = 4f;
+                _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.ParrySwordRight, AnimLayer = { 2,3 }, DoResetIdle = true, Speed = _parrySpeed });
             }
 
         }

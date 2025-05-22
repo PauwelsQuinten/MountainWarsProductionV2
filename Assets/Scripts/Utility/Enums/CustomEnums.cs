@@ -236,6 +236,11 @@ namespace UnityEngine
         Charge,
         PatchUp,
         PickUp,
+        Lean = 100,
+        DipWater = 101,
+        LookOver = 102,
+        AlmostFalling = 103,
+        Confused = 104
 
     }
 
@@ -282,7 +287,11 @@ namespace UnityEngine
         PickUp,
         SheatSword,
         UnSheatSword,
-        
+        Lean = 100,
+        DipWater = 101,
+        LookOver = 102,
+        AlmostFalling = 103,
+        Confused = 104
     }
 
 

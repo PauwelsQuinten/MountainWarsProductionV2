@@ -21,10 +21,25 @@ public class AnimationManager : MonoBehaviour
     private float _attBlend = 0f;
     private float _newBlockDirection = 0f;
 
+    private const string P_FULL_BODY = "FullBodyAnimation";
+    private const string P_BLOCK_DIR = "fBlockDirection";
+    private const string P_BLOCKED_HIT = "BlockedHit";
+    private const string P_BLOCK_MEDIUM = "BlockMedium";
+    private const string P_Stun = "IsStunned";
+    private const string P_ATTACK_STATE = "AttackState";
+    private const string P_GET_HIT = "GetHit";
+    private const string P_HIT_HEIGHT = "HitHeight";
+    private const string P_ON_TARGET = "OnTarget";
+    private const string P_X_MOVEMENT = "Xmovement";
+    private const string P_y_MOVEMENT = "Ymovement";
+    private const string P_ACTION_SPEED = "ActionSpeed";
+    private const string P_ATTACK_MEDIUM = "AttackMedium";
+    private const string P_ATTACK_HEIGHT = "IsAttackHigh";
+
     private void Start()
     {
         _animator = GetComponentInChildren<Animator>();
-        _animator.SetFloat("AttackState", 3f);
+        _animator.SetFloat(P_ATTACK_STATE, 3f);
 
     }
 
@@ -32,7 +47,7 @@ public class AnimationManager : MonoBehaviour
     {
         UpdateAnimatorValues(_XVelocity, _YVelocity, _GotTarget, _movementSpeed, _attBlend);
 
-        float current = _animator.GetFloat("fBlockDirection");
+        float current = _animator.GetFloat(P_BLOCK_DIR);
         if (!Mathf.Approximately(current, _newBlockDirection))
         {
             BockDirectionUpdate(true);
@@ -61,6 +76,8 @@ public class AnimationManager : MonoBehaviour
         //For fluid block direction switches, else he will always first equip. looks really buggy
         if (SetBlockDirection(args))
             return;
+        if (args.IsFullBodyAnim)
+            _animator.SetBool(P_FULL_BODY, args.IsFullBodyAnim);
 
         //Reset bored timer when doing an action
         if (args.AnimState != AnimationState.Idle)
@@ -69,29 +86,28 @@ public class AnimationManager : MonoBehaviour
         }
 
         //Lowerbody(2) should always transition even when stunnend
-        if ((!_animator.GetBool("IsStunned") && !_animator.GetBool("GetHit")) || (args.AnimLayer.Count == 1 && args.AnimLayer.Contains(2)))
+        if ((!_animator.GetBool(P_Stun) && !_animator.GetBool(P_GET_HIT)) || (args.AnimLayer.Count == 1 && args.AnimLayer.Contains(2)))
         {
-            _animator.SetFloat("ActionSpeed", args.Speed);
-            Debug.Log("Set speed");
+            _animator.SetFloat(P_ACTION_SPEED, args.Speed);
 
             switch (args.AnimState)
             {
                 case AnimationState.Stab:
-                    _animator.SetBool("IsAttackHigh", args.IsAttackHigh);
-                    _animator.SetInteger("AttackMedium", (int)args.AttackMedium);
-                    _animator.SetFloat("AttackState", 2f);
+                    _animator.SetBool(P_ATTACK_HEIGHT, args.IsAttackHigh);
+                    _animator.SetInteger(P_ATTACK_MEDIUM, (int)args.AttackMedium);
+                    _animator.SetFloat(P_ATTACK_STATE, 2f);
                     _attBlend = 1f;
                     break;
                 case AnimationState.SlashLeft:
-                    _animator.SetBool("IsAttackHigh", args.IsAttackHigh);
-                    _animator.SetInteger("AttackMedium", (int)args.AttackMedium);
-                    _animator.SetFloat("AttackState", 0f);
+                    _animator.SetBool(P_ATTACK_HEIGHT, args.IsAttackHigh);
+                    _animator.SetInteger(P_ATTACK_MEDIUM, (int)args.AttackMedium);
+                    _animator.SetFloat(P_ATTACK_STATE, 0f);
                     _attBlend = 1f;
                     break;
                 case AnimationState.SlashRight:
-                    _animator.SetBool("IsAttackHigh", args.IsAttackHigh);
-                    _animator.SetInteger("AttackMedium", (int)args.AttackMedium);
-                    _animator.SetFloat("AttackState", 1f);
+                    _animator.SetBool(P_ATTACK_HEIGHT, args.IsAttackHigh);
+                    _animator.SetInteger(P_ATTACK_MEDIUM, (int)args.AttackMedium);
+                    _animator.SetFloat(P_ATTACK_STATE, 1f);
                     _attBlend = 1f;
                     break;
                 default:
@@ -157,7 +173,7 @@ public class AnimationManager : MonoBehaviour
                 _newBlockDirection = (float)(int)args.BlockDirection;
                 if (_newBlockDirection == (float)(int)Direction.Wrong || _newBlockDirection == (float)(int)Direction.Idle)
                     BockDirectionUpdate(false);
-                _animator.SetInteger("BlockMedium", (int)args.BlockMedium);
+                _animator.SetInteger(P_BLOCK_MEDIUM, (int)args.BlockMedium);
             }
             
             return true;
@@ -172,7 +188,7 @@ public class AnimationManager : MonoBehaviour
                 BockDirectionUpdate(false);
             }
             _newBlockDirection = (float)(int)args.BlockDirection;
-            _animator.SetInteger("BlockMedium", (int)args.BlockMedium);
+            _animator.SetInteger(P_BLOCK_MEDIUM, (int)args.BlockMedium);
         }
 
         if (_newBlockDirection == (float)(int)Direction.Wrong || _newBlockDirection == (float)(int)Direction.Idle)
@@ -183,9 +199,9 @@ public class AnimationManager : MonoBehaviour
     private void BockDirectionUpdate(bool smoothly)
     {
         if (smoothly) 
-            _animator.SetFloat("fBlockDirection", _newBlockDirection, 0.1f, Time.deltaTime);
+            _animator.SetFloat(P_BLOCK_DIR, _newBlockDirection, 0.1f, Time.deltaTime);
         else
-            _animator.SetFloat("fBlockDirection", _newBlockDirection);
+            _animator.SetFloat(P_BLOCK_DIR, _newBlockDirection);
     }
 
     private bool ResetFeintSignal(AnimationEventArgs args)
@@ -215,10 +231,9 @@ public class AnimationManager : MonoBehaviour
 
     private void UpdateAnimatorValues(float XVelocity, float YVelocity, float GotTarget, float speed, float attBlend)
     {
-        _animator.SetFloat("OnTarget", GotTarget, 0.1f, Time.deltaTime);
-        _animator.SetFloat("Xmovement", XVelocity, 0.1f, Time.deltaTime);
-        _animator.SetFloat("Ymovement", YVelocity, 0.1f, Time.deltaTime);
-        _animator.SetFloat("SpeedMultiplier", speed, 0.1f, Time.deltaTime);
+        _animator.SetFloat(P_ON_TARGET, GotTarget, 0.1f, Time.deltaTime);
+        _animator.SetFloat(P_X_MOVEMENT, XVelocity, 0.1f, Time.deltaTime);
+        _animator.SetFloat(P_y_MOVEMENT, YVelocity, 0.1f, Time.deltaTime);
         //_animator.SetFloat("AttackBlend", attBlend, 0.1f, Time.deltaTime);
     }
 
@@ -248,8 +263,8 @@ public class AnimationManager : MonoBehaviour
             return;
 
         _animator.speed = 1;
-        _animator.SetFloat("HitHeight", (float)(int)args.AttackHeight);
-        _animator.SetTrigger("GetHit");
+        _animator.SetFloat(P_HIT_HEIGHT, (float)(int)args.AttackHeight);
+        _animator.SetTrigger(P_GET_HIT);
     }
 
     public void GetStunned(Component sender, object obj)
@@ -257,14 +272,14 @@ public class AnimationManager : MonoBehaviour
         LoseEquipmentEventArgs loseEquipmentEventArgs = obj as LoseEquipmentEventArgs;
         if (loseEquipmentEventArgs != null && sender.gameObject == gameObject)
         {
-            _animator.SetBool("IsStunned", true);
+            _animator.SetBool(P_Stun, true);
         }
 
         var args = obj as StunEventArgs;
         if (args == null)return;
         if (args.StunTarget != gameObject)return;
         
-        _animator.SetBool("IsStunned", true);
+        _animator.SetBool(P_Stun, true);
     }
 
     public void BlockHit(Component sender, object obj)
@@ -272,7 +287,7 @@ public class AnimationManager : MonoBehaviour
         var args = obj as AttackEventArgs;
         if (args == null) return;
         if (args.Attacker == gameObject || args.Defender == gameObject)
-            _animator.SetTrigger("BlockedHit");
+            _animator.SetTrigger(P_BLOCKED_HIT);
     }
 
 
@@ -280,6 +295,15 @@ public class AnimationManager : MonoBehaviour
     {
         if (Sender.gameObject != gameObject) return;
 
-        _animator.SetBool("IsStunned", false);
+        _animator.SetBool(P_Stun, false);
     }
+    public void StopFullBodyAnim(Component Sender, object obj)
+    {
+        if (Sender.gameObject != gameObject) return;
+
+        _animator.SetBool(P_FULL_BODY, false);
+        _animator.CrossFade(AnimationState.Idle.ToString(), 0.2f, 1, 0f);
+    }
+
+
 }

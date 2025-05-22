@@ -9,6 +9,7 @@ namespace UnityEngine
         public bool IsAttackHigh = false;
         public bool DoResetIdle;
         public bool IsFeint = true;
+        public bool IsFullBodyAnim = false;
         public float Speed = 1f;
         public List<int> AnimLayer = new List<int>();
         public Direction BlockDirection = Direction.Default;

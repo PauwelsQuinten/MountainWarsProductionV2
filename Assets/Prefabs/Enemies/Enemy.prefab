@@ -1295,11 +1295,11 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: 5bbe9fe65ae2c8546a64169ae42e8a8a, type: 2}
     - target: {fileID: 3805331497090860965, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
       propertyPath: Events.Array.size
-      value: 32
+      value: 33
       objectReference: {fileID: 0}
     - target: {fileID: 3805331497090860965, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
       propertyPath: Responses.Array.size
-      value: 32
+      value: 33
       objectReference: {fileID: 0}
     - target: {fileID: 3805331497090860965, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
       propertyPath: 'Events.Array.data[16]'
@@ -1368,7 +1368,7 @@ PrefabInstance:
     - target: {fileID: 3805331497090860965, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
       propertyPath: 'Events.Array.data[32]'
       value: 
-      objectReference: {fileID: 11400000, guid: ef1c1e852f404ef41a2a5ae46280abb3, type: 2}
+      objectReference: {fileID: 11400000, guid: 058b1201218d28e4ab99f172e6b144fb, type: 2}
     - target: {fileID: 3805331497090860965, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
       propertyPath: 'Events.Array.data[33]'
       value: 
@@ -1451,7 +1451,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3805331497090860965, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
       propertyPath: Responses.Array.data[32].m_PersistentCalls.m_Calls.Array.size
-      value: 0
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3805331497090860965, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
       propertyPath: Responses.Array.data[33].m_PersistentCalls.m_Calls.Array.size
@@ -1616,19 +1616,19 @@ PrefabInstance:
     - target: {fileID: 3805331497090860965, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
       propertyPath: Responses.Array.data[32].m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 2724192922246951129}
+      objectReference: {fileID: 3363722153122832148}
     - target: {fileID: 3805331497090860965, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
       propertyPath: Responses.Array.data[32].m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
-      objectReference: {fileID: 5318217082051312346}
+      objectReference: {fileID: 5380632065616784064}
     - target: {fileID: 3805331497090860965, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
       propertyPath: Responses.Array.data[32].m_PersistentCalls.m_Calls.Array.data[2].m_Target
       value: 
-      objectReference: {fileID: 4041348560418194016}
+      objectReference: {fileID: 744190855891141330}
     - target: {fileID: 3805331497090860965, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
       propertyPath: Responses.Array.data[32].m_PersistentCalls.m_Calls.Array.data[3].m_Target
       value: 
-      objectReference: {fileID: 744190855891141330}
+      objectReference: {fileID: 3363722153122832148}
     - target: {fileID: 3805331497090860965, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
       propertyPath: Responses.Array.data[32].m_PersistentCalls.m_Calls.Array.data[4].m_Target
       value: 
@@ -1971,11 +1971,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3805331497090860965, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
       propertyPath: Responses.Array.data[32].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: RecoveredStun
+      value: BlockHit
       objectReference: {fileID: 0}
     - target: {fileID: 3805331497090860965, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
       propertyPath: Responses.Array.data[32].m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
-      value: GetStunned
+      value: StartSlowDown
       objectReference: {fileID: 0}
     - target: {fileID: 3805331497090860965, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
       propertyPath: Responses.Array.data[32].m_PersistentCalls.m_Calls.Array.data[2].m_MethodName
@@ -1983,7 +1983,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3805331497090860965, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
       propertyPath: Responses.Array.data[32].m_PersistentCalls.m_Calls.Array.data[3].m_MethodName
-      value: OnStun
+      value: GetStunned
       objectReference: {fileID: 0}
     - target: {fileID: 3805331497090860965, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
       propertyPath: Responses.Array.data[32].m_PersistentCalls.m_Calls.Array.data[4].m_MethodName
@@ -2163,19 +2163,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3805331497090860965, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
       propertyPath: Responses.Array.data[32].m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: AIController, Assembly-CSharp
+      value: AnimationManager, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 3805331497090860965, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
       propertyPath: Responses.Array.data[32].m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
-      value: StateManager, Assembly-CSharp
+      value: SlowDownOnImpact, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 3805331497090860965, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
       propertyPath: Responses.Array.data[32].m_PersistentCalls.m_Calls.Array.data[2].m_TargetAssemblyTypeName
-      value: ActionQueue, Assembly-CSharp
+      value: Parry, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 3805331497090860965, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
       propertyPath: Responses.Array.data[32].m_PersistentCalls.m_Calls.Array.data[3].m_TargetAssemblyTypeName
-      value: Parry, Assembly-CSharp
+      value: AnimationManager, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 3805331497090860965, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
       propertyPath: Responses.Array.data[32].m_PersistentCalls.m_Calls.Array.data[4].m_TargetAssemblyTypeName
@@ -2558,6 +2558,9 @@ PrefabInstance:
       addedObject: {fileID: 4230602017903935408}
     - targetCorrespondingSourceObject: {fileID: 691636631868949397, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
       insertIndex: 20
+      addedObject: {fileID: 5380632065616784064}
+    - targetCorrespondingSourceObject: {fileID: 691636631868949397, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
+      insertIndex: 21
       addedObject: {fileID: 1376441188278556422}
     - targetCorrespondingSourceObject: {fileID: 691636631868949397, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
       insertIndex: -1
@@ -2745,6 +2748,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _changeAnimation: {fileID: 11400000, guid: f56e344763da3c34d9b3e5d48d24a9e4, type: 2}
+--- !u!114 &5380632065616784064
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8761888366074066331}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a58b753b636a0424f85a2c769062872e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _slowSpeed: 0.1
+  _timeSlowed: 0.1
+  _animParameter: ActionSpeed
 --- !u!114 &1376441188278556422
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3040,6 +3058,7 @@ MonoBehaviour:
   _rotateShield: {fileID: 11400000, guid: 7f9e479aba9dadf4abc23c350fe51bba, type: 2}
   _dragShieldDown: {fileID: 11400000, guid: 8d2b611f4f77a104786e9f561ae6594a, type: 2}
   _sheatSword: {fileID: 0}
+  _pickup: {fileID: 0}
 --- !u!4 &9040576335861566453 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: dd604a2ee8375f344bd5bbdf22db0362, type: 3}

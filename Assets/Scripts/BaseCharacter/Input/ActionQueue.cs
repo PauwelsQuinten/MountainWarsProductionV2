@@ -73,7 +73,7 @@ public class ActionQueue : MonoBehaviour
         }
 
         //Event from Stun
-        StunEventArgs args = (StunEventArgs)obj;
+        StunEventArgs args = obj as StunEventArgs;
         if (args == null) return;
         if (args.StunTarget != gameObject) return;
 

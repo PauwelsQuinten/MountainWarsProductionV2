@@ -32,6 +32,8 @@ public class SlowDownOnImpact : MonoBehaviour
         float miliseconds = (_slowedDuration - 2f * _easInDuration) * 1000f;
 
         await EaseAnimSpeed(start, _slowSpeed, _easInDuration);
+        Debug.Log("Set speed slow");
+
         await Task.Delay(Mathf.RoundToInt(miliseconds));
         await EaseAnimSpeed(_slowSpeed, start, _easInDuration);
     }

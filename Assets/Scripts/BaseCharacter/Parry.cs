@@ -191,46 +191,30 @@ public class Parry : MonoBehaviour
         if (args.Direction == Direction.ToLeft)
         {
             if (parryMedium == BlockMedium.Shield)
-                _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.ParryShieldLeft, AnimLayer = { 4 }, DoResetIdle = true, Speed = speed });
+                _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.ParryShieldLeft, AnimLayer = { 2,4 }, DoResetIdle = true, Speed = speed });
             else if (parryMedium == BlockMedium.Sword)
             {
                 
                 if (_tryDisarm)
                     speed = 4f;
-                _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.ParrySwordLeft, AnimLayer = { 3 }, DoResetIdle = true, Speed = speed  });
+                _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.ParrySwordLeft, AnimLayer = { 2,3 }, DoResetIdle = true, Speed = speed });
             }
         
         }
         else if (args.Direction == Direction.ToRight)
         {
             if (parryMedium == BlockMedium.Shield)
-                _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.ParryShieldRight, AnimLayer = { 4 }, DoResetIdle = true, Speed = speed });
+                _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.ParryShieldRight, AnimLayer = { 2,4 }, DoResetIdle = true, Speed = speed });
             else if (parryMedium == BlockMedium.Sword)
             {
                 if (_tryDisarm)
                     speed = 4f;
-                _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.ParrySwordRight, AnimLayer = { 3 }, DoResetIdle = true, Speed = speed });
+                _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.ParrySwordRight, AnimLayer = { 2,3 }, DoResetIdle = true, Speed = speed });
             }
 
         }
     }
 
-    //---------------------------------------------------------------------------------------------
-    //Coroutines Functions
-    //---------------------------------------------------------------------------------------------
-
-
-    //private IEnumerator ParryAction(float timeForParrying)
-    //{
-    //    yield return new WaitForSeconds(timeForParrying);
-    //
-    //    if(!_tryDisarm)
-    //    {
-    //        OnFaildedParry(_attackEventValues);
-    //        _attackEventValues = null;
-    //    }
-    //}
-    
     private IEnumerator DisarmAction(float timeForParrying)
     {
         yield return new WaitForSeconds(timeForParrying);

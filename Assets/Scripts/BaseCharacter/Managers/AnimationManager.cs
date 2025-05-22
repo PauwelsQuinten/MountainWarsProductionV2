@@ -72,6 +72,7 @@ public class AnimationManager : MonoBehaviour
         if ((!_animator.GetBool("IsStunned") && !_animator.GetBool("GetHit")) || (args.AnimLayer.Count == 1 && args.AnimLayer.Contains(2)))
         {
             _animator.SetFloat("ActionSpeed", args.Speed);
+            Debug.Log("Set speed");
 
             switch (args.AnimState)
             {
@@ -256,7 +257,6 @@ public class AnimationManager : MonoBehaviour
         LoseEquipmentEventArgs loseEquipmentEventArgs = obj as LoseEquipmentEventArgs;
         if (loseEquipmentEventArgs != null && sender.gameObject == gameObject)
         {
-            _animator.speed = 1;
             _animator.SetBool("IsStunned", true);
         }
 
@@ -264,7 +264,6 @@ public class AnimationManager : MonoBehaviour
         if (args == null)return;
         if (args.StunTarget != gameObject)return;
         
-        _animator.speed = 1;
         _animator.SetBool("IsStunned", true);
     }
 

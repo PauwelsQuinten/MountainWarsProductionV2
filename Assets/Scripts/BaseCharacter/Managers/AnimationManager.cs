@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Diagnostics.CodeAnalysis;
 using Unity.VisualScripting;
 using UnityEngine;
 using static UnityEditor.Experimental.GraphView.GraphView;
@@ -138,30 +139,33 @@ public class AnimationManager : MonoBehaviour
 
     private bool SetBlockDirection(AnimationEventArgs args)
     {
+        //When already holding a block, only change the direction. nothing else needs to be updated
         if (_currentState == args.AnimState && args.AnimState != AnimationState.Idle && args.AnimState != AnimationState.Empty)
         {
-            if (_newBlockDirection == (float)(int)Direction.Wrong && _newBlockDirection != (float)(int)args.BlockDirection)
+            //Imediatly set block value without lerping when it was in a wrong direction or down
+            if ((_newBlockDirection == (float)(int)Direction.Wrong || _newBlockDirection == (float)(int)Direction.Idle) 
+                && _newBlockDirection != (float)(int)args.BlockDirection)
             {
                 _newBlockDirection = (float)(int)args.BlockDirection;
                 BockDirectionUpdate(false);
                 return true;
             }
-
+            //Switch between block directions, make sure if from wrong or down it is instantly
             if (args.BlockDirection != Direction.Default)
             {
                 _newBlockDirection = (float)(int)args.BlockDirection;
+                if (_newBlockDirection == (float)(int)Direction.Wrong || _newBlockDirection == (float)(int)Direction.Idle)
+                    BockDirectionUpdate(false);
                 _animator.SetInteger("BlockMedium", (int)args.BlockMedium);
             }
-            if (args.BlockDirection == Direction.Wrong)
-            {
-                //imediatly set to wrong since this is putting down instead of transitioning
-                _animator.SetFloat("fBlockDirection", (float)(int)args.BlockDirection);
-            }
+            
             return true;
         }
+        //When start holding block
         else if (args.BlockDirection != Direction.Default)
         {
-            if (_newBlockDirection == (float)(int)Direction.Wrong && _newBlockDirection != (float)(int)args.BlockDirection)
+            if ((_newBlockDirection == (float)(int)Direction.Wrong || _newBlockDirection == (float)(int)Direction.Idle)
+               && _newBlockDirection != (float)(int)args.BlockDirection)
             {
                 _newBlockDirection = (float)(int)args.BlockDirection;
                 BockDirectionUpdate(false);
@@ -169,11 +173,9 @@ public class AnimationManager : MonoBehaviour
             _newBlockDirection = (float)(int)args.BlockDirection;
             _animator.SetInteger("BlockMedium", (int)args.BlockMedium);
         }
-        if (args.BlockDirection == Direction.Wrong)
-        {
-            //imediatly set to wrong since this is putting down instead of transitioning
-            _animator.SetFloat("fBlockDirection", (float)(int)args.BlockDirection);          
-        }
+
+        if (_newBlockDirection == (float)(int)Direction.Wrong || _newBlockDirection == (float)(int)Direction.Idle)
+            BockDirectionUpdate(false);
         return false;
     }
 

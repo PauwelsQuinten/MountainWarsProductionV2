@@ -32,6 +32,7 @@ public class Aiming : MonoBehaviour
     [SerializeField, Tooltip("the minimum angle your analog stick needs to travel to consider the attack not to be a feint")]
     [Range(F_ACCEPTED_MIN_ANGLE, 180f)]
     private float _minSwingAngle = 60f;
+    [SerializeField] private bool _useDynamicBlock = true;
 
     private Vector2 _vec2previousDirection = Vector2.zero;
     private Vector2 _vec2Start = Vector2.zero;
@@ -112,6 +113,15 @@ public class Aiming : MonoBehaviour
 
             _previousLength = 1.1f;
             return;
+        }
+
+        //Move your block smoothly when is holding and is set to dynamic
+        if (_useDynamicBlock 
+            && (_refAimingInput.variable.State == AttackState.ShieldDefence || _refAimingInput.variable.State == AttackState.SwordDefence) 
+            && _enmAimingInput == AimingInputState.Hold
+            && inputLength > 0.9f)
+        {
+            SendPackage();
         }
 
         //Throw attack/feint or return to idle when releasing the analogstick
@@ -253,8 +263,6 @@ public class Aiming : MonoBehaviour
                 if (_enmAimingInput == AimingInputState.Moving)
                 {
                     _enmAimingInput = AimingInputState.Hold;
-                    Debug.Log("Block");
-
                     _swingDirection = Direction.Wrong;//Put to wrong so the inputChanged function wont call a parry movement when switching block sides
                     SendPackage();
                 }             

@@ -23,10 +23,16 @@ public class QueuedAnimation : MonoBehaviour
         switch(args.Special)
         {
             case SpecialInput.SheatSword:
-                _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.SheathWeapon, AnimLayer = { 3 }, DoResetIdle = true });
+                _changeAnimation.Raise(this, new AnimationEventArgs 
+                { 
+                    AnimState = AnimationState.SheathWeapon, AnimLayer = { 3 }, DoResetIdle = true 
+                });
                 break;
             case SpecialInput.UnSheatSword:
-                _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.DrawWeapon, AnimLayer = { 3 }, DoResetIdle = true });
+                _changeAnimation.Raise(this, new AnimationEventArgs
+                { 
+                    AnimState = AnimationState.DrawWeapon, AnimLayer = { 3 }, DoResetIdle = true 
+                });
                 break;
             default:
                 return;
@@ -41,7 +47,10 @@ public class QueuedAnimation : MonoBehaviour
         if (args == null) return;
         if (args.Special != SpecialInput.PickUp) return;
 
-        _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.PickUp, AnimLayer = { 3 }, DoResetIdle = true });       
+        _changeAnimation.Raise(this, new AnimationEventArgs
+        { 
+            AnimState = AnimationState.PickUp, AnimLayer = { 3 }, DoResetIdle = true 
+        });       
     }
 
     public void PlayQueuedAnim(Component sender, object obj)
@@ -53,7 +62,10 @@ public class QueuedAnimation : MonoBehaviour
 
         AnimationState state = (AnimationState)args.Special;
 
-        _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = state, AnimLayer = { 1 }, DoResetIdle = true, IsFullBodyAnim = true });       
+        _changeAnimation.Raise(this, new AnimationEventArgs 
+        { 
+            AnimState = state, AnimLayer = { 1 }, DoResetIdle = true, IsFullBodyAnim = true
+        });       
 
     }
 

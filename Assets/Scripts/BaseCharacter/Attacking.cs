@@ -167,7 +167,6 @@ public class Attacking : MonoBehaviour
                 blackboard.variable.TargetCurrentAttack = AttackType.None;
                 blackboard.variable.TargetState = _stateManager.AttackState == AttackState.Stun? _stateManager.AttackState : AttackState.Idle;
             }
-
         }
     }
 
@@ -209,7 +208,6 @@ public class Attacking : MonoBehaviour
 
     }
         
-
     private bool IsAngleBigEnough(float currentAngle)
     {
         if (currentAngle > _minAttackAngle) return true;

@@ -13,7 +13,6 @@ public class Blocking : MonoBehaviour
     [SerializeField] private GameEvent _succesfullHitEvent;
     [SerializeField] private GameEvent _changeAnimation;
     [SerializeField] private GameEvent _blockAnimation;
-    [SerializeField] private GameEvent _impactAnimation;
 
     [Header("Stamina")]
     [SerializeField]

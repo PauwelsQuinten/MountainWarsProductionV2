@@ -50,7 +50,7 @@ public class PatchUp : MonoBehaviour
         float _patchEndTime = Time.time;
         float _patchTimer = _patchEndTime - _patchStartTime;
 
-        if (_patchUpDuration.value >= _patchTimer)
+        if (_patchUpDuration.value <= _patchTimer)
             _patchUpEvent.Raise(this, true);
         else
             _patchUpEvent.Raise(this, false);

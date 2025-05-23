@@ -116,7 +116,6 @@ public class AnimationManager : MonoBehaviour
                     else
                         _animator.SetFloat(P_ATTACK_STATE, 1f);
                     _attBlend = 1f;
-                    Debug.Log("Slash right");
                     break;
                 default:
                     foreach (int layer in args.AnimLayer)
@@ -274,7 +273,9 @@ public class AnimationManager : MonoBehaviour
         _animator.SetFloat(P_HIT_HEIGHT, (float)(int)args.AttackHeight);
 
         //Set all states besides base  to empty 
-        //_animator.SetTrigger(P_GET_HIT);
+        _animator.SetTrigger(P_GET_HIT);
+        _animator.SetBool(P_Stun, true);
+
         for (int i = 1; i < 4; i++)
         {
             if (i == 1)
@@ -282,6 +283,8 @@ public class AnimationManager : MonoBehaviour
             else
                 _animator.CrossFade(AnimationState.Empty.ToString(), 0.2f, i, 0f);
         }
+        //update this in animator imediatly or the stun will overwrite this state
+        _animator.Update(0f);
     }
 
     public void GetStunned(Component sender, object obj)
@@ -289,28 +292,21 @@ public class AnimationManager : MonoBehaviour
         LoseEquipmentEventArgs loseEquipmentEventArgs = obj as LoseEquipmentEventArgs;
         if (loseEquipmentEventArgs != null && sender.gameObject == gameObject)
         {
-            for (int i = 1; i < 4; i++)
-            {
-                if (i == 1)
-                    _animator.CrossFade(AnimationState.Stun.ToString(), 0.2f, i, 0f);
-                else
-                    _animator.CrossFade(AnimationState.Empty.ToString(), 0.2f, i, 0f);
-            }
+            SetStunValues();
         }
 
         var args = obj as StunEventArgs;
-        if (args == null)return;
-        if (args.StunTarget != gameObject)return;
+        if (args == null) return;
+        if (args.StunTarget != gameObject) return;
+
+        //When the character gets hit, he first get the animation call for hit.
+        //Then the stun is set in StateManager which automaticly gets this stun call,
+        //so we check first if he got hit before we set this state to stun
+        if (IsCurrentState(1, "FullBody.Hit"))
+            return;
 
         //Set all states besides base  to empty 
-        //_animator.SetBool(P_Stun, true);
-        for (int i = 1; i < 4; i++)
-        {
-            if (i  == 1)
-                _animator.CrossFade(AnimationState.Stun.ToString(), 0.2f, i, 0f);
-            else
-                _animator.CrossFade(AnimationState.Empty.ToString(), 0.2f, i, 0f);
-        }
+        SetStunValues();
     }
 
     public void BlockHit(Component sender, object obj)
@@ -330,6 +326,8 @@ public class AnimationManager : MonoBehaviour
         if (Sender.gameObject != gameObject) return;
 
         _animator.CrossFade(AnimationState.Idle.ToString(), 0.2f, 1, 0f);
+        _animator.SetBool(P_Stun, false);
+
     }
 
     public void StopFullBodyAnim(Component Sender, object obj)
@@ -339,4 +337,35 @@ public class AnimationManager : MonoBehaviour
         _animator.SetBool(P_FULL_BODY, false);
         _animator.CrossFade(AnimationState.Idle.ToString(), 0.2f, 1, 0f);
     }
+
+    private bool IsCurrentState(int layer, string state)
+    {
+        if (_animator.IsInTransition(layer))
+        {
+            AnimatorStateInfo info = _animator.GetNextAnimatorStateInfo(layer);
+            if (info.IsName(state))
+                return true;
+        }
+        else
+        {
+            AnimatorClipInfo[] clipInfos = _animator.GetCurrentAnimatorClipInfo(layer);
+            var currentState = clipInfos[0].clip.name;
+            if (currentState == state)
+                return true;
+        }
+        return false;
+    }
+
+    private void SetStunValues()
+    {
+        for (int i = 1; i < 4; i++)
+        {
+            if (i == 1)
+                _animator.CrossFade(AnimationState.Stun.ToString(), 0.2f, i, 0f);
+            else
+                _animator.CrossFade(AnimationState.Empty.ToString(), 0.2f, i, 0f);
+        }
+        _animator.SetBool(P_Stun, true);
+    }
+
 }

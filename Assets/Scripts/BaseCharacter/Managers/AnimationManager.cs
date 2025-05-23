@@ -35,6 +35,7 @@ public class AnimationManager : MonoBehaviour
     private const string P_ACTION_SPEED = "ActionSpeed";
     private const string P_ATTACK_MEDIUM = "AttackMedium";
     private const string P_ATTACK_HEIGHT = "IsAttackHigh";
+    private const string P_FEINT = "Feint";
 
     private void Start()
     {
@@ -109,6 +110,7 @@ public class AnimationManager : MonoBehaviour
                     _animator.SetInteger(P_ATTACK_MEDIUM, (int)args.AttackMedium);
                     _animator.SetFloat(P_ATTACK_STATE, 1f);
                     _attBlend = 1f;
+                    Debug.Log("Slash right");
                     break;
                 default:
                     foreach (int layer in args.AnimLayer)
@@ -264,7 +266,16 @@ public class AnimationManager : MonoBehaviour
 
         _animator.speed = 1;
         _animator.SetFloat(P_HIT_HEIGHT, (float)(int)args.AttackHeight);
-        _animator.SetTrigger(P_GET_HIT);
+
+        //Set all states besides base  to empty 
+        //_animator.SetTrigger(P_GET_HIT);
+        for (int i = 1; i < 4; i++)
+        {
+            if (i == 1)
+                _animator.CrossFade(AnimationState.Hit.ToString(), 0.2f, i, 0f);
+            else
+                _animator.CrossFade(AnimationState.Empty.ToString(), 0.2f, i, 0f);
+        }
     }
 
     public void GetStunned(Component sender, object obj)
@@ -272,14 +283,28 @@ public class AnimationManager : MonoBehaviour
         LoseEquipmentEventArgs loseEquipmentEventArgs = obj as LoseEquipmentEventArgs;
         if (loseEquipmentEventArgs != null && sender.gameObject == gameObject)
         {
-            _animator.SetBool(P_Stun, true);
+            for (int i = 1; i < 4; i++)
+            {
+                if (i == 1)
+                    _animator.CrossFade(AnimationState.Stun.ToString(), 0.2f, i, 0f);
+                else
+                    _animator.CrossFade(AnimationState.Empty.ToString(), 0.2f, i, 0f);
+            }
         }
 
         var args = obj as StunEventArgs;
         if (args == null)return;
         if (args.StunTarget != gameObject)return;
-        
-        _animator.SetBool(P_Stun, true);
+
+        //Set all states besides base  to empty 
+        //_animator.SetBool(P_Stun, true);
+        for (int i = 1; i < 4; i++)
+        {
+            if (i  == 1)
+                _animator.CrossFade(AnimationState.Stun.ToString(), 0.2f, i, 0f);
+            else
+                _animator.CrossFade(AnimationState.Empty.ToString(), 0.2f, i, 0f);
+        }
     }
 
     public void BlockHit(Component sender, object obj)
@@ -295,7 +320,8 @@ public class AnimationManager : MonoBehaviour
     {
         if (Sender.gameObject != gameObject) return;
 
-        _animator.SetBool(P_Stun, false);
+        //_animator.SetBool(P_Stun, false);
+        _animator.CrossFade(AnimationState.Empty.ToString(), 0.2f, 1, 0f);
     }
     public void StopFullBodyAnim(Component Sender, object obj)
     {

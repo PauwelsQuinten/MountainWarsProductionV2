@@ -34,14 +34,14 @@ public class ActionQueue : MonoBehaviour
             if (_inputQueue.Peek().Package.AnimationStart && _actionCount > 0)
                 _actionCount--;
             var package = _inputQueue.Dequeue();
-            //Debug.Log($"feint = {package.Package.IsFeint}");
+            Debug.Log($"{package.Package.AttackSignal} ,feint = {package.Package.IsFeint}");
             _activateAction.Raise(this, package.Package);
         }
 
         //Call next element imediatly if its about the feint signal, this is to continue the attack
         if (_inputQueue.Count > 0 && !_inputQueue.Peek().Package.IsFeint)
         {
-            //Debug.Log("Conti ue attack");
+            Debug.Log("Continue attack");
             _activateAction.Raise(this, _inputQueue.Dequeue().Package);
         }
         if (IsOldestElementInQueueToLong(_maxTimeInQueue))

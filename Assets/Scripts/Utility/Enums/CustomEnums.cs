@@ -236,6 +236,8 @@ namespace UnityEngine
         Charge,
         PatchUp,
         PickUp,
+        Stun,
+        Hit,
         Lean = 100,
         DipWater = 101,
         LookOver = 102,

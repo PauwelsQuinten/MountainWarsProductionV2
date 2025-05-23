@@ -264,6 +264,7 @@ public class EquipmentManager : MonoBehaviour
         else
             DisableAimingScript(EquipmentHand.RightHand);
 
+        //Update equipment Hud
         _onEquipmentDamage.Raise(this, new EquipmentEventArgs
         {
             ShieldDurability = GetDurabilityPercentage(LEFT_HAND),

@@ -173,22 +173,24 @@ public class Attacking : MonoBehaviour
 
     private void StartAnimation(float speed, bool useRightArm, bool isAttackHigh)
     {
-        int animLayer = useRightArm ? 3 : 4;
-        List<int> animLayers = new List<int>() { 2, animLayer};
-        BlockMedium attackMedium = useRightArm ? BlockMedium.Sword : BlockMedium.Shield;
+        //FullBodyAnim -> for setting a bool in animator so that the lowerBody mask will not override the layer
+        //DoResetIdle -> To make sure no idle animation is playing at same time
+        //Speed -> The animation speed
+        //AttackWithLeftHand -> a bool set so the attacks will be with shield or sword.
 
+        List<int> animLayers = new List<int>() { 1 };
         if (_attackType == AttackType.HorizontalSlashToLeft)
         {
             _changeAnimation.Raise(this, new AnimationEventArgs 
             { AnimState = AnimationState.SlashLeft, AnimLayer = animLayers, DoResetIdle = true, Speed = 1.5f
-            , IsAttackHigh = isAttackHigh, AttackMedium = attackMedium
+            , IsAttackHigh = isAttackHigh, AttackWithLeftHand = !useRightArm
             , IsFullBodyAnim = true});
         }
         else if (_attackType == AttackType.HorizontalSlashToRight)
         {
             _changeAnimation.Raise(this, new AnimationEventArgs 
             { AnimState = AnimationState.SlashRight, AnimLayer = animLayers, DoResetIdle = true, Speed = 1.5f
-            , IsAttackHigh = isAttackHigh, AttackMedium = attackMedium
+            , IsAttackHigh = isAttackHigh, AttackWithLeftHand = !useRightArm
             , IsFullBodyAnim = true
             });
         }
@@ -196,13 +198,13 @@ public class Attacking : MonoBehaviour
         {
             _changeAnimation.Raise(this, new AnimationEventArgs 
             { AnimState = AnimationState.Stab, AnimLayer = animLayers, DoResetIdle = true, Speed = 1.5f
-            , IsAttackHigh = isAttackHigh, AttackMedium = attackMedium,
+            , IsAttackHigh = isAttackHigh, AttackWithLeftHand = !useRightArm,
               IsFullBodyAnim = true
             });
         }
         else if (_attackType == AttackType.Charge)
         {
-            _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Charge, AnimLayer = animLayers, DoResetIdle = false });
+            _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Charge, AnimLayer = {3}, DoResetIdle = false });
         }
 
     }

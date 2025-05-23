@@ -33,7 +33,7 @@ public class AnimationManager : MonoBehaviour
     private const string P_X_MOVEMENT = "Xmovement";
     private const string P_y_MOVEMENT = "Ymovement";
     private const string P_ACTION_SPEED = "ActionSpeed";
-    private const string P_ATTACK_MEDIUM = "AttackMedium";
+    private const string P_ATTACK_MEDIUM = "LeftHandAttack";
     private const string P_ATTACK_HEIGHT = "IsAttackHigh";
     private const string P_FEINT = "Feint";
 
@@ -95,20 +95,26 @@ public class AnimationManager : MonoBehaviour
             {
                 case AnimationState.Stab:
                     _animator.SetBool(P_ATTACK_HEIGHT, args.IsAttackHigh);
-                    _animator.SetInteger(P_ATTACK_MEDIUM, (int)args.AttackMedium);
+                    _animator.SetBool(P_ATTACK_MEDIUM, args.AttackWithLeftHand);
                     _animator.SetFloat(P_ATTACK_STATE, 2f);
                     _attBlend = 1f;
                     break;
                 case AnimationState.SlashLeft:
                     _animator.SetBool(P_ATTACK_HEIGHT, args.IsAttackHigh);
-                    _animator.SetInteger(P_ATTACK_MEDIUM, (int)args.AttackMedium);
-                    _animator.SetFloat(P_ATTACK_STATE, 0f);
+                    _animator.SetBool(P_ATTACK_MEDIUM, args.AttackWithLeftHand);
+                    if (args.AttackWithLeftHand)
+                        _animator.SetFloat(P_ATTACK_STATE, 1f);
+                    else
+                        _animator.SetFloat(P_ATTACK_STATE, 0f);
                     _attBlend = 1f;
                     break;
                 case AnimationState.SlashRight:
                     _animator.SetBool(P_ATTACK_HEIGHT, args.IsAttackHigh);
-                    _animator.SetInteger(P_ATTACK_MEDIUM, (int)args.AttackMedium);
-                    _animator.SetFloat(P_ATTACK_STATE, 1f);
+                    _animator.SetBool(P_ATTACK_MEDIUM, args.AttackWithLeftHand);
+                    if (args.AttackWithLeftHand)
+                        _animator.SetFloat(P_ATTACK_STATE, 0f);
+                    else
+                        _animator.SetFloat(P_ATTACK_STATE, 1f);
                     _attBlend = 1f;
                     Debug.Log("Slash right");
                     break;
@@ -323,6 +329,7 @@ public class AnimationManager : MonoBehaviour
         //_animator.SetBool(P_Stun, false);
         _animator.CrossFade(AnimationState.Empty.ToString(), 0.2f, 1, 0f);
     }
+
     public void StopFullBodyAnim(Component Sender, object obj)
     {
         if (Sender.gameObject != gameObject) return;
@@ -330,6 +337,4 @@ public class AnimationManager : MonoBehaviour
         _animator.SetBool(P_FULL_BODY, false);
         _animator.CrossFade(AnimationState.Idle.ToString(), 0.2f, 1, 0f);
     }
-
-
 }

@@ -14,6 +14,6 @@ namespace UnityEngine
         public List<int> AnimLayer = new List<int>();
         public Direction BlockDirection = Direction.Default;
         public BlockMedium BlockMedium = BlockMedium.Shield;
-        public BlockMedium AttackMedium = BlockMedium.Sword;
+        public bool AttackWithLeftHand = false;
     }
 }

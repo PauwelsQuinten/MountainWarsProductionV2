@@ -318,16 +318,18 @@ public class AnimationManager : MonoBehaviour
         var args = obj as AttackEventArgs;
         if (args == null) return;
         if (args.Attacker == gameObject || args.Defender == gameObject)
+        {
+            //Use play for an direct transition
+            _animator.Play(AnimationState.BlockedHit.ToString());
             _animator.SetTrigger(P_BLOCKED_HIT);
+        }
     }
-
 
     public void RecoverStunned(Component Sender, object obj)
     {
         if (Sender.gameObject != gameObject) return;
 
-        //_animator.SetBool(P_Stun, false);
-        _animator.CrossFade(AnimationState.Empty.ToString(), 0.2f, 1, 0f);
+        _animator.CrossFade(AnimationState.Idle.ToString(), 0.2f, 1, 0f);
     }
 
     public void StopFullBodyAnim(Component Sender, object obj)

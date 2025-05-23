@@ -238,6 +238,7 @@ namespace UnityEngine
         PickUp,
         Stun,
         Hit,
+        BlockedHit,
         Lean = 100,
         DipWater = 101,
         LookOver = 102,

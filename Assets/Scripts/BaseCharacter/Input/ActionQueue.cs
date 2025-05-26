@@ -34,14 +34,16 @@ public class ActionQueue : MonoBehaviour
             if (_inputQueue.Peek().Package.AnimationStart && _actionCount > 0)
                 _actionCount--;
             var package = _inputQueue.Dequeue();
-            Debug.Log($"{package.Package.AttackSignal} ,feint = {package.Package.IsFeint}");
+            if (gameObject.CompareTag("Player"))
+                Debug.Log($"{package.Package.AttackSignal} ,feint = {package.Package.IsFeint}");
             _activateAction.Raise(this, package.Package);
         }
 
         //Call next element imediatly if its about the feint signal, this is to continue the attack
         if (_inputQueue.Count > 0 && !_inputQueue.Peek().Package.IsFeint)
         {
-            Debug.Log("Continue attack");
+            if (gameObject.CompareTag("Player"))
+                Debug.Log("Continue attack");
             _activateAction.Raise(this, _inputQueue.Dequeue().Package);
         }
         if (IsOldestElementInQueueToLong(_maxTimeInQueue))
@@ -79,6 +81,7 @@ public class ActionQueue : MonoBehaviour
 
         _inputQueue.Clear();
         _actionCount = 0;
+        gameObject.GetComponent<StateManager>().InAnimiation = false;
 
     }
 

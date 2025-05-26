@@ -131,6 +131,8 @@ public class AnimationManager : MonoBehaviour
         //Set a bool to prevent the actionqueue from executing another action before current is finished 
         if (args.DoResetIdle)
         {
+            if (gameObject.CompareTag("Player"))
+                Debug.Log($"{_currentState}, current state");
             _startAnimation.Raise(this, null);
         }
     }
@@ -274,10 +276,14 @@ public class AnimationManager : MonoBehaviour
         _animator.speed = 1;
         _animator.SetFloat(P_HIT_HEIGHT, (float)(int)args.AttackHeight);
 
-        //Set all states besides base  to empty 
-        _animator.SetTrigger(P_GET_HIT);
+        //Transition block to hit when his block was badly aimed
+        float dir = _animator.GetFloat(P_BLOCK_DIR);
+        if (dir > 0.9f && dir < 3.1f)
+            _animator.SetTrigger(P_GET_HIT);
+
         _animator.SetBool(P_Stun, true);
 
+        //Set all states besides base to empty 
         for (int i = 1; i < 4; i++)
         {
             if (i == 1)
@@ -286,7 +292,7 @@ public class AnimationManager : MonoBehaviour
                 _animator.CrossFade(AnimationState.Empty.ToString(), 0.2f, i, 0f);
         }
         //update this in animator imediatly or the stun will overwrite this state
-        _animator.Update(0f);
+        //_animator.Update(0f);
     }
 
     public void GetStunned(Component sender, object obj)
@@ -304,7 +310,8 @@ public class AnimationManager : MonoBehaviour
         //When the character gets hit, he first get the animation call for hit.
         //Then the stun is set in StateManager which automaticly gets this stun call,
         //so we check first if he got hit before we set this state to stun
-        if (IsCurrentState(1, "FullBody.Hit"))
+        //if (IsCurrentState(1, "FullBody.Hit"))
+        if (_animator.GetBool(P_Stun))
             return;
 
         //Set all states besides base  to empty 

@@ -187,25 +187,25 @@ public class Parry : MonoBehaviour
         if (args.Direction == Direction.ToLeft)
         {
             if (parryMedium == BlockMedium.Shield)
-                _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.ParryShieldLeft, AnimLayer = { 2,4 }, DoResetIdle = true, Speed = _parrySpeed });
+                _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.ParryShieldLeft, AnimLayer = { 4 }, DoResetIdle = true, Speed = _parrySpeed });
             else if (parryMedium == BlockMedium.Sword)
             {
                 
                 if (_tryDisarm)
                     _parrySpeed = 4f;
-                _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.ParrySwordLeft, AnimLayer = { 2,3 }, DoResetIdle = true, Speed = _parrySpeed });
+                _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.ParrySwordLeft, AnimLayer = { 3 }, DoResetIdle = true, Speed = _parrySpeed });
             }
         
         }
         else if (args.Direction == Direction.ToRight)
         {
             if (parryMedium == BlockMedium.Shield)
-                _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.ParryShieldRight, AnimLayer = { 2,4 }, DoResetIdle = true, Speed = _parrySpeed });
+                _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.ParryShieldRight, AnimLayer = { 4 }, DoResetIdle = true, Speed = _parrySpeed });
             else if (parryMedium == BlockMedium.Sword)
             {
                 if (_tryDisarm)
                     _parrySpeed = 4f;
-                _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.ParrySwordRight, AnimLayer = { 2,3 }, DoResetIdle = true, Speed = _parrySpeed });
+                _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.ParrySwordRight, AnimLayer = { 3 }, DoResetIdle = true, Speed = _parrySpeed });
             }
 
         }

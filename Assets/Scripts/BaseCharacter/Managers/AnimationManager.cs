@@ -36,6 +36,7 @@ public class AnimationManager : MonoBehaviour
     private const string P_ATTACK_MEDIUM = "LeftHandAttack";
     private const string P_ATTACK_HEIGHT = "IsAttackHigh";
     private const string P_FEINT = "Feint";
+    private const string P_BLOCKED_ATT = "BlockedAtt";
 
     private void Start()
     {
@@ -77,6 +78,7 @@ public class AnimationManager : MonoBehaviour
         //For fluid block direction switches, else he will always first equip. looks really buggy
         if (SetBlockDirection(args))
             return;
+
         if (args.IsFullBodyAnim)
             _animator.SetBool(P_FULL_BODY, args.IsFullBodyAnim);
 
@@ -313,12 +315,17 @@ public class AnimationManager : MonoBehaviour
     {
         var args = obj as AttackEventArgs;
         if (args == null) return;
-        if (args.Attacker == gameObject || args.Defender == gameObject)
+        if (args.Defender == gameObject)
         {
-            //Use play for an direct transition
-            _animator.Play(AnimationState.BlockedHit.ToString());
             _animator.SetTrigger(P_BLOCKED_HIT);
         }
+        if (args.Attacker == gameObject )
+        {
+            //Use play for an direct transition
+            //_animator.Play(AnimationState.BlockedHit.ToString());
+            _animator.CrossFade(AnimationState.BlockedHit.ToString(), 0f);
+            _animator.SetFloat(P_BLOCKED_ATT, _animator.GetFloat(P_ATTACK_STATE));
+        }            
     }
 
     public void RecoverStunned(Component Sender, object obj)

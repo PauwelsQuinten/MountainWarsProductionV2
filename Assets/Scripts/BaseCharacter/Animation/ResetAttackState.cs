@@ -5,6 +5,7 @@ public class ResetAttackState : StateMachineBehaviour
     private const string P_ATTACK_STATE = "AttackState";
     private const string P_FULL_BODY = "FullBodyAnimation";
     private const string P_FEINT = "Feint";
+    private const string P_BLOCKED_HIT = "BlockedHit";
 
 
     public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -18,6 +19,7 @@ public class ResetAttackState : StateMachineBehaviour
 
     public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+        
         //Reset the attackstate so it wont keep looping this attack
         animator.SetFloat(P_ATTACK_STATE, 3f);
         animator.SetBool(P_FULL_BODY, false);

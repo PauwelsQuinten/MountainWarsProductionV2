@@ -155,6 +155,7 @@ public class Blocking : MonoBehaviour
             _succesfullHitEvent.Raise(this, args);
             _stunFeedbackEvent.Raise(this, new StunEventArgs
             { StunDuration = _stunValues.variable.StunOnHit, StunTarget = gameObject });
+            args.BlockPower = 0f;
 
         }
         else
@@ -165,32 +166,40 @@ public class Blocking : MonoBehaviour
                     _loseStamina.Raise(this, new StaminaEventArgs { StaminaCost = _staminaCost.value});
                     _stunFeedbackEvent.Raise(this, new StunEventArgs 
                     { StunDuration = _stunValues.variable.StunWhenGettingFullyBlocked, StunTarget = args.Attacker });
+                    args.AttackPower *= 0.1f;
+                    args.BlockPower = 10f;
                     break;
                 case BlockResult.HalfBlocked:
                     _loseStamina.Raise(this, new StaminaEventArgs { StaminaCost = _staminaCost.value * 1.5f});
                     _stunFeedbackEvent.Raise(this, new StunEventArgs 
                     { StunDuration = _stunValues.variable.StunWhenGettingPartiallyBlocked, StunTarget = args.Attacker });
+                    args.AttackPower *= 0.4f;
+                    args.BlockPower = 6f;
                     break;
                 case BlockResult.SwordBlock:
                     _loseStamina.Raise(this, new StaminaEventArgs { StaminaCost = _staminaCost.value * 0.5f });
                     _stunFeedbackEvent.Raise(this, new StunEventArgs
                     { StunDuration = _stunValues.variable.StunWhenGettingFullyBlockedBySword, StunTarget = args.Attacker });
+                    args.AttackPower *= 0.6f;
+                    args.BlockPower = 6f;
 
                     break;
                 case BlockResult.SwordHalfBlock:
                     _loseStamina.Raise(this, new StaminaEventArgs { StaminaCost = _staminaCost.value * 0.75f });
                     _stunFeedbackEvent.Raise(this, new StunEventArgs 
                     { StunDuration =_stunValues.variable.StunWhenGettingPartiallyBlockedBySword, StunTarget = args.Attacker });
+                    args.AttackPower *= 0.7f;
+                    args.BlockPower = 3f;
                     //_succesfullHitEvent.Raise(this, args);
                     break;
             }
-            //Sent feedback animation to blocker and attacker
-            if (_blockAnimation)
-                _blockAnimation.Raise(this, args);       
             //Sent to equipment to deal with the damage to used equipment
             if (_equipmentUpdate)
                 _equipmentUpdate.Raise(this, defenceEventArgs);
         }
+        //Sent feedback animation to blocker and attacker
+        if (_blockAnimation)
+            _blockAnimation.Raise(this, args);       
 
     }
 

@@ -5,7 +5,8 @@ using static UnityEngine.Rendering.GPUSort;
 
 public class PositionOffset : MonoBehaviour
 {
-    [SerializeField, Tooltip("The ratio of offset in movement he gets in comparison to the power of the attack")] private float _offsetOnPower = 0.5f;
+    [SerializeField, Tooltip("The ratio of offset in movement he gets in comparison to the power of the attack")]
+    private float _offsetOnPower = 0.5f;
     private Vector3 _offsetDirectionPos;
     private Rigidbody _rb;
 
@@ -19,15 +20,27 @@ public class PositionOffset : MonoBehaviour
     public async void GetPositionOffset(Component sender, object obj)
     {
         AttackEventArgs args = obj as AttackEventArgs;
-        if (args == null || args.Defender != gameObject) return;
+        if (args == null) return;
 
-        MoveCharacter(args.Attacker.transform.position);
+        float power = 0f;
+        if (args.Defender != gameObject)
+        {
+            power = _offsetOnPower * args.AttackPower;
+        }
+        if (args.Defender != gameObject)
+        {
+            power = _offsetOnPower * args.BlockPower;
+        }
+        else
+            return;
+
+        MoveCharacter(args.Attacker.transform.position, power);
     }
 
-    private void MoveCharacter(Vector3 attackerPosition)
+    private void MoveCharacter(Vector3 attackerPosition, float power)
     {
         _offsetDirectionPos = (transform.position - attackerPosition).normalized;
-        _rb.AddForce(_offsetDirectionPos * _offsetOnPower, ForceMode.Impulse);
+        _rb.AddForce(_offsetDirectionPos * power, ForceMode.Impulse);
     }
 
 }

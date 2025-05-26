@@ -24,10 +24,11 @@ public class Attacking : MonoBehaviour
     private float _maxChargedPower = 20f;
 
     [Header("Attack")]
-    [SerializeField]
     private float _attackRange;
-    [SerializeField]
+    [SerializeField, Tooltip("This event is called from the moment the attack is hit and sends its info to the opponent defence")]
     private GameEvent _doAttack;
+    [SerializeField, Tooltip("This event is called from the moment the attack starts, after the feint. This is for giving it a forwards push ")]
+    private GameEvent _moveAttack;
 
     [Header("Stamina")]
     [SerializeField]
@@ -88,6 +89,7 @@ public class Attacking : MonoBehaviour
         if (!args.IsFeint )
         {
             _changeAnimation.Raise(this, new AnimationEventArgs { IsFeint = false });
+            _moveAttack.Raise(this, new AttackMoveEventArgs { Attacker = gameObject, AttackType = _attackType});
             return;
         }
 

@@ -22,6 +22,8 @@ public class AnimationEvents : MonoBehaviour
     private GameEvent _sheatSword;
     [SerializeField] 
     private GameEvent _pickup;
+    [SerializeField] 
+    private GameEvent _moveAttack;
 
     private int _storredDirection = 0;
     private void Start()
@@ -83,6 +85,14 @@ public class AnimationEvents : MonoBehaviour
     public void Pickup()
     {
         _pickup.Raise(this.transform.parent, null);
+    }
+
+    public void MoveBack(int forward)
+    {
+        if (forward == 0)
+            _moveAttack.Raise(this, new AttackMoveEventArgs { Attacker = transform.parent.gameObject });
+        else
+            _moveAttack.Raise(this, new AttackMoveEventArgs { Attacker = transform.parent.gameObject, AttackType = AttackType.Stab });
     }
 
 }

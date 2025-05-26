@@ -131,11 +131,13 @@ public class StateManager : MonoBehaviour
         {
             IsHoldingShield = false;
             SetStun(2f);
+            InAnimiation = false;
         }
 
         else if (args != null && args.StunTarget == gameObject)
         {
             SetStun(args.StunDuration);
+            InAnimiation = false;
         }
         
     }
@@ -191,6 +193,7 @@ public class StateManager : MonoBehaviour
     {
         yield return new WaitForSeconds(stunDuration);
         AttackState = AttackState.Idle;
+        InAnimiation = false;
         _OnStunRecovery.Raise(this, null);
 
         if (!gameObject.CompareTag(PLAYER))

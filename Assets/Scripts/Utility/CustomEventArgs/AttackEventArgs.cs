@@ -10,4 +10,11 @@ namespace UnityEngine
         public GameObject Attacker;
         public GameObject Defender;
     }
+
+    public class AttackMoveEventArgs : EventArgs
+    {
+        public AttackType AttackType = AttackType.None;
+        public GameObject Attacker;
+        public GameObject Target = null;
+    }
 }

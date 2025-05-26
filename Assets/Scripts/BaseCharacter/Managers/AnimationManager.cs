@@ -335,6 +335,7 @@ public class AnimationManager : MonoBehaviour
     {
         if (Sender.gameObject != gameObject) return;
 
+        _animator.SetBool(P_FULL_BODY, false);  
         _animator.CrossFade(AnimationState.Idle.ToString(), 0.2f, 1, 0f);
         _animator.SetBool(P_Stun, false);
 

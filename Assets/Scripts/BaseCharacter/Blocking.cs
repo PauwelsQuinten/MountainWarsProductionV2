@@ -166,21 +166,21 @@ public class Blocking : MonoBehaviour
                     _loseStamina.Raise(this, new StaminaEventArgs { StaminaCost = _staminaCost.value});
                     _stunFeedbackEvent.Raise(this, new StunEventArgs 
                     { StunDuration = _stunValues.variable.StunWhenGettingFullyBlocked, StunTarget = args.Attacker });
-                    args.AttackPower *= 0.1f;
+                    args.AttackPower *= 0.5f;
                     args.BlockPower = 10f;
                     break;
                 case BlockResult.HalfBlocked:
                     _loseStamina.Raise(this, new StaminaEventArgs { StaminaCost = _staminaCost.value * 1.5f});
                     _stunFeedbackEvent.Raise(this, new StunEventArgs 
                     { StunDuration = _stunValues.variable.StunWhenGettingPartiallyBlocked, StunTarget = args.Attacker });
-                    args.AttackPower *= 0.4f;
+                    args.AttackPower *= 0.7f;
                     args.BlockPower = 6f;
                     break;
                 case BlockResult.SwordBlock:
                     _loseStamina.Raise(this, new StaminaEventArgs { StaminaCost = _staminaCost.value * 0.5f });
                     _stunFeedbackEvent.Raise(this, new StunEventArgs
                     { StunDuration = _stunValues.variable.StunWhenGettingFullyBlockedBySword, StunTarget = args.Attacker });
-                    args.AttackPower *= 0.6f;
+                    args.AttackPower *= 0.8f;
                     args.BlockPower = 6f;
 
                     break;
@@ -188,7 +188,7 @@ public class Blocking : MonoBehaviour
                     _loseStamina.Raise(this, new StaminaEventArgs { StaminaCost = _staminaCost.value * 0.75f });
                     _stunFeedbackEvent.Raise(this, new StunEventArgs 
                     { StunDuration =_stunValues.variable.StunWhenGettingPartiallyBlockedBySword, StunTarget = args.Attacker });
-                    args.AttackPower *= 0.7f;
+                    args.AttackPower *= 0.85f;
                     args.BlockPower = 3f;
                     //_succesfullHitEvent.Raise(this, args);
                     break;

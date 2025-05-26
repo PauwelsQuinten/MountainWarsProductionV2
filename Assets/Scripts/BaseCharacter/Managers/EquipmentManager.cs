@@ -230,7 +230,7 @@ public class EquipmentManager : MonoBehaviour
 
     public void PickupEquipment(Component sender, object obj)
     {
-        if (sender.gameObject != gameObject) return;
+        if (sender.gameObject != gameObject || _hitColliders == null) return;
 
         foreach (var hitCollider in _hitColliders)
         {

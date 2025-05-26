@@ -290,12 +290,10 @@ public class PlayerController : MonoBehaviour
         if (Time.timeScale == 0) return;
         if (!ctx.performed) return;
 
-        if (!_stateManager.EquipmentManager.HasEquipmentInHand(true))
-            _pickupEvent.Raise(this);
+        if (!_stateManager.EquipmentManager.HasEquipmentInHand(true) && _stateManager.EquipmentManager.CloseToEquipment())
+            _inQueue.Raise(this, new AimingOutputArgs { Special = SpecialInput.PickUp, AnimationStart = true });
         else if (_stateManager.IsNearHidingSpot)
             _hide.Raise(this, EventArgs.Empty);
-        else if (_stateManager.EquipmentManager.CloseToEquipment())
-            _inQueue.Raise(this, new AimingOutputArgs { Special = SpecialInput.PickUp, AnimationStart = true });
 
     }
 

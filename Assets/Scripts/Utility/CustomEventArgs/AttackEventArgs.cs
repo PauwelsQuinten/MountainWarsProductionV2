@@ -6,6 +6,7 @@ namespace UnityEngine
         public AttackType AttackType;
         public AttackHeight AttackHeight;
         public float AttackPower;
+        public float BlockPower;
         public GameObject Attacker;
         public GameObject Defender;
     }

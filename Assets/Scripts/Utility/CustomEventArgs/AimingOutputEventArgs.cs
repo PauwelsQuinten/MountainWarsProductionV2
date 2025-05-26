@@ -15,7 +15,7 @@ namespace UnityEngine
         public bool IsHoldingBlock;
         public GameObject Sender;
         public bool AnimationStart = false;
-        public bool IsFeint;
+        public bool IsFeint = true;
         public SpecialInput Special = SpecialInput.Default;
     }
     

@@ -41,7 +41,7 @@ public class AIController : MonoBehaviour
         StartCoroutine(CheckSurrounding());
     }
 
-    //This OnStun is purely for storing his attackstate for if he is hilding shield or not
+    //This ClearQueue is purely for storing his attackstate for if he is hilding shield or not
     //!! its important that this event is called before the statemanager stunEvent!!!
     public void OnStun(Component sender, object obj)
     {
@@ -55,8 +55,7 @@ public class AIController : MonoBehaviour
 
         var args = obj as StunEventArgs;
         if (args == null) return;
-        if (args.ComesFromEnemy && sender.gameObject == gameObject) return;
-        else if (!args.ComesFromEnemy && sender.gameObject != gameObject) return;
+        if (args.StunTarget != gameObject) return;
 
         _storredAttackState =
             _stateManager.AttackState == AttackState.Stun ? AttackState.Idle : _stateManager.AttackState;

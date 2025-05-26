@@ -12,6 +12,7 @@ public class Blocking : MonoBehaviour
     [SerializeField] private GameEvent _equipmentUpdate;
     [SerializeField] private GameEvent _succesfullHitEvent;
     [SerializeField] private GameEvent _changeAnimation;
+    [SerializeField] private GameEvent _blockAnimation;
 
     [Header("Stamina")]
     [SerializeField]
@@ -153,7 +154,8 @@ public class Blocking : MonoBehaviour
         {
             _succesfullHitEvent.Raise(this, args);
             _stunFeedbackEvent.Raise(this, new StunEventArgs
-            { StunDuration = _stunValues.variable.StunOnHit, ComesFromEnemy = false});
+            { StunDuration = _stunValues.variable.StunOnHit, StunTarget = gameObject });
+            args.BlockPower = 0f;
 
         }
         else
@@ -163,29 +165,41 @@ public class Blocking : MonoBehaviour
                 case BlockResult.FullyBlocked:
                     _loseStamina.Raise(this, new StaminaEventArgs { StaminaCost = _staminaCost.value});
                     _stunFeedbackEvent.Raise(this, new StunEventArgs 
-                    { StunDuration = _stunValues.variable.StunWhenGettingFullyBlocked, ComesFromEnemy = true });
+                    { StunDuration = _stunValues.variable.StunWhenGettingFullyBlocked, StunTarget = args.Attacker });
+                    args.AttackPower *= 0.1f;
+                    args.BlockPower = 10f;
                     break;
                 case BlockResult.HalfBlocked:
                     _loseStamina.Raise(this, new StaminaEventArgs { StaminaCost = _staminaCost.value * 1.5f});
                     _stunFeedbackEvent.Raise(this, new StunEventArgs 
-                    { StunDuration = _stunValues.variable.StunWhenGettingPartiallyBlocked, ComesFromEnemy = true });
+                    { StunDuration = _stunValues.variable.StunWhenGettingPartiallyBlocked, StunTarget = args.Attacker });
+                    args.AttackPower *= 0.4f;
+                    args.BlockPower = 6f;
                     break;
                 case BlockResult.SwordBlock:
                     _loseStamina.Raise(this, new StaminaEventArgs { StaminaCost = _staminaCost.value * 0.5f });
                     _stunFeedbackEvent.Raise(this, new StunEventArgs
-                    { StunDuration = _stunValues.variable.StunWhenGettingFullyBlockedBySword, ComesFromEnemy = true });
+                    { StunDuration = _stunValues.variable.StunWhenGettingFullyBlockedBySword, StunTarget = args.Attacker });
+                    args.AttackPower *= 0.6f;
+                    args.BlockPower = 6f;
 
                     break;
                 case BlockResult.SwordHalfBlock:
                     _loseStamina.Raise(this, new StaminaEventArgs { StaminaCost = _staminaCost.value * 0.75f });
                     _stunFeedbackEvent.Raise(this, new StunEventArgs 
-                    { StunDuration =_stunValues.variable.StunWhenGettingPartiallyBlockedBySword, ComesFromEnemy = true });
+                    { StunDuration =_stunValues.variable.StunWhenGettingPartiallyBlockedBySword, StunTarget = args.Attacker });
+                    args.AttackPower *= 0.7f;
+                    args.BlockPower = 3f;
                     //_succesfullHitEvent.Raise(this, args);
                     break;
             }
-                       
-            _equipmentUpdate.Raise(this, defenceEventArgs);
+            //Sent to equipment to deal with the damage to used equipment
+            if (_equipmentUpdate)
+                _equipmentUpdate.Raise(this, defenceEventArgs);
         }
+        //Sent feedback animation to blocker and attacker
+        if (_blockAnimation)
+            _blockAnimation.Raise(this, args);       
 
     }
 
@@ -206,17 +220,16 @@ public class Blocking : MonoBehaviour
         //send event for animation
         if (_blockMedium == BlockMedium.Shield)
             _changeAnimation.Raise(this, new AnimationEventArgs 
-            { AnimState = AnimationState.ShieldEquip, AnimLayer = 4, DoResetIdle = false, BlockDirection = _blockDirection, BlockMedium = BlockMedium.Shield });
+            { AnimState = AnimationState.ShieldEquip, AnimLayer = { 4 }, DoResetIdle = false, BlockDirection = _blockDirection, BlockMedium = BlockMedium.Shield });
         else if (_blockMedium == BlockMedium.Sword)
             _changeAnimation.Raise(this, new AnimationEventArgs 
-            { AnimState = AnimationState.SwordEquip, AnimLayer = 3, DoResetIdle = false, BlockDirection = _blockDirection, BlockMedium = BlockMedium.Sword });
+            { AnimState = AnimationState.SwordEquip, AnimLayer = { 3 }, DoResetIdle = false, BlockDirection = _blockDirection, BlockMedium = BlockMedium.Sword });
     }
 
     private void LowerEquipment()
     {
-        _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Empty, AnimLayer = 4, DoResetIdle = false, BlockDirection = Direction.Idle });
-        _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Empty, AnimLayer = 3, DoResetIdle = false});
-        _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Idle, AnimLayer = 1, DoResetIdle = false});
+        _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Empty, AnimLayer = { 3,4 }, DoResetIdle = false, BlockDirection = Direction.Idle });
+        _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Idle, AnimLayer = { 1 }, DoResetIdle = false});
     }
 
     private void UpdateBlackboard(AimingOutputArgs args)

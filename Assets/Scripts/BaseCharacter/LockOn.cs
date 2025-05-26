@@ -7,7 +7,7 @@ public class LockOn : MonoBehaviour
     private GameObject _lockonTarget;
     [Header("Events")]
     [SerializeField] private GameEvent _lockonEvent;
-    [SerializeField] private GameEvent _sheathWeapon;
+    [SerializeField] private GameEvent _inQueue;
 
     [Header("Animation")]
     [SerializeField] private GameEvent _changePanel;
@@ -25,7 +25,6 @@ public class LockOn : MonoBehaviour
     private Coroutine _sheathingCoroutine;
     private bool _sheathing;
 
-    private bool _canResheath;
 
     private StateManager _stateManager;
 
@@ -88,7 +87,6 @@ public class LockOn : MonoBehaviour
         if(sender == this) return;
         if(_sheathingCoroutine != null)StopCoroutine(_sheathingCoroutine);
         _sheathing = false;
-        _canResheath = false;
     }
 
     private void SheatSword()
@@ -97,10 +95,9 @@ public class LockOn : MonoBehaviour
         {
             if (!_stateManager.WeaponIsSheathed)
             {
-                if (!_sheathing && _canResheath)
+                if (!_sheathing )
                 {
                     _sheathingCoroutine = StartCoroutine(SheathWeapon(_timewithoutTarget, true));
-                    _canResheath = false;
                 }
             }
         }
@@ -112,11 +109,9 @@ public class LockOn : MonoBehaviour
             {
                 if (!_sheathing)
                 {
-                    _canResheath = true;
                     _sheathingCoroutine = StartCoroutine(SheathWeapon(0.1f, false));
                 }
             }
-            else _canResheath = true;
         }
     }
 
@@ -135,14 +130,16 @@ public class LockOn : MonoBehaviour
     private bool IsOrientationChanged(Orientation newOrientation, float orientation)
     {
         return Mathf.Abs(_storedfOrientation - orientation) > _minAngleBeforeSendEvent;
-        //return newOrientation != _storedOrientation;
     }
 
     private IEnumerator SheathWeapon(float duration, bool sheat)
     {
         _sheathing = true;
         yield return new WaitForSeconds(duration);
-        _sheathWeapon.Raise(this, sheat);
+        if (sheat)
+            _inQueue.Raise(this, new AimingOutputArgs { Special = SpecialInput.SheatSword, AnimationStart = true });
+        else    
+            _inQueue.Raise(this, new AimingOutputArgs { Special = SpecialInput.UnSheatSword, AnimationStart = true });
         _sheathing = false;
     }
 }

@@ -14,8 +14,8 @@ namespace UnityEngine
 
     public enum AttackHeight
     {
-        Head,
-        Torso
+        Head = 0,
+        Torso = 1
     }
 
 
@@ -46,11 +46,11 @@ namespace UnityEngine
 
     public enum Direction
     {
-        Idle, //no specific direction
-        ToRight,
-        ToLeft, 
-        ToCenter,
-        Wrong,//aimed to a bad direction, like for an invallid block
+        Idle = 0, //no specific direction
+        ToRight = 1,
+        ToCenter = 2,
+        ToLeft = 3, 
+        Wrong = 4,//aimed to a bad direction, like for an invallid block
         Default // used for sending signal, on default dont change current direction in animator 
     }
 
@@ -234,7 +234,17 @@ namespace UnityEngine
         DrawWeapon,
         DragShieldDown,
         Charge,
-        PatchUp
+        PatchUp,
+        PickUp,
+        Stun,
+        Hit,
+        BlockedHit,
+        Lean = 100,
+        DipWater = 101,
+        LookOver = 102,
+        AlmostFalling = 103,
+        Confused = 104
+
     }
 
     public enum ObjectTarget
@@ -279,7 +289,12 @@ namespace UnityEngine
         PatchUp,
         PickUp,
         SheatSword,
-        UnSheatSword
+        UnSheatSword,
+        Lean = 100,
+        DipWater = 101,
+        LookOver = 102,
+        AlmostFalling = 103,
+        Confused = 104
     }
 
 

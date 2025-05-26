@@ -38,6 +38,10 @@ namespace Geometry
             float angle = (int)orientation * Mathf.Deg2Rad;
             return new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
         }
+         public static Vector2 CalculateVectorFromfOrientation(float orientation)
+        {
+            return new Vector2(Mathf.Cos(orientation), Mathf.Sin(orientation));
+        }
 
         public static float CalculateSwingSpeed(float length, float currentTime, float minResult, float maxResult)
         {
@@ -59,6 +63,7 @@ namespace Geometry
             float input = CalculateAngleRadOfInput(analogInput) * Mathf.Rad2Deg;
             int diff = (int)input - orient;
             diff = diff < -180 ? 360 + diff : diff;
+            diff = diff > 180 ? diff - 360 : diff;
 
 
             if (diff > -centerAngle && diff < centerAngle)
@@ -77,6 +82,7 @@ namespace Geometry
             float input = CalculateAngleRadOfInput(analogInput) * Mathf.Rad2Deg;
             int diff = (int)input - orient;
             diff = diff < -180 ? 360 + diff : diff;
+            diff = diff > 180 ? diff -360 : diff;
 
             //if (diff < 0 || diff > 180)                
             if (diff < 0 && diff > -maxAngleToCenter)                

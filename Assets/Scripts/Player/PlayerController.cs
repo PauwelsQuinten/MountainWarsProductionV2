@@ -7,6 +7,10 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
 {
     [Header("State Manager")]
+    [SerializeField] private bool _wantToSeePatchingAnim = false;
+
+
+    [Header("State Manager")]
     [SerializeField]
     private StateManager _stateManager;
 
@@ -15,6 +19,8 @@ public class PlayerController : MonoBehaviour
     private AimingInputReference _aimInputRef;
     [SerializeField]
     private MovingInputReference _moveInputRef;
+    [SerializeField]
+    private float _speedMultiplier = 1.5f;
 
     [Header("Stamina")]
     [SerializeField]
@@ -75,7 +81,7 @@ public class PlayerController : MonoBehaviour
         StartCoroutine(CheckSurrounding());
     }
 
-    //This OnStun is purely for storing his attackstate for if he is hilding shield or not
+    //This ClearQueue is purely for storing his attackstate for if he is hilding shield or not
     //!! its important that this event is called before the statemanager stunEvent!!!
     public void GetStun(Component sender, object obj)
     {
@@ -90,8 +96,7 @@ public class PlayerController : MonoBehaviour
 
         var args = obj as StunEventArgs;
         if (args == null) return;
-        if (args.ComesFromEnemy && sender.gameObject == gameObject) return;
-        else if (!args.ComesFromEnemy && sender.gameObject != gameObject) return;
+        if (args.StunTarget != gameObject) return;
 
         _storredAttackState = 
             _stateManager.AttackState == AttackState.Stun? _storredAttackState : _stateManager.AttackState;
@@ -203,7 +208,7 @@ public class PlayerController : MonoBehaviour
         else if (ctx.performed)
         {
             _stateManager.AttackState = AttackState.ShieldDefence;
-            _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.ShieldEquip, AnimLayer = 4, DoResetIdle = false });
+            //_changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.ShieldEquip, AnimLayer = { 4 }, DoResetIdle = false });
             _isHoldingShield = false;
             _stateManager.IsHoldingShield = _isHoldingShield;
         }
@@ -254,7 +259,7 @@ public class PlayerController : MonoBehaviour
             if (ctx.performed)
         {
             _wasSprinting = true;
-            _moveInputRef.variable.SpeedMultiplier = 1.5f;
+            _moveInputRef.variable.SpeedMultiplier = _speedMultiplier;
         }
         if (ctx.canceled)
         {
@@ -289,8 +294,8 @@ public class PlayerController : MonoBehaviour
             _pickupEvent.Raise(this);
         else if (_stateManager.IsNearHidingSpot)
             _hide.Raise(this, EventArgs.Empty);
-        else
-            _pickupEvent.Raise(this);
+        else if (_stateManager.EquipmentManager.CloseToEquipment())
+            _inQueue.Raise(this, new AimingOutputArgs { Special = SpecialInput.PickUp, AnimationStart = true });
 
     }
 
@@ -322,7 +327,7 @@ public class PlayerController : MonoBehaviour
         //This button will be used to sheat/unsheat sord when not bleeding
         if (ctx.action.WasPerformedThisFrame())
         {
-            if (!_stateManager.IsBleeding)
+            if (!_stateManager.IsBleeding && !_wantToSeePatchingAnim)
             {
                 if (_stateManager.WeaponIsSheathed)
                 {

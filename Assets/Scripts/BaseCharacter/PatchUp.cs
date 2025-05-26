@@ -38,7 +38,7 @@ public class PatchUp : MonoBehaviour
     {
         _patchStartTime = Time.time;
         _patchUpEvent.Raise(this, false);
-        _changeAnimation.Raise(this, new AnimationEventArgs { AnimLayer = 3, AnimState = AnimationState.PatchUp, DoResetIdle = true });
+        _changeAnimation.Raise(this, new AnimationEventArgs { AnimLayer = { 3 }, AnimState = AnimationState.PatchUp, DoResetIdle = true });
 
         _patchupRoutine = StartCoroutine(StartPatchingUp(_patchUpDuration.value));
     }
@@ -50,12 +50,12 @@ public class PatchUp : MonoBehaviour
         float _patchEndTime = Time.time;
         float _patchTimer = _patchEndTime - _patchStartTime;
 
-        if (_patchUpDuration.value >= _patchTimer)
+        if (_patchUpDuration.value <= _patchTimer)
             _patchUpEvent.Raise(this, true);
         else
             _patchUpEvent.Raise(this, false);
 
-        _changeAnimation.Raise(this, new AnimationEventArgs { AnimLayer = 3, AnimState = AnimationState.Empty, DoResetIdle = false });
+        _changeAnimation.Raise(this, new AnimationEventArgs { AnimLayer = { 3 }, AnimState = AnimationState.Empty, DoResetIdle = false });
         _patchStartTime = 0;
     }
 

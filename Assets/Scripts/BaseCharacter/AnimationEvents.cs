@@ -20,6 +20,8 @@ public class AnimationEvents : MonoBehaviour
     private GameEvent _dragShieldDown;
     [SerializeField] 
     private GameEvent _sheatSword;
+    [SerializeField] 
+    private GameEvent _pickup;
 
     private int _storredDirection = 0;
     private void Start()
@@ -42,11 +44,13 @@ public class AnimationEvents : MonoBehaviour
     {
         _recieveAttackEvent.Raise(this.transform.parent, null);
     }
+
     public void EndAnimation()
     {
         if ( _endAnimation ) 
             _endAnimation.Raise(this.transform.parent, null);
     }
+
     public void SetInParryZone(int InZone)
     {
         bool zone = InZone == 0? true : false;
@@ -74,6 +78,11 @@ public class AnimationEvents : MonoBehaviour
     {
         bool isSheating = zeroForIn == 0? true : false;
         _sheatSword.Raise(this.transform.parent, isSheating);
+    }
+     
+    public void Pickup()
+    {
+        _pickup.Raise(this.transform.parent, null);
     }
 
 }

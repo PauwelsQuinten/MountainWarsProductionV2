@@ -323,8 +323,11 @@ public class AnimationManager : MonoBehaviour
         {
             //Use play for an direct transition
             //_animator.Play(AnimationState.BlockedHit.ToString());
-            _animator.CrossFade(AnimationState.BlockedHit.ToString(), 0f);
             _animator.SetFloat(P_BLOCKED_ATT, _animator.GetFloat(P_ATTACK_STATE));
+            if (_animator.GetBool(P_ATTACK_HEIGHT))
+                _animator.CrossFade(AnimationState.AttackFeedFackHigh.ToString(), 0.1f);
+            else
+                _animator.CrossFade(AnimationState.AttackFeedFackLow.ToString(), 0.1f);
         }            
     }
 

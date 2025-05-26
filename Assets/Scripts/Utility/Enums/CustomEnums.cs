@@ -238,6 +238,8 @@ namespace UnityEngine
         PickUp,
         Stun,
         Hit,
+        AttackFeedFackLow,
+        AttackFeedFackHigh,
         BlockedHit,
         Lean = 100,
         DipWater = 101,

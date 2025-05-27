@@ -48,19 +48,22 @@ public class PositionOffset : MonoBehaviour
     {
         if (args.Attacker != gameObject) return; 
 
+        //Move forward
         if (args.Target == null && args.AttackType != AttackType.None)
         {
             _offsetDirectionPos = transform.forward;
             _rb.AddForce(_offsetDirectionPos * _movementPower, ForceMode.Impulse);
         }
+        //Move back
         else if (args.AttackType == AttackType.None)
         {
             _offsetDirectionPos = transform.forward * -1;
             _rb.AddForce(_offsetDirectionPos * _movementPower * 0.8f, ForceMode.Impulse);
         }
+        //move towards opponent
         else
         {
-            _offsetDirectionPos = (args.Target.transform.position - transform.forward).normalized;
+            _offsetDirectionPos = (args.Target.transform.position - transform.position).normalized;
             _rb.AddForce(_offsetDirectionPos * _movementPower, ForceMode.Impulse);
         }
     }

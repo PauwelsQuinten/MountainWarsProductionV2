@@ -25,7 +25,11 @@ public class OnWalkInEvents : MonoBehaviour
         {
             if ((int)tag >= 100  && collision.transform.CompareTag(tag.ToString()))
             {
-                Interact(collision.gameObject);
+
+                ContactPoint contact = collision.GetContact(0);
+                Vector3 collisionPoint = contact.point;
+
+                Interact(collisionPoint);
                 _queueEvent.Raise(this, new AimingOutputArgs {Special =  tag});
                 return;
             }
@@ -34,13 +38,13 @@ public class OnWalkInEvents : MonoBehaviour
         Debug.Log("No vallid tag name found on hit object");
     }
 
-    private async Task Interact(GameObject target)
+    private async Task Interact(Vector3 target)
     {        
         float elpased = 0f;
         while( elpased < _approachTime)
         {
             elpased += Time.deltaTime;
-            var _offsetDirectionPos = (transform.position - target.transform.position).normalized;
+            var _offsetDirectionPos = (transform.position - target).normalized;
             _rb.AddForce(_offsetDirectionPos * _movementPower, ForceMode.Force);
             await Task.Yield();  
         }

@@ -24,7 +24,10 @@ public class CharacterMovement : MonoBehaviour
     [Header("StateManager")]
     [SerializeField]
     private StateManager _stateManager;
-    
+
+    [SerializeField]
+    private bool _stopMovingDuringAttack = false;
+
     private Rigidbody _rb;
     private Vector3 _movedirection;
     private float _angleInterval = 22.5f;
@@ -32,6 +35,7 @@ public class CharacterMovement : MonoBehaviour
     float _rotationSpeed = 5f;
 
     private StaminaManager _staminaManager;
+    private bool _inAttackMotion = false;
 
     private void Start()
     {
@@ -42,6 +46,10 @@ public class CharacterMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (_stopMovingDuringAttack && _inAttackMotion)
+            return;
+
+        //npc get moved by navmesh
         if (gameObject.CompareTag("Player")) 
             _rb.Move(new Vector3(transform.position.x, transform.position.y,transform.position.z) + (_movedirection * (_speed.value * _moveInput.variable.SpeedMultiplier)) * Time.deltaTime, transform.rotation);
         _rb.AddForce(Vector3.down * 9.81f * 300, ForceMode.Force);
@@ -105,6 +113,15 @@ public class CharacterMovement : MonoBehaviour
         
         if (_stateManager.Target == null)
             UpdateOrientation();
+    }
+
+    public void SetInAttackMovement(Component sender, object obj)
+    {
+        AttackMoveEventArgs args = obj as AttackMoveEventArgs;
+        if (args == null || args.Attacker != gameObject) return;
+
+        _inAttackMotion = args.AttackType == AttackType.None? false : true;
+
     }
 
     private void UpdateOrientation()

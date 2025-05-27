@@ -113,6 +113,8 @@ public class CharacterMovement : MonoBehaviour
         if (_movedirection.magnitude <= 0.2f) return;
         float moveInputAngle = Mathf.Atan2(_movedirection.z, _movedirection.x);
         moveInputAngle = moveInputAngle * Mathf.Rad2Deg;
+        if (moveInputAngle - _angleInterval < -180)
+            moveInputAngle *= -1;
 
         foreach (Orientation direction in Enum.GetValues(typeof(Orientation)))
         {

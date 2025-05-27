@@ -34,8 +34,8 @@ public class ActionQueue : MonoBehaviour
             if (_inputQueue.Peek().Package.AnimationStart && _actionCount > 0)
                 _actionCount--;
             var package = _inputQueue.Dequeue();
-            if (gameObject.CompareTag("Player"))
-                Debug.Log($"{package.Package.AttackSignal} ,feint = {package.Package.IsFeint}");
+            /*if (gameObject.CompareTag("Player"))
+                Debug.Log($"{package.Package.AttackSignal} ,feint = {package.Package.IsFeint}");*/
             _activateAction.Raise(this, package.Package);
         }
 
@@ -56,7 +56,7 @@ public class ActionQueue : MonoBehaviour
     public void SendAction(Component sender, object obj)
     {
         if (sender.gameObject != gameObject) return;
-        var args = (AimingOutputArgs)obj;
+        var args = obj as AimingOutputArgs;
         if (args == null) return;
         if (_actionCount < _maxQueueSize)
         {

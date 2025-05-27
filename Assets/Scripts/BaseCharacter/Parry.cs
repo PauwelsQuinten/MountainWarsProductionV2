@@ -50,12 +50,10 @@ public class Parry : MonoBehaviour
             StartAnimation(args, _parryMedium);
             _swingDirection = args.Direction;
         }
-        else
-        {
-            _swingDirection = Direction.Idle;
-        }
+        
     }
 
+    //This is the signal coming from the attacker, checks if you where parying or not. if not it will be handled further in the BlockingScript
     public void StartParry(Component sender, object obj)
     {
         AttackEventArgs args = obj as AttackEventArgs;
@@ -74,15 +72,19 @@ public class Parry : MonoBehaviour
         
     }
 
+    //Event called from the parry animation, determening when you are in the motion for a parry 
     public void InParryMotion(Component sender, object obj)
     {
         if (sender.gameObject != gameObject) return;
 
         _InParryZone = (bool)obj;
+        Debug.Log($"Parry mode = {_InParryZone}");
 
         if (_tryDisarm && IsSuccesfullDisarm())
             OnSuccesfullDisarm();
     }
+
+
     public void OnStun(Component sender, object obj)
     {
         if (sender.gameObject != gameObject) return;

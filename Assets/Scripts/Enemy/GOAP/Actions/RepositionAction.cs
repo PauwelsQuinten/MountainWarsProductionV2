@@ -5,7 +5,7 @@ public class RepositionAction : GoapAction
     public override void StartAction(WorldState currentWorldState, BlackboardReference blackboard)
     {
         _isActivated = true;
-        Debug.Log($"start reposition");
+        //Debug.Log($"start reposition");
 
     }
 

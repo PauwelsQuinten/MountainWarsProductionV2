@@ -131,8 +131,8 @@ public class AnimationManager : MonoBehaviour
         //Set a bool to prevent the actionqueue from executing another action before current is finished 
         if (args.DoResetIdle)
         {
-            if (gameObject.CompareTag("Player"))
-                Debug.Log($"{_currentState}, current state");
+            /*if (gameObject.CompareTag("Player"))
+                Debug.Log($"{_currentState}, current state");*/
             _startAnimation.Raise(this, null);
         }
     }
@@ -346,6 +346,7 @@ public class AnimationManager : MonoBehaviour
         _animator.CrossFade(AnimationState.Idle.ToString(), 0.2f, 1, 0f);
         _animator.SetBool(P_Stun, false);
 
+        _currentState = AnimationState.Idle;
     }
 
     public void StopFullBodyAnim(Component Sender, object obj)

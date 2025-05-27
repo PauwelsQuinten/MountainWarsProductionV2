@@ -264,7 +264,7 @@ namespace UnityEngine
         PatchUp,
         Dash,
         StopDash,
-        Interact,
+        PickUp,
         LockShield,
         GrabShield
     }

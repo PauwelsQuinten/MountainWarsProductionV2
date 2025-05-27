@@ -3,6 +3,14 @@ using UnityEngine.Animations.Rigging;
 
 public class IKSpearMovement : MonoBehaviour
 {
+    private enum RigValue
+    {
+        Default = -1,
+        Zero = 0,
+        One = 1
+    }
+
+
     [Header("Rigs")]
     [SerializeField, Tooltip("the parent rig of all th spear IK")]
     private Rig _spearRig;
@@ -17,7 +25,7 @@ public class IKSpearMovement : MonoBehaviour
 
     
     private float _lerpLHSpeed;
-
+    private RigValue _setWeight = RigValue.Default;
     private GameObject _aimTarget;
 
 
@@ -33,6 +41,9 @@ public class IKSpearMovement : MonoBehaviour
     private void Update()
     {
         _IKTargetLh.transform.position = _lhHoldingPosition.transform.position;
+
+        Debug.Log("Current spearRig weight: " + _spearRig.weight);
+
         ////the spear stance, holding the Left hand on the spear below
         //if (_lhHoldingPosition && _IKTargetLh)
         //{
@@ -41,6 +52,16 @@ public class IKSpearMovement : MonoBehaviour
         //        _lhHoldingPosition.transform.position,
         //        Time.deltaTime * _lerpLHSpeed);
         //}
+
+    }
+
+    private void LateUpdate()
+    {
+        if (_setWeight != RigValue.Default)
+        {
+            _spearRig.weight = (int)_setWeight;
+            _setWeight = RigValue.Default;
+        }
 
     }
 
@@ -67,7 +88,7 @@ public class IKSpearMovement : MonoBehaviour
         if (args.UseSpear)
         {            
             _lhHoldingPosition = args.LHSocket;
-            _spearRig.weight = 1f;
+            _setWeight = RigValue.One;
             //var rotation = _IKTargetLh.transform.rotation;
             //_IKTargetLh.transform.parent = _lhHoldingPosition.transform;
             //_IKTargetLh.transform.localPosition = Vector3.zero;
@@ -75,8 +96,8 @@ public class IKSpearMovement : MonoBehaviour
 
         }
         else
-        {          
-            _spearRig.weight = 0f;
+        {
+            _setWeight = RigValue.Zero;
         }
 
     }

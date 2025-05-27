@@ -290,10 +290,14 @@ public class PlayerController : MonoBehaviour
         if (Time.timeScale == 0) return;
         if (!ctx.performed) return;
 
+        //The reason we call pick up in as frist priority is because when close to a hiding spot, picking up your weapon when you dont have one is most important
+        //but if you already have a weapon, you would endlessly switch between them, so we call them on 2 different situations.
         if (!_stateManager.EquipmentManager.HasEquipmentInHand(true) && _stateManager.EquipmentManager.CloseToEquipment())
             _inQueue.Raise(this, new AimingOutputArgs { Special = SpecialInput.PickUp, AnimationStart = true });
         else if (_stateManager.IsNearHidingSpot)
             _hide.Raise(this, EventArgs.Empty);
+        else if (_stateManager.EquipmentManager.CloseToEquipment())
+            _inQueue.Raise(this, new AimingOutputArgs { Special = SpecialInput.PickUp, AnimationStart = true });
 
     }
 

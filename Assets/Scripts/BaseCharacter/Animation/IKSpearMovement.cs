@@ -42,8 +42,6 @@ public class IKSpearMovement : MonoBehaviour
     {
         _IKTargetLh.transform.position = _lhHoldingPosition.transform.position;
 
-        Debug.Log("Current spearRig weight: " + _spearRig.weight);
-
         ////the spear stance, holding the Left hand on the spear below
         //if (_lhHoldingPosition && _IKTargetLh)
         //{

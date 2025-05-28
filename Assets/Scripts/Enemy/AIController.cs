@@ -27,8 +27,8 @@ public class AIController : MonoBehaviour
 
     private bool _wasSprinting;
     private bool _isHoldingShield;
-
     private float _patchTimer;
+
     void Start()
     {
         StartCoroutine(CheckSurrounding());

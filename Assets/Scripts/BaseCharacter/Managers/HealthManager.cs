@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor;
 using UnityEngine;
 
 public class HealthManager : MonoBehaviour
@@ -40,12 +39,8 @@ public class HealthManager : MonoBehaviour
     [SerializeField, Tooltip("The amount of health you will recover after succesfully patching yourself up")]
     private float _healAmount = 100f;
 
-    [Header("Managers")]
-    [SerializeField]
-    private StateManager _stateManager;
 
-    [Header("Blackboard")]
-    [SerializeField]
+    private StateManager _stateManager;
     private List<BlackboardReference> _blackboards;
 
     private float _currentHealth;
@@ -65,6 +60,12 @@ public class HealthManager : MonoBehaviour
 
     private bool _isBleeding;
 
+    private void Awake()
+    {
+        if (_stateManager == null)
+            _stateManager = GetComponent<StateManager>();
+        _blackboards = _stateManager.BlackboardRefs;
+    }
     private void Start()
     {
         SetHealth();

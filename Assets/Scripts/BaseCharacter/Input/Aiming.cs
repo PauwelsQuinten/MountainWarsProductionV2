@@ -125,7 +125,7 @@ public class Aiming : MonoBehaviour
         }
 
         //Throw attack/feint or return to idle when releasing the analogstick
-        if (_refAimingInput.variable.value == Vector2.zero || inputLength < F_MIN_ACCEPTED_VALUE)
+        else if (_refAimingInput.variable.value == Vector2.zero || inputLength < F_MIN_ACCEPTED_VALUE)
         {                                   
             //Reset signal e.g. when stop charging or stop Blocking
             if (_enmAimingInput != AimingInputState.Idle)

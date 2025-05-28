@@ -22,18 +22,20 @@ public class StaminaManager : MonoBehaviour
     [SerializeField]
     private GameEvent _changedStamina;
 
-    [Header("Blackboard")]
-    [SerializeField]
     private List<BlackboardReference> _blackboards;
 
     private bool _canRegen;
     private Coroutine _resetRegen;
 
+
+    private void Awake()
+    {
+        _blackboards = GetComponent<StateManager>().BlackboardRefs;
+    }
     private void Start()
     {
         CurrentStamina = _maxStamina;
         UpdateBlackboard();
-
     }
 
     private void Update()

@@ -13,19 +13,23 @@ public class EquipmentManager : MonoBehaviour
     [SerializeField] private Equipment _leftHand;
     [SerializeField] private Equipment _rightHand;
     [SerializeField] private Equipment _fists;
+
     [Header("Events")]
     [SerializeField] private GameEvent _onEquipmentBreak;
     [SerializeField] private GameEvent _onEquipmentDamage;
     [SerializeField] private GameEvent _changeAnimation;
     [SerializeField] private GameEvent _changeIKStance;
     [Header("Sockets"), Tooltip("These are the sockets that will hold the equipment")]
+
     [SerializeField] private Transform _leftHandSocket;
     [SerializeField] private Transform _rightHandSocket;
     //[SerializeField] private Transform _spearSocket;
     [SerializeField] private Transform _sheathSocket;
+
     [Header("Item")]
     [SerializeField] private LayerMask _itemMask;
     [SerializeField] private float _itemPickupRadius = 1f;
+
     [Header("ShieldPosition")]
     [SerializeField] private float _startAngle = 195f;
     [SerializeField] private float _sideAngleToStart = 60f;
@@ -33,10 +37,8 @@ public class EquipmentManager : MonoBehaviour
     [Header("EquipmentPosition")]
     //[SerializeField] private Quaternion _swordStartRotation = Quaternion.Euler(-32f, -116f, -195f);
     [SerializeField] private Quaternion _spearStartRotation = Quaternion.Euler(15f, -160f, -45);
-    [Header("Blackboard")]
-    [SerializeField]
-    private List<BlackboardReference> _blackboards;
 
+    private List<BlackboardReference> _blackboards;
     private List<Equipment> HeldEquipment = new List<Equipment> {null, null, null };
     Collider[] _hitColliders;
 
@@ -46,7 +48,12 @@ public class EquipmentManager : MonoBehaviour
 
     private StateManager _stateManager;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    private void Awake()
+    {
+        _stateManager = GetComponent<StateManager>();
+        _blackboards = _stateManager.BlackboardRefs;
+    }
+
     void Start()
     {
         if (_fists && _fists.Type == EquipmentType.Fist)

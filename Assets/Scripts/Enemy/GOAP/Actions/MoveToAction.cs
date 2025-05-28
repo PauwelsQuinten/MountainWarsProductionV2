@@ -12,6 +12,7 @@ public class MoveToAction : GoapAction
     [Header("Input")]
     [SerializeField] private GameEvent _moveInput;
     [SerializeField, Tooltip("when MoveTo is set to PatrolPoints, he will take from this starting from 0")]
+    private string _patrolName;
     private List<Transform> _patrolPoints;
 
     private List<Equipment> _foundEquipment = new List<Equipment>();
@@ -51,7 +52,7 @@ public class MoveToAction : GoapAction
             case ObjectTarget.PatrolPoint:
                 if (_patrolPoints != null && _patrolPoints.Count > 0) break;
                 _patrolPoints = new List<Transform>();
-                var obj = GameObject.Find("PatrollPointsFountain");
+                var obj = GameObject.Find(_patrolName);
                 foreach (Transform child in obj.transform)
                 {
                     _patrolPoints.Add(child);
@@ -96,7 +97,8 @@ public class MoveToAction : GoapAction
         Vector3 targetPos = Vector3.zero;
         float angleRad = (float)blackboard.variable.Orientation * Mathf.Deg2Rad;
 
-        if (Vector3.Distance(npcPos, _targetPos) < 0.5f && _patrolPoints.Count > 0)
+        if (Vector2.Distance(new Vector2 ( npcPos.x, npcPos.z) , new Vector2(_targetPos.x, _targetPos.z)) < 0.5f 
+            && _patrolPoints.Count > 0)
         {
             _patrolIndex++;
             _patrolIndex %= _patrolPoints.Count;
@@ -105,7 +107,8 @@ public class MoveToAction : GoapAction
         FindTargetPosAndDirection(blackboard, ref targetDir, npcPos, ref targetPos, ref angleRad);
 
         //Update target position when he moves around
-        if (Vector3.Distance(targetPos, _targetPos) > 1f || Vector3.Angle(targetDir, _targetDir) > 25f)
+        if (Vector2.Distance(new Vector2(npcPos.x, npcPos.z), new Vector2(targetPos.x, targetPos.z)) > 1f
+            || Vector3.Angle(targetDir, _targetDir) > 25f)
         {
             _navMeshAgent.SetDestination(targetPos);
             _targetPos = targetPos;

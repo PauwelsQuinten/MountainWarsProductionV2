@@ -40,8 +40,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private GameEvent _shieldBash;
     [SerializeField]
-    private GameEvent _pickupEvent;
-    [SerializeField]
     private GameEvent _LookForTarget;
     [SerializeField]
     private GameEvent _changeAnimation;
@@ -49,8 +47,6 @@ public class PlayerController : MonoBehaviour
     private GameEvent _hide;
     [SerializeField]
     private GameEvent _pauseGame;
-    [SerializeField]
-    private GameEvent _sheathWeapon;
     [SerializeField]
     private GameEvent _inQueue;
 

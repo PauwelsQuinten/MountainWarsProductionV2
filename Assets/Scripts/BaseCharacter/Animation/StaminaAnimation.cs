@@ -1,5 +1,4 @@
 using UnityEngine;
-using static Unity.Burst.Intrinsics.X86.Avx;
 
 public class StaminaAnimation : StateMachineBehaviour
 {
@@ -16,7 +15,8 @@ public class StaminaAnimation : StateMachineBehaviour
 
     public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        animator.SetFloat("Stamina", _staminaComp.GetStaminaPercentage());
+        if (_staminaComp != null)
+            animator.SetFloat("Stamina", _staminaComp.GetStaminaPercentage());
     }
 
 }

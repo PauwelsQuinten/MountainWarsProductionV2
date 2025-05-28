@@ -10,6 +10,8 @@ public class CharacterMovement : MonoBehaviour
     [Header("Movement")]
     [SerializeField]
     private FloatReference _speed;
+    [SerializeField]
+    private bool _stopMovingDuringAttack = false;
 
     [Header("Stamina")]
     [SerializeField]
@@ -21,24 +23,19 @@ public class CharacterMovement : MonoBehaviour
     [SerializeField]
     private GameEvent _changeAnimation;
 
-    [Header("StateManager")]
-    [SerializeField]
     private StateManager _stateManager;
-
-    [SerializeField]
-    private bool _stopMovingDuringAttack = false;
-
+    private StaminaManager _staminaManager;
     private Rigidbody _rb;
+
     private Vector3 _movedirection;
     private float _angleInterval = 22.5f;
-    Quaternion _targetRotation;
-    float _rotationSpeed = 5f;
-
-    private StaminaManager _staminaManager;
+    private Quaternion _targetRotation;
+    private float _rotationSpeed = 5f;
     private bool _inAttackMotion = false;
 
     private void Start()
     {
+        _stateManager = GetComponent<StateManager>();
         _rb = GetComponent<Rigidbody>();
         _moveInput.variable.ValueChanged += MoveInput_ValueChanged;
         _targetRotation = transform.rotation;
@@ -105,7 +102,7 @@ public class CharacterMovement : MonoBehaviour
                 _removeStamina.Raise(this, new StaminaEventArgs { StaminaCost = _sprintCost.value * Time.deltaTime });
         }
 
-            _movedirection = new Vector3(input.x, 0f, input.y);
+        _movedirection = new Vector3(input.x, 0f, input.y);
 
 
         _changeAnimation.Raise(this, new WalkingEventArgs 

@@ -6,11 +6,11 @@ public class StateManager : MonoBehaviour
 {
     private const string PLAYER = "Player";
     [Header("Events")]
-    //[SerializeField] GameEvent _OnKnockbackRecovery;
     [SerializeField] GameEvent _OnStunRecovery;
-    [SerializeField] GameEvent _chancheAnim;
+
     [Header("Refrence")]
-    [SerializeField] List<BlackboardReference> _blackboardRefs = new List<BlackboardReference>();
+    public List<BlackboardReference> BlackboardRefs = new List<BlackboardReference>();
+
     [Header("Values")]
     [SerializeField] private float _rotationSpeed = 5.0f;
     [HideInInspector]
@@ -32,11 +32,11 @@ public class StateManager : MonoBehaviour
     [HideInInspector]
     public bool IsHoldingShield;
 
-    public EquipmentManager EquipmentManager;
+    [HideInInspector]public EquipmentManager EquipmentManager;
 
     [HideInInspector]
     public bool IsBleeding;
-    //[HideInInspector]
+    [HideInInspector]
     public bool InAnimiation = false;
     [HideInInspector]
     public bool WeaponIsSheathed;
@@ -77,11 +77,11 @@ public class StateManager : MonoBehaviour
         if (!gameObject.CompareTag(PLAYER))
         {
             //When its not the player, it means he only has 1 blackboardRef, his own. so always zero
-            _blackboardRefs[0].variable.Target = Target;
+            BlackboardRefs[0].variable.Target = Target;
             
             if (Target)
             {                
-                foreach (var blackboard in _blackboardRefs)
+                foreach (var blackboard in BlackboardRefs)
                     blackboard.variable.TargetState = Target.GetComponent<StateManager>().AttackState;
             }
 
@@ -101,7 +101,7 @@ public class StateManager : MonoBehaviour
 
         if (!gameObject.CompareTag(PLAYER))
         {
-            foreach (var blackboard in _blackboardRefs)
+            foreach (var blackboard in BlackboardRefs)
                 blackboard.variable.Orientation = Orientation;
         }
     }
@@ -171,14 +171,14 @@ public class StateManager : MonoBehaviour
         //Update Blaackboard
         if (gameObject.CompareTag(PLAYER))
         {
-            foreach (var blackboard in _blackboardRefs)
+            foreach (var blackboard in BlackboardRefs)
             {
                 blackboard.variable.ResetCurrentAttack();
                 blackboard.variable.TargetState = AttackState.Stun;
             }
         }
         else
-            _blackboardRefs[0].variable.State = AttackState.Stun;
+            BlackboardRefs[0].variable.State = AttackState.Stun;
     }
 
     public void SetNewActiveCamera(Component sender, object obj)
@@ -197,9 +197,9 @@ public class StateManager : MonoBehaviour
         _OnStunRecovery.Raise(this, null);
 
         if (!gameObject.CompareTag(PLAYER))
-            _blackboardRefs[0].variable.State = AttackState.Idle;
+            BlackboardRefs[0].variable.State = AttackState.Idle;
         else
-            foreach (var blackboard in _blackboardRefs)
+            foreach (var blackboard in BlackboardRefs)
             {
                 blackboard.variable.TargetState = AttackState.Idle;
             }
@@ -207,8 +207,8 @@ public class StateManager : MonoBehaviour
     private IEnumerator InitBlackboard()
     {
         yield return new WaitForEndOfFrame();
-        _blackboardRefs[0].variable.State = AttackState;
-        _blackboardRefs[0].variable.Self = gameObject;
-        _blackboardRefs[0].variable.Orientation = Orientation;
+        BlackboardRefs[0].variable.State = AttackState;
+        BlackboardRefs[0].variable.Self = gameObject;
+        BlackboardRefs[0].variable.Orientation = Orientation;
     }
 }

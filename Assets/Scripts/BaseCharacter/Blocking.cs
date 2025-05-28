@@ -5,7 +5,7 @@ public class Blocking : MonoBehaviour
 {
     private const string PLAYER = "Player";
 
-    [SerializeField] private List<BlackboardReference> _blackboards;
+    private List<BlackboardReference> _blackboards;
 
     [Header("Events")]
     [SerializeField] private GameEvent _stunFeedbackEvent;
@@ -31,12 +31,16 @@ public class Blocking : MonoBehaviour
     private AttackState _previousState = AttackState.Idle;
     private bool _isInParryMotion = false; //is used for the block result, when the shield is in a parry animation the result should be different
 
-    
+    private void Awake()
+    {
+        if (_stateManager == null)
+            _stateManager = GetComponent<StateManager>();
+        _blackboards = _stateManager.BlackboardRefs;
+    }
     public void BlockMovement(Component sender, object obj)
     {
         //on top to make sure all objects that use this script get their statemanager initialised the momenent 1 uses it.
-        if (_stateManager == null)
-            _stateManager = GetComponent<StateManager>();
+        
 
         //Check for vallid signal
         AimingOutputArgs args = obj as AimingOutputArgs;

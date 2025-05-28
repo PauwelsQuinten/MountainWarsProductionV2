@@ -39,7 +39,7 @@ public class Attacking : MonoBehaviour
     [Header("Enemy")]
     [SerializeField]
     private LayerMask _characterLayer;
-    [SerializeField] List<BlackboardReference> _blackboardRefs;
+    private List<BlackboardReference> _blackboardRefs;
 
     [Header("Animation")]
     [SerializeField]
@@ -60,6 +60,12 @@ public class Attacking : MonoBehaviour
 
     private StateManager _stateManager;
 
+    private void Awake()
+    {
+        if (_stateManager == null) 
+            _stateManager = GetComponent<StateManager>();
+        _blackboardRefs = _stateManager.BlackboardRefs;
+    }
     private void Update()
     {
         UPdateChargePowerOnRelease();
@@ -68,13 +74,8 @@ public class Attacking : MonoBehaviour
     public void Attack(Component sender, object obj)
     {
         AimingOutputArgs args = obj as AimingOutputArgs;
-        if (args == null) return;
+        if (args == null || args.Special != SpecialInput.Default) return;
         if (sender.gameObject != gameObject && args.Sender != gameObject) return;
-        if (args.Special != SpecialInput.Default) return;
-
-
-        if (_stateManager == null) _stateManager = GetComponent<StateManager>();
-
         if (_stateManager.WeaponIsSheathed) return;
 
         if (args.AttackState == AttackState.ShieldDefence

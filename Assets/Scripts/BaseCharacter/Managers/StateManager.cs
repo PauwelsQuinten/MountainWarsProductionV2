@@ -80,9 +80,8 @@ public class StateManager : MonoBehaviour
             BlackboardRefs[0].variable.Target = Target;
             
             if (Target)
-            {                
-                foreach (var blackboard in BlackboardRefs)
-                    blackboard.variable.TargetState = Target.GetComponent<StateManager>().AttackState;
+            {
+                BlackboardRefs[0].variable.TargetState = Target.GetComponent<StateManager>().AttackState;
             }
 
         }

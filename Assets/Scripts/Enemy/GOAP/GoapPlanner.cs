@@ -3,15 +3,17 @@ using UnityEngine;
 
 public class GoapPlanner : MonoBehaviour
 {
-    [SerializeField] private BlackboardReference _blackboard;
+    private BlackboardReference _blackboard;
     [Header("CharacterStyle")]
     [SerializeField] private CharacterMentality _characterMentality = CharacterMentality.Basic;
     [Range(0, 10)]
     public int Perception = 8;
     [SerializeField] private List<GoapAction> _allActionPrefabs;
     [SerializeField] private List<GoapGoal> _allGoalPrefabs;
+    [SerializeField] private List<GoapInterupter> _allInteruptPrefabs;
     private List<GoapAction> _allActions = new List<GoapAction>();
     private List<GoapGoal> _allGoals = new List<GoapGoal>();
+    private List<GoapInterupter> _allInterupters = new List<GoapInterupter>();
 
     private WorldState _currentWorldState;
     private GoapGoal _activeGoal;
@@ -20,7 +22,10 @@ public class GoapPlanner : MonoBehaviour
     private List<EWorldState> _comparedWorldState = new List<EWorldState>();
 
     private int _recursionCounter = 0;
-
+    private void Awake()
+    {
+        _blackboard = GetComponent<StateManager>().BlackboardRefs[0];
+    }
     void Start()
     {
         _blackboard.variable.ResetAtStart();
@@ -38,24 +43,29 @@ public class GoapPlanner : MonoBehaviour
         {
             _allGoals.Add(Instantiate(goal, gameObject.transform));
         }
+        foreach (var interupter in _allInteruptPrefabs)
+        {
+            _allInterupters.Add(Instantiate(interupter, gameObject.transform));
+        }
     }
 
     void Update()
     {
-        //if (Time.timeScale == 0) return;
-
         _currentWorldState.UpdateWorldState();
         _recursionCounter = 0;
 
-        if (_activeGoal && _activeGoal.InteruptGoal(_currentWorldState, _blackboard)) //Placed for when getting a knockback 
-            ResetPlan(true);
+        //Check if the current goal has to be interupted through decision of itself or by an Interupter 
+        if (_activeGoal && (_activeGoal.InteruptGoal(_currentWorldState, _blackboard) || CheckGoalWithInterupters())) 
 
+        //Select a new Goal when previous one ended or got interupted
         if (_activeGoal == null || _actionPlan.Count == 0)
             _activeGoal = SelectCurrentGoal();
 
+        //Do nothing when no vallid new goal is found.
         if (_activeGoal == null || _activeGoal.DesiredWorldState == null)
             return;
 
+        //Create a plan for the new Goal, set goal invallid when this fails or start to execute.
         if (_actionPlan.Count == 0 && !Plan(_activeGoal.DesiredWorldState))
             _activeGoal.SetInvallid();
         else
@@ -80,13 +90,13 @@ public class GoapPlanner : MonoBehaviour
                 bestGoal = goal;
             }
         }
-        //if (bestGoal == null)
-            //Debug.Log($"No current goal{bestGoal}");
+      
         return bestGoal;
     }
 
     private void ExecutePlan()
     {
+        //Update current Action or start a new on from the Plan
         if (_activeAction)
             _activeAction.UpdateAction(_currentWorldState, _blackboard);
         else if (_actionPlan.Count > 0)
@@ -97,6 +107,7 @@ public class GoapPlanner : MonoBehaviour
         else
             return;
 
+        //When Active Action is completed we remove it from the Plan
         if (_activeAction.IsCompleted(_currentWorldState))
         {
             _actionPlan.RemoveAt(_actionPlan.Count - 1);
@@ -104,12 +115,12 @@ public class GoapPlanner : MonoBehaviour
             return;
         }
 
+        //Check if the active Action is interupting itself
         if (_activeAction.IsInterupted(_currentWorldState, _blackboard))
         {
             //_activeAction.ActionCompleted();
             ResetPlan(false);
         }
-
 
     }
 
@@ -219,5 +230,14 @@ public class GoapPlanner : MonoBehaviour
         _actionPlan.Clear();
     }
 
+    private bool CheckGoalWithInterupters()
+    {
+        foreach (var interupter in _allInterupters)
+        {
+            if (interupter.GoalToInterupt == _activeGoal && interupter.InteruptCurrentGoal(_currentWorldState, _blackboard))
+                return true;
+        }
+        return false;
+    }
 
 }

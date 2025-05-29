@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.AI;
 namespace Geometry
 {
     public static class Geometry
@@ -114,5 +115,40 @@ namespace Geometry
 
             return cross < 0 ? Direction.ToLeft : Direction.ToRight;
         }
+
+        public static Vector3 GetRandomPointOnNavMesh(Vector3 center, float radius)
+        {
+            for (int i = 0; i < 5; i++) // Try up to 5 times
+            {
+                Vector3 randomDirection = Random.insideUnitSphere * radius;
+                randomDirection += center;
+
+                if (NavMesh.SamplePosition(randomDirection, out NavMeshHit hit, 2.0f, NavMesh.AllAreas))
+                {
+                    return hit.position;
+                }
+            }
+
+            // If no valid point found, return center
+            return center;
+        }
+
+        public static float CalculatefOrientationToTarget(Vector3 target, Vector3 self)
+        {
+            Vector3 direction = self - target;
+            return Mathf.Atan2(direction.z, direction.x);
+        }
+
+        public static Orientation FindOrientationFromAngle(float fOrientation)
+        {
+            const int angleInterval = 45;
+            int newOrientation = Mathf.RoundToInt(fOrientation / angleInterval);
+            newOrientation *= angleInterval;
+
+            if (newOrientation == -180)
+                newOrientation = 180;
+            return (Orientation)newOrientation;
+        }
     }
+
 }

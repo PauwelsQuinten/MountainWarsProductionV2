@@ -9,6 +9,8 @@ using static UnityEngine.Rendering.GPUSort;
 
 public class ViewManager : MonoBehaviour
 {
+    private const string TAG_VILLAGER = "Villager";
+
     [Header("Panels")]
     [SerializeField]
     private float _panelswitchPauseTime = 1.5f;
@@ -80,7 +82,7 @@ public class ViewManager : MonoBehaviour
         {
             if (args.IsHidingSpot)
                 _isNearHidingSpot = true;
-            else if (args.IsShowDown)
+            else if (args.IsShowDown && !args.VsTarget.CompareTag(TAG_VILLAGER))
             {
                 _ShowdownSound.Raise(this, EventArgs.Empty);
                 StartCoroutine(DoShowDown(args.VsTarget));
@@ -222,11 +224,14 @@ public class ViewManager : MonoBehaviour
     {
         List<StateManager> targets = GameObject.FindObjectsOfType<StateManager>().ToList();
 
+
         foreach (StateManager target in targets)
         {
             if(target.GetComponent<AIController>() != null)
             {
-                target.GetComponentInChildren<Camera>().enabled = false;
+                var camComp = target.GetComponentInChildren<Camera>();
+                if (camComp != null) 
+                    camComp.enabled = false;
             }
         }
 
@@ -240,9 +245,13 @@ public class ViewManager : MonoBehaviour
         GameObject playerPanel = _panels[newIndex].gameObject;
         GameObject enemy = vsTarget;
         var cam = enemy.GetComponentInChildren<Camera>();
-        cam.enabled = true;
-        cam.targetTexture = _renderTexture;
-        cam.Render();
+        if ( cam)
+        {
+            cam.enabled = true;
+            cam.targetTexture = _renderTexture;
+            cam.Render();
+        }
+        
         GameObject enemyPanel = _panels[++newIndex].gameObject;
 
         CharacterMovement enemyMove = enemy.GetComponent<CharacterMovement>();

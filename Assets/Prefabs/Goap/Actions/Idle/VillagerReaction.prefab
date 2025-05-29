@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: -3160163725728759933}
   - component: {fileID: 8116822364762693881}
   m_Layer: 0
-  m_Name: LookAround
+  m_Name: VillagerReaction
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -67,7 +67,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   WorldStateType: 1
   PriorityList: 
-  _targetHealth: 5
+  _targetHealth: 4
   _targetStamina: 5
   _targetRHEquipment: 5
   _targetLHEquipment: 5
@@ -80,7 +80,7 @@ MonoBehaviour:
   _hasRHEquipment: 2
   _hasLHEquipment: 2
   _targetBehaviour: 4
-  _behaviour: 6
+  _behaviour: 4
   _targetAttackRange: 3
   _attackRange: 3
   _targetShieldState: 0

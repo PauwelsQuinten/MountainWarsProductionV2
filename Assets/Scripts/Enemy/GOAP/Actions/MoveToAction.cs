@@ -1,9 +1,6 @@
-using NUnit.Framework;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.EventSystems;
-using UnityEngine.Rendering;
 
 
 public class MoveToAction : GoapAction
@@ -11,9 +8,11 @@ public class MoveToAction : GoapAction
     [SerializeField] private ObjectTarget _MoveTo = ObjectTarget.Player;
     [Header("Input")]
     [SerializeField] private GameEvent _moveInput;
+    [SerializeField, Tooltip("When MoveTo is InRadius, he will use this as the rdius around his startpoint to find a new walking point")]
+    private float _radius = 2f;
     [SerializeField, Tooltip("when MoveTo is set to PatrolPoints, he will take from this starting from 0")]
     private string _patrolName;
-    private List<Transform> _patrolPoints;
+    private List<Transform> _patrolPoints = new List<Transform>();
 
     private List<Equipment> _foundEquipment = new List<Equipment>();
     private Equipment _foundSpecificEquipment;
@@ -23,6 +22,7 @@ public class MoveToAction : GoapAction
 
     Vector3 _targetDir = Vector3.zero;
     Vector3 _targetPos = Vector3.zero;
+    Vector3 _startPos = Vector3.zero;
 
 
     public override void StartAction(WorldState currentWorldState, BlackboardReference blackboard)
@@ -57,8 +57,10 @@ public class MoveToAction : GoapAction
                 {
                     _patrolPoints.Add(child);
                 }
-
-
+                break;
+            case ObjectTarget.InRadius:
+                _startPos = npc.transform.position; 
+                _targetPos = _startPos;
                 break;
             case ObjectTarget.Backward:
                 break;
@@ -116,7 +118,6 @@ public class MoveToAction : GoapAction
             _moveInput.Raise(this, new DirectionEventArgs { MoveDirection = targetDir, SpeedMultiplier = 1f, Sender = npc });
             ReactivateAgent();
         }
-
         
     }
 
@@ -243,11 +244,19 @@ public class MoveToAction : GoapAction
             case ObjectTarget.PatrolPoint:
                 if (_patrolPoints == null || _patrolPoints.Count < 0) return;
                 targetPos = _patrolPoints[_patrolIndex].transform.position;
-               
-
                 targetDir = targetPos - npcPos;
                 targetDir = new Vector2(targetDir.x, targetDir.z);
                 targetDir.Normalize(); 
+                break;
+            case ObjectTarget.InRadius:
+                if (Vector3.Distance(npcPos, _targetPos) < 0.5f)
+                    targetPos = Geometry.Geometry.GetRandomPointOnNavMesh(_startPos, _radius);
+                else
+                    targetPos = _targetPos;
+               
+                targetDir = targetPos - npcPos;
+                targetDir = new Vector2(targetDir.x, targetDir.z);
+                targetDir.Normalize();
                 break;
         }
     }

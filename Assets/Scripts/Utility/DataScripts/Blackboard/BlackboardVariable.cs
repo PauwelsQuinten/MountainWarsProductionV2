@@ -393,6 +393,18 @@ public class BlackboardVariable : ScriptableObject
         _targetCurrentAttack = AttackType.None;
     }
 
+    private int _numOffAttacks = 0;
+    public int NumOffAttacks
+    {
+        get => _numOffAttacks;
+        set
+        {
+            if ( _numOffAttacks >= 5)
+                IsPlayerAgressive = true;
+            else
+                IsPlayerAgressive = false;
+        }
+    }
 
     private Direction _targetShieldState;
     public Direction TargetShieldState

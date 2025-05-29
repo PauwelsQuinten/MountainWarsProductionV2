@@ -246,7 +246,8 @@ namespace UnityEngine
         DipWater = 101,
         LookOver = 102,
         AlmostFalling = 103,
-        Confused = 104
+        Confused = 104,
+        Angry = 105
 
     }
 
@@ -258,7 +259,8 @@ namespace UnityEngine
         Forward,
         Backward,
         Side,
-        PatrolPoint
+        PatrolPoint,
+        InRadius
     }
     public enum AIInputAction
     {
@@ -299,7 +301,9 @@ namespace UnityEngine
         DipWater = 101,
         LookOver = 102,
         AlmostFalling = 103,
-        Confused = 104
+        Confused = 104,
+        Angry = 105
+
     }
 
 

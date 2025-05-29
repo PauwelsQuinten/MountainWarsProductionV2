@@ -23,6 +23,9 @@ public class GoapAction : MonoBehaviour, IActions
     public float Cost = 1.0f;
     [SerializeField, Tooltip("Maximum time this action will run, when negative it can run forever or until interupted by other sources")] 
     protected float _actionMaxRunTime = 3f;
+    [SerializeField, Tooltip("when put to true, his max action runtime wil be randomised instead of the set value")]
+    private bool _randomWalkingTime = false;
+
     protected bool _isActivated = false;
     protected Coroutine _actionCoroutine;
     protected GameObject npc;
@@ -48,8 +51,12 @@ public class GoapAction : MonoBehaviour, IActions
             _actionCoroutine = StartCoroutine(StartTimer(_actionMaxRunTime));
 
         npc = transform.parent.gameObject;
-        //npc = blackboard.variable.Self;
-        //Debug.Log("Start action coroutine");
+
+
+        if (_randomWalkingTime)
+            _actionMaxRunTime = Random.Range(1f, 5f);
+
+        
     }
 
 

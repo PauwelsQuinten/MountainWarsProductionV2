@@ -9,6 +9,7 @@ public class OnWalkInEvents : MonoBehaviour
     [SerializeField] private float _movementPower = 100f;
     [SerializeField] private float _approachTime = 0.25f;
     private const string NO_TAG = "Untagged";
+    private const string TAG_Villager = "Untagged";
     private Rigidbody _rb;
 
     private void Start()
@@ -18,7 +19,7 @@ public class OnWalkInEvents : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.collider.gameObject.CompareTag(NO_TAG))
+        if (collision.collider.gameObject.CompareTag(NO_TAG) || collision.collider.gameObject.CompareTag(TAG_Villager))
             return;
 
         foreach (SpecialInput tag in Enum.GetValues(typeof(SpecialInput)))

@@ -193,10 +193,6 @@ public class WorldState : MonoBehaviour
             case BlackboardEventArgs.WhatChanged.Behaviour:
                 Behaviour = WatchBehaviour(_blackboard.variable.State);
                 break;
-            case BlackboardEventArgs.WhatChanged.TargetBehaviour:
-                if (HasTarget == EWorldStatePossesion.InPossesion)
-                    TargetBehaviour = WatchBehaviour(_blackboard.variable.TargetState);
-                break;
             case BlackboardEventArgs.WhatChanged.Stamina:
                 Stamina = CalculateValue(_blackboard.variable.Stamina);
                 break;
@@ -205,45 +201,49 @@ public class WorldState : MonoBehaviour
                 break;
             case BlackboardEventArgs.WhatChanged.RHEquipment:
                 RHEquipment = CalculateValue(_blackboard.variable.RHEquipmentHealth);
+                HasRHEquipment = _blackboard.variable.RHEquipmentHealth <= 0f? 
+                    EWorldStatePossesion.InPossesion : EWorldStatePossesion.NotInPossesion ;
                 break;
             case BlackboardEventArgs.WhatChanged.LHEquipment:
                 LHEquipment = CalculateValue(_blackboard.variable.LHEquipmentHealth);
-                break;
-             case BlackboardEventArgs.WhatChanged.RHEquipmentPossesion:
-                HasRHEquipment = _blackboard.variable.HasRHEquipment? EWorldStatePossesion.InPossesion : EWorldStatePossesion.NotInPossesion ;
-                break;
-            case BlackboardEventArgs.WhatChanged.LHEquipmenPossesion:
-                HasLHEquipment = _blackboard.variable.HasLHEquipment ? EWorldStatePossesion.InPossesion : EWorldStatePossesion.NotInPossesion;
+                HasLHEquipment = _blackboard.variable.LHEquipmentHealth <= 0f ? 
+                    EWorldStatePossesion.InPossesion : EWorldStatePossesion.NotInPossesion;
                 break;
             case BlackboardEventArgs.WhatChanged.ShieldState:
                 ShieldState = _blackboard.variable.ShieldState;
                 break;
-            case BlackboardEventArgs.WhatChanged.Target:
+
+
+            case BlackboardEventArgs.WhatChanged.TargetBlackboard:
                 HasTarget = SetInPossesion(_blackboard.variable.Target);
                 if (HasTarget == EWorldStatePossesion.InPossesion)
                     SetTargetValues();
                 else
                     ResetTargetValues();
                 break;
+            case BlackboardEventArgs.WhatChanged.TargetBehaviour:
+                if (HasTarget == EWorldStatePossesion.InPossesion)
+                    TargetBehaviour = WatchBehaviour(_blackboard.variable.TargetBlackboard.variable.State);
+                break;
             case BlackboardEventArgs.WhatChanged.TargetStamina:
                 if (HasTarget == EWorldStatePossesion.InPossesion)
-                    TargetStamina = CalculateValue(_blackboard.variable.TargetStamina);
+                    TargetStamina = CalculateValue(_blackboard.variable.TargetBlackboard.variable.Stamina);
                 break;
             case BlackboardEventArgs.WhatChanged.TargetHealth:
                 if (HasTarget == EWorldStatePossesion.InPossesion)
-                    TargetHealth = CalculateValue(_blackboard.variable.TargetHealth);
+                    TargetHealth = CalculateValue(_blackboard.variable.TargetBlackboard.variable.Health);
                 break;
             case BlackboardEventArgs.WhatChanged.TargetRHEquipment:
                 if (HasTarget == EWorldStatePossesion.InPossesion)
-                    TargetRHEquipment = CalculateValue(_blackboard.variable.TargetRHEquipmentHealth);
+                    TargetRHEquipment = CalculateValue(_blackboard.variable.TargetBlackboard.variable.RHEquipmentHealth);
                 break;
             case BlackboardEventArgs.WhatChanged.TargetLHEquipment:
                 if (HasTarget == EWorldStatePossesion.InPossesion)
-                    TargetLHEquipment = CalculateValue(_blackboard.variable.TargetLHEquipmentHealth);
+                    TargetLHEquipment = CalculateValue(_blackboard.variable.TargetBlackboard.variable.LHEquipmentHealth);
                 break;
             case BlackboardEventArgs.WhatChanged.TargetShieldState:
                 if (HasTarget == EWorldStatePossesion.InPossesion)
-                    TargetShieldState = _blackboard.variable.TargetShieldState;
+                    TargetShieldState = _blackboard.variable.TargetBlackboard.variable.ShieldState;
                 break;
            case BlackboardEventArgs.WhatChanged.TargetOpening:
                 //Debug.Log($"{_blackboard.variable.TargetOpening.OpeningDirection}, {_blackboard.variable.TargetOpening.OpeningSize}");
@@ -274,10 +274,10 @@ public class WorldState : MonoBehaviour
 
     private void SetTargetValues()
     {
-        TargetStamina = CalculateValue(_blackboard.variable.TargetStamina);
-        TargetHealth = CalculateValue(_blackboard.variable.TargetHealth);
-        TargetRHEquipment = CalculateValue(_blackboard.variable.TargetRHEquipmentHealth);
-        TargetLHEquipment = CalculateValue(_blackboard.variable.TargetLHEquipmentHealth);
+        TargetStamina = CalculateValue(_blackboard.variable.TargetBlackboard.variable.Stamina);
+        TargetHealth = CalculateValue(_blackboard.variable.TargetBlackboard.variable.Health);
+        TargetRHEquipment = CalculateValue(_blackboard.variable.TargetBlackboard.variable.RHEquipmentHealth);
+        TargetLHEquipment = CalculateValue(_blackboard.variable.TargetBlackboard.variable.LHEquipmentHealth);
 
     }
 
@@ -346,7 +346,7 @@ public class WorldState : MonoBehaviour
 
         if (HasTarget == EWorldStatePossesion.InPossesion)
         {
-            TargetBehaviour = WatchBehaviour(_blackboard.variable.TargetState);
+            TargetBehaviour = WatchBehaviour(_blackboard.variable.TargetBlackboard.variable.State);
         }
         else
             TargetBehaviour = EBehaviourValue.Default;
@@ -355,7 +355,7 @@ public class WorldState : MonoBehaviour
     private void CalculateRange()
     {
         float weaponRange = _blackboard.variable.WeaponRange;
-        float targetWeaponRange = _blackboard.variable.TargetWeaponRange;
+        float targetWeaponRange = _blackboard.variable.TargetBlackboard.variable.WeaponRange;
         float targetDistance = Vector3.Distance(gameObject.transform.position, _blackboard.variable.Target.transform.position);
 
         if (targetDistance < weaponRange)

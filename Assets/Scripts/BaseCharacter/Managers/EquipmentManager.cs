@@ -29,16 +29,12 @@ public class EquipmentManager : MonoBehaviour
     [Header("Item")]
     [SerializeField] private LayerMask _itemMask;
     [SerializeField] private float _itemPickupRadius = 1f;
-
-    [Header("ShieldPosition")]
-    [SerializeField] private float _startAngle = 195f;
-    [SerializeField] private float _sideAngleToStart = 60f;
     
     [Header("EquipmentPosition")]
     //[SerializeField] private Quaternion _swordStartRotation = Quaternion.Euler(-32f, -116f, -195f);
     [SerializeField] private Quaternion _spearStartRotation = Quaternion.Euler(15f, -160f, -45);
 
-    private List<BlackboardReference> _blackboards;
+    private BlackboardReference _blackboard;
     private List<Equipment> HeldEquipment = new List<Equipment> {null, null, null };
     Collider[] _hitColliders;
 
@@ -51,7 +47,7 @@ public class EquipmentManager : MonoBehaviour
     private void Awake()
     {
         _stateManager = GetComponent<StateManager>();
-        _blackboards = _stateManager.BlackboardRefs;
+        _blackboard = _stateManager.BlackboardRef;
     }
 
     void Start()
@@ -204,26 +200,11 @@ public class EquipmentManager : MonoBehaviour
     }
 
     private void UpdateBlackboard()
-    {
-        //Update blackboard
-        if (gameObject.CompareTag(PLAYER))
-        {
-            foreach (var blackboard in _blackboards)
-            {
-                blackboard.variable.TargetLHEquipmentHealth = GetDurabilityPercentage(LEFT_HAND);
-                blackboard.variable.TargetRHEquipmentHealth = GetDurabilityPercentage(RIGHT_HAND);
-                blackboard.variable.TargetWeaponRange = GetAttackRange();
-            }
-        }
-
-        else
-        {
-            _blackboards[0].variable.LHEquipmentHealth = GetDurabilityPercentage(LEFT_HAND);
-            _blackboards[0].variable.RHEquipmentHealth = GetDurabilityPercentage(RIGHT_HAND);
-            _blackboards[0].variable.WeaponRange = GetAttackRange();
-            _blackboards[0].variable.HasRHEquipment = HeldEquipment[RIGHT_HAND] != null;
-            _blackboards[0].variable.HasLHEquipment = HeldEquipment[LEFT_HAND] != null;
-        }
+    {       
+        _blackboard.variable.LHEquipmentHealth = GetDurabilityPercentage(LEFT_HAND);
+        _blackboard.variable.RHEquipmentHealth = GetDurabilityPercentage(RIGHT_HAND);
+        _blackboard.variable.WeaponRange = GetAttackRange();
+        
     }
 
     public bool CloseToEquipment()

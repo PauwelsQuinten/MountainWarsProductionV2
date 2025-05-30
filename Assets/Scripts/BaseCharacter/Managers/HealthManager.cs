@@ -41,7 +41,7 @@ public class HealthManager : MonoBehaviour
 
 
     private StateManager _stateManager;
-    private List<BlackboardReference> _blackboards;
+    private BlackboardReference _blackboard;
 
     private float _currentHealth;
     private float _maxHealth;
@@ -64,7 +64,7 @@ public class HealthManager : MonoBehaviour
     {
         if (_stateManager == null)
             _stateManager = GetComponent<StateManager>();
-        _blackboards = _stateManager.BlackboardRefs;
+        _blackboard = _stateManager.BlackboardRef;
     }
     private void Start()
     {
@@ -108,20 +108,8 @@ public class HealthManager : MonoBehaviour
 
     private void UpdateBlackboard()
     {
-        //Update blackboard
-        if (gameObject.CompareTag(PLAYER))
-        {
-            foreach (var blackboard in _blackboards)
-            {
-                blackboard.variable.TargetHealth = _currentHealth / _maxHealth;
-                blackboard.variable.TargetIsBleeding = _isBleeding;
-            }
-        }
-        else
-        {
-            _blackboards[0].variable.Health = _currentHealth / _maxHealth;
-            _blackboards[0].variable.IsBleeding = _isBleeding;
-        }
+        _blackboard.variable.Health = _currentHealth / _maxHealth;
+        _blackboard.variable.IsBleeding = _isBleeding;       
     }
 
     private void SetHealth()

@@ -12,7 +12,6 @@ public class SlowDownOnImpact : MonoBehaviour
     [SerializeField, Tooltip("The animator parameter name")] private string _animParameter = "ActionSpeed";
 
     private Animator _animator;
-    private float _currentSpeed = 1f;
     private float _easInDuration = 0.2f;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()

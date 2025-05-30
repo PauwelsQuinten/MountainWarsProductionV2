@@ -9,7 +9,7 @@ public class StateManager : MonoBehaviour
     [SerializeField] GameEvent _OnStunRecovery;
 
     [Header("Refrence")]
-    public List<BlackboardReference> BlackboardRefs = new List<BlackboardReference>();
+    public BlackboardReference BlackboardRef;
 
     [Header("Values")]
     [SerializeField] private float _rotationSpeed = 5.0f;
@@ -53,10 +53,7 @@ public class StateManager : MonoBehaviour
 
         ChangeOrientation(this, new OrientationEventArgs { NewOrientation = Orientation, NewFOrientation = (float)Orientation });
 
-        if (!gameObject.CompareTag(PLAYER))
-        {
-            StartCoroutine(InitBlackboard());         
-        }
+        StartCoroutine(InitBlackboard());         
     }
 
     private void FixedUpdate()
@@ -73,18 +70,16 @@ public class StateManager : MonoBehaviour
 
         Target = args.NewTarget;
 
-        //Update Blackboard
-        if (!gameObject.CompareTag(PLAYER))
-        {
-            //When its not the player, it means he only has 1 blackboardRef, his own. so always zero
-            BlackboardRefs[0].variable.Target = Target;
-            
-            if (Target)
-            {
-                BlackboardRefs[0].variable.TargetState = Target.GetComponent<StateManager>().AttackState;
-            }
 
+        BlackboardRef.variable.Target = Target;
+        
+        //Update Blackboard        
+        if (Target)
+        {
+            BlackboardRef.variable.TargetBlackboard = Target.GetComponent<StateManager>().BlackboardRef;
         }
+        else
+            BlackboardRef.variable.TargetBlackboard = null;
     }
 
     public void ChangeOrientation(Component sender, object obj)
@@ -97,12 +92,7 @@ public class StateManager : MonoBehaviour
         Orientation = args.NewOrientation;
         fOrientation = args.NewFOrientation;
 
-
-        if (!gameObject.CompareTag(PLAYER))
-        {
-            foreach (var blackboard in BlackboardRefs)
-                blackboard.variable.Orientation = Orientation;
-        }
+        BlackboardRef.variable.Orientation = Orientation;
     }
 
     public void OnAnimationStart(Component sender, object obj)
@@ -166,18 +156,9 @@ public class StateManager : MonoBehaviour
             _recoverCoroutine = StartCoroutine(RecoverStun(stunDuration));
             InAnimiation = false;
         }
-
-        //Update Blaackboard
-        if (gameObject.CompareTag(PLAYER))
-        {
-            foreach (var blackboard in BlackboardRefs)
-            {
-                blackboard.variable.ResetCurrentAttack();
-                blackboard.variable.TargetState = AttackState.Stun;
-            }
-        }
-        else
-            BlackboardRefs[0].variable.State = AttackState.Stun;
+       
+        BlackboardRef.variable.State = AttackState.Stun;
+        BlackboardRef.variable.ResetCurrentAttack();
     }
 
     public void SetNewActiveCamera(Component sender, object obj)
@@ -195,19 +176,14 @@ public class StateManager : MonoBehaviour
         InAnimiation = false;
         _OnStunRecovery.Raise(this, null);
 
-        if (!gameObject.CompareTag(PLAYER))
-            BlackboardRefs[0].variable.State = AttackState.Idle;
-        else
-            foreach (var blackboard in BlackboardRefs)
-            {
-                blackboard.variable.TargetState = AttackState.Idle;
-            }
+        BlackboardRef.variable.State = AttackState.Idle;
+       
     }
     private IEnumerator InitBlackboard()
     {
         yield return new WaitForEndOfFrame();
-        BlackboardRefs[0].variable.State = AttackState;
-        BlackboardRefs[0].variable.Self = gameObject;
-        BlackboardRefs[0].variable.Orientation = Orientation;
+        BlackboardRef.variable.State = AttackState;
+        BlackboardRef.variable.Self = gameObject;
+        BlackboardRef.variable.Orientation = Orientation;
     }
 }

@@ -22,7 +22,7 @@ public class StaminaManager : MonoBehaviour
     [SerializeField]
     private GameEvent _changedStamina;
 
-    private List<BlackboardReference> _blackboards;
+    private BlackboardReference _blackboards;
 
     private bool _canRegen;
     private Coroutine _resetRegen;
@@ -30,7 +30,7 @@ public class StaminaManager : MonoBehaviour
 
     private void Awake()
     {
-        _blackboards = GetComponent<StateManager>().BlackboardRefs;
+        _blackboards = GetComponent<StateManager>().BlackboardRef;
     }
     private void Start()
     {
@@ -75,13 +75,7 @@ public class StaminaManager : MonoBehaviour
 
     private void UpdateBlackboard()
     {
-        //Update blackboard
-        if (gameObject.CompareTag(PLAYER))
-            foreach (var blackboard in _blackboards)
-                blackboard.variable.TargetStamina = CurrentStamina / _maxStamina;
-
-        else
-            _blackboards[0].variable.Stamina = CurrentStamina / _maxStamina;
+       _blackboards.variable.Stamina = CurrentStamina / _maxStamina;
     }
 
     private IEnumerator ResetCanRegen()

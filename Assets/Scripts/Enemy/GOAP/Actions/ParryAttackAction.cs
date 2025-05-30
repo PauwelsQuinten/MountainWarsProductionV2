@@ -32,13 +32,13 @@ public class ParryAttackAction : GoapAction
     override public void UpdateAction(WorldState currentWorldState, BlackboardReference blackboard)
     {
         //Debug.Log("update");
-        if (blackboard.variable.TargetCurrentAttack == AttackType.None)
+        if (blackboard.variable.CurrentAttack == AttackType.None)
             return;
              
 
         if (_isMovementSet == false)
         {
-            if (blackboard.variable.TargetCurrentAttack == AttackType.HorizontalSlashToLeft)
+            if (blackboard.variable.CurrentAttack == AttackType.HorizontalSlashToLeft)
                 _direction = Direction.ToLeft;
             else
                 _direction = Direction.ToRight;

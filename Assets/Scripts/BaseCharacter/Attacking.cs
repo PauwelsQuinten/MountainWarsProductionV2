@@ -39,7 +39,7 @@ public class Attacking : MonoBehaviour
     [Header("Enemy")]
     [SerializeField]
     private LayerMask _characterLayer;
-    private List<BlackboardReference> _blackboardRefs;
+    private BlackboardReference _blackboardRef;
 
     [Header("Animation")]
     [SerializeField]
@@ -64,7 +64,7 @@ public class Attacking : MonoBehaviour
     {
         if (_stateManager == null) 
             _stateManager = GetComponent<StateManager>();
-        _blackboardRefs = _stateManager.BlackboardRefs;
+        _blackboardRef = _stateManager.BlackboardRef;
     }
     private void Update()
     {
@@ -96,12 +96,7 @@ public class Attacking : MonoBehaviour
 
         if (args.AttackSignal == AttackSignal.Idle )
         {
-            //Signal to blackboard
-            if (gameObject.CompareTag(PLAYER))
-            {
-                foreach (var blackboard in _blackboardRefs)
-                    blackboard.variable.TargetCurrentAttack = AttackType.None;
-            }
+            _blackboardRef.variable.CurrentAttack = AttackType.None;
             CalculateChargePower(args);
             return;
         }
@@ -122,20 +117,10 @@ public class Attacking : MonoBehaviour
             StartAnimation(args.Speed, useRightArm, args.AttackHeight == AttackHeight.Head);
         }
 
-        //PrintInput2(args);
         //Signal to blackboard
-        if (gameObject.CompareTag(PLAYER))
-        {
-            foreach (var blackboard in _blackboardRefs)
-            {
-                blackboard.variable.TargetCurrentAttack = _attackType;
-                blackboard.variable.TargetState = AttackState.Attack;
-            }
-        }
-        else
-        {
-            _blackboardRefs[0].variable.State = AttackState.Attack;
-        }
+        _blackboardRef.variable.CurrentAttack = _attackType;
+        _blackboardRef.variable.State = AttackState.Attack;
+       
     }
 
     public void SwordHit(Component sender, object obj)
@@ -163,13 +148,10 @@ public class Attacking : MonoBehaviour
     {
         if (sender.gameObject != gameObject) return;
 
-        if (gameObject.CompareTag(PLAYER) && _stateManager != null)
-        {
-            foreach (var blackboard in _blackboardRefs)
-            {
-                blackboard.variable.TargetCurrentAttack = AttackType.None;
-                blackboard.variable.TargetState = _stateManager.AttackState == AttackState.Stun? _stateManager.AttackState : AttackState.Idle;
-            }
+        if (_stateManager != null)
+        {            
+            _blackboardRef.variable.CurrentAttack = AttackType.None;
+            _blackboardRef.variable.State = _stateManager.AttackState == AttackState.Stun? _stateManager.AttackState : AttackState.Idle;
         }
     }
 

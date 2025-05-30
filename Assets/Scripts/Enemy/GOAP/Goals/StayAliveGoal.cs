@@ -17,7 +17,7 @@ public class StayAliveGoal : GoapGoal
             return 0.8f;
         if (blackboard.variable.IsPlayerAgressive)
             return 0.8f;        
-        if (blackboard.variable.ObservedAttack == blackboard.variable.TargetCurrentAttack && blackboard.variable.ObservedAttack != AttackType.None )
+        if (blackboard.variable.ObservedAttack == blackboard.variable.CurrentAttack && blackboard.variable.ObservedAttack != AttackType.None )
             return 0.9f;        
 
         return _defaultScore;

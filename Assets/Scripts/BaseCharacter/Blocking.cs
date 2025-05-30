@@ -5,7 +5,7 @@ public class Blocking : MonoBehaviour
 {
     private const string PLAYER = "Player";
 
-    private List<BlackboardReference> _blackboards;
+    private BlackboardReference _blackboard;
 
     [Header("Events")]
     [SerializeField] private GameEvent _stunFeedbackEvent;
@@ -35,13 +35,10 @@ public class Blocking : MonoBehaviour
     {
         if (_stateManager == null)
             _stateManager = GetComponent<StateManager>();
-        _blackboards = _stateManager.BlackboardRefs;
+        _blackboard = _stateManager.BlackboardRef;
     }
     public void BlockMovement(Component sender, object obj)
-    {
-        //on top to make sure all objects that use this script get their statemanager initialised the momenent 1 uses it.
-        
-
+    {        
         //Check for vallid signal
         AimingOutputArgs args = obj as AimingOutputArgs;
         if (args == null) return;
@@ -52,7 +49,6 @@ public class Blocking : MonoBehaviour
         //Make sure that it will always be a vallid Block, even after recovering from Stun
         if (args.IsHoldingBlock && args.AttackState == AttackState.BlockAttack)
         {
-           
             UpdateBlackboard(args);
             return;
         }
@@ -240,20 +236,11 @@ public class Blocking : MonoBehaviour
     {
         if (args == null)
         {
-            if (gameObject.CompareTag(PLAYER))
-                foreach (var blackboard in _blackboards)
-                    blackboard.variable.TargetShieldState = Direction.Idle;
-
-            else
-                _blackboards[0].variable.ShieldState = Direction.Idle;
+            _blackboard.variable.ShieldState = Direction.Idle;
         }
         else
         {
-            if (gameObject.CompareTag(PLAYER))
-                foreach (var blackboard in _blackboards)
-                    blackboard.variable.TargetShieldState = args.BlockDirection;
-            else
-                _blackboards[0].variable.ShieldState = args.BlockDirection;
+            _blackboard.variable.ShieldState = args.BlockDirection;
         }       
     }
 

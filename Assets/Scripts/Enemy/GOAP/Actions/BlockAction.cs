@@ -22,7 +22,7 @@ public class BlockAction : GoapAction
 
         if (_useAimedBlock)
         {
-            switch (blackboard.variable.TargetCurrentAttack)
+            switch (blackboard.variable.CurrentAttack)
             {
                 case AttackType.None:
                 case AttackType.Stab:

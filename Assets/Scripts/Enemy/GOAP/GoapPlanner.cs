@@ -24,7 +24,7 @@ public class GoapPlanner : MonoBehaviour
     private int _recursionCounter = 0;
     private void Awake()
     {
-        _blackboard = GetComponent<StateManager>().BlackboardRefs[0];
+        _blackboard = GetComponent<StateManager>().BlackboardRef;
     }
     void Start()
     {
@@ -55,7 +55,8 @@ public class GoapPlanner : MonoBehaviour
         _recursionCounter = 0;
 
         //Check if the current goal has to be interupted through decision of itself or by an Interupter 
-        if (_activeGoal && (_activeGoal.InteruptGoal(_currentWorldState, _blackboard) || CheckGoalWithInterupters())) 
+        if (_activeGoal && (_activeGoal.InteruptGoal(_currentWorldState, _blackboard) || CheckGoalWithInterupters()))
+            ResetPlan(true);
 
         //Select a new Goal when previous one ended or got interupted
         if (_activeGoal == null || _actionPlan.Count == 0)

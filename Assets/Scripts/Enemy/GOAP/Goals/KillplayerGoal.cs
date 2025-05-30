@@ -18,7 +18,7 @@ public class KillPlayerGoal : GoapGoal
 
     public override bool InteruptGoal(WorldState currentWorldState, BlackboardReference blackboard)
     {
-        return (/*(blackboard.variable.ObservedAttack == blackboard.variable.TargetCurrentAttack 
+        return (/*(blackboard.variable.ObservedAttack == blackboard.variable.CurrentAttack 
                 && blackboard.variable.ObservedAttack != AttackType.None
                 && currentWorldState.AttackRange == EWorldStateRange.InRange)//Disarm
             || */currentWorldState.Behaviour == EBehaviourValue.Knock);//No attacks when you got hit

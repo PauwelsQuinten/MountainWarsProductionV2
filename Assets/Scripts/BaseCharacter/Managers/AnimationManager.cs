@@ -291,8 +291,7 @@ public class AnimationManager : MonoBehaviour
             else
                 _animator.CrossFade(AnimationState.Empty.ToString(), 0.2f, i, 0f);
         }
-        //update this in animator imediatly or the stun will overwrite this state
-        //_animator.Update(0f);
+        
     }
 
     public void GetStunned(Component sender, object obj)
@@ -326,7 +325,7 @@ public class AnimationManager : MonoBehaviour
         {
             _animator.SetTrigger(P_BLOCKED_HIT);
         }
-        if (args.Attacker == gameObject )
+        if (args.Attacker == gameObject && args.BlockPower > 0f)
         {
             //Use play for an direct transition
             //_animator.Play(AnimationState.BlockedHit.ToString());

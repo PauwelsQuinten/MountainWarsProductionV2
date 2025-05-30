@@ -93,6 +93,7 @@ public class AnimationEvents : MonoBehaviour
             _moveAttack.Raise(this, new AttackMoveEventArgs { Attacker = transform.parent.gameObject });
         else
             _moveAttack.Raise(this, new AttackMoveEventArgs { Attacker = transform.parent.gameObject, AttackType = AttackType.Stab });
+        Debug.Log($"Move 1 = f, 0 = b. {forward}, {transform.parent}");
     }
 
 }

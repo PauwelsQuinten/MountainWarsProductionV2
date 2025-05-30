@@ -114,11 +114,24 @@ public class CharacterMovement : MonoBehaviour
 
     public void SetInAttackMovement(Component sender, object obj)
     {
+        StunEventArgs stunEventArgs = obj as StunEventArgs;
+        if (stunEventArgs != null && stunEventArgs.StunTarget == gameObject)
+        {
+            _inAttackMotion = false;
+            return;
+        }
+
+        AttackEventArgs attackEventArgs = obj as AttackEventArgs;
+        if (attackEventArgs != null && attackEventArgs.Attacker == gameObject)
+        {
+            _inAttackMotion = false;
+            return;
+        }
+
         AttackMoveEventArgs args = obj as AttackMoveEventArgs;
         if (args == null || args.Attacker != gameObject) return;
 
         _inAttackMotion = args.AttackType == AttackType.None? false : true;
-
     }
 
     private void UpdateOrientation()

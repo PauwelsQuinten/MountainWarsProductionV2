@@ -174,7 +174,7 @@ public class GoapAction : MonoBehaviour, IActions
 
     protected static bool SeesParryableAttack(BlackboardReference blackboard, WorldState currentWorldState)
     {
-        return blackboard.variable.ObservedAttack == blackboard.variable.TargetCurrentAttack
+        return blackboard.variable.ObservedAttack == blackboard.variable.CurrentAttack
                     && blackboard.variable.ObservedAttack != AttackType.None
                     && currentWorldState.TargetAttackRange == EWorldStateRange.InRange;
     }

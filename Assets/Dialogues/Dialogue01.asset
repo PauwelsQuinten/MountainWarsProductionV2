@@ -17,10 +17,12 @@ MonoBehaviour:
   shoutingImages: []
   hasSecondImageLine: 0
   text: Oh hello there Paul. how's the wife doing these days?
-  CharacterName: Player
+  CharacterName:
+  - Player
   textDisplaySpeed: 0.01
   hasSecondaryLine: 0
   isShouting: 0
+  shoutIntensity: 0
   newFont: {fileID: 0}
   newTextSize: 0
   balloonObject: {fileID: 2592667508800547744, guid: 2bac7fcd62ad2254ba0b5c6805ad7e98, type: 3}
@@ -57,10 +59,12 @@ MonoBehaviour:
   shoutingImages: []
   hasSecondImageLine: 0
   text: Hi Friend. Whell she left me a couple of weeks ago.
-  CharacterName: Paul
+  CharacterName:
+  - Paul
   textDisplaySpeed: 0.01
   hasSecondaryLine: 0
   isShouting: 0
+  shoutIntensity: 0
   newFont: {fileID: 0}
   newTextSize: 0
   balloonObject: {fileID: 2592667508800547744, guid: 2bac7fcd62ad2254ba0b5c6805ad7e98, type: 3}
@@ -97,10 +101,12 @@ MonoBehaviour:
   shoutingImages: []
   hasSecondImageLine: 0
   text: Oh no! So sad Paul.
-  CharacterName: Player
+  CharacterName:
+  - Player
   textDisplaySpeed: 0.01
   hasSecondaryLine: 1
   isShouting: 0
+  shoutIntensity: 1.221
   newFont: {fileID: 0}
   newTextSize: 0
   balloonObject: {fileID: 2592667508800547744, guid: 2bac7fcd62ad2254ba0b5c6805ad7e98, type: 3}
@@ -157,10 +163,12 @@ MonoBehaviour:
   shoutingImages: []
   hasSecondImageLine: 0
   text: Anyway Bye!
-  CharacterName: Player
+  CharacterName:
+  - Player
   textDisplaySpeed: 0.01
   hasSecondaryLine: 0
   isShouting: 0
+  shoutIntensity: 0
   newFont: {fileID: 0}
   newTextSize: 0
   balloonObject: {fileID: 2592667508800547744, guid: 2bac7fcd62ad2254ba0b5c6805ad7e98, type: 3}

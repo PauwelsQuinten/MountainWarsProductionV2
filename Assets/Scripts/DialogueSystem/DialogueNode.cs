@@ -19,13 +19,15 @@ public class DialogueNode : ScriptableObject
     [SerializeField]
     string text;
     [SerializeField]
-    string CharacterName;
+    List<string> CharacterName;
     [SerializeField]
     float textDisplaySpeed;
     [SerializeField]
     bool hasSecondaryLine = false;
     [SerializeField]
     bool isShouting = false;
+    [SerializeField]
+    float shoutIntensity;
     [SerializeField]
     TMP_FontAsset newFont;
     [SerializeField]
@@ -78,7 +80,7 @@ public class DialogueNode : ScriptableObject
         return text;
     }
 
-    public string GetCharacterName()
+    public List<string> GetCharacterName()
     {
         return CharacterName;
     }
@@ -96,6 +98,12 @@ public class DialogueNode : ScriptableObject
     {
         return isShouting;
     }
+
+    public float GetShoutIntensity()
+    {
+        return shoutIntensity;
+    }
+
 
     public TMP_FontAsset GetNewFont()
     {
@@ -211,7 +219,7 @@ public class DialogueNode : ScriptableObject
         }
     }
 
-    public void SetCharacterName(string newCharacterName)
+    public void SetCharacterName(List<string> newCharacterName)
     {
         if (newCharacterName != CharacterName)
         {
@@ -248,9 +256,20 @@ public class DialogueNode : ScriptableObject
     {
         if (newIsShouting != isShouting)
         {
-            Undo.RecordObject(this, " Update Dialogue Has Secondary Line ");
+            Undo.RecordObject(this, " Update Is Shouting");
 
             isShouting = newIsShouting;
+            EditorUtility.SetDirty(this);
+        }
+    }
+
+    public void SetIsShoutIntensity(float newIsShoutIntensity)
+    {
+        if (newIsShoutIntensity != shoutIntensity)
+        {
+            Undo.RecordObject(this, " Update Shout Intensity");
+
+            shoutIntensity = newIsShoutIntensity;
             EditorUtility.SetDirty(this);
         }
     }

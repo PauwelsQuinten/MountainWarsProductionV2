@@ -208,6 +208,10 @@ public class DialogueEditor : EditorWindow
         node.SetHasImageSupport(EditorGUILayout.Toggle(node.GetHasImageSupport()));
         EditorGUILayout.EndHorizontal();
 
+        float textHeight = 0;
+        float previewHeight = 0;
+        float characterNameOffset = 0;
+
         if (node.GetHasImageSupport())
         {
             EditorGUILayout.LabelField("-Images-", labelStyle);
@@ -235,18 +239,21 @@ public class DialogueEditor : EditorWindow
 
             float availableWidth = 60;
 
-            float textHeight = textStyle.CalcHeight(guiContent, availableWidth);
+            textHeight = textStyle.CalcHeight(guiContent, availableWidth);
 
-            float previewHeight = previewStyle.CalcHeight(guiContent, availableWidth);
-
-            node.SetHeight(textHeight + 430 + previewHeight);
-
+            previewHeight = previewStyle.CalcHeight(guiContent, availableWidth);
 
             EditorGUILayout.LabelField("-Text-", labelStyle);
-            GUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("Character", GUILayout.Width(60));
-            node.SetCharacterName(EditorGUILayout.TextField(node.GetCharacterName(), textStyle));
-            GUILayout.EndHorizontal();
+            EditorGUILayout.LabelField("Character");
+            SerializedObject so = new SerializedObject(node); 
+            SerializedProperty characterNameProp = so.FindProperty("CharacterName");
+            EditorGUILayout.PropertyField(characterNameProp, true); 
+            so.ApplyModifiedProperties();
+
+            if (node.GetShoutingImages().Count != 0)
+            {
+                characterNameOffset = 60 * (node.GetShoutingImages().Count - 1);
+            }
 
             GUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("Text", GUILayout.Width(60));
@@ -261,11 +268,6 @@ public class DialogueEditor : EditorWindow
             GUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("Has secondary Dialogue", GUILayout.Width(142.5f));
             node.SetHasSecondaryLine(EditorGUILayout.Toggle(node.GetHasSecondaryLine()));
-            GUILayout.EndHorizontal();
-
-            GUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("Is Shouting", GUILayout.Width(142.5f));
-            node.SetIsShouting(EditorGUILayout.Toggle(node.GetIsShouting()));
             GUILayout.EndHorizontal();
 
             EditorGUILayout.LabelField("-Preview-", labelStyle);
@@ -330,6 +332,18 @@ public class DialogueEditor : EditorWindow
             GUILayout.EndHorizontal();
         }
 
+        GUILayout.BeginHorizontal();
+        EditorGUILayout.LabelField("Is Shouting", GUILayout.Width(142.5f));
+        node.SetIsShouting(EditorGUILayout.Toggle(node.GetIsShouting()));
+        GUILayout.EndHorizontal();
+
+        if (node.GetIsShouting())
+        {
+            EditorGUILayout.LabelField("Shouting Intensity");
+            node.SetIsShoutIntensity(EditorGUILayout.Slider(node.GetShoutIntensity(), 0.5f, 1.3f));
+            node.SetHeight(textHeight + 470 + previewHeight + characterNameOffset);
+        }
+        else node.SetHeight(textHeight + 430 + previewHeight + characterNameOffset);
 
         EditorGUILayout.LabelField("-Text Balloon-", labelStyle);
 

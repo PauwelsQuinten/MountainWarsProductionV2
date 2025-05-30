@@ -58,6 +58,8 @@ public class DialogueSystem : MonoBehaviour
 
     private Vector3 _bridgeOrigin;
 
+    private DialogueNode _shoutingNode;
+
 
     private void Start()
     {
@@ -69,48 +71,35 @@ public class DialogueSystem : MonoBehaviour
     private void LateUpdate()
     {
         if (!_stateManager.IsInDialogue.value || !_allowMovement || _stateManager.IsInStaticDialogue.value) return;
-        Vector2 newPos = Vector2.zero;
-        Vector2 Tailpos = Vector2.zero;
-        if (_spawnedTextBalloons.Count != 0)
+
+        Vector2 newBalloonPos = Vector2.zero;
+
+        newBalloonPos = GetTextBalloonPos(_spawnedTextBalloons, _spawnedText[0].GetComponent<TextMeshProUGUI>(), _currentDialogueNode.GetNeedsToBeFlipped(), false);
+
+        if (_currentDialogueNode.GetIsShouting() || _shoutingNode != null)
         {
-            newPos = GetTextBalloonPos(_spawnedTextBalloons, _spawnedText[0].GetComponent<TextMeshProUGUI>(), _currentDialogueNode.GetNeedsToBeFlipped(), false);
-
-            if (_currentDialogueNode.GetIsShouting())
-            {
-                newPos += new Vector2(150, 50);
-            }
-
-            if (_spawnedTextBalloons[0] != null) _spawnedTextBalloons[0].transform.position = new Vector3(newPos.x, newPos.y, 0);
-            if (_spawnedTextBalloons[1] != null) _spawnedTextBalloons[1].transform.position = new Vector3(newPos.x, newPos.y, 0);
-
-            if (_spawnedTextBalloons[0] != null)
-                _spawnedText[0].transform.position = new Vector3(newPos.x, newPos.y, 0);
-            else
-                _spawnedText[0].transform.position = new Vector3(newPos.x, newPos.y + 200, 0);
-
-            if (_spawnedTextBalloons.Count > 2)
-            {
-                float yOffset = _spawnedTextBalloons[0].GetComponent<Image>().rectTransform.rect.height * 0.35f;
-                float xOffset = _spawnedTextBalloons[0].GetComponent<Image>().rectTransform.rect.width * 0.35f;
-                if (_spawnedTextBalloons[2] != null) _spawnedTextBalloons[2].transform.position = new Vector3(newPos.x + xOffset, newPos.y + -yOffset, 0);
-                if (_spawnedTextBalloons[3] != null) _spawnedTextBalloons[3].transform.position = new Vector3(newPos.x + xOffset, newPos.y + -yOffset, 0);
-
-                _spawnedText[1].transform.position = new Vector3(newPos.x + xOffset, newPos.y + -yOffset, 0);
-            }
+            newBalloonPos += new Vector2(150 * _shoutingNode.GetShoutIntensity(), 50);
         }
 
-        if (_spawnedTails.Count != 0)
+        if (_spawnedTextBalloons[0] != null) _spawnedTextBalloons[0].transform.position = new Vector3(newBalloonPos.x, newBalloonPos.y, 0);
+        if (_spawnedTextBalloons[1] != null) _spawnedTextBalloons[1].transform.position = new Vector3(newBalloonPos.x, newBalloonPos.y, 0);
+
+        if (_spawnedTextBalloons[0] != null)
+            _spawnedText[0].transform.position = new Vector3(newBalloonPos.x, newBalloonPos.y, 0);
+        else
+            _spawnedText[0].transform.position = new Vector3(newBalloonPos.x, newBalloonPos.y + 200, 0);
+
+        if (_spawnedTextBalloons.Count > 2)
         {
-            Tailpos = GetTailPosition(_spawnedTextBalloons);
+            float yOffset = _spawnedTextBalloons[0].GetComponent<Image>().rectTransform.rect.height * 0.35f;
+            float xOffset = _spawnedTextBalloons[0].GetComponent<Image>().rectTransform.rect.width * 0.35f;
+            if (_spawnedTextBalloons[2] != null) _spawnedTextBalloons[2].transform.position = new Vector3(newBalloonPos.x + xOffset, newBalloonPos.y + -yOffset, 0);
+            if (_spawnedTextBalloons[3] != null) _spawnedTextBalloons[3].transform.position = new Vector3(newBalloonPos.x + xOffset, newBalloonPos.y + -yOffset, 0);
 
-            if (_currentDialogueNode.GetIsShouting())
-            {
-                Tailpos -= new Vector2(-25, 0);
-            }
-
-            if(_spawnedTails[0] != null)_spawnedTails[0].transform.position = new Vector3(Tailpos.x, Tailpos.y, 0);
-            if(_spawnedTails[1]) _spawnedTails[1].transform.position = new Vector3(Tailpos.x, Tailpos.y, 0);
+            _spawnedText[1].transform.position = new Vector3(newBalloonPos.x + xOffset, newBalloonPos.y + -yOffset, 0);
         }
+
+        SetTailsPosition(_spawnedTextBalloons, true);
     }
 
     public void StartNewDialoge(Component sender, object obj)
@@ -176,7 +165,7 @@ public class DialogueSystem : MonoBehaviour
             TextballoonPos += new Vector2(xOffset, -yOffset);
             return TextballoonPos;
         }
-        GameObject target = GameObject.Find(_currentDialogueNode.GetCharacterName());
+        GameObject target = GameObject.Find(_currentDialogueNode.GetCharacterName()[0]);
         Vector3 targetPos = target.transform.position;
         targetPos.y += target.GetComponent<CapsuleCollider>().height * 0.5f;
 
@@ -213,53 +202,80 @@ public class DialogueSystem : MonoBehaviour
         return TextballoonPos;
     }
 
-    private Vector2 GetTailPosition(List<GameObject> textBalloon)
+    private void SetTailsPosition(List<GameObject> textBalloon, bool moveTail)
     {
-        int firstIndex = 0;
-        int secondIndex = 0;
-        if(textBalloon.Count() > 2)
-        {
-            firstIndex = 1;
-            secondIndex = 3;
-        }
-        else
-        {
-            firstIndex = 0;
-            secondIndex = 1;
-        }
-        if(textBalloon[firstIndex] == null || textBalloon[secondIndex] == null) return Vector2.zero;
+        if (!moveTail) return;
+        Vector2 textballonPos = textBalloon[0].GetComponent<Image>().rectTransform.position;
+        Vector2 tailPos = new Vector2(textballonPos.x, textballonPos.y);
+        Vector2 returnPos = Vector2.zero;
         float textBalloonWidth = textBalloon[0].GetComponent<Image>().rectTransform.rect.width;
         float textBalloonHeight = textBalloon[0].GetComponent<Image>().rectTransform.rect.height;
-
-        Vector2 tailPos = new Vector2(textBalloon[0].gameObject.transform.position.x, textBalloon[0].gameObject.transform.position.y);
         float Yoffset = -textBalloonHeight * 0.25f;
         float Xoffset = -textBalloonWidth * 0.25f;
 
-        float xRotation = 0;
-        if (_currentDialogue.GetIsStaticDialogue())
+        int index = 0;
+        if (_spawnedTails.Count != 0)
+            index = _spawnedTails.Count - (2 * _currentDialogueNode.GetCharacterName().Count);
+        int tailsOnLeft = 0;
+        int tailsOnRight = 0;
+
+        foreach(string character in _currentDialogueNode.GetCharacterName())
         {
-            if (_previousPos != Vector2.zero)
+            GameObject target = GameObject.Find(character);
+            Vector3 targetPos = target.transform.position;
+            targetPos.y += target.GetComponent<CapsuleCollider>().height * 0.5f;
+
+            Vector2 characterPos = _stateManager.CurrentCamera.WorldToScreenPoint(targetPos);
+
+            float xRotation = 0;
+            if (_currentDialogue.GetIsStaticDialogue())
             {
-                Yoffset = -Yoffset;
-                xRotation = 180;
+                if (_previousPos != Vector2.zero)
+                {
+                    Yoffset = -Yoffset;
+                    xRotation = 180;
+                }
             }
-        }
 
-        bool needsFlip = _currentDialogueNode.GetNeedsToBeFlipped();
-        if (needsFlip)
-        {
-            tailPos = new Vector2(-Xoffset, Yoffset) + tailPos;
-            textBalloon[firstIndex].transform.rotation = Quaternion.Euler(xRotation, 180, 0);
-            textBalloon[secondIndex].transform.rotation = Quaternion.Euler(xRotation, 180, 0);
-        }
-        else
-        {
-            tailPos = new Vector2(Xoffset, Yoffset) + tailPos;
-            textBalloon[firstIndex].transform.rotation = Quaternion.Euler(xRotation, 0, 0);
-            textBalloon[secondIndex].transform.rotation = Quaternion.Euler(xRotation, 0, 0);
-        }
+            int side = GetTailSide(textballonPos - new Vector2(0,10), textballonPos + new Vector2(0, 10), characterPos);
 
-        return tailPos;
+            if (side == 1)
+            {
+                tailPos = new Vector2(-Xoffset - (70 * tailsOnRight), Yoffset - (7 * tailsOnRight)) + textballonPos;
+                if (returnPos == Vector2.zero) returnPos = tailPos;
+                tailsOnRight++;
+                _spawnedTails[index].transform.rotation = Quaternion.Euler(xRotation, 180, 0);
+                _spawnedTails[index + 1].transform.rotation = Quaternion.Euler(xRotation, 180, 0);
+            }
+            else
+            {
+                tailPos = new Vector2(Xoffset + (70 * tailsOnLeft), Yoffset - (7 * tailsOnLeft)) + textballonPos;
+                if (returnPos == Vector2.zero) returnPos = tailPos;
+                tailsOnLeft++;
+                _spawnedTails[index].transform.rotation = Quaternion.Euler(xRotation, 0, 0);
+                _spawnedTails[index + 1].transform.rotation = Quaternion.Euler(xRotation, 0, 0);
+            }
+
+            if (_currentDialogueNode.GetIsShouting() || _shoutingNode != null && _spawnSubBalloon)
+            {
+                tailPos -= new Vector2(15 * _shoutingNode.GetShoutIntensity(), -15);
+            }
+
+            _spawnedTails[index].transform.position = new Vector3(tailPos.x, tailPos.y, 0);
+            _spawnedTails[index + 1].transform.position = new Vector3(tailPos.x, tailPos.y, 0);
+            index += 2;
+        }
+    }
+
+    public static int GetTailSide(Vector2 linePointA, Vector2 linePointB, Vector2 pointC)
+    {
+        Vector2 AB = linePointB - linePointA;
+        Vector2 AC = pointC - linePointA;
+        float cross = AB.x * AC.y - AB.y * AC.x;
+
+        if (cross > 0) return -1;    
+        if (cross < 0) return 1;   
+        return 0;                   
     }
 
     private IEnumerator EnableTextBalloon()
@@ -285,23 +301,17 @@ public class DialogueSystem : MonoBehaviour
 
         if (_currentDialogueNode.GetIsShouting())
         {
-            balloonPos += new Vector2(150, 50);
+            _shoutingNode = _currentDialogueNode;
+            balloonPos += new Vector2(150 * _shoutingNode.GetShoutIntensity(), 50);
         }
 
         if(tempList[0] != null) tempList[0].transform.position = new Vector3(balloonPos.x, balloonPos.y, 0);
-        if (tempList[2] != null) tempList[2].transform.position = new Vector3(balloonPos.x, balloonPos.y, 0);
+        if (tempList[1] != null) tempList[1].transform.position = new Vector3(balloonPos.x, balloonPos.y, 0);
 
-        if(tempList[1] != null || tempList[3] != null)
+
+        if (_spawnedTails.Count != 0)
         {
-            Vector2 Tailpos = GetTailPosition(tempList);
-
-            if (_currentDialogueNode.GetIsShouting())
-            {
-                Tailpos -= new Vector2(-25, 0);
-            }
-
-            tempList[1].transform.position = new Vector3(Tailpos.x, Tailpos.y, 0);
-            tempList[3].transform.position = new Vector3(Tailpos.x, Tailpos.y, 0);
+            SetTailsPosition(tempList, _TextBalloonBridges.Count == 0);
         }
 
         _spawnedDialogue.Add(_currentDialogueNode, tempList);
@@ -412,14 +422,11 @@ public class DialogueSystem : MonoBehaviour
             textBalloonBorder.transform.parent = _blackHolder.transform;
         }
 
-        list.Add(textBalloonBorder);
-        _spawnedTextBalloons.Add(textBalloonBorder);
-
         if(_spawnedDialogue.Count != 0 && !_spawnSubBalloon && _currentDialogue.GetIsStaticDialogue())
         {
             foreach(DialogueNode node in _spawnedDialogue.Keys)
             {
-                if(node.GetCharacterName() == _currentDialogueNode.GetCharacterName())
+                if (node.GetCharacterName()[0] == _currentDialogueNode.GetCharacterName()[0])
                 {
                     spawnTail = false;
                     GameObject temp = Instantiate(_bridgeObject);
@@ -433,18 +440,6 @@ public class DialogueSystem : MonoBehaviour
             }
         }
 
-        GameObject tailBorder = null;
-
-        if (spawnTail && _currentDialogueNode.GetTailObject() != null)
-        {
-            tailBorder = Instantiate(_currentDialogueNode.GetTailObject());
-            tailBorder.GetComponent<Image>().color = Color.black;
-            tailBorder.transform.parent = _blackHolder.transform;
-        }
-
-        list.Add(tailBorder);
-        _spawnedTails.Add(tailBorder);
-
          GameObject textBalloon = null;
         if(_currentDialogueNode.GetBalloonObject() != null)
         {
@@ -452,19 +447,36 @@ public class DialogueSystem : MonoBehaviour
             textBalloon.transform.parent = _whiteHolder.transform;
         }
 
-         list.Add(textBalloon);
+        list.Add(textBalloonBorder);
+        _spawnedTextBalloons.Add(textBalloonBorder);
+
+        list.Add(textBalloon);
         _spawnedTextBalloons.Add(textBalloon);
 
+        GameObject tailBorder = null;
         GameObject tail = null;
-        if (spawnTail && _currentDialogueNode.GetTailObject() != null)
+
+        for (int i = 0; i < _currentDialogueNode.GetCharacterName().Count; i++)
         {
-            tail = Instantiate(_currentDialogueNode.GetTailObject());
-            tail.transform.parent = _whiteHolder.transform;
+            if (spawnTail && _currentDialogueNode.GetTailObject() != null)
+            {
+                GameObject tempBorder = Instantiate(_currentDialogueNode.GetTailObject());
+                tempBorder.GetComponent<Image>().color = Color.black;
+                tempBorder.transform.parent = _blackHolder.transform;
+                if(tailBorder == null) tailBorder = tempBorder;
+                tailBorder.name = $"{tempBorder.name} {i}";
+                _spawnedTails.Add(tempBorder);
+
+                GameObject temptail = Instantiate(_currentDialogueNode.GetTailObject());
+                temptail.transform.parent = _whiteHolder.transform;
+                if (tail == null) tail = temptail;
+                temptail.name = $"{temptail.name} {i}";
+                _spawnedTails.Add(temptail);
+
+                list.Add(temptail);
+                list.Add(tempBorder);
+            }
         }
-
-        list.Add(tail);
-        _spawnedTails.Add(tail);
-
         return list;
     }
 
@@ -532,16 +544,42 @@ public class DialogueSystem : MonoBehaviour
         float FontSizeMultiplier = DetermineFontSizeMultiplier(text.fontSize);
 
         Vector2 size = new Vector2(((FontSizeMultiplier * characterWidth) * LetterCount), ((FontSizeMultiplier * characterHeight) * linecount));
-       size += _currentDialogueNode.GetSizePadding() + new Vector2(20,20);
+        size += _currentDialogueNode.GetSizePadding() + new Vector2(20,20);
 
-        if (textBalloon[0] != null) textBalloon[0].GetComponent<Image>().rectTransform.sizeDelta = (size * new Vector2(node.GetBorderSize() * 0.85f, node.GetBorderSize())) + node.GetSizePadding();
-        if (textBalloon[2] != null) textBalloon[2].GetComponent<Image>().rectTransform.sizeDelta = size + node.GetSizePadding();
-        if (textBalloon[1] != null) textBalloon[1].GetComponent<Image>().rectTransform.sizeDelta = (size * node.GetBorderSize()) + node.GetSizePadding();
-        if (textBalloon[3] != null) textBalloon[3].GetComponent<Image>().rectTransform.sizeDelta = size + node.GetSizePadding();
+        //for(int i = 0; i < textBalloon.Count; i++)
+        //{
+        //    Image image = textBalloon[i].GetComponent<Image>();
+        //    if (image.color == Color.black)
+        //    {
+        //        image.rectTransform.sizeDelta = (size * new Vector2(node.GetBorderSize() * 0.85f, node.GetBorderSize())) + node.GetSizePadding();
+        //    }
+        //    else
+        //    {
+        //        image.rectTransform.sizeDelta = size + node.GetSizePadding();
+        //    }
+        //}
+
+        foreach (GameObject go in textBalloon)
+        {
+            Image image = go.GetComponent<Image>();
+
+            if (image.color == Color.black)
+            {
+                image.rectTransform.sizeDelta = (size * new Vector2(node.GetBorderSize() * 0.85f, node.GetBorderSize())) + node.GetSizePadding();
+            }
+            else
+            {
+                image.rectTransform.sizeDelta = size + node.GetSizePadding();
+            }
+        }
+
         if (_currentDialogueNode.GetIsShouting())
         {
-            if (textBalloon[1] != null) textBalloon[1].GetComponent<Image>().rectTransform.sizeDelta += new Vector2(2000, 25);
-            if (textBalloon[3] != null) textBalloon[3].GetComponent<Image>().rectTransform.sizeDelta += new Vector2(2000, 25);
+            for (int i = 0; i < textBalloon.Count - 2; i++)
+            {
+                textBalloon[1 + i].GetComponent<Image>().rectTransform.sizeDelta += new Vector2(2000 * _currentDialogueNode.GetShoutIntensity(), 25);
+                textBalloon[1 + (i + 1)].GetComponent<Image>().rectTransform.sizeDelta += new Vector2(2000 * _currentDialogueNode.GetShoutIntensity(), 25);
+            }
         }
 
         if (text != null)

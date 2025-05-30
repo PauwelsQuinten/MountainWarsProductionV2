@@ -96,28 +96,19 @@ public class AnimationManager : MonoBehaviour
             switch (args.AnimState)
             {
                 case AnimationState.Stab:
-                    _animator.SetBool(P_ATTACK_HEIGHT, args.IsAttackHigh);
-                    _animator.SetBool(P_ATTACK_MEDIUM, args.AttackWithLeftHand);
-                    _animator.SetFloat(P_ATTACK_STATE, 2f);
-                    _attBlend = 1f;
+                    SetAttackAnim(args, 2f);
                     break;
-                case AnimationState.SlashLeft:
-                    _animator.SetBool(P_ATTACK_HEIGHT, args.IsAttackHigh);
-                    _animator.SetBool(P_ATTACK_MEDIUM, args.AttackWithLeftHand);
+                case AnimationState.SlashLeft:                   
                     if (args.AttackWithLeftHand)
-                        _animator.SetFloat(P_ATTACK_STATE, 1f);
+                        SetAttackAnim(args, 1f);
                     else
-                        _animator.SetFloat(P_ATTACK_STATE, 0f);
-                    _attBlend = 1f;
+                        SetAttackAnim(args, 0f);
                     break;
                 case AnimationState.SlashRight:
-                    _animator.SetBool(P_ATTACK_HEIGHT, args.IsAttackHigh);
-                    _animator.SetBool(P_ATTACK_MEDIUM, args.AttackWithLeftHand);
                     if (args.AttackWithLeftHand)
-                        _animator.SetFloat(P_ATTACK_STATE, 0f);
+                        SetAttackAnim(args, 0f);
                     else
-                        _animator.SetFloat(P_ATTACK_STATE, 1f);
-                    _attBlend = 1f;
+                        SetAttackAnim(args, 1f);
                     break;
                 default:
                     foreach (int layer in args.AnimLayer)
@@ -135,6 +126,20 @@ public class AnimationManager : MonoBehaviour
                 Debug.Log($"{_currentState}, current state");*/
             _startAnimation.Raise(this, null);
         }
+    }
+
+    private void SetAttackAnim(AnimationEventArgs args, float attNum)
+    {
+        _animator.SetBool(P_ATTACK_HEIGHT, args.IsAttackHigh);
+        if (args.IsAttackHigh)
+            _animator.CrossFade("AttackHigh", 0.1f, 1, 0f);
+        else
+            _animator.CrossFade("AttackLow", 0.1f, 1, 0f);
+
+        _animator.SetBool(P_ATTACK_MEDIUM, args.AttackWithLeftHand);
+        _animator.SetFloat(P_ATTACK_STATE, attNum);
+
+        _attBlend = 1f;
     }
 
     private void ResetBoredTime()

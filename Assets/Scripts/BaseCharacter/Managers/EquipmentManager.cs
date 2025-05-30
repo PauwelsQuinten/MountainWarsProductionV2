@@ -71,7 +71,6 @@ public class EquipmentManager : MonoBehaviour
                 _changeAnimation.Raise(this, true);
                 _changeIKStance?.Raise(this, new ChangeIKStanceEventArgs { UseSpear = true, LHSocket = equipment.WeaponSocket });
 
-                _stateManager = GetComponent<StateManager>();
                 UpdateBlackboard();
                 return;
             }
@@ -83,6 +82,8 @@ public class EquipmentManager : MonoBehaviour
                 _changeIKStance?.Raise(this, new ChangeIKStanceEventArgs { UseSpear = false });
             }
         }
+        else if (_rightHand == null)
+            _changeIKStance?.Raise(this, new ChangeIKStanceEventArgs { UseSpear = false });
 
         if (_leftHand && _leftHand.EquipmentHand == EquipmentHand.LeftHand )
         {

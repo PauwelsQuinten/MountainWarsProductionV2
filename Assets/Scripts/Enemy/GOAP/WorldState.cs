@@ -344,7 +344,7 @@ public class WorldState : MonoBehaviour
     {
         Behaviour = WatchBehaviour(_blackboard.variable.State);
 
-        if (HasTarget == EWorldStatePossesion.InPossesion)
+        if (HasTarget == EWorldStatePossesion.InPossesion && _blackboard.variable.TargetBlackboard != null)
         {
             TargetBehaviour = WatchBehaviour(_blackboard.variable.TargetBlackboard.variable.State);
         }
@@ -354,6 +354,8 @@ public class WorldState : MonoBehaviour
 
     private void CalculateRange()
     {
+        if (_blackboard.variable.TargetBlackboard == null) return;
+
         float weaponRange = _blackboard.variable.WeaponRange;
         float targetWeaponRange = _blackboard.variable.TargetBlackboard.variable.WeaponRange;
         float targetDistance = Vector3.Distance(gameObject.transform.position, _blackboard.variable.Target.transform.position);

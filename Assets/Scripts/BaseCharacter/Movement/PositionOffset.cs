@@ -27,6 +27,10 @@ public class PositionOffset : MonoBehaviour
         AttackMoveEventArgs attArgs = obj as AttackMoveEventArgs;
         if (attArgs != null)
             HandleAttackMovement(attArgs);
+
+        AttackVillager attVilArgs = obj as AttackVillager;
+        if (attVilArgs != null)
+            HandleHitFeedback(attVilArgs);
     }
 
     private void HandleHitFeedback(AttackEventArgs args)
@@ -43,7 +47,13 @@ public class PositionOffset : MonoBehaviour
             MoveCharacter(args.Defender.transform.position, power);
         }
     }
-    
+    private void HandleHitFeedback(AttackVillager args)
+    {
+        HandleHitFeedback(new AttackEventArgs
+        { Attacker = args.Attacker, Defender = args.Defender, AttackPower = args.AttackPower, BlockPower = args.BlockPower });
+    }
+
+
     private void HandleAttackMovement(AttackMoveEventArgs args)
     {
         if (args.Attacker != gameObject) return; 

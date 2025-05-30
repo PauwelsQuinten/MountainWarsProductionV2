@@ -135,8 +135,8 @@ namespace Geometry
 
         public static float CalculatefOrientationToTarget(Vector3 target, Vector3 self)
         {
-            Vector3 direction = self - target;
-            return Mathf.Atan2(direction.z, direction.x);
+            Vector3 direction = target - self;
+            return Mathf.Atan2(direction.z, direction.x) * Mathf.Rad2Deg;
         }
 
         public static Orientation FindOrientationFromAngle(float fOrientation)

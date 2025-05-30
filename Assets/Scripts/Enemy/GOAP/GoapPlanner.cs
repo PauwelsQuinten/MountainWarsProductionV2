@@ -37,15 +37,18 @@ public class GoapPlanner : MonoBehaviour
 
         foreach (var action in _allActionPrefabs)
         {
-            _allActions.Add(Instantiate(action, gameObject.transform));
+            if (action != null)
+                _allActions.Add(Instantiate(action, gameObject.transform));
         }
         foreach (var goal in _allGoalPrefabs)
         {
-            _allGoals.Add(Instantiate(goal, gameObject.transform));
+            if (goal != null)
+                _allGoals.Add(Instantiate(goal, gameObject.transform));
         }
         foreach (var interupter in _allInteruptPrefabs)
         {
-            _allInterupters.Add(Instantiate(interupter, gameObject.transform));
+            if (interupter != null)
+                _allInterupters.Add(Instantiate(interupter, gameObject.transform));
         }
     }
 

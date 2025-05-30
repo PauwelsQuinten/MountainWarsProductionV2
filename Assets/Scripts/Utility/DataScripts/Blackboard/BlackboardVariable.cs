@@ -164,6 +164,8 @@ public class BlackboardVariable : ScriptableObject
             if (_target != value)
             {
                 _target = value;
+                if (_target == null)
+                    TargetBlackboard = null;
             }
         }
     }
@@ -180,10 +182,12 @@ public class BlackboardVariable : ScriptableObject
                 ValueChanged?.Invoke(this, new BlackboardEventArgs { ThisChanged = BlackboardEventArgs.WhatChanged.TargetBlackboard });
                 _targetBlackboard.variable.ValueChanged += Variable_ValueChanged;
             }
-            else if (value == null)
+            else if (_targetBlackboard != value && value == null)
             {
-                _targetBlackboard.variable.ValueChanged -= Variable_ValueChanged;
+                if (_targetBlackboard != null)
+                    _targetBlackboard.variable.ValueChanged -= Variable_ValueChanged;
                 _targetBlackboard = null;
+                ValueChanged?.Invoke(this, new BlackboardEventArgs { ThisChanged = BlackboardEventArgs.WhatChanged.TargetBlackboard });
             }
         }
     }

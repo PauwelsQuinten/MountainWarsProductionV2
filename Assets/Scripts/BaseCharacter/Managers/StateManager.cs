@@ -20,7 +20,7 @@ public class StateManager : MonoBehaviour
     [HideInInspector]
     public Orientation Orientation;
     [HideInInspector]
-    public float fOrientation = 0f;
+    [Tooltip("Angle of orientation in degree")] public float fOrientation = 0f;
     [Header("Camera")]
     [SerializeField]
     public Camera StartCamera;
@@ -58,6 +58,7 @@ public class StateManager : MonoBehaviour
 
     private void FixedUpdate()
     {
+        //Rotate smoothly between the 8 directions
         Quaternion targetRotation = Quaternion.Euler(new Vector3(0, -(int)Orientation + 90, 0));
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
     }

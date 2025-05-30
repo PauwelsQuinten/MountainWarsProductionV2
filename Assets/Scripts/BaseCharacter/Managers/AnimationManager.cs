@@ -172,6 +172,9 @@ public class AnimationManager : MonoBehaviour
 
     private bool SetBlockDirection(AnimationEventArgs args)
     {
+        if (args.BlockDirection == Direction.Default)
+            return false;
+
         //When already holding a block, only change the direction. nothing else needs to be updated
         if (_currentState == args.AnimState && args.AnimState != AnimationState.Idle && args.AnimState != AnimationState.Empty)
         {

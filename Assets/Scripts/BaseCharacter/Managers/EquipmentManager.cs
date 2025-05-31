@@ -224,11 +224,12 @@ public class EquipmentManager : MonoBehaviour
         foreach (var hitCollider in _hitColliders)
         {
             var newEquip = hitCollider.gameObject.GetComponent<Equipment>();
-            if (newEquip && newEquip.transform.parent == null)
-            {
-                Transform socket = newEquip.EquipmentHand == EquipmentHand.LeftHand? _leftHandSocket : _rightHandSocket ;
-                EquipmentHelper.EquipEquipment(HeldEquipment, newEquip, newEquip.EquipmentHand, socket);
-            }
+            if (!newEquip || (newEquip.transform.parent && newEquip.transform.parent.gameObject.layer != 0))
+                return;
+
+            Transform socket = newEquip.EquipmentHand == EquipmentHand.LeftHand? _leftHandSocket : _rightHandSocket ;
+            EquipmentHelper.EquipEquipment(HeldEquipment, newEquip, newEquip.EquipmentHand, socket);
+            
         }
 
         //Update which aiming script to use on the new equipment and fighting stance

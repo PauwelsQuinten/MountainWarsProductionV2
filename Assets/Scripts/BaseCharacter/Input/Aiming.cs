@@ -22,9 +22,6 @@ public class Aiming : MonoBehaviour
     private float _maxAllowedBlockAngle = 150f;
     [SerializeField, Tooltip("analog input direction will be accepted as center Block if between this angle and his negative")]
     private float _acceptedAngleForCenter = 35f;
-    [SerializeField, Tooltip("angle of the direction starting from your orientation, higher then this will be called as a feint")]
-    [Range(90, 180f)]
-    private float _feintAngle = 100f;
     private float _minSwingSpeed = 1f;
     [SerializeField, Tooltip("This will determine the animation _movementSpeed of block and attack, the attack power will also be influenced by this")]
     [Range(1.1f, 2f)]
@@ -42,12 +39,10 @@ public class Aiming : MonoBehaviour
     private const float F_MIN_DIFF_BETWEEN_INPUT = 0.03f;
     private const float F_MAX_TIME_NOT_MOVING = 0.1f;
     private const float F_MIN_ACCEPTED_VALUE = 0.40f;
-    private const float F_TIME_BETWEEN_SWING = 0.40f;
-    private const float F_TIME_BETWEEN_FEINT = 0.10f;
     private const float F_TIME_BETWEEN_STAB = 0.10f;
     private const float F_MAX_ALLOWED_ANGLE_ON_ORIENTATION = 17f;
     private const float F_MIN_ACCEPTED_MOVEMENT_ANGLE = 30f;
-    private const float F_ACCEPTED_MIN_ANGLE = 10f;
+    private const float F_ACCEPTED_MIN_ANGLE = 15f;
 
     private float _fNotMovingTime = 0f;
     private float _fMovingTime = 0f;
@@ -124,7 +119,7 @@ public class Aiming : MonoBehaviour
             SendPackage();
         }
 
-        //Throw attack/feint or return to idle when releasing the analogstick
+        //Reset values when putting analog stick to neutral
         else if (_refAimingInput.variable.value == Vector2.zero || inputLength < F_MIN_ACCEPTED_VALUE)
         {                                   
             //Reset signal e.g. when stop charging or stop Blocking
@@ -166,7 +161,7 @@ public class Aiming : MonoBehaviour
         }
 
         //When it is not a Stab and input is big enough, set to moving
-        else if (DetectAnalogMovement() || _traversedAngle > F_ACCEPTED_MIN_ANGLE)
+        else if (_previousLength < 1.1f && (DetectAnalogMovement() || _traversedAngle > F_ACCEPTED_MIN_ANGLE))
         {
             _fNotMovingTime = 0f;
             switch (_enmAimingInput)
@@ -182,7 +177,7 @@ public class Aiming : MonoBehaviour
                     break;
             }
             //To throw parry
-            if (_traversedAngle >= _minSwingAngle && _swingDirection == Direction.Idle)
+            if (_traversedAngle >= F_ACCEPTED_MIN_ANGLE && _swingDirection == Direction.Idle)
             {
                 _swingDirection = Geometry.Geometry.CalculateSwingDirection(_traversedAngle, _refAimingInput.variable.value, _vec2previousDirection, _vec2Start);
                 _enmAttackSignal = AttackSignal.Swing;
@@ -196,21 +191,23 @@ public class Aiming : MonoBehaviour
                 SendPackage(false, false);
             }
         }
-        //Store measured length to use as comparision for the IsStabMovement
-        _previousLength = inputLength;
+        //only whenn putting analog stick to neutral should this be able to be reseted
+        //keeping it at 1.1 will make sure no extra input will be sent
+        if (_previousLength < 1.1f)
+            _previousLength = inputLength;
     }
 
     private void OnStateChanged()
     {
         if (_enmCurrentState == AttackState.ShieldDefence && _refAimingInput.variable.State == AttackState.BlockAttack)
         {
-            SendPackage();
+            //SendPackage();
             _previousLength = 1.1f;
         }
-        else if (_enmCurrentState ==  AttackState.BlockAttack && _refAimingInput.variable.State != AttackState.BlockAttack)
-        {
-            SendPackage();
-        }
+        //else if (_enmCurrentState ==  AttackState.BlockAttack && _refAimingInput.variable.State != AttackState.BlockAttack)
+        //{
+        //    SendPackage();
+        //}
 
         if (_enmCurrentState != _refAimingInput.variable.State)
         {
@@ -249,15 +246,17 @@ public class Aiming : MonoBehaviour
             case AttackState.Idle:
             case AttackState.Attack:
             case AttackState.BlockAttack:
-                //When stop moving with small agle its chargUp or nothing.
+                //When stop moving with small angle its chargUp or nothing.
                 if (_traversedAngle < F_MIN_ACCEPTED_MOVEMENT_ANGLE 
-                    && Geometry.Geometry.AreVectorWithinAngle(-orient, _refAimingInput.variable.value, F_MIN_ACCEPTED_MOVEMENT_ANGLE))
+                    && Geometry.Geometry.AreVectorWithinAngle(-orient, _refAimingInput.variable.value, F_MIN_ACCEPTED_MOVEMENT_ANGLE)
+                    && _enmAttackSignal != AttackSignal.Charge)
                 {                                   
                     _enmAttackSignal = AttackSignal.Charge;
-                    SendPackage(true);                   
+                    SendPackage(true);
                 }
                 break;
 
+                //Moving the shield to hold block
             case AttackState.ShieldDefence:
             case AttackState.SwordDefence:
                 if (_enmAimingInput == AimingInputState.Moving)
@@ -331,26 +330,6 @@ public class Aiming : MonoBehaviour
         };
         //Debug.Log($"Send package: {package.AttackState}, {package.AttackSignal}, {_enmAimingInput}, angle : {_traversedAngle}, swing direction: {package.Direction}, block direction: {package.BlockDirection} holding = {package.IsHoldingBlock}");
         _AimOutputEvent.Raise(this, package);
-    }
-
-    private bool IsFeintMovement(Direction direction)
-    {       
-        var orientAngleRad = _refAimingInput.variable.StateManager.fOrientation * Mathf.Deg2Rad;
-
-        var startAngleRad = Geometry.Geometry.CalculateAngleRadOfInput(_vec2Start) - orientAngleRad;
-        startAngleRad = Geometry.Geometry.ClampAngle(startAngleRad);
-
-        if (_enmAttackSignal != AttackSignal.Idle)
-            Debug.Log($", start: {_vec2Start} angle= {startAngleRad * Mathf.Rad2Deg}");
-
-        //Debug.Log($"storredDirection= {_swingDirection}");
-
-        if (direction == Direction.ToLeft  && startAngleRad > -_feintAngle * Mathf.Deg2Rad && startAngleRad < 0f)
-            return false;
-        else if (direction == Direction.ToRight  && startAngleRad < _feintAngle * Mathf.Deg2Rad && startAngleRad > 0)
-            return false;
-        
-        return true;
     }
 
     private void ResetValues()

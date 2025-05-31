@@ -51,6 +51,11 @@ public class ActionQueue : MonoBehaviour
             if (_inputQueue.Peek().Package.AnimationStart && _actionCount > 0)
                 _actionCount--;
             _inputQueue.Dequeue();
+
+            //When a feint attack was just removed, their might just be a continues attack behind it. remove that
+            if (_inputQueue.Count > 0 && !_inputQueue.Peek().Package.IsFeint )
+                _inputQueue.Dequeue();
+
         }
     }
     public void SendAction(Component sender, object obj)

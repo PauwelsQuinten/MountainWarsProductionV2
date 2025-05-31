@@ -119,7 +119,8 @@ namespace UnityEngine
         Melee,
         Ranged,
         Shield,
-        Fist
+        Fist,
+        Wood
     }
     
     public enum EquipmentHand

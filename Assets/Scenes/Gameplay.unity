@@ -7631,6 +7631,10 @@ PrefabInstance:
       value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 8300343760534209040, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
+      propertyPath: _slowBothDown
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8300343760534209040, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
       propertyPath: _slowedDuration
       value: 0.15
       objectReference: {fileID: 0}
@@ -7642,6 +7646,14 @@ PrefabInstance:
       propertyPath: m_AnimatePhysics
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8421172182924108262, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
+      propertyPath: _pushPower
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8421172182924108262, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
+      propertyPath: _pushOfEvent
+      value: 
+      objectReference: {fileID: 11400000, guid: 058b1201218d28e4ab99f172e6b144fb, type: 2}
     - target: {fileID: 8424690266699013297, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
       propertyPath: m_LocalPosition.x
       value: 26.55
@@ -10506,6 +10518,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 744190855891141330, guid: e9651b4801f36d14e86c1cb82aa75d59, type: 3}
+      propertyPath: _pushPower
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 744190855891141330, guid: e9651b4801f36d14e86c1cb82aa75d59, type: 3}
+      propertyPath: _pushOfEvent
+      value: 
+      objectReference: {fileID: 11400000, guid: 058b1201218d28e4ab99f172e6b144fb, type: 2}
     - target: {fileID: 749679949557989253, guid: e9651b4801f36d14e86c1cb82aa75d59, type: 3}
       propertyPath: m_LocalPosition.x
       value: 40.78
@@ -11009,6 +11029,10 @@ PrefabInstance:
     - target: {fileID: 5380632065616784064, guid: e9651b4801f36d14e86c1cb82aa75d59, type: 3}
       propertyPath: _slowSpeed
       value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5380632065616784064, guid: e9651b4801f36d14e86c1cb82aa75d59, type: 3}
+      propertyPath: _slowBothDown
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5380632065616784064, guid: e9651b4801f36d14e86c1cb82aa75d59, type: 3}
       propertyPath: _slowedDuration

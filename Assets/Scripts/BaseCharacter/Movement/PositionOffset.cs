@@ -38,11 +38,13 @@ public class PositionOffset : MonoBehaviour
         float power = 0f;
         if (args.Defender == gameObject)
         {
+            //Push away the one who recieve the attack
             power = _pushbackForDefenderPowerRatio * args.AttackPower;
             MoveCharacter(args.Attacker.transform.position, power);
         }
         else if (args.Attacker == gameObject)
         {
+            //Push away the one who throw the attack
             power = _pushbackForAttackerPowerRatio * args.BlockPower;
             MoveCharacter(args.Defender.transform.position, power);
         }

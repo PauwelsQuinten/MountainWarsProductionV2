@@ -10,6 +10,7 @@ public class SlowDownOnImpact : MonoBehaviour
     [Range(0f, 0.5f)]
     [SerializeField, Tooltip("The time percentage duration the animation will ease in or out")] private float _easInPercentage = 0.2f; 
     [SerializeField, Tooltip("The animator parameter name")] private string _animParameter = "ActionSpeed";
+    [SerializeField, Tooltip("Slow down both the attacker and the defender")] private bool _slowBothDown = false;
 
     private Animator _animator;
     private float _easInDuration = 0.2f;
@@ -25,7 +26,8 @@ public class SlowDownOnImpact : MonoBehaviour
     public async void StartSlowDown(Component sender, object obj)
     {
         AttackEventArgs args = obj as AttackEventArgs;
-        if (args == null || args.Attacker != gameObject) return;
+        if (args == null) return;
+        if (args.Attacker != gameObject && (args.Defender != gameObject && _slowBothDown)) return;
 
         float start = _animator.GetFloat(_animParameter);
         float miliseconds = (_slowedDuration - 2f * _easInDuration) * 1000f;

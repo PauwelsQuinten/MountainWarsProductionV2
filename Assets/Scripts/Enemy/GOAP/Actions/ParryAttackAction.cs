@@ -73,7 +73,8 @@ public class ParryAttackAction : GoapAction
     override public void CancelAction()
     {
         base.CancelAction();
-        StopCoroutine(_defendCoroutine);
+        if (_defendCoroutine != null) 
+            StopCoroutine(_defendCoroutine);
     }
 
     public override float CalculateCost(BlackboardReference blackboard, WorldState currentWorldState)

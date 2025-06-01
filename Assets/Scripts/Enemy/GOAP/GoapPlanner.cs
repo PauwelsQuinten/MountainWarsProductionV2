@@ -238,7 +238,9 @@ public class GoapPlanner : MonoBehaviour
     {
         foreach (var interupter in _allInterupters)
         {
-            if (interupter.GoalToInterupt == _activeGoal && interupter.InteruptCurrentGoal(_currentWorldState, _blackboard))
+            if (interupter== null || interupter.GoalToInterupt.GetType() == null)
+                return false;
+            if (interupter.GoalToInterupt.GetType() == _activeGoal.GetType() && interupter.InteruptCurrentGoal(_currentWorldState, _blackboard))
                 return true;
         }
         return false;

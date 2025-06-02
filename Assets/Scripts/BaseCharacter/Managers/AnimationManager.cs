@@ -364,6 +364,14 @@ public class AnimationManager : MonoBehaviour
         _animator.CrossFade(AnimationState.Idle.ToString(), 0.2f, 1, 0f);
     }
 
+    public void SetFullBodyAnim(Component Sender, object obj)
+    {
+        AttackMoveEventArgs args = obj as AttackMoveEventArgs;
+        if (args == null || args.Attacker != gameObject) return; 
+
+        _animator.SetBool(P_FULL_BODY, args.AttackType != AttackType.None);
+    }
+
     private bool IsCurrentState(int layer, string state)
     {
         if (_animator.IsInTransition(layer))

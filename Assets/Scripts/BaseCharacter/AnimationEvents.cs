@@ -89,8 +89,11 @@ public class AnimationEvents : MonoBehaviour
 
     public void MoveBack(int forward)
     {
+        //To move Back
         if (forward == 0)
             _moveAttack.Raise(this, new AttackMoveEventArgs { Attacker = transform.parent.gameObject });
+
+        //To move Forward
         else
             _moveAttack.Raise(this, new AttackMoveEventArgs { Attacker = transform.parent.gameObject, AttackType = AttackType.Stab });
         Debug.Log($"Move 1 = f, 0 = b. {forward}, {transform.parent}");

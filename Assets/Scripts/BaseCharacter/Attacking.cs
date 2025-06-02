@@ -45,12 +45,15 @@ public class Attacking : MonoBehaviour
     [SerializeField]
     private GameEvent _changeAnimation;
 
+    [SerializeField]
+    private bool _isFullBodyAnim = false;
+
     private float _chargePower = 0f;
     [HideInInspector] public float ChargedPower
     {
         get { return _chargePower; }
     }
-    public bool ChargePowerUsed = false;
+    [HideInInspector] public bool ChargePowerUsed = false;
     private float _attackPower = 0f;
     private AttackType _attackType;
     private AttackHeight _attackHeight = AttackHeight.Torso;
@@ -91,6 +94,7 @@ public class Attacking : MonoBehaviour
         {
             _changeAnimation.Raise(this, new AnimationEventArgs { IsFeint = false });
             _moveAttack.Raise(this, new AttackMoveEventArgs { Attacker = gameObject, AttackType = _attackType});
+            _changeAnimation.Raise(this, new AttackMoveEventArgs { Attacker = gameObject, AttackType= _attackType });
             return;
         }
 
@@ -168,22 +172,23 @@ public class Attacking : MonoBehaviour
             _changeAnimation.Raise(this, new AnimationEventArgs 
             { AnimState = AnimationState.SlashLeft, AnimLayer = animLayers, DoResetIdle = true, Speed = 1.5f
             , IsAttackHigh = isAttackHigh, AttackWithLeftHand = !useRightArm
-            , IsFullBodyAnim = true});
+            , IsFullBodyAnim = _isFullBodyAnim
+            });
         }
         else if (_attackType == AttackType.HorizontalSlashToRight)
         {
             _changeAnimation.Raise(this, new AnimationEventArgs 
             { AnimState = AnimationState.SlashRight, AnimLayer = animLayers, DoResetIdle = true, Speed = 1.5f
             , IsAttackHigh = isAttackHigh, AttackWithLeftHand = !useRightArm
-            , IsFullBodyAnim = true
+            , IsFullBodyAnim = _isFullBodyAnim
             });
         }
         else if (_attackType == AttackType.Stab)
         {
             _changeAnimation.Raise(this, new AnimationEventArgs 
             { AnimState = AnimationState.Stab, AnimLayer = animLayers, DoResetIdle = true, Speed = 1.5f
-            , IsAttackHigh = isAttackHigh, AttackWithLeftHand = !useRightArm,
-              IsFullBodyAnim = true
+            , IsAttackHigh = isAttackHigh, AttackWithLeftHand = !useRightArm
+            , IsFullBodyAnim = _isFullBodyAnim
             });
         }
         else if (_attackType == AttackType.Charge)

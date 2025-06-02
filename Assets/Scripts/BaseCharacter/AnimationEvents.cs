@@ -22,7 +22,8 @@ public class AnimationEvents : MonoBehaviour
     private GameEvent _sheatSword;
     [SerializeField] 
     private GameEvent _pickup;
-
+    [SerializeField] 
+    private GameEvent _stunned;
     private int _storredDirection = 0;
     private void Start()
     {
@@ -85,4 +86,8 @@ public class AnimationEvents : MonoBehaviour
         _pickup.Raise(this.transform.parent, null);
     }
 
+    public void Stunned()
+    {
+         _stunned.Raise(this.transform.parent, null);
+    }
 }

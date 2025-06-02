@@ -281,7 +281,7 @@ public class AnimationManager : MonoBehaviour
         if (args == null) 
             return;
 
-        _animator.speed = 1;
+        _animator.SetFloat(P_ACTION_SPEED, 1f);
         _animator.SetFloat(P_HIT_HEIGHT, (float)(int)args.AttackHeight);
 
         //Transition block to hit when his block was badly aimed
@@ -392,6 +392,7 @@ public class AnimationManager : MonoBehaviour
                 _animator.CrossFade(AnimationState.Empty.ToString(), 0.2f, i, 0f);
         }
         _animator.SetBool(P_Stun, true);
+        _animator.SetFloat(P_ACTION_SPEED, 1f);
     }
 
 }

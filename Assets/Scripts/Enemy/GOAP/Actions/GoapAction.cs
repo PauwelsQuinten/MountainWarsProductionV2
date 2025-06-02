@@ -23,7 +23,7 @@ public class GoapAction : MonoBehaviour, IActions
     public float Cost = 1.0f;
     [SerializeField, Tooltip("Maximum time this action will run, when negative it can run forever or until interupted by other sources")] 
     protected float _actionMaxRunTime = 3f;
-    [SerializeField, Tooltip("when put to true, his max action runtime wil be randomised instead of the set value")]
+    [SerializeField, Tooltip("when put to true, his max action runtime wil be randomised between the set value and 10% of it instead of the set value")]
     private bool _randomWalkingTime = false;
 
     protected bool _isActivated = false;
@@ -54,7 +54,7 @@ public class GoapAction : MonoBehaviour, IActions
 
 
         if (_randomWalkingTime)
-            _actionMaxRunTime = Random.Range(1f, 5f);
+            _actionMaxRunTime = Random.Range(_actionMaxRunTime * 0.1f, _actionMaxRunTime);
 
         
     }

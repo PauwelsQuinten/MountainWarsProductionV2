@@ -342,6 +342,9 @@ public class WorldState : MonoBehaviour
 
     private void UpdateBehaviour()
     {
+        if (_blackboard.variable.TargetBlackboard != null && _blackboard.variable.TargetBlackboard.variable.Self == null)
+            _blackboard.variable.TargetBlackboard = null;
+
         Behaviour = WatchBehaviour(_blackboard.variable.State);
 
         if (HasTarget == EWorldStatePossesion.InPossesion && _blackboard.variable.TargetBlackboard != null)

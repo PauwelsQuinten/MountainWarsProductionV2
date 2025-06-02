@@ -32,7 +32,8 @@ public class ParryAttackAction : GoapAction
     override public void UpdateAction(WorldState currentWorldState, BlackboardReference blackboard)
     {
         //Debug.Log("update");
-        if (blackboard.variable.CurrentAttack == AttackType.None)
+        if (blackboard.variable.TargetBlackboard == null 
+            || blackboard.variable.TargetBlackboard.variable.CurrentAttack == AttackType.None)
             return;
              
 

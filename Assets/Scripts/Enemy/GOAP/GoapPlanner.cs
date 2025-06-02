@@ -8,6 +8,8 @@ public class GoapPlanner : MonoBehaviour
     [SerializeField] private CharacterMentality _characterMentality = CharacterMentality.Basic;
     [Range(0, 10)]
     public int Perception = 8;
+    [Range(0, 10), Tooltip("the higher the faster he will recover from a interupted goal, 10 is zero invallid time")]
+    public int Determination = 8;
     [SerializeField] private List<GoapAction> _allActionPrefabs;
     [SerializeField] private List<GoapGoal> _allGoalPrefabs;
     [SerializeField] private List<GoapInterupter> _allInteruptPrefabs;
@@ -43,7 +45,10 @@ public class GoapPlanner : MonoBehaviour
         foreach (var goal in _allGoalPrefabs)
         {
             if (goal != null)
+            {
+                goal.DeterminationSetup(Determination);
                 _allGoals.Add(Instantiate(goal, gameObject.transform));
+            }
         }
         foreach (var interupter in _allInteruptPrefabs)
         {
@@ -58,8 +63,9 @@ public class GoapPlanner : MonoBehaviour
         _recursionCounter = 0;
 
         //Check if the current goal has to be interupted through decision of itself or by an Interupter 
-        if (_activeGoal && (_activeGoal.InteruptGoal(_currentWorldState, _blackboard) || CheckGoalWithInterupters()))
-            ResetPlan(true);
+        bool setInvallid = false;
+        if (_activeGoal && (_activeGoal.InteruptGoal(_currentWorldState, _blackboard) || CheckGoalWithInterupters(out setInvallid)))
+            ResetPlan(setInvallid);
 
         //Select a new Goal when previous one ended or got interupted
         if (_activeGoal == null || _actionPlan.Count == 0)
@@ -234,14 +240,19 @@ public class GoapPlanner : MonoBehaviour
         _actionPlan.Clear();
     }
 
-    private bool CheckGoalWithInterupters()
+    private bool CheckGoalWithInterupters(out bool setInavllid)
     {
+        setInavllid = false;
         foreach (var interupter in _allInterupters)
         {
             if (interupter== null || interupter.GoalToInterupt.GetType() == null)
                 return false;
-            if (interupter.GoalToInterupt.GetType() == _activeGoal.GetType() && interupter.InteruptCurrentGoal(_currentWorldState, _blackboard))
+            if (interupter.GoalToInterupt.GetType() == _activeGoal.GetType() 
+                && interupter.InteruptCurrentGoal(_currentWorldState, _blackboard))
+            {
+                setInavllid = interupter.SetInvallid;
                 return true;
+            }
         }
         return false;
     }

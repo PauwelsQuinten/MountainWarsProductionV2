@@ -17,9 +17,11 @@ public class StayAliveGoal : GoapGoal
             return 0.8f;
         if (blackboard.variable.IsPlayerAgressive)
             return 0.8f;        
-        if (blackboard.variable.ObservedAttack == blackboard.variable.CurrentAttack && blackboard.variable.ObservedAttack != AttackType.None )
+        if (blackboard.variable.TargetBlackboard != null 
+            && blackboard.variable.TargetBlackboard.variable.CurrentAttack != AttackType.None 
+            && currentWorldState.TargetAttackRange == EWorldStateRange.InRange)
             return 0.9f;        
-
+        
         return _defaultScore;
     }
     public override bool InteruptGoal(WorldState currentWorldState, BlackboardReference blackboard)

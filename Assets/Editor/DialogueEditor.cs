@@ -233,13 +233,18 @@ public class DialogueEditor : EditorWindow
             so2.ApplyModifiedProperties();
             if(node.GetShoutingImages().Count != 0)
             {
-                node.SetHeight(400 + characterNameOffset + (60 * (node.GetShoutingImages().Count - 1)));
+                node.SetHeight(420 + characterNameOffset + (60 * (node.GetShoutingImages().Count - 1)));
             }
-            else node.SetHeight(400 + characterNameOffset);
+            else node.SetHeight(420 + characterNameOffset);
 
             GUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("Has second image line", GUILayout.Width(142.5f));
             node.SethasSecondImageLine(EditorGUILayout.Toggle(node.GetHasSecondImageLine()));
+            GUILayout.EndHorizontal();
+
+            GUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField("Image Size", GUILayout.Width(115));
+            node.SetImageSize(EditorGUILayout.IntField(node.getImageSize(), GUILayout.Width(40)));
             GUILayout.EndHorizontal();
         }
         else

@@ -15,6 +15,8 @@ public class DialogueNode : ScriptableObject
     [SerializeField]
     List<GameObject> shoutingImages;
     [SerializeField]
+    int imageSize;
+    [SerializeField]
     bool hasSecondImageLine;
     [SerializeField]
     string text;
@@ -68,6 +70,11 @@ public class DialogueNode : ScriptableObject
     public List<GameObject> GetShoutingImages()
     {
         return shoutingImages;
+    }
+
+    public int getImageSize()
+    {
+        return imageSize;
     }
 
     public bool GetHasSecondImageLine()
@@ -193,6 +200,16 @@ public class DialogueNode : ScriptableObject
         {
             Undo.RecordObject(this, "Update Shouting Images");
             shoutingImages = images;
+            EditorUtility.SetDirty(this);
+        }
+    }
+
+    public void SetImageSize(int newImageSize)
+    {
+        if(newImageSize != imageSize)
+        {
+            Undo.RecordObject(this, "Update Image Size");
+            imageSize = newImageSize;
             EditorUtility.SetDirty(this);
         }
     }

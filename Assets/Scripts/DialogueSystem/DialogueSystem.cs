@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -99,6 +100,7 @@ public class DialogueSystem : MonoBehaviour
             _spawnedText[1].transform.position = new Vector3(newBalloonPos.x + xOffset, newBalloonPos.y + -yOffset, 0);
         }
 
+        if(_activeShoutingImages.Count != 0) DistributeImages(_spawnedTextBalloons,false, _activeShoutingImages);
         SetTailsPosition(_spawnedTextBalloons, true);
     }
 
@@ -119,6 +121,9 @@ public class DialogueSystem : MonoBehaviour
         _previousTextBalloonSize = Vector2.zero;
         _spawnedDialogue = new Dictionary<DialogueNode, List<GameObject>>();
         _TextBalloonBridges = new List<GameObject>();
+        foreach (var img in _activeShoutingImages)
+            Destroy(img.gameObject);
+        _activeShoutingImages.Clear();
         StartCoroutine(EnableTextBalloon());
     }
 
@@ -141,6 +146,10 @@ public class DialogueSystem : MonoBehaviour
             }
             else
             {
+                foreach (var img in _activeShoutingImages)
+                    Destroy(img);
+                _activeShoutingImages.Clear();
+
                 if (_spawnSubBalloon)
                     StartCoroutine(EnableTextBalloon());
                 else StartCoroutine(DissableTextBalloon(true, true));
@@ -290,13 +299,6 @@ public class DialogueSystem : MonoBehaviour
 
         string tempText = " ";
 
-        if (_currentDialogueNode.GetShoutingImages().Count == 0) tempText = InsertLineBreaksByWord(_currentDialogueNode.GetText(), 5, tempList, text);
-        else
-        {
-            DistributeImages(tempList);
-            DetermineTextBalloonSizeBasedOnImages(tempList, _currentDialogueNode, text);
-        }
-
         Vector2 balloonPos = GetTextBalloonPos(tempList, text, _currentDialogueNode.GetNeedsToBeFlipped(), true);
 
         if (_currentDialogueNode.GetIsShouting())
@@ -313,6 +315,10 @@ public class DialogueSystem : MonoBehaviour
         {
             SetTailsPosition(tempList, _TextBalloonBridges.Count == 0);
         }
+
+        if (_currentDialogueNode.GetShoutingImages().Count == 0) tempText = InsertLineBreaksByWord(_currentDialogueNode.GetText(), 5, tempList, text);
+        else DistributeImages(tempList, true);
+
 
         _spawnedDialogue.Add(_currentDialogueNode, tempList);
 
@@ -588,40 +594,40 @@ public class DialogueSystem : MonoBehaviour
         }
     }
 
-    private void DetermineTextBalloonSizeBasedOnImages(List<GameObject> textBalloon, DialogueNode node, TextMeshProUGUI text)
-    {
-        float imageSizeX = 0;
-        float imagesSizeY = 0;
+    //private void DetermineTextBalloonSizeBasedOnImages(List<GameObject> textBalloon, DialogueNode node, TextMeshProUGUI text)
+    //{
+    //    float imageSizeX = 0;
+    //    float imagesSizeY = 0;
 
-        float imageSpacingX = 0;
-        float imageSpacingY = 0;
+    //    float imageSpacingX = 0;
+    //    float imageSpacingY = 0;
 
-        imageSizeX += _activeShoutingImages[0].GetComponent<Image>().rectTransform.rect.width;
-        imagesSizeY += _activeShoutingImages[0].GetComponent<Image>().rectTransform.rect.height;
+    //    imageSizeX += _activeShoutingImages[0].GetComponent<Image>().rectTransform.rect.width;
+    //    imagesSizeY += _activeShoutingImages[0].GetComponent<Image>().rectTransform.rect.height;
 
 
-        if (node.GetShoutingImages().Count > 1)
-        {
-            imageSpacingX = Vector3.Distance(_activeShoutingImages[0].transform.position, _activeShoutingImages[1].transform.position);
-            imageSpacingX -= imageSizeX / node.GetShoutingImages().Count;
+    //    if (node.GetShoutingImages().Count > 1)
+    //    {
+    //        imageSpacingX = Vector3.Distance(_activeShoutingImages[0].transform.position, _activeShoutingImages[1].transform.position);
+    //        imageSpacingX -= imageSizeX / node.GetShoutingImages().Count;
 
-            if (node.GetHasSecondImageLine())
-            {
-                imageSpacingY = Vector3.Distance(_activeShoutingImages[0].transform.position, _activeShoutingImages[(int)Mathf.Ceil(node.GetShoutingImages().Count * 0.5f)].transform.position);
-                imageSpacingY -= imagesSizeY / 2;
-            }
-        }
+    //        if (node.GetHasSecondImageLine())
+    //        {
+    //            imageSpacingY = Vector3.Distance(_activeShoutingImages[0].transform.position, _activeShoutingImages[(int)Mathf.Ceil(node.GetShoutingImages().Count * 0.5f)].transform.position);
+    //            imageSpacingY -= imagesSizeY / 2;
+    //        }
+    //    }
 
-        float imagesOnFirstLine = Mathf.Ceil(node.GetShoutingImages().Count * 0.5f);
-        Vector2 size = new Vector2((imageSizeX + imageSpacingX) * imagesOnFirstLine, (imagesSizeY + imageSpacingY) * 2);
-        size += node.GetSizePadding() + new Vector2(20,20);
+    //    float imagesOnFirstLine = Mathf.Ceil(node.GetShoutingImages().Count * 0.5f);
+    //    Vector2 size = new Vector2((imageSizeX + imageSpacingX) * imagesOnFirstLine, (imagesSizeY + imageSpacingY) * 2);
+    //    size += node.GetSizePadding() + new Vector2(20,20);
 
-        textBalloon[0].GetComponent<Image>().rectTransform.sizeDelta = (size * new Vector2(node.GetBorderSize() * 0.85f, node.GetBorderSize())) + node.GetSizePadding();
-        textBalloon[2].GetComponent<Image>().rectTransform.sizeDelta = size + node.GetSizePadding();
-        if (textBalloon[1] != null) textBalloon[1].GetComponent<Image>().rectTransform.sizeDelta = (size * node.GetBorderSize()) + node.GetSizePadding();
-        if (textBalloon[3] != null) textBalloon[3].GetComponent<Image>().rectTransform.sizeDelta = size + node.GetSizePadding();
-        text.rectTransform.sizeDelta = size;
-    }
+    //    textBalloon[0].GetComponent<Image>().rectTransform.sizeDelta = (size * new Vector2(node.GetBorderSize() * 0.85f, node.GetBorderSize())) + node.GetSizePadding();
+    //    textBalloon[2].GetComponent<Image>().rectTransform.sizeDelta = size + node.GetSizePadding();
+    //    if (textBalloon[1] != null) textBalloon[1].GetComponent<Image>().rectTransform.sizeDelta = (size * node.GetBorderSize()) + node.GetSizePadding();
+    //    if (textBalloon[3] != null) textBalloon[3].GetComponent<Image>().rectTransform.sizeDelta = size + node.GetSizePadding();
+    //    text.rectTransform.sizeDelta = size;
+    //}
 
     private float DetermineFontSizeMultiplier(float size)
     {
@@ -633,65 +639,117 @@ public class DialogueSystem : MonoBehaviour
          return multiplier;
     }
 
-    public void DistributeImages(List<GameObject> textBalloon)
+    public void DistributeImages(List<GameObject> textBalloon, bool spawnImages, List<GameObject> shoutingImages = null)
     {
-        // Clear previous images
-        foreach (var img in _activeShoutingImages)
-            Destroy(img);
-        _activeShoutingImages.Clear();
-
-        List<GameObject> shoutingImages = _currentDialogueNode.GetShoutingImages();
+        List<GameObject> newShoutingImages = _currentDialogueNode.GetShoutingImages();
         RectTransform balloonRect = textBalloon[0].GetComponent<RectTransform>();
         bool hasSecondRow = _currentDialogueNode.GetHasSecondImageLine();
 
-        int totalImages = shoutingImages.Count;
+        int totalImages = newShoutingImages.Count;
         if (totalImages == 0) return;
 
-        float balloonWidth = balloonRect.rect.width;
-        float balloonHeight = balloonRect.rect.height;
-
+        // Calculate image layout BEFORE resizing balloon
         int firstRowCount = hasSecondRow ? Mathf.CeilToInt(totalImages / 2f) : totalImages;
         int secondRowCount = hasSecondRow ? totalImages - firstRowCount : 0;
 
-        float rowHeight = hasSecondRow ? balloonHeight * 0.35f : balloonHeight * 0.5f;
-        float yOffsetFirstRow = hasSecondRow ? balloonHeight * 0.20f : 0f;
-        float yOffsetSecondRow = -balloonHeight * 0.20f;
+        // Fixed image size (not dependent on balloon size)
+        float fixedImageSize = _currentDialogueNode.getImageSize(); // Set your desired fixed size here
+        float spacing = 10f; // Fixed spacing between images
+
+        // Calculate required balloon size based on fixed image sizes
+        if (spawnImages)
+        {
+            ResizeBalloonToFitImages(textBalloon, newShoutingImages, hasSecondRow, fixedImageSize, spacing, firstRowCount, secondRowCount);
+        }
+
+        // NOW get the updated balloon dimensions
+        float balloonWidth = balloonRect.rect.width;
+        float balloonHeight = balloonRect.rect.height;
+
+        float yOffsetFirstRow = hasSecondRow ? fixedImageSize * 0.6f : 0f;
+        float yOffsetSecondRow = -fixedImageSize * 0.6f;
 
         // Helper function to place a row of images
         void PlaceRow(int rowIndex, int count, float yOffset)
         {
             if (count == 0) return;
-            float spacing = count > 1 ? balloonWidth / (count + 1) : 0f;
+
+            // Calculate row width and starting position
+            float totalRowWidth = (count * fixedImageSize) + ((count - 1) * spacing);
+            float startX = -totalRowWidth / 2f + fixedImageSize / 2f;
 
             for (int i = 0; i < count; i++)
             {
-                GameObject prefab = shoutingImages[rowIndex == 0 ? i : firstRowCount + i];
-                GameObject imgObj = Instantiate(prefab, balloonRect);
-                imgObj.transform.parent = _balloonHolder.transform;
+                GameObject prefab = null;
+                GameObject imgObj = null;
+
+                if (spawnImages)
+                {
+                    prefab = newShoutingImages[rowIndex == 0 ? i : firstRowCount + i];
+                    imgObj = Instantiate(prefab);
+                }
+                else
+                {
+                    imgObj = shoutingImages[rowIndex == 0 ? i : firstRowCount + i];
+                }
+
+                // Parent to balloon holder with world position false to prevent scaling
+                imgObj.transform.SetParent(_balloonHolder.transform, false);
                 RectTransform imgRect = imgObj.GetComponent<RectTransform>();
 
-                // Optionally, set image size (e.g., 20% of balloon height)
-                float imgSize = rowHeight;
-                imgRect.sizeDelta = new Vector2(imgSize, imgSize);
+                // Set FIXED size (won't scale with balloon)
+                imgRect.sizeDelta = new Vector2(fixedImageSize, fixedImageSize);
+                imgRect.localScale = Vector3.one; // Ensure no inherited scaling
 
-                // Calculate X position (centered)
-                float x = (count == 1)
-                    ? 0
-                    : -balloonWidth / 2f + spacing * (i + 1);
+                // Calculate X position for this row
+                float x = startX + i * (fixedImageSize + spacing);
 
-                // Set local position
-                imgObj.transform.position = textBalloon[0].transform.position + new Vector3(x, yOffset, 0);
+                // Use anchoredPosition relative to balloon center
+                Vector2 balloonCenter = balloonRect.anchoredPosition;
+                imgRect.anchoredPosition = balloonCenter + new Vector2(x, yOffset);
 
-                _activeShoutingImages.Add(imgObj);
+                if (spawnImages) _activeShoutingImages.Add(imgObj);
             }
         }
 
-        // Place the first row (top or center)
+        // Place the rows
         PlaceRow(0, firstRowCount, yOffsetFirstRow);
-
-        // Place the second row (if any, below the first row)
         if (hasSecondRow)
             PlaceRow(1, secondRowCount, yOffsetSecondRow);
+    }
+
+    public void ResizeBalloonToFitImages(List<GameObject> textBalloon, List<GameObject> imagePrefabs, bool hasSecondRow, float fixedImageSize, float spacing, int firstRowCount, int secondRowCount)
+    {
+        if (imagePrefabs == null || imagePrefabs.Count == 0 || textBalloon.Count == 0)
+            return;
+
+        DialogueNode node = _currentDialogueNode;
+
+        // Calculate required width based on the largest row
+        int maxRowCount = Mathf.Max(firstRowCount, secondRowCount);
+        float maxRowWidth = (maxRowCount * fixedImageSize) + ((maxRowCount - 1) * spacing);
+        float requiredWidth = maxRowWidth + node.GetSizePadding().x;
+
+        // Calculate required height based on fixed image size
+        float requiredHeight = fixedImageSize + node.GetSizePadding().y;
+        if (hasSecondRow)
+            requiredHeight = (fixedImageSize * 2) + (fixedImageSize * 0.2f) + node.GetSizePadding().y; // Small gap between rows
+
+        Vector2 size = new Vector2(requiredWidth, requiredHeight);
+
+        // Resize balloon elements
+        foreach (GameObject go in textBalloon)
+        {
+            Image image = go.GetComponent<Image>();
+            if (image.color == Color.black)
+            {
+                image.rectTransform.sizeDelta = (size * new Vector2(node.GetBorderSize() * 0.85f, node.GetBorderSize())) + node.GetSizePadding();
+            }
+            else
+            {
+                image.rectTransform.sizeDelta = size + node.GetSizePadding();
+            }
+        }
     }
 
     private IEnumerator TypeText(string text, TextMeshProUGUI textObject, DialogueNode node)

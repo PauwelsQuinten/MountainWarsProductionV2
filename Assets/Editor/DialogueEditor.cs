@@ -38,7 +38,7 @@ public class DialogueEditor : EditorWindow
     [NonSerialized]
     Vector2 draggingCanvasOffset;
 
-    const float canvasSize = 4000;
+    const float canvasSize = 8000;
     const float backgroundSize = 50f;
 
 
@@ -214,17 +214,28 @@ public class DialogueEditor : EditorWindow
 
         if (node.GetHasImageSupport())
         {
+            EditorGUILayout.LabelField("Character");
+            SerializedObject so = new SerializedObject(node);
+            SerializedProperty characterNameProp = so.FindProperty("CharacterName");
+            EditorGUILayout.PropertyField(characterNameProp, true);
+            so.ApplyModifiedProperties();
+
+            if (node.GetShoutingImages().Count != 0)
+            {
+                characterNameOffset = 60 * (node.GetShoutingImages().Count - 1);
+            }
+
             EditorGUILayout.LabelField("-Images-", labelStyle);
             EditorGUILayout.LabelField("Shouting Images");
-            SerializedObject so = new SerializedObject(node); // 'target' is your DialogueNode
-            SerializedProperty imagesProp = so.FindProperty("shoutingImages");
+            SerializedObject so2 = new SerializedObject(node); // 'target' is your DialogueNode
+            SerializedProperty imagesProp = so2.FindProperty("shoutingImages");
             EditorGUILayout.PropertyField(imagesProp, true); // 'true' draws children (the list elements)
-            so.ApplyModifiedProperties();
+            so2.ApplyModifiedProperties();
             if(node.GetShoutingImages().Count != 0)
             {
-                node.SetHeight(400 + (60 * (node.GetShoutingImages().Count - 1)));
+                node.SetHeight(400 + characterNameOffset + (60 * (node.GetShoutingImages().Count - 1)));
             }
-            else node.SetHeight(400);
+            else node.SetHeight(400 + characterNameOffset);
 
             GUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("Has second image line", GUILayout.Width(142.5f));

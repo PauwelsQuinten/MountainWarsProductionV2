@@ -633,109 +633,65 @@ public class DialogueSystem : MonoBehaviour
          return multiplier;
     }
 
-    private void DistributeImages(List<GameObject> textBalloon)
+    public void DistributeImages(List<GameObject> textBalloon)
     {
-        DialogueNode node = _currentDialogueNode;
-        //RectTransform rectTransform = textBalloon[0].GetComponent<Image>().rectTransform;
+        // Clear previous images
+        foreach (var img in _activeShoutingImages)
+            Destroy(img);
+        _activeShoutingImages.Clear();
 
-        //Rect imageRect = RectTransformUtility.PixelAdjustRect(rectTransform, _canvas.GetComponent<Canvas>());
+        List<GameObject> shoutingImages = _currentDialogueNode.GetShoutingImages();
+        RectTransform balloonRect = textBalloon[0].GetComponent<RectTransform>();
+        bool hasSecondRow = _currentDialogueNode.GetHasSecondImageLine();
 
-        //float balloonWith = imageRect.width;
-        //float balloonHeight = imageRect.height;
+        int totalImages = shoutingImages.Count;
+        if (totalImages == 0) return;
 
-        //float spacingX = 0;
-        //float spacingY = 0;
+        float balloonWidth = balloonRect.rect.width;
+        float balloonHeight = balloonRect.rect.height;
 
-        //int amountOfImagesInLine = 0;
-        //int imagesOnFirstLine = 0;
-        //int imagesOnSecondLine = 0;
+        int firstRowCount = hasSecondRow ? Mathf.CeilToInt(totalImages / 2f) : totalImages;
+        int secondRowCount = hasSecondRow ? totalImages - firstRowCount : 0;
 
-        //int linesindex = 1;
+        float rowHeight = hasSecondRow ? balloonHeight * 0.35f : balloonHeight * 0.5f;
+        float yOffsetFirstRow = hasSecondRow ? balloonHeight * 0.20f : 0f;
+        float yOffsetSecondRow = -balloonHeight * 0.20f;
 
-        //if (node.GetHasSecondImageLine())
-        //{
-        //    spacingX = balloonWith / Mathf.Ceil(node.GetShoutingImages().Count * 0.5f);
-        //    spacingY = balloonHeight * 0.25f;
-
-        //    imagesOnFirstLine = (int)Mathf.Ceil(node.GetShoutingImages().Count * 0.5f);
-        //    imagesOnSecondLine = node.GetShoutingImages().Count - imagesOnFirstLine;
-        //    linesindex = 2;
-        //}
-        //else
-        //{
-        //    spacingX = balloonWith / node.GetShoutingImages().Count;
-        //    imagesOnFirstLine = node.GetShoutingImages().Count;
-        //}
-
-        //amountOfImagesInLine = imagesOnFirstLine;
-
-        //for (int i = 0; i < linesindex; i++)
-        //{
-        //    for (int j = 0; j < amountOfImagesInLine; j++)
-        //    {
-        //        GameObject newImage = (Instantiate(node.GetShoutingImages()[j * (i + 1)], textBalloon[i].transform));
-
-        //        //float newX = +spacingX - (spacingX * j);
-
-        //        float newX = 0 + (balloonWith / 2f) - (spacingX * j) - (newImage.GetComponent<Image>().rectTransform.rect.width);
-        //        float newY = 0;
-
-        //        if (node.GetHasSecondImageLine()) newY = 0 + (balloonHeight * 0.25f) - (spacingY * i) - (newImage.GetComponent<Image>().rectTransform.rect.width / 2);
-
-        //        newImage.transform.localPosition = new Vector3(newX, newY, 0);
-        //        newImage.transform.parent = _balloonHolder.transform;
-        //        _activeShoutingImages.Add(newImage);
-        //    }
-
-        //    amountOfImagesInLine = imagesOnSecondLine;
-        //}
-
-        int childCount = node.GetShoutingImages().Count;
-        int columns = Mathf.CeilToInt(Mathf.Sqrt(childCount));
-        int rows = Mathf.CeilToInt((float)childCount / columns);
-
-        Image balloon = textBalloon[2].GetComponent<Image>();
-        RectTransform balloonRect = balloon.rectTransform;
-
-        // Define what percentage of space you want the images to occupy (0.6 = 60%)
-        float imageSizeRatio = 1f;
-
-        // Calculate desired cell dimensions based on the container size and image ratio
-        float desiredCellWidth = (balloonRect.rect.width / columns) * imageSizeRatio;
-        float desiredCellHeight = (balloonRect.rect.height / rows) * imageSizeRatio;
-
-        // Calculate spacing based on desired cell size
-        float spacingX = (balloonRect.rect.width - (desiredCellWidth * columns)) / (columns - 1);
-        float spacingY = (balloonRect.rect.height - (desiredCellHeight * rows)) / (rows - 1);
-
-        // Use these calculated values for placement
-        for (int i = 0; i < childCount; i++)
+        // Helper function to place a row of images
+        void PlaceRow(int rowIndex, int count, float yOffset)
         {
-            int row = 0;
-            if (node.GetHasSecondImageLine()) row = i / columns;
-            else row = 1;
-            int col = i % columns;
-            GameObject newImage = (Instantiate(node.GetShoutingImages()[i], textBalloon[0].transform));
-            if (newImage != null)
+            if (count == 0) return;
+            float spacing = count > 1 ? balloonWidth / (count + 1) : 0f;
+
+            for (int i = 0; i < count; i++)
             {
-                _activeShoutingImages.Add(newImage);
-                // Calculate position using the spacing values we just determined
-                float x = (col * desiredCellWidth) + (col * spacingX);
-                float y = (row * desiredCellHeight) + (row * spacingY);
+                GameObject prefab = shoutingImages[rowIndex == 0 ? i : firstRowCount + i];
+                GameObject imgObj = Instantiate(prefab, balloonRect);
+                imgObj.transform.parent = _balloonHolder.transform;
+                RectTransform imgRect = imgObj.GetComponent<RectTransform>();
 
-                // Adjust position based on balloon's position
-                Vector3 position = new Vector3(x - balloonRect.rect.width / 2 + desiredCellWidth / 2, -y + balloonRect.rect.height / 2 - desiredCellHeight / 2, 0);
+                // Optionally, set image size (e.g., 20% of balloon height)
+                float imgSize = rowHeight;
+                imgRect.sizeDelta = new Vector2(imgSize, imgSize);
 
-                newImage.transform.localPosition = position;
+                // Calculate X position (centered)
+                float x = (count == 1)
+                    ? 0
+                    : -balloonWidth / 2f + spacing * (i + 1);
 
-                // Make sure the child has a RectTransform to set its size
-                RectTransform childRect = newImage.GetComponent<RectTransform>();
-                if (childRect != null)
-                {
-                    childRect.sizeDelta = new Vector2(desiredCellWidth, desiredCellHeight);
-                }
+                // Set local position
+                imgObj.transform.position = textBalloon[0].transform.position + new Vector3(x, yOffset, 0);
+
+                _activeShoutingImages.Add(imgObj);
             }
         }
+
+        // Place the first row (top or center)
+        PlaceRow(0, firstRowCount, yOffsetFirstRow);
+
+        // Place the second row (if any, below the first row)
+        if (hasSecondRow)
+            PlaceRow(1, secondRowCount, yOffsetSecondRow);
     }
 
     private IEnumerator TypeText(string text, TextMeshProUGUI textObject, DialogueNode node)

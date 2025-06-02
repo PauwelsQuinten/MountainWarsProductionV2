@@ -34,8 +34,8 @@ MonoBehaviour:
   - ad2acf9c-81c3-4f71-9d35-e5e221b7a28f
   rect:
     serializedVersion: 2
-    x: 306.40002
-    y: 49.59999
+    x: 28.000015
+    y: 63.199993
     width: 200
     height: 665.38
   onEnterAction: 
@@ -76,8 +76,8 @@ MonoBehaviour:
   - 34e63512-100c-4bb8-8ece-3ba38bb83575
   rect:
     serializedVersion: 2
-    x: 562.7999
-    y: 78.40002
+    x: 274.79993
+    y: 63.20002
     width: 200
     height: 665.37
   onEnterAction: 
@@ -118,10 +118,55 @@ MonoBehaviour:
   - cd1da861-d3e8-430a-ba85-205749486f43
   rect:
     serializedVersion: 2
-    x: 822.40015
-    y: 97.60002
+    x: 511.20013
+    y: 105.60003
     width: 200
     height: 520.14
+  onEnterAction: 
+  onExitAction: 
+  condition:
+    and: []
+--- !u!114 &-651812129837969101
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a7a6ddfe04bf004fbb402deb2b21761, type: 3}
+  m_Name: 9ab82d5b-06d8-4715-95b2-4bff763fe76b
+  m_EditorClassIdentifier: 
+  isPlayerSpeaking: 0
+  hasImageSupport: 1
+  shoutingImages:
+  - {fileID: 1643545390761264672, guid: f6a23aea52d0f674dbadaa776aedbebc, type: 3}
+  - {fileID: 1857187268575111128, guid: 8049f496604332949ba4389d7343e6db, type: 3}
+  - {fileID: 2797005787010629771, guid: 8d0a35798b09dda418ac4992969a0ab2, type: 3}
+  - {fileID: 2797005787010629771, guid: 8d0a35798b09dda418ac4992969a0ab2, type: 3}
+  hasSecondImageLine: 1
+  text: 
+  CharacterName:
+  - Paul
+  textDisplaySpeed: 0
+  hasSecondaryLine: 0
+  isShouting: 0
+  shoutIntensity: 0
+  newFont: {fileID: 0}
+  newTextSize: 0
+  balloonObject: {fileID: 2592667508800547744, guid: 2bac7fcd62ad2254ba0b5c6805ad7e98, type: 3}
+  tailObject: {fileID: 8216558290986259432, guid: 89ac598207ca10e43b46e0a3e1c6d86d, type: 3}
+  borderSize: 1.2
+  sizePadding: {x: -10, y: 60}
+  needsToBeFlipped: 0
+  children: []
+  rect:
+    serializedVersion: 2
+    x: 1005.1999
+    y: 149.60002
+    width: 200
+    height: 610
   onEnterAction: 
   onExitAction: 
   condition:
@@ -143,8 +188,9 @@ MonoBehaviour:
   - {fileID: -4182607501235757020}
   - {fileID: -2989413853084130841}
   - {fileID: 2262670474335264596}
+  - {fileID: -651812129837969101}
   newNodeOffset: {x: 250, y: 0}
-  isStaticDialogue: 1
+  isStaticDialogue: 0
   isStarted: 0
 --- !u!114 &2262670474335264596
 MonoBehaviour:
@@ -176,11 +222,12 @@ MonoBehaviour:
   borderSize: 1.2
   sizePadding: {x: -10, y: 50}
   needsToBeFlipped: 0
-  children: []
+  children:
+  - 9ab82d5b-06d8-4715-95b2-4bff763fe76b
   rect:
     serializedVersion: 2
-    x: 1072.7999
-    y: 187.20003
+    x: 743.9999
+    y: 127.20003
     width: 200
     height: 491.1
   onEnterAction: 

@@ -129,8 +129,18 @@ public class Attacking : MonoBehaviour
 
     public void SwordHit(Component sender, object obj)
     {
-        if (sender.gameObject != gameObject) return;
+        //Event coming from the spear
+        AttackEventArgs args = obj as AttackEventArgs;
+        if (args != null && args.Attacker == gameObject)
+        {
+            if (_attackType == AttackType.Stab) _loseStamina.Raise(this, new StaminaEventArgs { StaminaCost = _staminaCost.value * 0.75f });
+            else _loseStamina.Raise(this, new StaminaEventArgs { StaminaCost = _staminaCost.value });
 
+            _doAttack.Raise(this, args);
+        }
+
+        //event coming from the sword attack animations
+        else if (sender.gameObject != gameObject) return;
 
         if (_attackType == AttackType.Stab) _loseStamina.Raise(this, new StaminaEventArgs { StaminaCost = _staminaCost.value * 0.75f });
         else _loseStamina.Raise(this, new StaminaEventArgs { StaminaCost = _staminaCost.value });

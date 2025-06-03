@@ -187,6 +187,7 @@ public class DialogueEditor : EditorWindow
 
     private void DrawNode(DialogueNode node)
     {
+        int baseNodeHeight = 0;
         GUIStyle previewStyle = new GUIStyle(EditorStyles.label);
         previewStyle.wordWrap = true;
         previewStyle.richText = true;
@@ -204,9 +205,10 @@ public class DialogueEditor : EditorWindow
         EditorGUI.BeginChangeCheck();
 
         EditorGUILayout.BeginHorizontal();
-        EditorGUILayout.LabelField("Has Image Support", GUILayout.Width(142.5f));
-        node.SetHasImageSupport(EditorGUILayout.Toggle(node.GetHasImageSupport()));
+        EditorGUILayout.LabelField("Has Image Support", GUILayout.Width(142.5f), GUILayout.Height(20));
+        node.SetHasImageSupport(EditorGUILayout.Toggle(node.GetHasImageSupport(), GUILayout.Height(20)));
         EditorGUILayout.EndHorizontal();
+        baseNodeHeight += 20;
 
         float textHeight = 0;
         float previewHeight = 0;
@@ -214,38 +216,33 @@ public class DialogueEditor : EditorWindow
 
         if (node.GetHasImageSupport())
         {
-            EditorGUILayout.LabelField("Character");
+            EditorGUILayout.LabelField("Character", GUILayout.Height(20));
+            baseNodeHeight += 20;
             SerializedObject so = new SerializedObject(node);
             SerializedProperty characterNameProp = so.FindProperty("CharacterName");
             EditorGUILayout.PropertyField(characterNameProp, true);
             so.ApplyModifiedProperties();
 
-            if (node.GetShoutingImages().Count != 0)
-            {
-                characterNameOffset = 60 * (node.GetShoutingImages().Count - 1);
-            }
-
-            EditorGUILayout.LabelField("-Images-", labelStyle);
-            EditorGUILayout.LabelField("Shouting Images");
+            EditorGUILayout.LabelField("-Images-", labelStyle, GUILayout.Height(20));
+            baseNodeHeight += 20;
+            EditorGUILayout.LabelField("Shouting Images", GUILayout.Height(20));
+            baseNodeHeight += 20;
             SerializedObject so2 = new SerializedObject(node); // 'target' is your DialogueNode
             SerializedProperty imagesProp = so2.FindProperty("shoutingImages");
             EditorGUILayout.PropertyField(imagesProp, true); // 'true' draws children (the list elements)
             so2.ApplyModifiedProperties();
-            if(node.GetShoutingImages().Count != 0)
-            {
-                node.SetHeight(420 + characterNameOffset + (60 * (node.GetShoutingImages().Count - 1)));
-            }
-            else node.SetHeight(420 + characterNameOffset);
 
             GUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("Has second image line", GUILayout.Width(142.5f));
-            node.SethasSecondImageLine(EditorGUILayout.Toggle(node.GetHasSecondImageLine()));
+            EditorGUILayout.LabelField("Has second image line", GUILayout.Width(142.5f), GUILayout.Height(20));
+            node.SethasSecondImageLine(EditorGUILayout.Toggle(node.GetHasSecondImageLine(), GUILayout.Height(20)));
             GUILayout.EndHorizontal();
+            baseNodeHeight += 20;
 
             GUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("Image Size", GUILayout.Width(115));
-            node.SetImageSize(EditorGUILayout.IntField(node.getImageSize(), GUILayout.Width(40)));
+            EditorGUILayout.LabelField("Image Size", GUILayout.Width(115), GUILayout.Height(20));
+            node.SetImageSize(EditorGUILayout.IntField(node.getImageSize(), GUILayout.Width(40), GUILayout.Height(20)));
             GUILayout.EndHorizontal();
+            baseNodeHeight += 20;
         }
         else
         {
@@ -259,17 +256,14 @@ public class DialogueEditor : EditorWindow
 
             previewHeight = previewStyle.CalcHeight(guiContent, availableWidth);
 
-            EditorGUILayout.LabelField("-Text-", labelStyle);
-            EditorGUILayout.LabelField("Character");
+            EditorGUILayout.LabelField("-Text-", labelStyle, GUILayout.Height(20));
+            baseNodeHeight += 20;
+            EditorGUILayout.LabelField("Character", GUILayout.Height(20));
+            baseNodeHeight += 20;
             SerializedObject so = new SerializedObject(node); 
             SerializedProperty characterNameProp = so.FindProperty("CharacterName");
             EditorGUILayout.PropertyField(characterNameProp, true); 
             so.ApplyModifiedProperties();
-
-            if (node.GetShoutingImages().Count != 0)
-            {
-                characterNameOffset = 60 * (node.GetShoutingImages().Count - 1);
-            }
 
             GUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("Text", GUILayout.Width(60));
@@ -277,22 +271,26 @@ public class DialogueEditor : EditorWindow
             GUILayout.EndHorizontal();
 
             GUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("Text Display Speed", GUILayout.Width(115));
-            node.SetTextDisplaySpeed(EditorGUILayout.FloatField(node.GetTextDisplaySpeed(), GUILayout.Width(40)));
+            EditorGUILayout.LabelField("Text Display Speed", GUILayout.Width(115), GUILayout.Height(20));
+            node.SetTextDisplaySpeed(EditorGUILayout.FloatField(node.GetTextDisplaySpeed(), GUILayout.Width(40), GUILayout.Height(20)));
             GUILayout.EndHorizontal();
+            baseNodeHeight += 20;
 
             GUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("Has secondary Dialogue", GUILayout.Width(142.5f));
-            node.SetHasSecondaryLine(EditorGUILayout.Toggle(node.GetHasSecondaryLine()));
+            EditorGUILayout.LabelField("Has secondary Dialogue", GUILayout.Width(142.5f), GUILayout.Height(20));
+            node.SetHasSecondaryLine(EditorGUILayout.Toggle(node.GetHasSecondaryLine(), GUILayout.Height(20)));
             GUILayout.EndHorizontal();
+            baseNodeHeight += 20;
 
-            EditorGUILayout.LabelField("-Preview-", labelStyle);
+            EditorGUILayout.LabelField("-Preview-", labelStyle, GUILayout.Height(20));
+            baseNodeHeight += 20;
             EditorGUILayout.LabelField(node.GetText(), previewStyle);
 
-            EditorGUILayout.LabelField("-Font Style-", labelStyle);
+            EditorGUILayout.LabelField("-Font Style-", labelStyle, GUILayout.Height(20));
+            baseNodeHeight += 20;
 
             GUILayout.BeginHorizontal();
-            if (GUILayout.Button("Size"))
+            if (GUILayout.Button("Size", GUILayout.Height(20)))
             {
                 TextEditor t = new TextEditor();
                 string highlightedText = "";
@@ -303,7 +301,7 @@ public class DialogueEditor : EditorWindow
                 }
             }
 
-            if (GUILayout.Button("Font"))
+            if (GUILayout.Button("Font", GUILayout.Height(20)))
             {
                 TextEditor t = new TextEditor();
                 string highlightedText = "";
@@ -314,7 +312,7 @@ public class DialogueEditor : EditorWindow
                 }
             }
 
-            if (GUILayout.Button("B"))
+            if (GUILayout.Button("B", GUILayout.Height(20)))
             {
                 TextEditor t = new TextEditor();
                 string highlightedText = "";
@@ -325,7 +323,7 @@ public class DialogueEditor : EditorWindow
                 }
             }
 
-            if (GUILayout.Button("I"))
+            if (GUILayout.Button("I", GUILayout.Height(20)))
             {
                 TextEditor t = new TextEditor();
                 string highlightedText = "";
@@ -336,72 +334,101 @@ public class DialogueEditor : EditorWindow
                 }
             }
             GUILayout.EndHorizontal();
+            baseNodeHeight += 20;
 
             GUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("Font Size", GUILayout.Width(60));
-            node.SetNewSize(EditorGUILayout.IntField(node.GetNewFontSize()));
+            EditorGUILayout.LabelField("Font Size", GUILayout.Width(60), GUILayout.Height(20));
+            node.SetNewSize(EditorGUILayout.IntField(node.GetNewFontSize(), GUILayout.Height(20)));
             GUILayout.EndHorizontal();
+            baseNodeHeight += 20;
 
             GUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("New Font", GUILayout.Width(60));
-            node.SetNewFont((TMP_FontAsset)EditorGUILayout.ObjectField(node.GetNewFont(), typeof(TMP_FontAsset), false));
+            EditorGUILayout.LabelField("New Font", GUILayout.Width(60), GUILayout.Height(20));
+            node.SetNewFont((TMP_FontAsset)EditorGUILayout.ObjectField(node.GetNewFont(), typeof(TMP_FontAsset), false, GUILayout.Height(20)));
             GUILayout.EndHorizontal();
+            baseNodeHeight += 20;
         }
 
         GUILayout.BeginHorizontal();
-        EditorGUILayout.LabelField("Is Shouting", GUILayout.Width(142.5f));
-        node.SetIsShouting(EditorGUILayout.Toggle(node.GetIsShouting()));
+        EditorGUILayout.LabelField("Is Shouting", GUILayout.Width(142.5f), GUILayout.Height(20));
+        node.SetIsShouting(EditorGUILayout.Toggle(node.GetIsShouting(), GUILayout.Height(20)));
         GUILayout.EndHorizontal();
+        baseNodeHeight += 20;
 
-        if (node.GetIsShouting())
-        {
-            EditorGUILayout.LabelField("Shouting Intensity");
-            node.SetIsShoutIntensity(EditorGUILayout.Slider(node.GetShoutIntensity(), 0.5f, 1.3f));
-            node.SetHeight(textHeight + 470 + previewHeight + characterNameOffset);
-        }
-        else node.SetHeight(textHeight + 430 + previewHeight + characterNameOffset);
+        EditorGUILayout.LabelField("Shouting Intensity", GUILayout.Height(20));
+        baseNodeHeight += 20;
+        node.SetIsShoutIntensity(EditorGUILayout.Slider(node.GetShoutIntensity(), 0.5f, 1.3f, GUILayout.Height(20)));
+        baseNodeHeight += 20;
 
-        EditorGUILayout.LabelField("-Text Balloon-", labelStyle);
+        EditorGUILayout.LabelField("-Text Balloon-", labelStyle, GUILayout.Height(20));
+        baseNodeHeight += 20;
 
         GUILayout.BeginHorizontal();
-        EditorGUILayout.LabelField("Balloon Image", GUILayout.Width(90));
-        node.SetBalloonObject((GameObject)EditorGUILayout.ObjectField(node.GetBalloonObject(), typeof(GameObject), false));
+        EditorGUILayout.LabelField("Balloon Image", GUILayout.Width(90), GUILayout.Height(20));
+        node.SetBalloonObject((GameObject)EditorGUILayout.ObjectField(node.GetBalloonObject(), typeof(GameObject), false, GUILayout.Height(20)));
         GUILayout.EndHorizontal();
+        baseNodeHeight += 20;
 
         GUILayout.BeginHorizontal();
-        EditorGUILayout.LabelField("Tail Image", GUILayout.Width(90));
-        node.SetTailObject((GameObject)EditorGUILayout.ObjectField(node.GetTailObject(), typeof(GameObject), false));
+        EditorGUILayout.LabelField("Tail Image", GUILayout.Width(90), GUILayout.Height(20));
+        node.SetTailObject((GameObject)EditorGUILayout.ObjectField(node.GetTailObject(), typeof(GameObject), false, GUILayout.Height(20)));
         GUILayout.EndHorizontal();
+        baseNodeHeight += 20;
 
         GUILayout.BeginHorizontal();
-        EditorGUILayout.LabelField("Border Size", GUILayout.Width(90));
-        node.SetBorderSize(EditorGUILayout.FloatField(node.GetBorderSize()));
+        EditorGUILayout.LabelField("Border Size", GUILayout.Width(90), GUILayout.Height(20));
+        node.SetBorderSize(EditorGUILayout.FloatField(node.GetBorderSize(), GUILayout.Height(20)));
         GUILayout.EndHorizontal();
+        baseNodeHeight += 20;
 
         GUILayout.BeginHorizontal();
         //EditorGUILayout.LabelField("Padding", GUILayout.Width(90));
-        node.SetSizePadding(EditorGUILayout.Vector2Field("Padding", node.GetSizePadding(), GUILayout.Width(150)));
+        node.SetSizePadding(EditorGUILayout.Vector2Field("Padding", node.GetSizePadding(), GUILayout.Width(150), GUILayout.Height(40)));
         GUILayout.EndHorizontal();
+        baseNodeHeight += 40;
 
         GUILayout.BeginHorizontal();
-        EditorGUILayout.LabelField("Needs to be flipped", GUILayout.Width(142.5f));
-        node.SetNeedsToBeFlipped(EditorGUILayout.Toggle(node.GetNeedsToBeFlipped()));
+        EditorGUILayout.LabelField("Needs to be flipped", GUILayout.Width(142.5f), GUILayout.Height(20));
+        node.SetNeedsToBeFlipped(EditorGUILayout.Toggle(node.GetNeedsToBeFlipped(), GUILayout.Height(20)));
         GUILayout.EndHorizontal();
+        baseNodeHeight += 20;
 
-        EditorGUILayout.LabelField("-Nodes-", labelStyle);
+        EditorGUILayout.LabelField("-Nodes-", labelStyle, GUILayout.Height(20));
+        baseNodeHeight += 20;
 
         GUILayout.BeginHorizontal();
-        if (GUILayout.Button("X"))
+        if (GUILayout.Button("X", GUILayout.Height(20)))
         {
             deletingNode = node;
         }
         DrawLinkButtons(node);
 
-        if (GUILayout.Button("+"))
+        if (GUILayout.Button("+", GUILayout.Height(20)))
         {
             creatingNode = node;
         }
         GUILayout.EndHorizontal();
+        baseNodeHeight += 20;
+
+        if (node.GetCharacterName().Count != 0)
+        {
+            characterNameOffset = 60 * (node.GetCharacterName().Count - 1);
+        }
+        else characterNameOffset = 60;
+
+        float imageOffset = 0;
+        if (node.GetShoutingImages().Count != 0)
+        {
+            imageOffset = (60 * (node.GetShoutingImages().Count - 1));
+        }
+        else imageOffset = 60;
+
+        if (node.GetHasImageSupport())
+        {
+            node.SetHeight(imageOffset + characterNameOffset + baseNodeHeight + 140);
+        }
+        else node.SetHeight(characterNameOffset + baseNodeHeight + textHeight + previewHeight + 140);
+
 
         GUILayout.EndArea();
     }

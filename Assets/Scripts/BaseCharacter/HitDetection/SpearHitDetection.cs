@@ -9,6 +9,8 @@ public class SpearHitDetection : MonoBehaviour
     [SerializeField] private GameEvent _recieveAttackEvent;
     [SerializeField] private LayerMask _characterLayer;
     [SerializeField] private float _minPower = 1f;
+    [SerializeField] private float _maxPower = 20f;
+    [SerializeField] private float _powerOnSpeed = 7.5f;
     private float _velocity = 0f;
     private Vector3 _PreviousPosition = Vector3.zero;
 
@@ -50,12 +52,18 @@ public class SpearHitDetection : MonoBehaviour
         {
             if (other.gameObject == gameObject) return;
 
-            float power = _power * 10f + _minPower;
+            float power = _power * _powerOnSpeed;
+            if (power < 1) 
+                power = 1;
+            power*= _minPower;
+            if (power >_maxPower ) 
+                power = _maxPower;
+
+            Debug.Log(power);
             _recieveAttackEvent.Raise(transform.root, new AttackEventArgs
             {
                 Attacker = transform.root.gameObject, AttackPower = power, Defender = other.gameObject
             });
-            Debug.Log(power);
 
         }
     }

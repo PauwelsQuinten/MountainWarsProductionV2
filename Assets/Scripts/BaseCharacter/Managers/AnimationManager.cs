@@ -124,7 +124,7 @@ public class AnimationManager : MonoBehaviour
         {
             /*if (gameObject.CompareTag("Player"))
                 Debug.Log($"{_currentState}, current state");*/
-            _startAnimation.Raise(this, null);
+            //_startAnimation.Raise(this, null);
         }
     }
 
@@ -317,7 +317,6 @@ public class AnimationManager : MonoBehaviour
         //When the character gets hit, he first get the animation call for hit.
         //Then the stun is set in StateManager which automaticly gets this stun call,
         //so we check first if he got hit before we set this state to stun
-        //if (IsCurrentState(1, "FullBody.Hit"))
         if (_animator.GetBool(P_Stun))
             return;
 

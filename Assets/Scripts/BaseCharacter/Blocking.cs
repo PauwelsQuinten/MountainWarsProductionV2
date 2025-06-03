@@ -192,6 +192,13 @@ public class Blocking : MonoBehaviour
                     args.BlockPower = 3f;
                     //_succesfullHitEvent.Raise(this, args);
                     break;
+                case BlockResult.PassiveBlock:
+                    _loseStamina.Raise(this, new StaminaEventArgs { StaminaCost = _staminaCost.value * 1.5f});
+                    _stunFeedbackEvent.Raise(this, new StunEventArgs 
+                    { StunDuration = _stunValues.variable.StunWhenGettingPartiallyBlocked *0.5f, StunTarget = args.Attacker });
+                    args.AttackPower *= 0.8f;
+                    args.BlockPower = 3f;
+                    break;
             }
             //Sent to equipment to deal with the damage to used equipment
             if (_equipmentUpdate)
@@ -361,7 +368,7 @@ public class Blocking : MonoBehaviour
         {
             case AttackType.Stab:
                 if (blockDirection == Direction.Idle)
-                    blockResult = BlockResult.Hit;
+                    blockResult = BlockResult.PassiveBlock;
                 else if (blockDirection == Direction.ToCenter)
                     blockResult = BlockResult.FullyBlocked;
                 break;
@@ -371,7 +378,7 @@ public class Blocking : MonoBehaviour
                     blockResult = BlockResult.FullyBlocked;
                 else if (blockDirection == Direction.ToRight )
                     blockResult = BlockResult.Hit;
-                else
+                else if (blockDirection == Direction.ToCenter)
                     blockResult = BlockResult.HalfBlocked;
                 break;
 

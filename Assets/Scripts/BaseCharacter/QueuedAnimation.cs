@@ -25,13 +25,13 @@ public class QueuedAnimation : MonoBehaviour
             case SpecialInput.SheatSword:
                 _changeAnimation.Raise(this, new AnimationEventArgs 
                 { 
-                    AnimState = AnimationState.SheathWeapon, AnimLayer = { 3 }, DoResetIdle = true 
+                    AnimState = AnimationState.SheathWeapon, AnimLayer = 3, DoResetIdle = true 
                 });
                 break;
             case SpecialInput.UnSheatSword:
                 _changeAnimation.Raise(this, new AnimationEventArgs
                 { 
-                    AnimState = AnimationState.DrawWeapon, AnimLayer = { 3 }, DoResetIdle = true 
+                    AnimState = AnimationState.DrawWeapon, AnimLayer = 3, DoResetIdle = true 
                 });
                 break;
             default:
@@ -49,7 +49,7 @@ public class QueuedAnimation : MonoBehaviour
 
         _changeAnimation.Raise(this, new AnimationEventArgs
         { 
-            AnimState = AnimationState.PickUp, AnimLayer = { 3 }, DoResetIdle = true 
+            AnimState = AnimationState.PickUp, AnimLayer = 3, DoResetIdle = true 
         });       
     }
 
@@ -64,7 +64,7 @@ public class QueuedAnimation : MonoBehaviour
 
         _changeAnimation.Raise(this, new AnimationEventArgs 
         { 
-            AnimState = state, AnimLayer = { 1 }, DoResetIdle = true, IsFullBodyAnim = true
+            AnimState = state, AnimLayer = 1, DoResetIdle = true, IsFullBodyAnim = true
         });       
 
     }

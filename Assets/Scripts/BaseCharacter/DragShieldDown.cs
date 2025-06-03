@@ -23,7 +23,7 @@ public class DragShieldDown : MonoBehaviour
 
         _changeAnimation.Raise(this, new AnimationEventArgs 
         { 
-            AnimState = AnimationState.DragShieldDown, AnimLayer = {1 /* 2,3*/ }, DoResetIdle = true, IsFullBodyAnim = true
+            AnimState = AnimationState.DragShieldDown, AnimLayer = 1, DoResetIdle = true, IsFullBodyAnim = true
         });
         _loseStamina.Raise(this, new StaminaEventArgs { StaminaCost = _staminaCost.value });
     }

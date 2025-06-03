@@ -189,7 +189,7 @@ public class Parry : MonoBehaviour
     
     private void StartAnimation(AimingOutputArgs args, BlockMedium parryMedium)
     {
-        List<int> animLayers = new List<int>{ 1 };
+        int animLayers = 1 ;
         float multiplier = 1f;
         //float _parrySpeedShield = args.Speed < 2.5f ? 2.5f : args.Speed;
         if (args.Direction == Direction.ToLeft)

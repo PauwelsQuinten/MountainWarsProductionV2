@@ -89,7 +89,7 @@ public class AnimationManager : MonoBehaviour
         }
 
         //Lowerbody(2) should always transition even when stunnend
-        if ((!_animator.GetBool(P_Stun) && !_animator.GetBool(P_GET_HIT)) || (args.AnimLayer.Count == 1 && args.AnimLayer.Contains(2)))
+        if ((!_animator.GetBool(P_Stun) && !_animator.GetBool(P_GET_HIT)) || (args.AnimLayer == 2 ))
         {
             _animator.SetFloat(P_ACTION_SPEED, args.Speed);
 
@@ -111,21 +111,17 @@ public class AnimationManager : MonoBehaviour
                         SetAttackAnim(args, 1f);
                     break;
                 default:
-                    foreach (int layer in args.AnimLayer)
-                        _animator.CrossFade(args.AnimState.ToString(), 0.2f, layer, 0f);
+                    if (!_animator.IsInTransition(args.AnimLayer))
+                        _animator.CrossFade(args.AnimState.ToString(), 0.2f, args.AnimLayer, 0f);
+                    else
+                        _animator.Play(args.AnimState.ToString(), args.AnimLayer);
                     break;
             }
         }
 
         _currentState = args.AnimState;
 
-        //Set a bool to prevent the actionqueue from executing another action before current is finished 
-        if (args.DoResetIdle)
-        {
-            /*if (gameObject.CompareTag("Player"))
-                Debug.Log($"{_currentState}, current state");*/
-            //_startAnimation.Raise(this, null);
-        }
+        
     }
 
     private void SetAttackAnim(AnimationEventArgs args, float attNum)

@@ -23,8 +23,9 @@ public class AnimationEvents : MonoBehaviour
     [SerializeField] 
     private GameEvent _pickup;
     [SerializeField] 
+    private GameEvent _stunned;
+    [SerializeField] 
     private GameEvent _moveAttack;
-
     private int _storredDirection = 0;
     private void Start()
     {
@@ -87,6 +88,11 @@ public class AnimationEvents : MonoBehaviour
         _pickup.Raise(this.transform.parent, null);
     }
 
+    public void Stunned()
+    {
+         _stunned.Raise(this.transform.parent, null);
+    }
+    
     public void MoveBack(int forward)
     {
         //To move Back
@@ -98,5 +104,4 @@ public class AnimationEvents : MonoBehaviour
             _moveAttack.Raise(this, new AttackMoveEventArgs { Attacker = transform.parent.gameObject, AttackType = AttackType.Stab });
         Debug.Log($"Move 1 = f, 0 = b. {forward}, {transform.parent}");
     }
-
 }

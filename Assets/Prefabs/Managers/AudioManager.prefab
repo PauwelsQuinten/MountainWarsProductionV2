@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 3780531940537309555}
   - component: {fileID: -9064225466436632881}
   - component: {fileID: -7891369219080097047}
-  - component: {fileID: 9191901890054301822}
   m_Layer: 0
   m_Name: AudioManager
   m_TagString: Untagged
@@ -68,6 +67,13 @@ MonoBehaviour:
       Data3: -1338453336
       Data4: -369907754
     Path: event:/Character/CharacterFootsteps
+  _vocalizationSFX:
+    Guid:
+      Data1: 974183020
+      Data2: 1311176030
+      Data3: -488797773
+      Data4: -376467414
+    Path: event:/Character/Vocalizations
   _attackChargeSFX:
     Guid:
       Data1: 1169967744
@@ -124,6 +130,13 @@ MonoBehaviour:
       Data3: 1154439301
       Data4: -1782917154
     Path: event:/Misc/ShowdownTriggered
+  _stunnedSFX:
+    Guid:
+      Data1: 187124725
+      Data2: 1160504568
+      Data3: -1572653671
+      Data4: -2015827421
+    Path: event:/Misc/Confusion
 --- !u!114 &-7891369219080097047
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -146,6 +159,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 1fa0ac8c24365fa4fa43f0ccc057a02a, type: 2}
   - {fileID: 11400000, guid: dc4683c9b3a45b6489f572b0765e6e9e, type: 2}
   - {fileID: 11400000, guid: 256011474ec1c184e867e9af51206920, type: 2}
+  - {fileID: 11400000, guid: 2cc625b4ec016e14899ad658a28da4c8, type: 2}
   Responses:
   - m_PersistentCalls:
       m_Calls:
@@ -273,15 +287,17 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &9191901890054301822
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3779732516173593837}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f97cfddaecd17c7419fc1ecc62d0b3ba, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: -9064225466436632881}
+        m_TargetAssemblyTypeName: FMODAudioHandler, Assembly-CSharp
+        m_MethodName: PlayStunnedSFX
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2

@@ -32,6 +32,7 @@ public static class EquipmentHelper
         HeldEquipment[index] = newEquip;
         newEquip.transform.parent = socket;
         newEquip.transform.localPosition = Vector3.zero;
+        newEquip.transform.localRotation = Quaternion.identity;
         
 
         var collider = HeldEquipment[index].GetComponent<CapsuleCollider>();

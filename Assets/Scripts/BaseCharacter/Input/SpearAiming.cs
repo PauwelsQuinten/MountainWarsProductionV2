@@ -82,8 +82,8 @@ public class SpearAiming : MonoBehaviour
        //Back or forwards movement
         float angle = Vector3.Angle(new Vector3(_refAimingInput.variable.value.x, 0f, _refAimingInput.variable.value.y), transform.forward);
         if (angle > 90f)
-            _outputLength = 0;
-            //_outputLength *= -0.5f;
+            _outputLength *= -0.15f;
+            //_outputLength = 0;
         else
             _outputLength = _refAimingInput.variable.value.x * transform.forward.x + _refAimingInput.variable.value.y * transform.forward.z;
 
@@ -95,8 +95,7 @@ public class SpearAiming : MonoBehaviour
         //Forward stab motion, find the output length and rotate it towards your orientation
         Quaternion rotation = Quaternion.Euler(0, _refAimingInput.variable.StateManager.fOrientation, 0);
         var offset = -transform.right * _outputLength * _moveDistance;
-        if (_outputLength > 0f)
-            _aimTarget.transform.localPosition = _spearIdlePosition + rotation * offset;
+        _aimTarget.transform.localPosition = _spearIdlePosition + rotation * offset;
         _rShoulderTarget.transform.localPosition = _shoulderIdlePosition + rotation * offset * _ratioShoulderHand;
 
         //Set new rotation for swing

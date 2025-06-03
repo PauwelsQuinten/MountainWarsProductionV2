@@ -96,28 +96,19 @@ public class AnimationManager : MonoBehaviour
             switch (args.AnimState)
             {
                 case AnimationState.Stab:
-                    _animator.SetBool(P_ATTACK_HEIGHT, args.IsAttackHigh);
-                    _animator.SetBool(P_ATTACK_MEDIUM, args.AttackWithLeftHand);
-                    _animator.SetFloat(P_ATTACK_STATE, 2f);
-                    _attBlend = 1f;
+                    SetAttackAnim(args, 2f);
                     break;
-                case AnimationState.SlashLeft:
-                    _animator.SetBool(P_ATTACK_HEIGHT, args.IsAttackHigh);
-                    _animator.SetBool(P_ATTACK_MEDIUM, args.AttackWithLeftHand);
+                case AnimationState.SlashLeft:                   
                     if (args.AttackWithLeftHand)
-                        _animator.SetFloat(P_ATTACK_STATE, 1f);
+                        SetAttackAnim(args, 1f);
                     else
-                        _animator.SetFloat(P_ATTACK_STATE, 0f);
-                    _attBlend = 1f;
+                        SetAttackAnim(args, 0f);
                     break;
                 case AnimationState.SlashRight:
-                    _animator.SetBool(P_ATTACK_HEIGHT, args.IsAttackHigh);
-                    _animator.SetBool(P_ATTACK_MEDIUM, args.AttackWithLeftHand);
                     if (args.AttackWithLeftHand)
-                        _animator.SetFloat(P_ATTACK_STATE, 0f);
+                        SetAttackAnim(args, 0f);
                     else
-                        _animator.SetFloat(P_ATTACK_STATE, 1f);
-                    _attBlend = 1f;
+                        SetAttackAnim(args, 1f);
                     break;
                 default:
                     foreach (int layer in args.AnimLayer)
@@ -131,8 +122,24 @@ public class AnimationManager : MonoBehaviour
         //Set a bool to prevent the actionqueue from executing another action before current is finished 
         if (args.DoResetIdle)
         {
+            /*if (gameObject.CompareTag("Player"))
+                Debug.Log($"{_currentState}, current state");*/
             _startAnimation.Raise(this, null);
         }
+    }
+
+    private void SetAttackAnim(AnimationEventArgs args, float attNum)
+    {
+        _animator.SetBool(P_ATTACK_HEIGHT, args.IsAttackHigh);
+        if (args.IsAttackHigh)
+            _animator.CrossFade("AttackHigh", 0.1f, 1, 0f);
+        else
+            _animator.CrossFade("AttackLow", 0.1f, 1, 0f);
+
+        _animator.SetBool(P_ATTACK_MEDIUM, args.AttackWithLeftHand);
+        _animator.SetFloat(P_ATTACK_STATE, attNum);
+
+        _attBlend = 1f;
     }
 
     private void ResetBoredTime()
@@ -165,6 +172,9 @@ public class AnimationManager : MonoBehaviour
 
     private bool SetBlockDirection(AnimationEventArgs args)
     {
+        if (args.BlockDirection == Direction.Default)
+            return false;
+
         //When already holding a block, only change the direction. nothing else needs to be updated
         if (_currentState == args.AnimState && args.AnimState != AnimationState.Idle && args.AnimState != AnimationState.Empty)
         {
@@ -271,13 +281,17 @@ public class AnimationManager : MonoBehaviour
         if (args == null) 
             return;
 
-        _animator.speed = 1;
+        _animator.SetFloat(P_ACTION_SPEED, 1f);
         _animator.SetFloat(P_HIT_HEIGHT, (float)(int)args.AttackHeight);
 
-        //Set all states besides base  to empty 
-        _animator.SetTrigger(P_GET_HIT);
+        //Transition block to hit when his block was badly aimed
+        float dir = _animator.GetFloat(P_BLOCK_DIR);
+        if (dir > 0.9f && dir < 3.1f)
+            _animator.SetTrigger(P_GET_HIT);
+
         _animator.SetBool(P_Stun, true);
 
+        //Set all states besides base to empty 
         for (int i = 1; i < 4; i++)
         {
             if (i == 1)
@@ -285,8 +299,7 @@ public class AnimationManager : MonoBehaviour
             else
                 _animator.CrossFade(AnimationState.Empty.ToString(), 0.2f, i, 0f);
         }
-        //update this in animator imediatly or the stun will overwrite this state
-        _animator.Update(0f);
+        
     }
 
     public void GetStunned(Component sender, object obj)
@@ -304,7 +317,8 @@ public class AnimationManager : MonoBehaviour
         //When the character gets hit, he first get the animation call for hit.
         //Then the stun is set in StateManager which automaticly gets this stun call,
         //so we check first if he got hit before we set this state to stun
-        if (IsCurrentState(1, "FullBody.Hit"))
+        //if (IsCurrentState(1, "FullBody.Hit"))
+        if (_animator.GetBool(P_Stun))
             return;
 
         //Set all states besides base  to empty 
@@ -319,12 +333,15 @@ public class AnimationManager : MonoBehaviour
         {
             _animator.SetTrigger(P_BLOCKED_HIT);
         }
-        if (args.Attacker == gameObject )
+        if (args.Attacker == gameObject && args.BlockPower > 0f)
         {
             //Use play for an direct transition
             //_animator.Play(AnimationState.BlockedHit.ToString());
-            _animator.CrossFade(AnimationState.BlockedHit.ToString(), 0f);
             _animator.SetFloat(P_BLOCKED_ATT, _animator.GetFloat(P_ATTACK_STATE));
+            if (_animator.GetBool(P_ATTACK_HEIGHT))
+                _animator.CrossFade(AnimationState.AttackFeedFackHigh.ToString(), 0.1f);
+            else
+                _animator.CrossFade(AnimationState.AttackFeedFackLow.ToString(), 0.1f);
         }            
     }
 
@@ -332,9 +349,11 @@ public class AnimationManager : MonoBehaviour
     {
         if (Sender.gameObject != gameObject) return;
 
+        _animator.SetBool(P_FULL_BODY, false);  
         _animator.CrossFade(AnimationState.Idle.ToString(), 0.2f, 1, 0f);
         _animator.SetBool(P_Stun, false);
 
+        _currentState = AnimationState.Idle;
     }
 
     public void StopFullBodyAnim(Component Sender, object obj)
@@ -343,6 +362,14 @@ public class AnimationManager : MonoBehaviour
 
         _animator.SetBool(P_FULL_BODY, false);
         _animator.CrossFade(AnimationState.Idle.ToString(), 0.2f, 1, 0f);
+    }
+
+    public void SetFullBodyAnim(Component Sender, object obj)
+    {
+        AttackMoveEventArgs args = obj as AttackMoveEventArgs;
+        if (args == null || args.Attacker != gameObject) return; 
+
+        _animator.SetBool(P_FULL_BODY, args.AttackType != AttackType.None);
     }
 
     private bool IsCurrentState(int layer, string state)
@@ -373,6 +400,7 @@ public class AnimationManager : MonoBehaviour
                 _animator.CrossFade(AnimationState.Empty.ToString(), 0.2f, i, 0f);
         }
         _animator.SetBool(P_Stun, true);
+        _animator.SetFloat(P_ACTION_SPEED, 1f);
     }
 
 }

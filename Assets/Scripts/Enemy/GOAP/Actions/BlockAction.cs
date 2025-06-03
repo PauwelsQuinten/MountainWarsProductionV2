@@ -18,11 +18,12 @@ public class BlockAction : GoapAction
 
     public override void StartAction(WorldState currentWorldState, BlackboardReference blackboard)
     {
-        base.StartAction(currentWorldState, blackboard);
+        if (blackboard.variable.TargetBlackboard == null) return;
 
+        base.StartAction(currentWorldState, blackboard);
         if (_useAimedBlock)
         {
-            switch (blackboard.variable.TargetCurrentAttack)
+            switch (blackboard.variable.TargetBlackboard.variable.CurrentAttack)
             {
                 case AttackType.None:
                 case AttackType.Stab:

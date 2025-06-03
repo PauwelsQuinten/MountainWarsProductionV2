@@ -119,7 +119,8 @@ namespace UnityEngine
         Melee,
         Ranged,
         Shield,
-        Fist
+        Fist,
+        Wood
     }
     
     public enum EquipmentHand
@@ -238,12 +239,16 @@ namespace UnityEngine
         PickUp,
         Stun,
         Hit,
+        AttackFeedFackLow,
+        AttackFeedFackHigh,
         BlockedHit,
+        //values above 100 are used for in scene interactions
         Lean = 100,
         DipWater = 101,
         LookOver = 102,
         AlmostFalling = 103,
-        Confused = 104
+        Confused = 104,
+        Angry = 105
 
     }
 
@@ -255,14 +260,15 @@ namespace UnityEngine
         Forward,
         Backward,
         Side,
-        PatrolPoint
+        PatrolPoint,
+        InRadius
     }
     public enum AIInputAction
     {
         PatchUp,
         Dash,
         StopDash,
-        Interact,
+        PickUp,
         LockShield,
         GrabShield
     }
@@ -290,11 +296,15 @@ namespace UnityEngine
         PickUp,
         SheatSword,
         UnSheatSword,
+        // values above 100 ar used to activate animations for scene interactions
+        //Make sure that these are equal to the ones from the AnimationState
         Lean = 100,
         DipWater = 101,
         LookOver = 102,
         AlmostFalling = 103,
-        Confused = 104
+        Confused = 104,
+        Angry = 105
+
     }
 
 

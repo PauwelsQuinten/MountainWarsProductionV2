@@ -10,6 +10,8 @@ public class CharacterMovement : MonoBehaviour
     [Header("Movement")]
     [SerializeField]
     private FloatReference _speed;
+    [SerializeField]
+    private bool _stopMovingDuringAttack = false;
 
     [Header("Stamina")]
     [SerializeField]
@@ -21,20 +23,19 @@ public class CharacterMovement : MonoBehaviour
     [SerializeField]
     private GameEvent _changeAnimation;
 
-    [Header("StateManager")]
-    [SerializeField]
     private StateManager _stateManager;
-    
+    private StaminaManager _staminaManager;
     private Rigidbody _rb;
+
     private Vector3 _movedirection;
     private float _angleInterval = 22.5f;
-    Quaternion _targetRotation;
-    float _rotationSpeed = 5f;
-
-    private StaminaManager _staminaManager;
+    private Quaternion _targetRotation;
+    private float _rotationSpeed = 5f;
+    private bool _inAttackMotion = false;
 
     private void Start()
     {
+        _stateManager = GetComponent<StateManager>();
         _rb = GetComponent<Rigidbody>();
         _moveInput.variable.ValueChanged += MoveInput_ValueChanged;
         _targetRotation = transform.rotation;
@@ -42,6 +43,10 @@ public class CharacterMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (_stopMovingDuringAttack && _inAttackMotion)
+            return;
+
+        //npc get moved by navmesh
         if (gameObject.CompareTag("Player")) 
             _rb.Move(new Vector3(transform.position.x, transform.position.y,transform.position.z) + (_movedirection * (_speed.value * _moveInput.variable.SpeedMultiplier)) * Time.deltaTime, transform.rotation);
         _rb.AddForce(Vector3.down * 9.81f * 300, ForceMode.Force);
@@ -97,7 +102,7 @@ public class CharacterMovement : MonoBehaviour
                 _removeStamina.Raise(this, new StaminaEventArgs { StaminaCost = _sprintCost.value * Time.deltaTime });
         }
 
-            _movedirection = new Vector3(input.x, 0f, input.y);
+        _movedirection = new Vector3(input.x, 0f, input.y);
 
 
         _changeAnimation.Raise(this, new WalkingEventArgs 
@@ -107,12 +112,36 @@ public class CharacterMovement : MonoBehaviour
             UpdateOrientation();
     }
 
+    public void SetInAttackMovement(Component sender, object obj)
+    {
+        StunEventArgs stunEventArgs = obj as StunEventArgs;
+        if (stunEventArgs != null && stunEventArgs.StunTarget == gameObject)
+        {
+            _inAttackMotion = false;
+            return;
+        }
+
+        AttackEventArgs attackEventArgs = obj as AttackEventArgs;
+        if (attackEventArgs != null && attackEventArgs.Attacker == gameObject)
+        {
+            _inAttackMotion = false;
+            return;
+        }
+
+        AttackMoveEventArgs args = obj as AttackMoveEventArgs;
+        if (args == null || args.Attacker != gameObject) return;
+
+        _inAttackMotion = args.AttackType == AttackType.None? false : true;
+    }
+
     private void UpdateOrientation()
     {
         if (_movedirection == Vector3.zero) return;
         if (_movedirection.magnitude <= 0.2f) return;
         float moveInputAngle = Mathf.Atan2(_movedirection.z, _movedirection.x);
         moveInputAngle = moveInputAngle * Mathf.Rad2Deg;
+        if (moveInputAngle - _angleInterval < -180)
+            moveInputAngle *= -1;
 
         foreach (Orientation direction in Enum.GetValues(typeof(Orientation)))
         {

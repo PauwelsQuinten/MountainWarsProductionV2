@@ -10,16 +10,9 @@ public class AIController : MonoBehaviour
 
     [Header("Variables")]
     [SerializeField]
-    private GameEvent _interactEvent;
-    [SerializeField]
     private GameEvent _MoveEvent;
 
-    [Header("Healing")]
-    [SerializeField]
-    private float _patchUpDuration;
-    [SerializeField]
-    private GameEvent _patchUpEvent;
-
+    
     [SerializeField]
     private GameEvent _shieldBash;
 
@@ -34,8 +27,8 @@ public class AIController : MonoBehaviour
 
     private bool _wasSprinting;
     private bool _isHoldingShield;
-
     private float _patchTimer;
+
     void Start()
     {
         StartCoroutine(CheckSurrounding());
@@ -88,7 +81,7 @@ public class AIController : MonoBehaviour
              case AIInputAction.StopDash:
                 Sprint(false);
                 break;
-            case AIInputAction.Interact:
+            case AIInputAction.PickUp:
                 break;
             case AIInputAction.LockShield:
                 LockShield();
@@ -119,12 +112,12 @@ public class AIController : MonoBehaviour
 
     private void PatchUp()
     {
-        _patchUpEvent.Raise(this, false);
+        _inQueueAction.Raise(this, new AimingOutputArgs { Special = SpecialInput.PatchUp, AnimationStart = true});
     }
 
-    public void Interact()
+    public void PickUp()
     {
-        _interactEvent.Raise(this);
+        _inQueueAction.Raise(this, new AimingOutputArgs { Special = SpecialInput.PickUp, AnimationStart = true});
     }
 
     public void LockShield()

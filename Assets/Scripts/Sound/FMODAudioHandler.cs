@@ -93,6 +93,13 @@ public class FMODAudioHandler : MonoBehaviour
     [Header("SFX/Misc")] 
     [SerializeField] private EventReference _stunnedSFX;
     private EventInstance _stunnedSFXInstance;
+    
+    [SerializeField] private EventReference _dialogueStartSFX;
+    private EventInstance _dialogueStartSFXInstance;
+    
+    [SerializeField] private EventReference _nextDialogueSFX;
+    private EventInstance _nextDialogueSFXInstance;
+    
     private void OnEnable()
     {
         _checker = new TerrainChecker();
@@ -228,6 +235,23 @@ public class FMODAudioHandler : MonoBehaviour
         _stunnedSFXInstance.start();
         _stunnedSFXInstance.release();
     }
+
+    public void PlayDialogueStartSFX(Component sender, object obj)
+    {
+        _dialogueStartSFXInstance = RuntimeManager.CreateInstance(_dialogueStartSFX);
+        
+        _dialogueStartSFXInstance.start();
+        _dialogueStartSFXInstance.release();
+    }
+    
+    public void PlayNextDialogueSFX(Component sender, object obj)
+    {
+        _nextDialogueSFXInstance = RuntimeManager.CreateInstance(_nextDialogueSFX);
+        
+        _nextDialogueSFXInstance.start();
+        _nextDialogueSFXInstance.release();
+    }
+
     public void PlayFootstepsSFX(Component sender, object obj)
     {
         string surfaceType = DetectSurfaceType();

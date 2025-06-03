@@ -10,6 +10,8 @@ public class StateManager : MonoBehaviour
 
     [Header("Refrence")]
     public BlackboardReference BlackboardRef;
+    public BoolReference IsInDialogue;
+    public BoolReference IsInStaticDialogue;
 
     [Header("Values")]
     [SerializeField] private float _rotationSpeed = 5.0f;

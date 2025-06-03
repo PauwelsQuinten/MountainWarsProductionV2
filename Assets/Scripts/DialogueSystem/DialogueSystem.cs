@@ -784,9 +784,11 @@ public class DialogueSystem : MonoBehaviour
 
             if (_activeShoutingImages.Count != 0)
             {
-                foreach (GameObject image in _activeShoutingImages)
+                foreach (GameObject imageObject in _activeShoutingImages)
                 {
-                    image.GetComponent<Image>().color = new Color(0, 0, 0, transparacy);
+                    if (imageObject == null) continue;
+                    Image image = imageObject.GetComponent<Image>();
+                    image.color = new Color(image.color.r, image.color.g, image.color.b, transparacy);
                 }
             }
             yield return null;
@@ -821,9 +823,11 @@ public class DialogueSystem : MonoBehaviour
 
         if (_activeShoutingImages.Count != 0)
         {
-            foreach (GameObject image in _activeShoutingImages)
+            foreach (GameObject imageObject in _activeShoutingImages)
             {
-                image.GetComponent<Image>().color = new Color(0, 0, 0, 0);
+                if (imageObject == null) continue;
+                Image image = imageObject.GetComponent<Image>();
+                image.color = new Color(image.color.r, image.color.g, image.color.b, 0);
             }
         }
 

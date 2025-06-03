@@ -129,50 +129,6 @@ MonoBehaviour:
   onExitAction: 
   condition:
     and: []
---- !u!114 &-65797805038623100
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4a7a6ddfe04bf004fbb402deb2b21761, type: 3}
-  m_Name: 746ee7fd-499e-402d-b006-8192db987dd8
-  m_EditorClassIdentifier: 
-  isPlayerSpeaking: 0
-  hasImageSupport: 1
-  shoutingImages:
-  - {fileID: 1643545390761264672, guid: f6a23aea52d0f674dbadaa776aedbebc, type: 3}
-  - {fileID: 1857187268575111128, guid: 8049f496604332949ba4389d7343e6db, type: 3}
-  imageSize: 0
-  hasSecondImageLine: 0
-  text: 
-  CharacterName:
-  - Paul
-  textDisplaySpeed: 0
-  hasSecondaryLine: 0
-  isShouting: 0
-  shoutIntensity: 0.5
-  newFont: {fileID: 0}
-  newTextSize: 0
-  balloonObject: {fileID: 2592667508800547744, guid: 2bac7fcd62ad2254ba0b5c6805ad7e98, type: 3}
-  tailObject: {fileID: 8216558290986259432, guid: 89ac598207ca10e43b46e0a3e1c6d86d, type: 3}
-  borderSize: 1.2
-  sizePadding: {x: 0, y: 0}
-  needsToBeFlipped: 0
-  children: []
-  rect:
-    serializedVersion: 2
-    x: 993.9999
-    y: 127.20003
-    width: 200
-    height: 560
-  onEnterAction: 
-  onExitAction: 
-  condition:
-    and: []
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -190,7 +146,6 @@ MonoBehaviour:
   - {fileID: -4182607501235757020}
   - {fileID: -2989413853084130841}
   - {fileID: 2262670474335264596}
-  - {fileID: -65797805038623100}
   newNodeOffset: {x: 250, y: 0}
   isStaticDialogue: 0
   isStarted: 0
@@ -225,8 +180,7 @@ MonoBehaviour:
   borderSize: 1.2
   sizePadding: {x: -10, y: 50}
   needsToBeFlipped: 0
-  children:
-  - 746ee7fd-499e-402d-b006-8192db987dd8
+  children: []
   rect:
     serializedVersion: 2
     x: 743.9999

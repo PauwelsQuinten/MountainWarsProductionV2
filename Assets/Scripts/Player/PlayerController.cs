@@ -49,6 +49,8 @@ public class PlayerController : MonoBehaviour
     private GameEvent _pauseGame;
     [SerializeField]
     private GameEvent _inQueue;
+    [SerializeField]
+    private GameEvent _playNextDialogueLine;
 
     private Vector2 _moveInput;
 
@@ -113,6 +115,7 @@ public class PlayerController : MonoBehaviour
 
     public void ProcessAimInput(InputAction.CallbackContext ctx)
     {
+        if (_stateManager.IsInStaticDialogue.value) return;
         if (Time.timeScale == 0) return;
         if (_staminaManager.CurrentStamina < _aimCost.value) return;
         _aimInputRef.variable.value = ctx.ReadValue<Vector2>();
@@ -120,6 +123,7 @@ public class PlayerController : MonoBehaviour
 
     private void AimInputRef_ValueChanged(object sender, AimInputEventArgs e)
     {
+        if (_stateManager.IsInStaticDialogue.value) return;
         if (Time.timeScale == 0) return;
         if (_stateManager.AttackState == AttackState.Stun || _aimInputRef.variable.State == AttackState.Stun)
         {
@@ -145,6 +149,7 @@ public class PlayerController : MonoBehaviour
 
     public void ProccesMoveInput(InputAction.CallbackContext ctx)
     {
+        if (_stateManager.IsInStaticDialogue.value) return;
         if (Time.timeScale == 0) return;
         Vector2 input = ctx.ReadValue<Vector2>();
 
@@ -167,6 +172,7 @@ public class PlayerController : MonoBehaviour
 
     public void ProccesSetBlockInput(InputAction.CallbackContext ctx)
     {
+        if (_stateManager.IsInStaticDialogue.value) return;
         if (Time.timeScale == 0) return;
         if (_stateManager.AttackState == AttackState.Stun)
         {
@@ -214,6 +220,7 @@ public class PlayerController : MonoBehaviour
 
     public void ProccesSetParryInput(InputAction.CallbackContext ctx)
     {
+        if (_stateManager.IsInStaticDialogue.value) return;
         if (Time.timeScale == 0) return;
         if (_stateManager.AttackState == AttackState.Stun)
         {
@@ -251,8 +258,14 @@ public class PlayerController : MonoBehaviour
 
     public void ProccesDodgeInput(InputAction.CallbackContext ctx)
     {
+        if (_stateManager.IsInDialogue.value || _stateManager.IsInStaticDialogue.value)
+        {
+            if (!ctx.action.WasPressedThisFrame()) return;
+            _playNextDialogueLine.Raise();
+            return;
+        }
         if (Time.timeScale == 0) return;
-            if (ctx.performed)
+        if (ctx.performed)
         {
             _wasSprinting = true;
             _moveInputRef.variable.SpeedMultiplier = _speedMultiplier;
@@ -283,6 +296,7 @@ public class PlayerController : MonoBehaviour
 
     public void ProccesInteractInput(InputAction.CallbackContext ctx)
     {
+        if (_stateManager.IsInStaticDialogue.value) return;
         if (Time.timeScale == 0) return;
         if (!ctx.performed) return;
 
@@ -299,6 +313,7 @@ public class PlayerController : MonoBehaviour
 
     public void ProccesAtackHeightInput(InputAction.CallbackContext ctx)
     {
+        if (_stateManager.IsInStaticDialogue.value) return;
         if (Time.timeScale == 0) return;
         if (!ctx.performed) return;
         _stateManager.AttackHeight = AttackHeight.Head;
@@ -309,6 +324,7 @@ public class PlayerController : MonoBehaviour
 
     public void ProssesLockShieldInput(InputAction.CallbackContext ctx)
     {
+        if (_stateManager.IsInStaticDialogue.value) return;
         if (Time.timeScale == 0) return;
         if (!ctx.performed) return;
         if (_stateManager.AttackState != AttackState.ShieldDefence ) return;
@@ -321,6 +337,7 @@ public class PlayerController : MonoBehaviour
 
     public void ProssesPatchUpInput(InputAction.CallbackContext ctx)
     {
+        if (_stateManager.IsInStaticDialogue.value) return;
         if (Time.timeScale == 0) return;
         //This button will be used to sheat/unsheat sord when not bleeding
         if (ctx.action.WasPerformedThisFrame())
@@ -356,6 +373,7 @@ public class PlayerController : MonoBehaviour
 
     public void ProccesShieldGrab(InputAction.CallbackContext ctx)
     {
+        if (_stateManager.IsInStaticDialogue.value) return;
         if (Time.timeScale == 0) return;
         if (!ctx.performed) return;
         //if (_stateManager.AttackState == AttackState.ShieldDefence || _stateManager.AttackState == AttackState.BlockAttack)

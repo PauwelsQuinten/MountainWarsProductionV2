@@ -7,7 +7,6 @@ namespace UnityEngine
     {
         public AnimationState AnimState;
         public bool IsAttackHigh = false;
-        public bool DoResetIdle;
         public bool IsFeint = true;
         public bool IsFullBodyAnim = false;
         public float Speed = 1f;

@@ -39,7 +39,7 @@ public class VillagerReaction : GoapAction
 
             //Play animation
             _changeAnim.Raise(npc.transform, new AnimationEventArgs
-            { AnimState = AnimationState.Angry, IsFullBodyAnim = true, DoResetIdle = true, AnimLayer = 1 });
+            { AnimState = AnimationState.Angry, IsFullBodyAnim = true, AnimLayer = 1 });
             await Task.Delay(100);
 
             //Turn npc towards the target

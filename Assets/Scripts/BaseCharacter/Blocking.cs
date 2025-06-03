@@ -220,16 +220,17 @@ public class Blocking : MonoBehaviour
         //send event for animation
         if (_blockMedium == BlockMedium.Shield)
             _changeAnimation.Raise(this, new AnimationEventArgs 
-            { AnimState = AnimationState.ShieldEquip, AnimLayer = 4, DoResetIdle = false, BlockDirection = _blockDirection, BlockMedium = BlockMedium.Shield });
+            { AnimState = AnimationState.ShieldEquip, AnimLayer = 4, BlockDirection = _blockDirection, BlockMedium = BlockMedium.Shield });
         else if (_blockMedium == BlockMedium.Sword)
             _changeAnimation.Raise(this, new AnimationEventArgs 
-            { AnimState = AnimationState.SwordEquip, AnimLayer = 3, DoResetIdle = false, BlockDirection = _blockDirection, BlockMedium = BlockMedium.Sword });
+            { AnimState = AnimationState.SwordEquip, AnimLayer = 3, BlockDirection = _blockDirection, BlockMedium = BlockMedium.Sword });
     }
 
     private void LowerEquipment()
     {
-        //_changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Empty, AnimLayer = { 3,4 }, DoResetIdle = false, BlockDirection = Direction.Idle });
-        _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Idle, AnimLayer = 1, DoResetIdle = false});
+        _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Empty, AnimLayer = 3, BlockDirection = Direction.Idle });
+        _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Empty, AnimLayer = 4, BlockDirection = Direction.Idle });
+        _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Idle, AnimLayer = 1});
     }
 
     private void UpdateBlackboard(AimingOutputArgs args)

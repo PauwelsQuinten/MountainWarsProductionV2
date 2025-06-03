@@ -29,8 +29,9 @@ public class SlowDownOnImpact : MonoBehaviour
         if (args == null) return;
         if (args.Attacker != gameObject && (args.Defender != gameObject && _slowBothDown)) return;
 
-        Debug.Log("start slow down hit");
         float start = _animator.GetFloat(_animParameter);
+        if (start < 1f) start = 1f; //this can happen when 2 hits happen quickly after each other.
+
         float miliseconds = (_slowedDuration - 2f * _easInDuration) * 1000f;
 
         await EaseAnimSpeed(start, _slowSpeed, _easInDuration);
@@ -38,7 +39,6 @@ public class SlowDownOnImpact : MonoBehaviour
 
         await Task.Delay(Mathf.RoundToInt(miliseconds));
         await EaseAnimSpeed(_slowSpeed, start, _easInDuration);
-        Debug.Log("end slow down hit");
     }
 
     private async Task EaseAnimSpeed(float start, float end, float duration)

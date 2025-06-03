@@ -180,7 +180,7 @@ public class Attacking : MonoBehaviour
         if (_attackType == AttackType.HorizontalSlashToLeft)
         {
             _changeAnimation.Raise(this, new AnimationEventArgs 
-            { AnimState = AnimationState.SlashLeft, AnimLayer = animLayers, DoResetIdle = true, Speed = 1.5f
+            { AnimState = AnimationState.SlashLeft, AnimLayer = animLayers, Speed = 1.5f
             , IsAttackHigh = isAttackHigh, AttackWithLeftHand = !useRightArm
             , IsFullBodyAnim = _isFullBodyAnim
             });
@@ -188,7 +188,7 @@ public class Attacking : MonoBehaviour
         else if (_attackType == AttackType.HorizontalSlashToRight)
         {
             _changeAnimation.Raise(this, new AnimationEventArgs 
-            { AnimState = AnimationState.SlashRight, AnimLayer = animLayers, DoResetIdle = true, Speed = 1.5f
+            { AnimState = AnimationState.SlashRight, AnimLayer = animLayers, Speed = 1.5f
             , IsAttackHigh = isAttackHigh, AttackWithLeftHand = !useRightArm
             , IsFullBodyAnim = _isFullBodyAnim
             });
@@ -196,14 +196,14 @@ public class Attacking : MonoBehaviour
         else if (_attackType == AttackType.Stab)
         {
             _changeAnimation.Raise(this, new AnimationEventArgs 
-            { AnimState = AnimationState.Stab, AnimLayer = animLayers, DoResetIdle = true, Speed = 1.5f
+            { AnimState = AnimationState.Stab, AnimLayer = animLayers , Speed = 1.5f
             , IsAttackHigh = isAttackHigh, AttackWithLeftHand = !useRightArm
             , IsFullBodyAnim = _isFullBodyAnim
             });
         }
         else if (_attackType == AttackType.Charge)
         {
-            _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Charge, AnimLayer = 3, DoResetIdle = false });
+            _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Charge, AnimLayer = 3 });
         }
 
     }

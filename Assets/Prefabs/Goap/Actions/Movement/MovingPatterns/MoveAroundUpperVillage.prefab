@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: -5583447613549028956}
   - component: {fileID: 1086266624753057273}
   m_Layer: 0
-  m_Name: MoveAroundFountain
+  m_Name: MoveAroundUpperVillage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -52,7 +52,7 @@ MonoBehaviour:
   _actionMaxRunTime: 3
   _MoveTo: 6
   _moveInput: {fileID: 11400000, guid: c56f6b487803f2447b475d33b2fabd4b, type: 2}
-  _patrolPoints: []
+  _patrolName: PatrollPointsUpperVillage
 --- !u!114 &-5583447613549028956
 MonoBehaviour:
   m_ObjectHideFlags: 0

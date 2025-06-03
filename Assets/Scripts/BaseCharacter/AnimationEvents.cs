@@ -24,6 +24,8 @@ public class AnimationEvents : MonoBehaviour
     private GameEvent _pickup;
     [SerializeField] 
     private GameEvent _stunned;
+    [SerializeField] 
+    private GameEvent _moveAttack;
     private int _storredDirection = 0;
     private void Start()
     {
@@ -55,7 +57,7 @@ public class AnimationEvents : MonoBehaviour
     public void SetInParryZone(int InZone)
     {
         bool zone = InZone == 0? true : false;
-        Debug.Log($"in parry zone signal = {zone}");
+        Debug.Log($"in parry movement signal = {zone}");
 
         _inParryZone.Raise(this.transform.parent, zone);
     }
@@ -89,5 +91,17 @@ public class AnimationEvents : MonoBehaviour
     public void Stunned()
     {
          _stunned.Raise(this.transform.parent, null);
+    }
+    
+    public void MoveBack(int forward)
+    {
+        //To move Back
+        if (forward == 0)
+            _moveAttack.Raise(this, new AttackMoveEventArgs { Attacker = transform.parent.gameObject });
+
+        //To move Forward
+        else
+            _moveAttack.Raise(this, new AttackMoveEventArgs { Attacker = transform.parent.gameObject, AttackType = AttackType.Stab });
+        Debug.Log($"Move 1 = f, 0 = b. {forward}, {transform.parent}");
     }
 }

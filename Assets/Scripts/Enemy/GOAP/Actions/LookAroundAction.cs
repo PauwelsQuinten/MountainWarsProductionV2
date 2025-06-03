@@ -16,12 +16,13 @@ public class LookAroundAction : GoapAction
         if (state)
             _currentAngle = state.fOrientation * Mathf.Rad2Deg;
     }
+
     public override void UpdateAction(WorldState currentWorldState, BlackboardReference blackboard)
     {
         _currentAngle += Time.deltaTime * _rotationSpeed;
         _currentAngle = (_currentAngle >= 180f) ? _currentAngle - 360f : _currentAngle;
         
-        float newfAngle = _currentAngle * Mathf.Deg2Rad;
+        float newfAngle = _currentAngle;
 
         int clampedAngle = (Mathf.RoundToInt(_currentAngle / 45)) * 45;
         clampedAngle = (clampedAngle == -180) ? 180 : clampedAngle;

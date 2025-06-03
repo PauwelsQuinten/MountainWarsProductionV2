@@ -14,7 +14,7 @@ public class AIEvents : GoapAction
     [Header("Input")]
     [SerializeField] private GameEvent _aiInputEvent;
     [Header("State")]
-    [SerializeField] AIInputAction _input = AIInputAction.Interact;
+    [SerializeField] AIInputAction _input = AIInputAction.PickUp;
     [SerializeField] float _actionActivationTime = 0f;
     [SerializeField] float _actionDuration = 0.25f;
 
@@ -80,7 +80,7 @@ public class AIEvents : GoapAction
                 break;
             case AIInputAction.StopDash:
                 break;
-            case AIInputAction.Interact:
+            case AIInputAction.PickUp:
                 break;
         }
         return cost;

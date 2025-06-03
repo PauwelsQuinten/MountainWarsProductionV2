@@ -13,30 +13,28 @@ public class EquipmentManager : MonoBehaviour
     [SerializeField] private Equipment _leftHand;
     [SerializeField] private Equipment _rightHand;
     [SerializeField] private Equipment _fists;
+
     [Header("Events")]
     [SerializeField] private GameEvent _onEquipmentBreak;
     [SerializeField] private GameEvent _onEquipmentDamage;
     [SerializeField] private GameEvent _changeAnimation;
     [SerializeField] private GameEvent _changeIKStance;
     [Header("Sockets"), Tooltip("These are the sockets that will hold the equipment")]
+
     [SerializeField] private Transform _leftHandSocket;
     [SerializeField] private Transform _rightHandSocket;
     //[SerializeField] private Transform _spearSocket;
     [SerializeField] private Transform _sheathSocket;
+
     [Header("Item")]
     [SerializeField] private LayerMask _itemMask;
     [SerializeField] private float _itemPickupRadius = 1f;
-    [Header("ShieldPosition")]
-    [SerializeField] private float _startAngle = 195f;
-    [SerializeField] private float _sideAngleToStart = 60f;
     
     [Header("EquipmentPosition")]
     //[SerializeField] private Quaternion _swordStartRotation = Quaternion.Euler(-32f, -116f, -195f);
     [SerializeField] private Quaternion _spearStartRotation = Quaternion.Euler(15f, -160f, -45);
-    [Header("Blackboard")]
-    [SerializeField]
-    private List<BlackboardReference> _blackboards;
 
+    private BlackboardReference _blackboard;
     private List<Equipment> HeldEquipment = new List<Equipment> {null, null, null };
     Collider[] _hitColliders;
 
@@ -46,7 +44,12 @@ public class EquipmentManager : MonoBehaviour
 
     private StateManager _stateManager;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    private void Awake()
+    {
+        _stateManager = GetComponent<StateManager>();
+        _blackboard = _stateManager.BlackboardRef;
+    }
+
     void Start()
     {
         if (_fists && _fists.Type == EquipmentType.Fist)
@@ -68,7 +71,6 @@ public class EquipmentManager : MonoBehaviour
                 _changeAnimation.Raise(this, true);
                 _changeIKStance?.Raise(this, new ChangeIKStanceEventArgs { UseSpear = true, LHSocket = equipment.WeaponSocket });
 
-                _stateManager = GetComponent<StateManager>();
                 UpdateBlackboard();
                 return;
             }
@@ -80,6 +82,8 @@ public class EquipmentManager : MonoBehaviour
                 _changeIKStance?.Raise(this, new ChangeIKStanceEventArgs { UseSpear = false });
             }
         }
+        else if (_rightHand == null)
+            _changeIKStance?.Raise(this, new ChangeIKStanceEventArgs { UseSpear = false });
 
         if (_leftHand && _leftHand.EquipmentHand == EquipmentHand.LeftHand )
         {
@@ -197,26 +201,11 @@ public class EquipmentManager : MonoBehaviour
     }
 
     private void UpdateBlackboard()
-    {
-        //Update blackboard
-        if (gameObject.CompareTag(PLAYER))
-        {
-            foreach (var blackboard in _blackboards)
-            {
-                blackboard.variable.TargetLHEquipmentHealth = GetDurabilityPercentage(LEFT_HAND);
-                blackboard.variable.TargetRHEquipmentHealth = GetDurabilityPercentage(RIGHT_HAND);
-                blackboard.variable.TargetWeaponRange = GetAttackRange();
-            }
-        }
-
-        else
-        {
-            _blackboards[0].variable.LHEquipmentHealth = GetDurabilityPercentage(LEFT_HAND);
-            _blackboards[0].variable.RHEquipmentHealth = GetDurabilityPercentage(RIGHT_HAND);
-            _blackboards[0].variable.WeaponRange = GetAttackRange();
-            _blackboards[0].variable.HasRHEquipment = HeldEquipment[RIGHT_HAND] != null;
-            _blackboards[0].variable.HasLHEquipment = HeldEquipment[LEFT_HAND] != null;
-        }
+    {       
+        _blackboard.variable.LHEquipmentHealth = GetDurabilityPercentage(LEFT_HAND);
+        _blackboard.variable.RHEquipmentHealth = GetDurabilityPercentage(RIGHT_HAND);
+        _blackboard.variable.WeaponRange = GetAttackRange();
+        
     }
 
     public bool CloseToEquipment()
@@ -230,16 +219,17 @@ public class EquipmentManager : MonoBehaviour
 
     public void PickupEquipment(Component sender, object obj)
     {
-        if (sender.gameObject != gameObject) return;
+        if (sender.gameObject != gameObject || _hitColliders == null) return;
 
         foreach (var hitCollider in _hitColliders)
         {
             var newEquip = hitCollider.gameObject.GetComponent<Equipment>();
-            if (newEquip && newEquip.transform.parent == null)
-            {
-                Transform socket = newEquip.EquipmentHand == EquipmentHand.LeftHand? _leftHandSocket : _rightHandSocket ;
-                EquipmentHelper.EquipEquipment(HeldEquipment, newEquip, newEquip.EquipmentHand, socket);
-            }
+            if (!newEquip || (newEquip.transform.parent && newEquip.transform.parent.gameObject.layer != 0))
+                return;
+
+            Transform socket = newEquip.EquipmentHand == EquipmentHand.LeftHand? _leftHandSocket : _rightHandSocket ;
+            EquipmentHelper.EquipEquipment(HeldEquipment, newEquip, newEquip.EquipmentHand, socket);
+            
         }
 
         //Update which aiming script to use on the new equipment and fighting stance

@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.AI;
 namespace Geometry
 {
     public static class Geometry
@@ -113,6 +114,59 @@ namespace Geometry
                 return cross > 0 ? Direction.ToLeft : Direction.ToRight;
 
             return cross < 0 ? Direction.ToLeft : Direction.ToRight;
+        }
+
+        public static Vector3 GetRandomPointOnNavMesh(Vector3 center, float radius)
+        {
+            for (int i = 0; i < 5; i++) // Try up to 5 times
+            {
+                Vector3 randomDirection = Random.insideUnitSphere * radius;
+                randomDirection += center;
+
+                if (NavMesh.SamplePosition(randomDirection, out NavMeshHit hit, 2.0f, NavMesh.AllAreas))
+                {
+                    return hit.position;
+                }
+            }
+
+            // If no valid point found, return center
+            return center;
+        }
+
+        public static float CalculatefOrientationToTarget(Vector3 target, Vector3 self)
+        {
+            Vector3 direction = target - self;
+            return Mathf.Atan2(direction.z, direction.x) * Mathf.Rad2Deg;
+        }
+
+        public static Orientation FindOrientationFromAngle(float fOrientation)
+        {
+            const int angleInterval = 45;
+            int newOrientation = Mathf.RoundToInt(fOrientation / angleInterval);
+            newOrientation *= angleInterval;
+
+            if (newOrientation == -180)
+                newOrientation = 180;
+            return (Orientation)newOrientation;
+        }
+
+        //One way of deciding if input is a feint
+        //This way it is decided by where your analog input starts compared to your orientation
+        //Side is attack, below is feint
+        private static bool IsFeintMovement(Direction direction, float feintAngle, Vector2 inputStart, float fOrientation)
+        {
+            var orientAngleRad = fOrientation * Mathf.Deg2Rad;
+
+            var startAngleRad = CalculateAngleRadOfInput(inputStart) - orientAngleRad;
+            startAngleRad = ClampAngle(startAngleRad);
+
+
+            if (direction == Direction.ToLeft && startAngleRad > -feintAngle * Mathf.Deg2Rad && startAngleRad < 0f)
+                return false;
+            else if (direction == Direction.ToRight && startAngleRad < feintAngle * Mathf.Deg2Rad && startAngleRad > 0)
+                return false;
+
+            return true;
         }
     }
 }

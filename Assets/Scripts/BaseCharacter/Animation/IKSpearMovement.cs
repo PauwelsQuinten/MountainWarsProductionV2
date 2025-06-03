@@ -1,8 +1,17 @@
+using UnityEditor.SpeedTree.Importer;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
 
 public class IKSpearMovement : MonoBehaviour
 {
+    private enum RigValue
+    {
+        Default = -1,
+        Zero = 0,
+        One = 1
+    }
+
+
     [Header("Rigs")]
     [SerializeField, Tooltip("the parent rig of all th spear IK")]
     private Rig _spearRig;
@@ -14,16 +23,22 @@ public class IKSpearMovement : MonoBehaviour
     private GameObject _IKTargetRh;
     [SerializeField, Tooltip("IK Right shoulder target")]
     private GameObject _rShoulderTarget;
+    [SerializeField, Tooltip("IK target for aiming adjustment to opponent")]
+    private GameObject _aimTargetAdjuster;
 
     
     private float _lerpLHSpeed;
-
-    private GameObject _aimTarget;
-
+    private RigValue _setWeight = RigValue.Default;
+    private StateManager _stateManager;
+    private Quaternion _defaultOrientation;
+    private Quaternion _targetRotation = Quaternion.identity;
 
 
     private void Start()
     {
+        _stateManager = GetComponent<StateManager>();
+        _defaultOrientation = _aimTargetAdjuster.transform.localRotation;
+
         if (_IKTargetRh && _rShoulderTarget)
         {
             GetComponent<SpearAiming>()?.SetIdlePosition();
@@ -33,14 +48,18 @@ public class IKSpearMovement : MonoBehaviour
     private void Update()
     {
         _IKTargetLh.transform.position = _lhHoldingPosition.transform.position;
-        ////the spear stance, holding the Left hand on the spear below
-        //if (_lhHoldingPosition && _IKTargetLh)
-        //{
-        //    _IKTargetLh.transform.position = Vector3.Lerp(
-        //        _IKTargetLh.transform.position,
-        //        _lhHoldingPosition.transform.position,
-        //        Time.deltaTime * _lerpLHSpeed);
-        //}
+        AdjustAim();
+        if (_targetRotation != Quaternion.identity) 
+            _aimTargetAdjuster.transform.localRotation = Quaternion.Slerp(_aimTargetAdjuster.transform.localRotation, _targetRotation, Time.deltaTime);
+    }
+
+    private void LateUpdate()
+    {
+        if (_setWeight != RigValue.Default)
+        {
+            _spearRig.weight = (int)_setWeight;
+            _setWeight = RigValue.Default;
+        }
 
     }
 
@@ -67,18 +86,28 @@ public class IKSpearMovement : MonoBehaviour
         if (args.UseSpear)
         {            
             _lhHoldingPosition = args.LHSocket;
-            _spearRig.weight = 1f;
-            //var rotation = _IKTargetLh.transform.rotation;
-            //_IKTargetLh.transform.parent = _lhHoldingPosition.transform;
-            //_IKTargetLh.transform.localPosition = Vector3.zero;
-            //_IKTargetLh.transform.rotation = rotation;
-
+            _setWeight = RigValue.One;
+            
         }
         else
-        {          
-            _spearRig.weight = 0f;
+        {
+            _setWeight = RigValue.Zero;
         }
 
+    }
+
+    private void AdjustAim()
+    {
+        float orient = (float)_stateManager.Orientation;
+        float fOrient = _stateManager.fOrientation;
+        float diff = orient - fOrient;
+        if (Mathf.Abs(diff) < 1f)
+        {
+            _targetRotation = Quaternion.identity;
+            return;
+        }
+        Quaternion rotationAdjustment = Quaternion.Euler(0, diff, 0);
+       _targetRotation = _defaultOrientation * rotationAdjustment;
     }
 
 }

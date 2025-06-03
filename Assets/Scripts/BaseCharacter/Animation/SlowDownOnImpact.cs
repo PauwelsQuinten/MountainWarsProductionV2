@@ -10,9 +10,9 @@ public class SlowDownOnImpact : MonoBehaviour
     [Range(0f, 0.5f)]
     [SerializeField, Tooltip("The time percentage duration the animation will ease in or out")] private float _easInPercentage = 0.2f; 
     [SerializeField, Tooltip("The animator parameter name")] private string _animParameter = "ActionSpeed";
+    [SerializeField, Tooltip("Slow down both the attacker and the defender")] private bool _slowBothDown = false;
 
     private Animator _animator;
-    private float _currentSpeed = 1f;
     private float _easInDuration = 0.2f;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -26,13 +26,14 @@ public class SlowDownOnImpact : MonoBehaviour
     public async void StartSlowDown(Component sender, object obj)
     {
         AttackEventArgs args = obj as AttackEventArgs;
-        if (args == null || args.Attacker != gameObject) return;
+        if (args == null) return;
+        if (args.Attacker != gameObject && (args.Defender != gameObject && _slowBothDown)) return;
 
         float start = _animator.GetFloat(_animParameter);
         float miliseconds = (_slowedDuration - 2f * _easInDuration) * 1000f;
 
         await EaseAnimSpeed(start, _slowSpeed, _easInDuration);
-        Debug.Log("Set speed slow");
+        //Debug.Log("Set speed slow");
 
         await Task.Delay(Mathf.RoundToInt(miliseconds));
         await EaseAnimSpeed(_slowSpeed, start, _easInDuration);
@@ -52,11 +53,12 @@ public class SlowDownOnImpact : MonoBehaviour
                 1f - Mathf.Pow(-2f * t + 2f, 2f) * 0.5f;
 
             float value = Mathf.Lerp(start, end, easedValue);
-            _animator.SetFloat(_animParameter, value);
+            if (_animator)
+                _animator.SetFloat(_animParameter, value);
             await Task.Yield(); 
         }
-
-        _animator.SetFloat(_animParameter, end);
+        if (_animator)
+            _animator.SetFloat(_animParameter, end);
     }
 
 

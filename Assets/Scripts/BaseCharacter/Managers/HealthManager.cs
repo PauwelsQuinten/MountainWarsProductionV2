@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor;
 using UnityEngine;
 
 public class HealthManager : MonoBehaviour
@@ -40,13 +39,9 @@ public class HealthManager : MonoBehaviour
     [SerializeField, Tooltip("The amount of health you will recover after succesfully patching yourself up")]
     private float _healAmount = 100f;
 
-    [Header("Managers")]
-    [SerializeField]
-    private StateManager _stateManager;
 
-    [Header("Blackboard")]
-    [SerializeField]
-    private List<BlackboardReference> _blackboards;
+    private StateManager _stateManager;
+    private BlackboardReference _blackboard;
 
     private float _currentHealth;
     private float _maxHealth;
@@ -65,6 +60,12 @@ public class HealthManager : MonoBehaviour
 
     private bool _isBleeding;
 
+    private void Awake()
+    {
+        if (_stateManager == null)
+            _stateManager = GetComponent<StateManager>();
+        _blackboard = _stateManager.BlackboardRef;
+    }
     private void Start()
     {
         SetHealth();
@@ -107,20 +108,8 @@ public class HealthManager : MonoBehaviour
 
     private void UpdateBlackboard()
     {
-        //Update blackboard
-        if (gameObject.CompareTag(PLAYER))
-        {
-            foreach (var blackboard in _blackboards)
-            {
-                blackboard.variable.TargetHealth = _currentHealth / _maxHealth;
-                blackboard.variable.TargetIsBleeding = _isBleeding;
-            }
-        }
-        else
-        {
-            _blackboards[0].variable.Health = _currentHealth / _maxHealth;
-            _blackboards[0].variable.IsBleeding = _isBleeding;
-        }
+        _blackboard.variable.Health = _currentHealth / _maxHealth;
+        _blackboard.variable.IsBleeding = _isBleeding;       
     }
 
     private void SetHealth()

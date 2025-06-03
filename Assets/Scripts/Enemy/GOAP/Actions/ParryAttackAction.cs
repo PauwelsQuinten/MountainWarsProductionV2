@@ -4,12 +4,12 @@ using UnityEngine;
 public class ParryAttackAction : GoapAction
 {
     [Header("Input")]
-    [SerializeField] private GameEvent _defendEvent;
-    [SerializeField] float _timeInterval = 1f;
+    [SerializeField] private GameEvent _inQueueDefense;
+    [SerializeField, Tooltip("Time before he starts execution the action")] float _timeBeforexEecuting = 0.15f;
+    [SerializeField, Tooltip("Time after his action start until he quits this action")] float _timeInterval = 1f;
     [Header("State")]
     [SerializeField] BlockMedium _blockMediume = BlockMedium.Shield;
     [SerializeField] Direction _direction = Direction.Idle;
-    [SerializeField] float _swingAngle = 180f;
     [SerializeField] float _swingSpeed = 1.25f;
     [SerializeField] bool _disarmOpponent =false;
     
@@ -32,13 +32,14 @@ public class ParryAttackAction : GoapAction
     override public void UpdateAction(WorldState currentWorldState, BlackboardReference blackboard)
     {
         //Debug.Log("update");
-        if (blackboard.variable.TargetCurrentAttack == AttackType.None)
+        if (blackboard.variable.TargetBlackboard == null 
+            || blackboard.variable.TargetBlackboard.variable.CurrentAttack == AttackType.None)
             return;
              
 
         if (_isMovementSet == false)
         {
-            if (blackboard.variable.TargetCurrentAttack == AttackType.HorizontalSlashToLeft)
+            if (blackboard.variable.CurrentAttack == AttackType.HorizontalSlashToLeft)
                 _direction = Direction.ToLeft;
             else
                 _direction = Direction.ToRight;
@@ -73,7 +74,8 @@ public class ParryAttackAction : GoapAction
     override public void CancelAction()
     {
         base.CancelAction();
-        StopCoroutine(_defendCoroutine);
+        if (_defendCoroutine != null) 
+            StopCoroutine(_defendCoroutine);
     }
 
     public override float CalculateCost(BlackboardReference blackboard, WorldState currentWorldState)
@@ -98,7 +100,7 @@ public class ParryAttackAction : GoapAction
 
     private IEnumerator DefendRoutine(float time)
     {
-        yield return new WaitForSeconds(0.25f);
+        yield return new WaitForSeconds(_timeBeforexEecuting);
         DefendMovement(false);
         yield return new WaitForEndOfFrame();
         //StopMovement();
@@ -160,7 +162,7 @@ public class ParryAttackAction : GoapAction
         {
             AimingInputState = AimingInputState.Idle
                ,
-            AngleTravelled = _swingAngle
+            AngleTravelled = 45f
                ,
             AttackHeight = AttackHeight.Torso
                ,
@@ -182,7 +184,7 @@ public class ParryAttackAction : GoapAction
             ,
             AnimationStart = true
         };
-        _defendEvent.Raise(this, package);
+        _inQueueDefense.Raise(npc.transform, package);
     }
 
 

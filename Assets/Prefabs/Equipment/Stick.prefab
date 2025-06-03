@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 7286309409779928695}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.007, z: 0}
+  m_LocalPosition: {x: 0, y: -0.87, z: 0}
   m_LocalScale: {x: 0.40667987, y: 1.3402135, z: 0.40667987}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -158,9 +158,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _type: 0
   _durability: 100
-  _isRightHandEquipment: 1
+  _equipmentHand: 1
   _power: 8
   _range: 2
+  _weaponSocket: {fileID: 0}
 --- !u!136 &390646725699142519
 CapsuleCollider:
   m_ObjectHideFlags: 0

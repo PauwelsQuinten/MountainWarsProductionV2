@@ -1,0 +1,193 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-7264227322239673264
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a7a6ddfe04bf004fbb402deb2b21761, type: 3}
+  m_Name: 67374305-2854-457e-ba66-dd0e2216c61d
+  m_EditorClassIdentifier: 
+  isPlayerSpeaking: 0
+  hasImageSupport: 0
+  shoutingImages: []
+  imageSize: 0
+  hasSecondImageLine: 0
+  text: Oh hello there Paul. how's the wife doing these days?
+  CharacterName:
+  - Player
+  textDisplaySpeed: 0.01
+  hasSecondaryLine: 0
+  isShouting: 0
+  shoutIntensity: 0
+  newFont: {fileID: 0}
+  newTextSize: 0
+  balloonObject: {fileID: 2592667508800547744, guid: 2bac7fcd62ad2254ba0b5c6805ad7e98, type: 3}
+  tailObject: {fileID: 8216558290986259432, guid: 89ac598207ca10e43b46e0a3e1c6d86d, type: 3}
+  borderSize: 1.2
+  sizePadding: {x: -10, y: 70}
+  needsToBeFlipped: 0
+  children:
+  - ad2acf9c-81c3-4f71-9d35-e5e221b7a28f
+  rect:
+    serializedVersion: 2
+    x: 28.000015
+    y: 63.199993
+    width: 200
+    height: 665.38
+  onEnterAction: 
+  onExitAction: 
+  condition:
+    and: []
+--- !u!114 &-4182607501235757020
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a7a6ddfe04bf004fbb402deb2b21761, type: 3}
+  m_Name: ad2acf9c-81c3-4f71-9d35-e5e221b7a28f
+  m_EditorClassIdentifier: 
+  isPlayerSpeaking: 1
+  hasImageSupport: 0
+  shoutingImages: []
+  imageSize: 0
+  hasSecondImageLine: 0
+  text: Hi Friend. Whell she left me a couple of weeks ago.
+  CharacterName:
+  - Paul
+  textDisplaySpeed: 0.01
+  hasSecondaryLine: 0
+  isShouting: 0
+  shoutIntensity: 0
+  newFont: {fileID: 0}
+  newTextSize: 0
+  balloonObject: {fileID: 2592667508800547744, guid: 2bac7fcd62ad2254ba0b5c6805ad7e98, type: 3}
+  tailObject: {fileID: 8216558290986259432, guid: 89ac598207ca10e43b46e0a3e1c6d86d, type: 3}
+  borderSize: 1.2
+  sizePadding: {x: -10, y: 100}
+  needsToBeFlipped: 1
+  children:
+  - 34e63512-100c-4bb8-8ece-3ba38bb83575
+  rect:
+    serializedVersion: 2
+    x: 274.79993
+    y: 63.20002
+    width: 200
+    height: 665.37
+  onEnterAction: 
+  onExitAction: 
+  condition:
+    and: []
+--- !u!114 &-2989413853084130841
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a7a6ddfe04bf004fbb402deb2b21761, type: 3}
+  m_Name: 34e63512-100c-4bb8-8ece-3ba38bb83575
+  m_EditorClassIdentifier: 
+  isPlayerSpeaking: 0
+  hasImageSupport: 0
+  shoutingImages: []
+  imageSize: 0
+  hasSecondImageLine: 0
+  text: Oh no! So sad Paul.
+  CharacterName:
+  - Player
+  textDisplaySpeed: 0.01
+  hasSecondaryLine: 1
+  isShouting: 0
+  shoutIntensity: 1.221
+  newFont: {fileID: 0}
+  newTextSize: 0
+  balloonObject: {fileID: 2592667508800547744, guid: 2bac7fcd62ad2254ba0b5c6805ad7e98, type: 3}
+  tailObject: {fileID: 8216558290986259432, guid: 89ac598207ca10e43b46e0a3e1c6d86d, type: 3}
+  borderSize: 1.2
+  sizePadding: {x: -10, y: 60}
+  needsToBeFlipped: 0
+  children:
+  - cd1da861-d3e8-430a-ba85-205749486f43
+  rect:
+    serializedVersion: 2
+    x: 511.20013
+    y: 105.60003
+    width: 200
+    height: 520.14
+  onEnterAction: 
+  onExitAction: 
+  condition:
+    and: []
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5795a2dd33b2e3d4d9d64c417ce8d471, type: 3}
+  m_Name: Dialogue01
+  m_EditorClassIdentifier: 
+  nodes:
+  - {fileID: -7264227322239673264}
+  - {fileID: -4182607501235757020}
+  - {fileID: -2989413853084130841}
+  - {fileID: 2262670474335264596}
+  newNodeOffset: {x: 250, y: 0}
+  isStaticDialogue: 1
+  isStarted: 0
+--- !u!114 &2262670474335264596
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a7a6ddfe04bf004fbb402deb2b21761, type: 3}
+  m_Name: cd1da861-d3e8-430a-ba85-205749486f43
+  m_EditorClassIdentifier: 
+  isPlayerSpeaking: 1
+  hasImageSupport: 0
+  shoutingImages: []
+  imageSize: 0
+  hasSecondImageLine: 0
+  text: Anyway Bye!
+  CharacterName:
+  - Player
+  textDisplaySpeed: 0.01
+  hasSecondaryLine: 0
+  isShouting: 0
+  shoutIntensity: 0
+  newFont: {fileID: 0}
+  newTextSize: 0
+  balloonObject: {fileID: 2592667508800547744, guid: 2bac7fcd62ad2254ba0b5c6805ad7e98, type: 3}
+  tailObject: {fileID: 8216558290986259432, guid: 89ac598207ca10e43b46e0a3e1c6d86d, type: 3}
+  borderSize: 1.2
+  sizePadding: {x: -10, y: 50}
+  needsToBeFlipped: 0
+  children: []
+  rect:
+    serializedVersion: 2
+    x: 743.9999
+    y: 127.20003
+    width: 200
+    height: 491.1
+  onEnterAction: 
+  onExitAction: 
+  condition:
+    and: []

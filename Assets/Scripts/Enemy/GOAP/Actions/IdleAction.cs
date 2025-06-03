@@ -20,9 +20,8 @@ public class IdleAction : GoapAction
     }
 
     public override bool IsInterupted(WorldState currentWorldState, BlackboardReference blackboard)
-    {
-
-        return (blackboard.variable.TargetState == AttackState.Attack || blackboard.variable.TargetState == AttackState.BlockAttack)
+    {       
+        return currentWorldState.TargetBehaviour == EBehaviourValue.Attacking
              && currentWorldState.TargetAttackRange == EWorldStateRange.InRange;
     }
 

@@ -10,35 +10,59 @@ public class AIController : MonoBehaviour
 
     [Header("Variables")]
     [SerializeField]
-    private GameEvent _interactEvent;
-    [SerializeField]
     private GameEvent _MoveEvent;
 
-    [Header("Healing")]
-    [SerializeField]
-    private float _patchUpDuration;
-    [SerializeField]
-    private GameEvent _patchUpEvent;
-
+    
     [SerializeField]
     private GameEvent _shieldBash;
 
     [Header("Perception")]
     [SerializeField] private GameEvent _LookForTarget;
+    
+    [Header("Actions")]
+    [SerializeField] private GameEvent _inQueueAction;
 
     private Coroutine _resetAttackheight;
+    private AttackState _storredAttackState = AttackState.Idle;
 
     private bool _wasSprinting;
     private bool _isHoldingShield;
-
     private float _patchTimer;
+
     void Start()
     {
         StartCoroutine(CheckSurrounding());
     }
 
-    //Send Package to Block/ParryAction/Attack instead of going through aiming.
-    //
+    //This ClearQueue is purely for storing his attackstate for if he is hilding shield or not
+    //!! its important that this event is called before the statemanager stunEvent!!!
+    public void OnStun(Component sender, object obj)
+    {
+        LoseEquipmentEventArgs loseEquipmentEventArgs = obj as LoseEquipmentEventArgs;
+        if (loseEquipmentEventArgs != null && sender.gameObject == gameObject)
+        {
+            _storredAttackState =
+                _stateManager.AttackState == AttackState.Stun || _stateManager.AttackState == AttackState.BlockAttack ?
+                    AttackState.Idle : _stateManager.AttackState;
+        }
+
+        var args = obj as StunEventArgs;
+        if (args == null) return;
+        if (args.StunTarget != gameObject) return;
+
+        _storredAttackState =
+            _stateManager.AttackState == AttackState.Stun ? AttackState.Idle : _stateManager.AttackState;
+    }
+
+    public void RecoveredStun(Component sender, object obj)
+    {
+        if (sender.gameObject != gameObject) return;
+
+        if (!_stateManager.EquipmentManager.HasFullEquipment() && _storredAttackState == AttackState.BlockAttack)
+            _storredAttackState = AttackState.Idle;
+
+        _stateManager.AttackState = _storredAttackState;
+    }
 
     public void AIEvents(Component sender, object obj)
     {
@@ -57,7 +81,13 @@ public class AIController : MonoBehaviour
              case AIInputAction.StopDash:
                 Sprint(false);
                 break;
-            case AIInputAction.Interact:
+            case AIInputAction.PickUp:
+                break;
+            case AIInputAction.LockShield:
+                LockShield();
+                break;
+            case AIInputAction.GrabShield:
+                _inQueueAction.Raise(this, new AimingOutputArgs {Special = SpecialInput.ShieldGrab, AnimationStart = true });
                 break;
         }
     }
@@ -82,15 +112,21 @@ public class AIController : MonoBehaviour
 
     private void PatchUp()
     {
-        _patchUpEvent.Raise(this, false);
+        _inQueueAction.Raise(this, new AimingOutputArgs { Special = SpecialInput.PatchUp, AnimationStart = true});
     }
 
-    public void Interact()
+    public void PickUp()
     {
-        _interactEvent.Raise(this);
+        _inQueueAction.Raise(this, new AimingOutputArgs { Special = SpecialInput.PickUp, AnimationStart = true});
     }
 
-
+    public void LockShield()
+    {
+        if (!_stateManager.EquipmentManager.HasFullEquipment()) return;
+        _isHoldingShield = true;
+        _stateManager.IsHoldingShield = _isHoldingShield;
+        _stateManager.AttackState = AttackState.BlockAttack;
+    }
 
     private IEnumerator CheckSurrounding()
     {

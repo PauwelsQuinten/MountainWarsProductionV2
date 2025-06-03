@@ -1,9 +1,6 @@
-using NUnit.Framework;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.EventSystems;
-using UnityEngine.Rendering;
 
 
 public class MoveToAction : GoapAction
@@ -11,8 +8,11 @@ public class MoveToAction : GoapAction
     [SerializeField] private ObjectTarget _MoveTo = ObjectTarget.Player;
     [Header("Input")]
     [SerializeField] private GameEvent _moveInput;
+    [SerializeField, Tooltip("When MoveTo is InRadius, he will use this as the rdius around his startpoint to find a new walking point")]
+    private float _radius = 2f;
     [SerializeField, Tooltip("when MoveTo is set to PatrolPoints, he will take from this starting from 0")]
-    private List<Transform> _patrolPoints;
+    private string _patrolName;
+    private List<Transform> _patrolPoints = new List<Transform>();
 
     private List<Equipment> _foundEquipment = new List<Equipment>();
     private Equipment _foundSpecificEquipment;
@@ -22,6 +22,7 @@ public class MoveToAction : GoapAction
 
     Vector3 _targetDir = Vector3.zero;
     Vector3 _targetPos = Vector3.zero;
+    Vector3 _startPos = Vector3.zero;
 
 
     public override void StartAction(WorldState currentWorldState, BlackboardReference blackboard)
@@ -51,13 +52,15 @@ public class MoveToAction : GoapAction
             case ObjectTarget.PatrolPoint:
                 if (_patrolPoints != null && _patrolPoints.Count > 0) break;
                 _patrolPoints = new List<Transform>();
-                var obj = GameObject.Find("PatrollPointsFountain");
+                var obj = GameObject.Find(_patrolName);
                 foreach (Transform child in obj.transform)
                 {
                     _patrolPoints.Add(child);
                 }
-
-
+                break;
+            case ObjectTarget.InRadius:
+                _startPos = npc.transform.position; 
+                _targetPos = _startPos;
                 break;
             case ObjectTarget.Backward:
                 break;
@@ -77,8 +80,7 @@ public class MoveToAction : GoapAction
         _moveInput.Raise(this, new DirectionEventArgs { MoveDirection = _targetDir, SpeedMultiplier = 1f, Sender = npc });
         _navMeshAgent.SetDestination(_targetPos);
 
-        if (_navMeshAgent.isStopped)
-            _navMeshAgent.isStopped = false;
+        ReactivateAgent();
 
     }
 
@@ -97,7 +99,8 @@ public class MoveToAction : GoapAction
         Vector3 targetPos = Vector3.zero;
         float angleRad = (float)blackboard.variable.Orientation * Mathf.Deg2Rad;
 
-        if (Vector3.Distance(npcPos, _targetPos) < 0.5f && _patrolPoints.Count > 0)
+        if (Vector2.Distance(new Vector2 ( npcPos.x, npcPos.z) , new Vector2(_targetPos.x, _targetPos.z)) < 0.5f 
+            && _patrolPoints.Count > 0)
         {
             _patrolIndex++;
             _patrolIndex %= _patrolPoints.Count;
@@ -106,15 +109,16 @@ public class MoveToAction : GoapAction
         FindTargetPosAndDirection(blackboard, ref targetDir, npcPos, ref targetPos, ref angleRad);
 
         //Update target position when he moves around
-        if (Vector3.Distance(targetPos, _targetPos) > 1f || Vector3.Distance(targetDir, _targetDir) > 1f)
+        if (Vector2.Distance(new Vector2(npcPos.x, npcPos.z), new Vector2(targetPos.x, targetPos.z)) > 1f
+            || Vector3.Angle(targetDir, _targetDir) > 25f)
         {
             _navMeshAgent.SetDestination(targetPos);
             _targetPos = targetPos;
+            _targetDir = targetDir;
             _moveInput.Raise(this, new DirectionEventArgs { MoveDirection = targetDir, SpeedMultiplier = 1f, Sender = npc });
+            ReactivateAgent();
         }
-
-        if (_navMeshAgent.isStopped)
-            _navMeshAgent.isStopped = false;
+        
     }
 
     public override bool IsCompleted(WorldState currentWorldState)
@@ -240,11 +244,19 @@ public class MoveToAction : GoapAction
             case ObjectTarget.PatrolPoint:
                 if (_patrolPoints == null || _patrolPoints.Count < 0) return;
                 targetPos = _patrolPoints[_patrolIndex].transform.position;
-               
-
                 targetDir = targetPos - npcPos;
                 targetDir = new Vector2(targetDir.x, targetDir.z);
                 targetDir.Normalize(); 
+                break;
+            case ObjectTarget.InRadius:
+                if (Vector3.Distance(npcPos, _targetPos) < 0.5f)
+                    targetPos = Geometry.Geometry.GetRandomPointOnNavMesh(_startPos, _radius);
+                else
+                    targetPos = _targetPos;
+               
+                targetDir = targetPos - npcPos;
+                targetDir = new Vector2(targetDir.x, targetDir.z);
+                targetDir.Normalize();
                 break;
         }
     }
@@ -255,8 +267,20 @@ public class MoveToAction : GoapAction
         {
             _navMeshAgent.isStopped = true;
             _navMeshAgent.velocity = Vector3.zero;
+            _navMeshAgent.updatePosition = false;
+            _navMeshAgent.updateRotation = false;
         }       
         npc.GetComponent<Rigidbody>().linearVelocity = Vector3.zero;
+    }
+
+    private void ReactivateAgent()
+    {
+        if (_navMeshAgent.isStopped)
+        {
+            _navMeshAgent.isStopped = false;
+            _navMeshAgent.updatePosition = true;
+            _navMeshAgent.updateRotation = true;
+        }
     }
 
 

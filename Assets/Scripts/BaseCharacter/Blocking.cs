@@ -5,19 +5,23 @@ public class Blocking : MonoBehaviour
 {
     private const string PLAYER = "Player";
 
-    [SerializeField] private List<BlackboardReference> _blackboards;
+    private BlackboardReference _blackboard;
 
     [Header("Events")]
-    [SerializeField] private GameEvent _succesfullBlockevent;
+    [SerializeField] private GameEvent _stunFeedbackEvent;
     [SerializeField] private GameEvent _equipmentUpdate;
     [SerializeField] private GameEvent _succesfullHitEvent;
     [SerializeField] private GameEvent _changeAnimation;
+    [SerializeField] private GameEvent _blockAnimation;
 
     [Header("Stamina")]
     [SerializeField]
     private FloatReference _staminaCost;
     [SerializeField]
     private GameEvent _loseStamina;
+
+    [Header("StunFeedback")]
+    [SerializeField] StunVariablesReference _stunValues;
 
     private StateManager _stateManager;
     private Direction _blockDirection;
@@ -27,36 +31,25 @@ public class Blocking : MonoBehaviour
     private AttackState _previousState = AttackState.Idle;
     private bool _isInParryMotion = false; //is used for the block result, when the shield is in a parry animation the result should be different
 
-    
-    public void BlockMovement(Component sender, object obj)
+    private void Awake()
     {
-        //on top to make sure all objects that use this script get their statemanager initialised the momenent 1 uses it.
         if (_stateManager == null)
             _stateManager = GetComponent<StateManager>();
-
+        _blackboard = _stateManager.BlackboardRef;
+    }
+    public void BlockMovement(Component sender, object obj)
+    {        
         //Check for vallid signal
         AimingOutputArgs args = obj as AimingOutputArgs;
         if (args == null) return;
         if (sender.gameObject != gameObject && args.Sender != gameObject) return;
+        if (args.Special != SpecialInput.Default) return;
 
         //When Shield is locked and state hasnt changed, keep previous values
         //Make sure that it will always be a vallid Block, even after recovering from Stun
         if (args.IsHoldingBlock && args.AttackState == AttackState.BlockAttack)
         {
-            _aimingInputState = AimingInputState.Hold;
-            _blockMedium = Blocking.GetBlockMedium(args);
-
-            //Set this storred value by event when he gets stunned during holding Block
-            if (_storredHoldDirection != Direction.Idle)
-            {
-                _blockDirection = _storredHoldDirection;
-                _storredHoldDirection = Direction.Idle;
-            }
-            else if (_blockDirection == Direction.Wrong)
-                _blockDirection = args.BlockDirection;
-
-            //PlayShieldAnimation();
-
+            UpdateBlackboard(args);
             return;
         }
         //Debug.Log($"package to Block State = {args.AttackState}, hold: {args.AimingInputState}, {_blockMedium}, {args.BlockDirection}");
@@ -74,14 +67,23 @@ public class Blocking : MonoBehaviour
             _blockDirection = args.BlockDirection;
             _previousState = args.AttackState;
 
-            //Debug.Log($"package to Block State {args.BlockDirection}");
-
             PlayShieldAnimation();
-
             UpdateBlackboard(args);
         }
-        //Lower shield when no vallid block input or state
-        else if ( ((int)_previousState >= 3 && (int)args.AttackState < 3 )
+        //Keep block direction when getting stunned in animator, on stun the block will allready be invallid so no need to temporary adjust it
+        else if (args.AttackState == AttackState.Stun)
+        {
+            if (!args.EquipmentManager.HasFullEquipment())
+            {
+                _blockDirection = Direction.Idle;
+                _aimingInputState = AimingInputState.Idle;
+                _previousState = AttackState.Idle;
+                LowerEquipment();
+            }
+            UpdateBlackboard(null);
+        }
+        //Lower shield when no vallid block input or state eg lowering shield
+        else if ( ((int)_previousState >= 3 && (int)args.AttackState < 2 )
             || ((int)args.AttackState >= 3 && args.AimingInputState == AimingInputState.Idle))
         {
             _aimingInputState = AimingInputState.Idle;
@@ -89,10 +91,7 @@ public class Blocking : MonoBehaviour
             _previousState = args.AttackState;
             UpdateBlackboard(null);
 
-            _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Empty, AnimLayer = 4, DoResetIdle = false, Interupt = false });
-            _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Empty, AnimLayer = 3, DoResetIdle = false, Interupt = false });
-            _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Idle, AnimLayer = 1, DoResetIdle = false, Interupt = false });
-
+            LowerEquipment();
         }
 
         else
@@ -103,6 +102,7 @@ public class Blocking : MonoBehaviour
 
         }
     }
+
     public void CheckBlock(Component sender, object obj)
     {
         //Check for vallid signal
@@ -153,7 +153,9 @@ public class Blocking : MonoBehaviour
         if (blockResult == BlockResult.Hit)
         {
             _succesfullHitEvent.Raise(this, args);
-            _succesfullBlockevent.Raise(this, new StunEventArgs { StunDuration = 2f, ComesFromEnemy = false});
+            _stunFeedbackEvent.Raise(this, new StunEventArgs
+            { StunDuration = _stunValues.variable.StunOnHit, StunTarget = gameObject });
+            args.BlockPower = 0f;
 
         }
         else
@@ -162,27 +164,42 @@ public class Blocking : MonoBehaviour
             {
                 case BlockResult.FullyBlocked:
                     _loseStamina.Raise(this, new StaminaEventArgs { StaminaCost = _staminaCost.value});
-                    _succesfullBlockevent.Raise(this, new StunEventArgs { StunDuration = 2f, ComesFromEnemy = true });
+                    _stunFeedbackEvent.Raise(this, new StunEventArgs 
+                    { StunDuration = _stunValues.variable.StunWhenGettingFullyBlocked, StunTarget = args.Attacker });
+                    args.AttackPower *= 0.5f;
+                    args.BlockPower = 10f;
                     break;
                 case BlockResult.HalfBlocked:
                     _loseStamina.Raise(this, new StaminaEventArgs { StaminaCost = _staminaCost.value * 1.5f});
-                    _succesfullBlockevent.Raise(this, new StunEventArgs { StunDuration = 1f, ComesFromEnemy = true });
+                    _stunFeedbackEvent.Raise(this, new StunEventArgs 
+                    { StunDuration = _stunValues.variable.StunWhenGettingPartiallyBlocked, StunTarget = args.Attacker });
+                    args.AttackPower *= 0.7f;
+                    args.BlockPower = 6f;
                     break;
                 case BlockResult.SwordBlock:
                     _loseStamina.Raise(this, new StaminaEventArgs { StaminaCost = _staminaCost.value * 0.5f });
-                    _succesfullBlockevent.Raise(this, new StunEventArgs { StunDuration = 0.75f, ComesFromEnemy = true });
+                    _stunFeedbackEvent.Raise(this, new StunEventArgs
+                    { StunDuration = _stunValues.variable.StunWhenGettingFullyBlockedBySword, StunTarget = args.Attacker });
+                    args.AttackPower *= 0.8f;
+                    args.BlockPower = 6f;
 
                     break;
                 case BlockResult.SwordHalfBlock:
                     _loseStamina.Raise(this, new StaminaEventArgs { StaminaCost = _staminaCost.value * 0.75f });
-                    _succesfullBlockevent.Raise(this, new StunEventArgs { StunDuration = 0.5f, ComesFromEnemy = true });
+                    _stunFeedbackEvent.Raise(this, new StunEventArgs 
+                    { StunDuration =_stunValues.variable.StunWhenGettingPartiallyBlockedBySword, StunTarget = args.Attacker });
+                    args.AttackPower *= 0.85f;
+                    args.BlockPower = 3f;
                     //_succesfullHitEvent.Raise(this, args);
-
                     break;
             }
-                       
-            _equipmentUpdate.Raise(this, defenceEventArgs);
+            //Sent to equipment to deal with the damage to used equipment
+            if (_equipmentUpdate)
+                _equipmentUpdate.Raise(this, defenceEventArgs);
         }
+        //Sent feedback animation to blocker and attacker
+        if (_blockAnimation)
+            _blockAnimation.Raise(this, args);       
 
     }
 
@@ -202,32 +219,29 @@ public class Blocking : MonoBehaviour
     {
         //send event for animation
         if (_blockMedium == BlockMedium.Shield)
-            _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.ShieldEquip, AnimLayer = 4, DoResetIdle = false, Interupt = false, BlockDirection = _blockDirection });
+            _changeAnimation.Raise(this, new AnimationEventArgs 
+            { AnimState = AnimationState.ShieldEquip, AnimLayer = { 4 }, DoResetIdle = false, BlockDirection = _blockDirection, BlockMedium = BlockMedium.Shield });
         else if (_blockMedium == BlockMedium.Sword)
-            _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.SwordEquip, AnimLayer = 3, DoResetIdle = false, Interupt = false, BlockDirection = 0 });
+            _changeAnimation.Raise(this, new AnimationEventArgs 
+            { AnimState = AnimationState.SwordEquip, AnimLayer = { 3 }, DoResetIdle = false, BlockDirection = _blockDirection, BlockMedium = BlockMedium.Sword });
     }
 
+    private void LowerEquipment()
+    {
+        _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Empty, AnimLayer = { 3,4 }, DoResetIdle = false, BlockDirection = Direction.Idle });
+        _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Idle, AnimLayer = { 1 }, DoResetIdle = false});
+    }
 
     private void UpdateBlackboard(AimingOutputArgs args)
     {
         if (args == null)
         {
-            if (gameObject.CompareTag(PLAYER))
-                foreach (var blackboard in _blackboards)
-                    blackboard.variable.TargetShieldState = Direction.Idle;
-
-            else
-                _blackboards[0].variable.ShieldState = Direction.Idle;
+            _blackboard.variable.ShieldState = Direction.Idle;
         }
         else
         {
-            if (gameObject.CompareTag(PLAYER))
-                foreach (var blackboard in _blackboards)
-                    blackboard.variable.TargetShieldState = args.BlockDirection;
-            else
-                _blackboards[0].variable.ShieldState = args.BlockDirection;
-        }
-       
+            _blackboard.variable.ShieldState = args.BlockDirection;
+        }       
     }
 
     static public BlockMedium GetBlockMedium(AimingOutputArgs args)
@@ -319,6 +333,9 @@ public class Blocking : MonoBehaviour
                     blockResult = BlockResult.Hit;
                 break;
 
+            case AttackType.ShieldBash:                
+                blockResult = BlockResult.Hit;
+                break;
             default:
                 break;
         }
@@ -368,6 +385,12 @@ public class Blocking : MonoBehaviour
                     blockResult = BlockResult.Hit;
                 break;
 
+            case AttackType.ShieldBash: 
+                if (blockDirection == Direction.ToCenter)
+                    blockResult = BlockResult.HalfBlocked;
+                else
+                    blockResult = BlockResult.Hit;
+                break;
             default:
                 break;
         }

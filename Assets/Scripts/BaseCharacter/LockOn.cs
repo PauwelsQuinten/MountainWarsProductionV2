@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class LockOn : MonoBehaviour
 {
-    [SerializeField] private GameObject _lockonTarget;
+    private GameObject _lockonTarget;
+    [Header("Events")]
     [SerializeField] private GameEvent _lockonEvent;
-    [SerializeField] private GameEvent _sheathWeapon;
+    [SerializeField] private GameEvent _inQueue;
 
     [Header("Animation")]
     [SerializeField] private GameEvent _changePanel;
@@ -14,6 +15,8 @@ public class LockOn : MonoBehaviour
     [Header("updateValue")]
     [SerializeField, Tooltip("will send event to statemanager to update orientation on every change of this angle")]
     private float _minAngleBeforeSendEvent = 10f;
+    [SerializeField, Tooltip("The time he takes without target to sheat away his sword")]
+    private float _timewithoutTarget = 5f;
 
     private Orientation _storedOrientation = Orientation.East;
     private float _storedfOrientation = 0;
@@ -22,7 +25,6 @@ public class LockOn : MonoBehaviour
     private Coroutine _sheathingCoroutine;
     private bool _sheathing;
 
-    private bool _canResheath;
 
     private StateManager _stateManager;
 
@@ -64,14 +66,38 @@ public class LockOn : MonoBehaviour
         if (args == null) return;
 
         _lockonTarget = args.NewTarget;
+        SheatSword();
 
+        if (!_lockonTarget || !_lockonEvent)
+            return;
+        float fOrientation = 0f;
+        var newOrientation = CalculateOrientation(out fOrientation);
+        _storedOrientation = newOrientation;
+        _storedfOrientation = fOrientation;
+        _lockonEvent.Raise(this, new OrientationEventArgs { NewOrientation = _storedOrientation, NewFOrientation = fOrientation });
+
+        if (_previousTarget == _lockonTarget) return;
+        _previousTarget = _lockonTarget;
+        if (_changePanel == null) return;
+        _changePanel.Raise(this, new TriggerEnterEventArgs { NewViewIndex = 0, IsShowDown = true, VsTarget = _lockonTarget });
+    }
+
+    public void WeaponSheathed(Component sender, object obj)
+    {
+        if(sender == this) return;
+        if(_sheathingCoroutine != null)StopCoroutine(_sheathingCoroutine);
+        _sheathing = false;
+    }
+
+    private void SheatSword()
+    {
         if (_lockonTarget == null)
         {
             if (!_stateManager.WeaponIsSheathed)
             {
-                if (!_sheathing && _canResheath)
+                if (!_sheathing )
                 {
-                    _sheathingCoroutine = StartCoroutine(SheathWeapon(5));
+                    _sheathingCoroutine = StartCoroutine(SheathWeapon(_timewithoutTarget, true));
                 }
             }
         }
@@ -83,33 +109,10 @@ public class LockOn : MonoBehaviour
             {
                 if (!_sheathing)
                 {
-                    _canResheath = true;
-                    _sheathingCoroutine = StartCoroutine(SheathWeapon(0.1f));
+                    _sheathingCoroutine = StartCoroutine(SheathWeapon(0.1f, false));
                 }
             }
-            else _canResheath = true;
         }
-
-        if (!_lockonTarget || !_lockonEvent)
-            return;
-        float fOrientation = 0f;
-        var newOrientation = CalculateOrientation(out fOrientation);
-        _storedOrientation = newOrientation;
-        _storedfOrientation = fOrientation;
-        _lockonEvent.Raise(this, new OrientationEventArgs { NewOrientation = _storedOrientation, NewFOrientation =  fOrientation});
-
-        if (_previousTarget == _lockonTarget) return;
-        _previousTarget = _lockonTarget;
-        if (_changePanel == null) return;
-        _changePanel.Raise(this, new TriggerEnterEventArgs { NewViewIndex = 0,IsShowDown = true, VsTarget = _lockonTarget});
-    }
-
-    public void WeaponSheathed(Component sender, object obj)
-    {
-        if(sender == this) return;
-        if(_sheathingCoroutine != null)StopCoroutine(_sheathingCoroutine);
-        _sheathing = false;
-        _canResheath = false;
     }
 
     private Orientation CalculateOrientation(out float fOrientation)
@@ -127,14 +130,16 @@ public class LockOn : MonoBehaviour
     private bool IsOrientationChanged(Orientation newOrientation, float orientation)
     {
         return Mathf.Abs(_storedfOrientation - orientation) > _minAngleBeforeSendEvent;
-        //return newOrientation != _storedOrientation;
     }
 
-    private IEnumerator SheathWeapon(float duration)
+    private IEnumerator SheathWeapon(float duration, bool sheat)
     {
         _sheathing = true;
         yield return new WaitForSeconds(duration);
-        _sheathWeapon.Raise(this, EventArgs.Empty);
+        if (sheat)
+            _inQueue.Raise(this, new AimingOutputArgs { Special = SpecialInput.SheatSword, AnimationStart = true });
+        else    
+            _inQueue.Raise(this, new AimingOutputArgs { Special = SpecialInput.UnSheatSword, AnimationStart = true });
         _sheathing = false;
     }
 }

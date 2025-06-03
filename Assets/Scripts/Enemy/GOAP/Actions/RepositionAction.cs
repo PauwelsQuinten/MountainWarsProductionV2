@@ -5,7 +5,7 @@ public class RepositionAction : GoapAction
     public override void StartAction(WorldState currentWorldState, BlackboardReference blackboard)
     {
         _isActivated = true;
-        Debug.Log($"start reposition");
+        //Debug.Log($"start reposition");
 
     }
 
@@ -36,8 +36,7 @@ public class RepositionAction : GoapAction
 
     public override bool IsInterupted(WorldState currentWorldState, BlackboardReference blackboard)
     {
-        //Interupt action to defend if necesary, let him walk back between attacks
-        return (blackboard.variable.TargetState == AttackState.Attack || blackboard.variable.TargetState == AttackState.BlockAttack)
+        return currentWorldState.TargetBehaviour == EBehaviourValue.Attacking
             && currentWorldState.TargetAttackRange == EWorldStateRange.InRange;
     }
 }

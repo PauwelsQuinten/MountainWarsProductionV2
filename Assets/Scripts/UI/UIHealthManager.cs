@@ -10,6 +10,8 @@ public class UIHealthManager : MonoBehaviour
     [Header("Health")]
     [SerializeField]
     private Image _healthBar;
+    [SerializeField]
+    private FloatReference _patchupDuration;
     [SerializeField] 
     private Color _fullHealthColor;
     [SerializeField]
@@ -227,7 +229,7 @@ public class UIHealthManager : MonoBehaviour
         _patchUpBar.transform.parent.gameObject.SetActive(true);
         while(_patchUpBar.fillAmount < 1)
         {
-            time += Time.deltaTime;
+            time += Time.deltaTime / _patchupDuration.value;
             size = time;
             _patchUpBar.fillAmount = size;
             yield return null;

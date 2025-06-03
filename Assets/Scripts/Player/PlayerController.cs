@@ -7,6 +7,10 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
 {
     [Header("State Manager")]
+    [SerializeField] private bool _wantToSeePatchingAnim = false;
+
+
+    [Header("State Manager")]
     [SerializeField]
     private StateManager _stateManager;
 
@@ -15,12 +19,8 @@ public class PlayerController : MonoBehaviour
     private AimingInputReference _aimInputRef;
     [SerializeField]
     private MovingInputReference _moveInputRef;
-
-    [Header("Healing")]
-    [SerializeField, Tooltip("How long it takes to patch up your bleeding")]
-    private FloatReference _patchUpDuration;
     [SerializeField]
-    private GameEvent _patchUpEvent;
+    private float _speedMultiplier = 1.5f;
 
     [Header("Stamina")]
     [SerializeField]
@@ -40,8 +40,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private GameEvent _shieldBash;
     [SerializeField]
-    private GameEvent _pickupEvent;
-    [SerializeField]
     private GameEvent _LookForTarget;
     [SerializeField]
     private GameEvent _changeAnimation;
@@ -50,11 +48,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private GameEvent _pauseGame;
     [SerializeField]
-    private GameEvent _sheathWeapon;
-    [SerializeField]
-    private GameEvent _shieldGrab;
-    [SerializeField]
-    private GameEvent _nextDialogueLine;
+    private GameEvent _inQueue;
 
     private Vector2 _moveInput;
 
@@ -62,10 +56,6 @@ public class PlayerController : MonoBehaviour
     private AttackState _storredAttackState = AttackState.Idle;
 
     private bool _isHoldingShield;
-
-    private float _patchTimer;
-    private float _patchStartTime;
-    private float _patchEndTime;
 
     private bool _wasSprinting;
     
@@ -87,6 +77,8 @@ public class PlayerController : MonoBehaviour
         StartCoroutine(CheckSurrounding());
     }
 
+    //This ClearQueue is purely for storing his attackstate for if he is hilding shield or not
+    //!! its important that this event is called before the statemanager stunEvent!!!
     public void GetStun(Component sender, object obj)
     {
         LoseEquipmentEventArgs loseEquipmentEventArgs = obj as LoseEquipmentEventArgs;
@@ -100,11 +92,10 @@ public class PlayerController : MonoBehaviour
 
         var args = obj as StunEventArgs;
         if (args == null) return;
-        if (args.ComesFromEnemy && sender.gameObject == gameObject) return;
-        else if (!args.ComesFromEnemy && sender.gameObject != gameObject) return;
+        if (args.StunTarget != gameObject) return;
 
         _storredAttackState = 
-            _stateManager.AttackState == AttackState.Stun? AttackState.Idle : _stateManager.AttackState;
+            _stateManager.AttackState == AttackState.Stun? _storredAttackState : _stateManager.AttackState;
         _aimInputRef.variable.State = AttackState.Stun;
         //_stateManager.AttackState = AttackState.Stun;
     }
@@ -122,14 +113,14 @@ public class PlayerController : MonoBehaviour
 
     public void ProcessAimInput(InputAction.CallbackContext ctx)
     {
-        if (Time.timeScale == 0 || _stateManager.IsInStaticDialogue.value) return;
+        if (Time.timeScale == 0) return;
         if (_staminaManager.CurrentStamina < _aimCost.value) return;
         _aimInputRef.variable.value = ctx.ReadValue<Vector2>();
     }
 
     private void AimInputRef_ValueChanged(object sender, AimInputEventArgs e)
     {
-        if (Time.timeScale == 0 || _stateManager.IsInStaticDialogue.value) return;
+        if (Time.timeScale == 0) return;
         if (_stateManager.AttackState == AttackState.Stun || _aimInputRef.variable.State == AttackState.Stun)
         {
             return;
@@ -154,7 +145,7 @@ public class PlayerController : MonoBehaviour
 
     public void ProccesMoveInput(InputAction.CallbackContext ctx)
     {
-        if (Time.timeScale == 0 || _stateManager.IsInStaticDialogue.value) return;
+        if (Time.timeScale == 0) return;
         Vector2 input = ctx.ReadValue<Vector2>();
 
         // Get camera vectors and flatten them to horizontal plane
@@ -174,9 +165,9 @@ public class PlayerController : MonoBehaviour
         _moveInputRef.variable.value = output;
     }
 
-        public void ProccesSetBlockInput(InputAction.CallbackContext ctx)
+    public void ProccesSetBlockInput(InputAction.CallbackContext ctx)
     {
-        if (Time.timeScale == 0 || _stateManager.IsInStaticDialogue.value) return;
+        if (Time.timeScale == 0) return;
         if (_stateManager.AttackState == AttackState.Stun)
         {
             if (ctx.action.WasPressedThisFrame())
@@ -213,7 +204,7 @@ public class PlayerController : MonoBehaviour
         else if (ctx.performed)
         {
             _stateManager.AttackState = AttackState.ShieldDefence;
-            _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.ShieldEquip, AnimLayer = 4, DoResetIdle = false, Interupt = false });
+            //_changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.ShieldEquip, AnimLayer = { 4 }, DoResetIdle = false });
             _isHoldingShield = false;
             _stateManager.IsHoldingShield = _isHoldingShield;
         }
@@ -223,7 +214,7 @@ public class PlayerController : MonoBehaviour
 
     public void ProccesSetParryInput(InputAction.CallbackContext ctx)
     {
-        if (Time.timeScale == 0 || _stateManager.IsInStaticDialogue.value) return;
+        if (Time.timeScale == 0) return;
         if (_stateManager.AttackState == AttackState.Stun)
         {
             if (ctx.action.WasPressedThisFrame())
@@ -260,17 +251,11 @@ public class PlayerController : MonoBehaviour
 
     public void ProccesDodgeInput(InputAction.CallbackContext ctx)
     {
-        if (_stateManager.IsInDialogue.value)
-        {
-            if (!ctx.performed) return;
-            _nextDialogueLine.Raise();
-            return;
-        }
-        if (Time.timeScale == 0 || _stateManager.IsInStaticDialogue.value) return;
+        if (Time.timeScale == 0) return;
             if (ctx.performed)
         {
             _wasSprinting = true;
-            _moveInputRef.variable.SpeedMultiplier = 1.5f;
+            _moveInputRef.variable.SpeedMultiplier = _speedMultiplier;
         }
         if (ctx.canceled)
         {
@@ -298,21 +283,23 @@ public class PlayerController : MonoBehaviour
 
     public void ProccesInteractInput(InputAction.CallbackContext ctx)
     {
-        if (Time.timeScale == 0 || _stateManager.IsInStaticDialogue.value) return;
+        if (Time.timeScale == 0) return;
         if (!ctx.performed) return;
 
-        if (!_stateManager.EquipmentManager.HasEquipmentInHand(true))
-            _pickupEvent.Raise(this);
+        //The reason we call pick up in as frist priority is because when close to a hiding spot, picking up your weapon when you dont have one is most important
+        //but if you already have a weapon, you would endlessly switch between them, so we call them on 2 different situations.
+        if (!_stateManager.EquipmentManager.HasEquipmentInHand(true) && _stateManager.EquipmentManager.CloseToEquipment())
+            _inQueue.Raise(this, new AimingOutputArgs { Special = SpecialInput.PickUp, AnimationStart = true });
         else if (_stateManager.IsNearHidingSpot)
             _hide.Raise(this, EventArgs.Empty);
-        else
-            _pickupEvent.Raise(this);
+        else if (_stateManager.EquipmentManager.CloseToEquipment())
+            _inQueue.Raise(this, new AimingOutputArgs { Special = SpecialInput.PickUp, AnimationStart = true });
 
     }
 
     public void ProccesAtackHeightInput(InputAction.CallbackContext ctx)
     {
-        if (Time.timeScale == 0 || _stateManager.IsInStaticDialogue.value) return;
+        if (Time.timeScale == 0) return;
         if (!ctx.performed) return;
         _stateManager.AttackHeight = AttackHeight.Head;
 
@@ -322,7 +309,7 @@ public class PlayerController : MonoBehaviour
 
     public void ProssesLockShieldInput(InputAction.CallbackContext ctx)
     {
-        if (Time.timeScale == 0 || _stateManager.IsInStaticDialogue.value) return;
+        if (Time.timeScale == 0) return;
         if (!ctx.performed) return;
         if (_stateManager.AttackState != AttackState.ShieldDefence ) return;
         if (!_stateManager.EquipmentManager.HasFullEquipment() ) return;
@@ -334,41 +321,30 @@ public class PlayerController : MonoBehaviour
 
     public void ProssesPatchUpInput(InputAction.CallbackContext ctx)
     {
-        if (Time.timeScale == 0 || _stateManager.IsInStaticDialogue.value) return;
-        //if (ctx.action.WasPressedThisFrame())
+        if (Time.timeScale == 0) return;
+        //This button will be used to sheat/unsheat sord when not bleeding
         if (ctx.action.WasPerformedThisFrame())
         {
-            if (!_stateManager.IsBleeding)
+            if (!_stateManager.IsBleeding && !_wantToSeePatchingAnim)
             {
                 if (_stateManager.WeaponIsSheathed)
                 {
-                    _sheathWeapon.Raise(this, EventArgs.Empty);
-                    //_stateManager.WeaponIsSheathed = false;
+                    _inQueue.Raise(this, new AimingOutputArgs { Special = SpecialInput.UnSheatSword, AnimationStart = true });
                 }
                 else if (!_stateManager.WeaponIsSheathed)
                 {
-                    _sheathWeapon.Raise(this, EventArgs.Empty);
-                    //_stateManager.WeaponIsSheathed = true;
+                    _inQueue.Raise(this, new AimingOutputArgs { Special = SpecialInput.SheatSword, AnimationStart = true });
                 }
             }
             else
-            {
-                _patchStartTime = Time.time;
-                _patchUpEvent.Raise(this, false);
-            }           
+            {               
+                _inQueue.Raise(this, new AimingOutputArgs { Special = SpecialInput.PatchUp, AnimationStart = true });
+            }
         }
 
-        if(ctx.action.WasReleasedThisFrame() && _patchStartTime != 0f)
-        {
-            _patchEndTime = Time.time;
-            _patchTimer = _patchEndTime - _patchStartTime;
-
-            if (_patchUpDuration.value >= _patchTimer) 
-                _patchUpEvent.Raise(this, true);
-            else _patchUpEvent.Raise(this, false);
-
-            _patchStartTime = 0;
-            _patchEndTime = 0;
+        if(ctx.action.WasReleasedThisFrame() )
+        {           
+            _inQueue.Raise(this, new AimingOutputArgs { Special = SpecialInput.PatchUp, AnimationStart = false });
         }
     }
 
@@ -380,10 +356,10 @@ public class PlayerController : MonoBehaviour
 
     public void ProccesShieldGrab(InputAction.CallbackContext ctx)
     {
-        if (Time.timeScale == 0 || _stateManager.IsInStaticDialogue.value) return;
+        if (Time.timeScale == 0) return;
         if (!ctx.performed) return;
-        if (_stateManager.AttackState == AttackState.ShieldDefence || _stateManager.AttackState == AttackState.BlockAttack)
-            _shieldGrab.Raise(this, EventArgs.Empty);
+        //if (_stateManager.AttackState == AttackState.ShieldDefence || _stateManager.AttackState == AttackState.BlockAttack)
+            _inQueue.Raise(this, new AimingOutputArgs { Special = SpecialInput.ShieldGrab, AnimationStart = true});
     }
 
 

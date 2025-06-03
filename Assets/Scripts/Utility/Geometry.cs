@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.AI;
 namespace Geometry
 {
     public static class Geometry
@@ -38,6 +39,10 @@ namespace Geometry
             float angle = (int)orientation * Mathf.Deg2Rad;
             return new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
         }
+         public static Vector2 CalculateVectorFromfOrientation(float orientation)
+        {
+            return new Vector2(Mathf.Cos(orientation), Mathf.Sin(orientation));
+        }
 
         public static float CalculateSwingSpeed(float length, float currentTime, float minResult, float maxResult)
         {
@@ -59,6 +64,7 @@ namespace Geometry
             float input = CalculateAngleRadOfInput(analogInput) * Mathf.Rad2Deg;
             int diff = (int)input - orient;
             diff = diff < -180 ? 360 + diff : diff;
+            diff = diff > 180 ? diff - 360 : diff;
 
 
             if (diff > -centerAngle && diff < centerAngle)
@@ -68,6 +74,24 @@ namespace Geometry
             else if (diff < -30 && diff > -outerAngle || (isHoldingShield && diff < -30))
                 return Direction.ToRight;
             return Direction.Wrong;
+        }
+
+        public static Direction CalculateFeintDirection(float orientation, Vector2 analogInput, float maxAngleToCenter)
+        {
+            //int orient = (int)orientation;
+            int orient = (int)orientation;
+            float input = CalculateAngleRadOfInput(analogInput) * Mathf.Rad2Deg;
+            int diff = (int)input - orient;
+            diff = diff < -180 ? 360 + diff : diff;
+            diff = diff > 180 ? diff -360 : diff;
+
+            //if (diff < 0 || diff > 180)                
+            if (diff < 0 && diff > -maxAngleToCenter)                
+                return Direction.ToLeft;
+            if (diff > 0 && diff <  maxAngleToCenter)                
+                return Direction.ToRight;
+            else 
+                return Direction.Wrong;
         }
 
         public static Direction CalculateSwingDirection(float angleDegree, Vector2 analogInput, Vector2 previousInput, Vector2 StorredStartInput)
@@ -90,6 +114,59 @@ namespace Geometry
                 return cross > 0 ? Direction.ToLeft : Direction.ToRight;
 
             return cross < 0 ? Direction.ToLeft : Direction.ToRight;
+        }
+
+        public static Vector3 GetRandomPointOnNavMesh(Vector3 center, float radius)
+        {
+            for (int i = 0; i < 5; i++) // Try up to 5 times
+            {
+                Vector3 randomDirection = Random.insideUnitSphere * radius;
+                randomDirection += center;
+
+                if (NavMesh.SamplePosition(randomDirection, out NavMeshHit hit, 2.0f, NavMesh.AllAreas))
+                {
+                    return hit.position;
+                }
+            }
+
+            // If no valid point found, return center
+            return center;
+        }
+
+        public static float CalculatefOrientationToTarget(Vector3 target, Vector3 self)
+        {
+            Vector3 direction = target - self;
+            return Mathf.Atan2(direction.z, direction.x) * Mathf.Rad2Deg;
+        }
+
+        public static Orientation FindOrientationFromAngle(float fOrientation)
+        {
+            const int angleInterval = 45;
+            int newOrientation = Mathf.RoundToInt(fOrientation / angleInterval);
+            newOrientation *= angleInterval;
+
+            if (newOrientation == -180)
+                newOrientation = 180;
+            return (Orientation)newOrientation;
+        }
+
+        //One way of deciding if input is a feint
+        //This way it is decided by where your analog input starts compared to your orientation
+        //Side is attack, below is feint
+        private static bool IsFeintMovement(Direction direction, float feintAngle, Vector2 inputStart, float fOrientation)
+        {
+            var orientAngleRad = fOrientation * Mathf.Deg2Rad;
+
+            var startAngleRad = CalculateAngleRadOfInput(inputStart) - orientAngleRad;
+            startAngleRad = ClampAngle(startAngleRad);
+
+
+            if (direction == Direction.ToLeft && startAngleRad > -feintAngle * Mathf.Deg2Rad && startAngleRad < 0f)
+                return false;
+            else if (direction == Direction.ToRight && startAngleRad < feintAngle * Mathf.Deg2Rad && startAngleRad > 0)
+                return false;
+
+            return true;
         }
     }
 }

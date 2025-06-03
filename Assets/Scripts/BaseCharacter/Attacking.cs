@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using static UnityEngine.Rendering.GPUSort;
 
 public class Attacking : MonoBehaviour
 {
@@ -19,12 +18,17 @@ public class Attacking : MonoBehaviour
     private float _basePower;
     [SerializeField]
     private float _chargeSpeed;
+    [SerializeField]
+    private float _chargeDownSpeed;
+    [SerializeField]
+    private float _maxChargedPower = 20f;
 
     [Header("Attack")]
-    [SerializeField]
     private float _attackRange;
-    [SerializeField]
+    [SerializeField, Tooltip("This event is called from the moment the attack is hit and sends its info to the opponent defence")]
     private GameEvent _doAttack;
+    [SerializeField, Tooltip("This event is called from the moment the attack starts, after the feint. This is for giving it a forwards push ")]
+    private GameEvent _moveAttack;
 
     [Header("Stamina")]
     [SerializeField]
@@ -35,32 +39,46 @@ public class Attacking : MonoBehaviour
     [Header("Enemy")]
     [SerializeField]
     private LayerMask _characterLayer;
-    [SerializeField] List<BlackboardReference> _blackboardRefs;
+    private BlackboardReference _blackboardRef;
 
     [Header("Animation")]
     [SerializeField]
     private GameEvent _changeAnimation;
 
-    private float _chargePower;
-    private float _attackPower;
+    [SerializeField]
+    private bool _isFullBodyAnim = false;
+
+    private float _chargePower = 0f;
+    [HideInInspector] public float ChargedPower
+    {
+        get { return _chargePower; }
+    }
+    [HideInInspector] public bool ChargePowerUsed = false;
+    private float _attackPower = 0f;
     private AttackType _attackType;
     private AttackHeight _attackHeight = AttackHeight.Torso;
 
     private bool _wasCharging;
     private float _startChargeTime;
-    private float _endChargeTime;
 
     private StateManager _stateManager;
+
+    private void Awake()
+    {
+        if (_stateManager == null) 
+            _stateManager = GetComponent<StateManager>();
+        _blackboardRef = _stateManager.BlackboardRef;
+    }
+    private void Update()
+    {
+        UPdateChargePowerOnRelease();
+    }
 
     public void Attack(Component sender, object obj)
     {
         AimingOutputArgs args = obj as AimingOutputArgs;
-        if (args == null) return;
+        if (args == null || args.Special != SpecialInput.Default) return;
         if (sender.gameObject != gameObject && args.Sender != gameObject) return;
-
-
-        if (_stateManager == null) _stateManager = GetComponent<StateManager>();
-
         if (_stateManager.WeaponIsSheathed) return;
 
         if (args.AttackState == AttackState.ShieldDefence
@@ -70,15 +88,20 @@ public class Attacking : MonoBehaviour
         //if (args.AttackSignal != AttackSignal.Idle)
         //    PrintInput(args);
         
+        //All attack signals are by default feint = true, when the angle movement is bigger then the set min value
+        //it will sent a signal to set feint to false and continue the attck animation instead of cancelling it.
+        if (!args.IsFeint )
+        {
+            _changeAnimation.Raise(this, new AnimationEventArgs { IsFeint = false });
+            _moveAttack.Raise(this, new AttackMoveEventArgs { Attacker = gameObject, AttackType = _attackType});
+            _changeAnimation.Raise(this, new AttackMoveEventArgs { Attacker = gameObject, AttackType= _attackType });
+            return;
+        }
+
         if (args.AttackSignal == AttackSignal.Idle )
         {
-            //Signal to blackboard
-            if (gameObject.CompareTag(PLAYER))
-            {
-                foreach (var blackboard in _blackboardRefs)
-                    blackboard.variable.TargetCurrentAttack = AttackType.None;
-            }
-
+            _blackboardRef.variable.CurrentAttack = AttackType.None;
+            CalculateChargePower(args);
             return;
         }
 
@@ -86,33 +109,38 @@ public class Attacking : MonoBehaviour
 
         _attackType = DetermineAttack(args);
         _attackRange = GetAttackMediumRange(args);
-        _attackPower = CalculatePower(args);
+        if (_attackType != AttackType.Charge)
+            _attackPower = CalculatePower(args);
         _attackHeight = args.AttackHeight;
         //Debug.Log($"charging : {_wasCharging}, power: {_attackPower}");
 
         if (args.AnimationStart)
         {
-            //Debug.Log($"speed: {args.Speed}");
+            //Debug.Log($"_movementSpeed: {args.Speed}");
             bool useRightArm = args.EquipmentManager.HasEquipmentInHand(true) || args.EquipmentManager.HasNoneInHand();
-            StartAnimation(args.Speed, useRightArm, args.IsFeint);
+            StartAnimation(args.Speed, useRightArm, args.AttackHeight == AttackHeight.Head);
         }
 
-        //PrintInput2(args);
         //Signal to blackboard
-        if (gameObject.CompareTag(PLAYER))
-        {
-            foreach (var blackboard in _blackboardRefs)
-            {
-                blackboard.variable.TargetCurrentAttack = _attackType;
-                blackboard.variable.TargetState = args.AttackState;
-            }
-        }
+        _blackboardRef.variable.CurrentAttack = _attackType;
+        _blackboardRef.variable.State = AttackState.Attack;
+       
     }
 
     public void SwordHit(Component sender, object obj)
     {
-        if (sender.gameObject != gameObject) return;
+        //Event coming from the spear
+        AttackEventArgs args = obj as AttackEventArgs;
+        if (args != null && args.Attacker == gameObject)
+        {
+            if (_attackType == AttackType.Stab) _loseStamina.Raise(this, new StaminaEventArgs { StaminaCost = _staminaCost.value * 0.75f });
+            else _loseStamina.Raise(this, new StaminaEventArgs { StaminaCost = _staminaCost.value });
 
+            _doAttack.Raise(this, args);
+        }
+
+        //event coming from the sword attack animations
+        else if (sender.gameObject != gameObject) return;
 
         if (_attackType == AttackType.Stab) _loseStamina.Raise(this, new StaminaEventArgs { StaminaCost = _staminaCost.value * 0.75f });
         else _loseStamina.Raise(this, new StaminaEventArgs { StaminaCost = _staminaCost.value });
@@ -134,42 +162,52 @@ public class Attacking : MonoBehaviour
     {
         if (sender.gameObject != gameObject) return;
 
-        if (gameObject.CompareTag(PLAYER))
-        {
-            foreach (var blackboard in _blackboardRefs)
-            {
-                blackboard.variable.TargetCurrentAttack = AttackType.None;
-                blackboard.variable.TargetState = AttackState.Idle;
-            }
-
+        if (_stateManager != null)
+        {            
+            _blackboardRef.variable.CurrentAttack = AttackType.None;
+            _blackboardRef.variable.State = _stateManager.AttackState == AttackState.Stun? _stateManager.AttackState : AttackState.Idle;
         }
     }
 
-    private void StartAnimation(float speed, bool useRightArm, bool isFeint)
+    private void StartAnimation(float speed, bool useRightArm, bool isAttackHigh)
     {
-        int animLayer = useRightArm ? 3 : 4;
+        //FullBodyAnim -> for setting a bool in animator so that the lowerBody mask will not override the layer
+        //DoResetIdle -> To make sure no idle animation is playing at same time
+        //Speed -> The animation speed
+        //AttackWithLeftHand -> a bool set so the attacks will be with shield or sword.
 
+        List<int> animLayers = new List<int>() { 1 };
         if (_attackType == AttackType.HorizontalSlashToLeft)
         {
-            _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.SlashLeft, AnimLayer = animLayer, DoResetIdle = true, Interupt = isFeint, Speed = speed });
+            _changeAnimation.Raise(this, new AnimationEventArgs 
+            { AnimState = AnimationState.SlashLeft, AnimLayer = animLayers, DoResetIdle = true, Speed = 1.5f
+            , IsAttackHigh = isAttackHigh, AttackWithLeftHand = !useRightArm
+            , IsFullBodyAnim = _isFullBodyAnim
+            });
         }
         else if (_attackType == AttackType.HorizontalSlashToRight)
         {
-            _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.SlashRight, AnimLayer = animLayer, DoResetIdle = true, Interupt = isFeint, Speed = speed });
+            _changeAnimation.Raise(this, new AnimationEventArgs 
+            { AnimState = AnimationState.SlashRight, AnimLayer = animLayers, DoResetIdle = true, Speed = 1.5f
+            , IsAttackHigh = isAttackHigh, AttackWithLeftHand = !useRightArm
+            , IsFullBodyAnim = _isFullBodyAnim
+            });
         }
         else if (_attackType == AttackType.Stab)
         {
-            _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Stab, AnimLayer = animLayer, DoResetIdle = true, Interupt = false, Speed = 1.5f  });
+            _changeAnimation.Raise(this, new AnimationEventArgs 
+            { AnimState = AnimationState.Stab, AnimLayer = animLayers, DoResetIdle = true, Speed = 1.5f
+            , IsAttackHigh = isAttackHigh, AttackWithLeftHand = !useRightArm
+            , IsFullBodyAnim = _isFullBodyAnim
+            });
+        }
+        else if (_attackType == AttackType.Charge)
+        {
+            _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Charge, AnimLayer = {3}, DoResetIdle = false });
         }
 
     }
-    
-    private void InteruptAnimation()
-    {
-         _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Idle, AnimLayer = 1, DoResetIdle = false, Interupt = true });
-    }
         
-
     private bool IsAngleBigEnough(float currentAngle)
     {
         if (currentAngle > _minAttackAngle) return true;
@@ -192,14 +230,30 @@ public class Attacking : MonoBehaviour
         {
             _wasCharging = true;
             _startChargeTime = Time.time;
+            ChargePowerUsed = false;
         }
         else if (args.AttackSignal != AttackSignal.Charge && _wasCharging)
         {
-            _endChargeTime = Time.time;
-            _chargePower = _chargeSpeed * (_endChargeTime - _startChargeTime);
             _startChargeTime = 0;
-            _endChargeTime = 0;
             _wasCharging = false;
+        }
+        
+    }
+
+    private void UPdateChargePowerOnRelease()
+    {
+        if (_startChargeTime != 0)
+        {
+            float _chargedTime = Time.time - _startChargeTime;
+            _chargePower = _chargeSpeed * _chargedTime + 1f;
+            if (_chargePower > _maxChargedPower)
+                _chargePower = _maxChargedPower;
+        }
+        
+        else if (_chargePower > 0 && _startChargeTime == 0)
+        {
+            float newTime = _chargePower - _chargeDownSpeed * Time.deltaTime;
+            _chargePower = (newTime > 0f) ? newTime : 0f;
         }
     }
 
@@ -210,6 +264,7 @@ public class Attacking : MonoBehaviour
         if (aimOutput.Speed != 0) power += _basePower * aimOutput.Speed + _chargePower;
         else power += _basePower + _chargePower;
         _chargePower = 0f;
+        ChargePowerUsed = true;
         return swingAngle + power;
     }
 
@@ -221,6 +276,7 @@ public class Attacking : MonoBehaviour
     private AttackType DetermineAttack(AimingOutputArgs aimOutput)
     {
         if(aimOutput.AttackSignal == AttackSignal.Stab) return AttackType.Stab;
+        if(aimOutput.AttackSignal == AttackSignal.Charge) return AttackType.Charge;
         if (aimOutput.Direction == Direction.ToRight) return AttackType.HorizontalSlashToRight;
         return AttackType.HorizontalSlashToLeft;
     }

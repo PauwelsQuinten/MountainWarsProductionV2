@@ -14,8 +14,8 @@ namespace UnityEngine
 
     public enum AttackHeight
     {
-        Head,
-        Torso
+        Head = 0,
+        Torso = 1
     }
 
 
@@ -46,11 +46,12 @@ namespace UnityEngine
 
     public enum Direction
     {
-        Idle,
-        ToRight, 
-        ToLeft, 
-        ToCenter,
-        Wrong
+        Idle = 0, //no specific direction
+        ToRight = 1,
+        ToCenter = 2,
+        ToLeft = 3, 
+        Wrong = 4,//aimed to a bad direction, like for an invallid block
+        Default // used for sending signal, on default dont change current direction in animator 
     }
 
     public enum AttackSignal
@@ -68,7 +69,8 @@ namespace UnityEngine
         HorizontalSlashToLeft,
         HorizontalSlashToRight,
         ShieldBash,
-        None
+        None,
+        Charge
     }
 
     public enum BodyParts 
@@ -117,7 +119,15 @@ namespace UnityEngine
         Melee,
         Ranged,
         Shield,
-        Fist
+        Fist,
+        Wood
+    }
+    
+    public enum EquipmentHand
+    {
+       LeftHand = 0,
+       RightHand = 1,
+       TwoHanded = 2
     }
 
 
@@ -222,7 +232,24 @@ namespace UnityEngine
         ParrySwordLeft,
         ParrySwordRight,
         SheathWeapon,
-        DrawWeapon
+        DrawWeapon,
+        DragShieldDown,
+        Charge,
+        PatchUp,
+        PickUp,
+        Stun,
+        Hit,
+        AttackFeedFackLow,
+        AttackFeedFackHigh,
+        BlockedHit,
+        //values above 100 are used for in scene interactions
+        Lean = 100,
+        DipWater = 101,
+        LookOver = 102,
+        AlmostFalling = 103,
+        Confused = 104,
+        Angry = 105
+
     }
 
     public enum ObjectTarget
@@ -233,14 +260,17 @@ namespace UnityEngine
         Forward,
         Backward,
         Side,
-        PatrolPoint
+        PatrolPoint,
+        InRadius
     }
     public enum AIInputAction
     {
         PatchUp,
         Dash,
         StopDash,
-        Interact
+        PickUp,
+        LockShield,
+        GrabShield
     }
 
     public enum Size
@@ -257,4 +287,26 @@ namespace UnityEngine
         Forest,
         Mountain
     }
+    
+    public enum SpecialInput
+    { 
+        Default,
+        ShieldGrab,
+        PatchUp,
+        PickUp,
+        SheatSword,
+        UnSheatSword,
+        // values above 100 ar used to activate animations for scene interactions
+        //Make sure that these are equal to the ones from the AnimationState
+        Lean = 100,
+        DipWater = 101,
+        LookOver = 102,
+        AlmostFalling = 103,
+        Confused = 104,
+        Angry = 105
+
+    }
+
+
+
 }

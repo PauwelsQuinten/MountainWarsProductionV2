@@ -1,18 +1,21 @@
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class GoapPlanner : MonoBehaviour
 {
-    [SerializeField] private BlackboardReference _blackboard;
+    private BlackboardReference _blackboard;
     [Header("CharacterStyle")]
     [SerializeField] private CharacterMentality _characterMentality = CharacterMentality.Basic;
-    [Range(0f, 1f)]
-    public float Perception = 0.8f;
+    [Range(0, 10)]
+    public int Perception = 8;
+    [Range(0, 10), Tooltip("the higher the faster he will recover from a interupted goal, 10 is zero invallid time")]
+    public int Determination = 8;
     [SerializeField] private List<GoapAction> _allActionPrefabs;
     [SerializeField] private List<GoapGoal> _allGoalPrefabs;
+    [SerializeField] private List<GoapInterupter> _allInteruptPrefabs;
     private List<GoapAction> _allActions = new List<GoapAction>();
     private List<GoapGoal> _allGoals = new List<GoapGoal>();
+    private List<GoapInterupter> _allInterupters = new List<GoapInterupter>();
 
     private WorldState _currentWorldState;
     private GoapGoal _activeGoal;
@@ -21,44 +24,58 @@ public class GoapPlanner : MonoBehaviour
     private List<EWorldState> _comparedWorldState = new List<EWorldState>();
 
     private int _recursionCounter = 0;
-
-    private StateManager _stateManager;
-
+    private void Awake()
+    {
+        _blackboard = GetComponent<StateManager>().BlackboardRef;
+    }
     void Start()
     {
         _blackboard.variable.ResetAtStart();
         _currentWorldState = gameObject.AddComponent<WorldState>();
         _currentWorldState.WorldStateType = WorldStateType.Current;
+        _blackboard.variable.SetPerception(Perception);
         _currentWorldState.AsignBlackboard(_blackboard);
         _currentWorldState.Init();
 
         foreach (var action in _allActionPrefabs)
         {
-            _allActions.Add(Instantiate(action, gameObject.transform));
+            if (action != null)
+                _allActions.Add(Instantiate(action, gameObject.transform));
         }
         foreach (var goal in _allGoalPrefabs)
         {
-            _allGoals.Add(Instantiate(goal, gameObject.transform));
+            if (goal != null)
+            {
+                goal.DeterminationSetup(Determination);
+                _allGoals.Add(Instantiate(goal, gameObject.transform));
+            }
+        }
+        foreach (var interupter in _allInteruptPrefabs)
+        {
+            if (interupter != null)
+                _allInterupters.Add(Instantiate(interupter, gameObject.transform));
         }
     }
 
     void Update()
     {
-        //if (Time.timeScale == 0) return;
-        if(_stateManager == null) _stateManager = GetComponent<StateManager>();
-        if (_stateManager.IsInDialogue.value) return;
         _currentWorldState.UpdateWorldState();
         _recursionCounter = 0;
 
-        if (_activeGoal && _activeGoal.InteruptGoal(_currentWorldState, _blackboard)) //Placed for when getting a knockback
-            ResetPlan(true);
+        //Check if the current goal has to be interupted through decision of itself or by an Interupter 
+        bool setInvallid = false;
+        if (_activeGoal && (_activeGoal.InteruptGoal(_currentWorldState, _blackboard) || CheckGoalWithInterupters(out setInvallid)))
+            ResetPlan(setInvallid);
 
+        //Select a new Goal when previous one ended or got interupted
         if (_activeGoal == null || _actionPlan.Count == 0)
             _activeGoal = SelectCurrentGoal();
 
+        //Do nothing when no vallid new goal is found.
         if (_activeGoal == null || _activeGoal.DesiredWorldState == null)
             return;
 
+        //Create a plan for the new Goal, set goal invallid when this fails or start to execute.
         if (_actionPlan.Count == 0 && !Plan(_activeGoal.DesiredWorldState))
             _activeGoal.SetInvallid();
         else
@@ -83,13 +100,13 @@ public class GoapPlanner : MonoBehaviour
                 bestGoal = goal;
             }
         }
-        //if (bestGoal == null)
-            //Debug.Log($"No current goal{bestGoal}");
+      
         return bestGoal;
     }
 
     private void ExecutePlan()
     {
+        //Update current Action or start a new on from the Plan
         if (_activeAction)
             _activeAction.UpdateAction(_currentWorldState, _blackboard);
         else if (_actionPlan.Count > 0)
@@ -100,6 +117,7 @@ public class GoapPlanner : MonoBehaviour
         else
             return;
 
+        //When Active Action is completed we remove it from the Plan
         if (_activeAction.IsCompleted(_currentWorldState))
         {
             _actionPlan.RemoveAt(_actionPlan.Count - 1);
@@ -107,12 +125,12 @@ public class GoapPlanner : MonoBehaviour
             return;
         }
 
+        //Check if the active Action is interupting itself
         if (_activeAction.IsInterupted(_currentWorldState, _blackboard))
         {
             //_activeAction.ActionCompleted();
             ResetPlan(false);
         }
-
 
     }
 
@@ -222,5 +240,21 @@ public class GoapPlanner : MonoBehaviour
         _actionPlan.Clear();
     }
 
+    private bool CheckGoalWithInterupters(out bool setInavllid)
+    {
+        setInavllid = false;
+        foreach (var interupter in _allInterupters)
+        {
+            if (interupter== null || interupter.GoalToInterupt.GetType() == null)
+                return false;
+            if (interupter.GoalToInterupt.GetType() == _activeGoal.GetType() 
+                && interupter.InteruptCurrentGoal(_currentWorldState, _blackboard))
+            {
+                setInavllid = interupter.SetInvallid;
+                return true;
+            }
+        }
+        return false;
+    }
 
 }

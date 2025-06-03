@@ -57,6 +57,10 @@ PrefabInstance:
       value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 76cdbef5355895d44a0aeb635c997ef4, type: 3}
+      propertyPath: m_TagString
+      value: Lean
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 76cdbef5355895d44a0aeb635c997ef4, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
@@ -117,7 +121,7 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 1.73
+  m_Radius: 1.89
   m_Height: 5.31
   m_Direction: 1
   m_Center: {x: -0.0000077468885, y: 0.62, z: 0.0000000025733828}

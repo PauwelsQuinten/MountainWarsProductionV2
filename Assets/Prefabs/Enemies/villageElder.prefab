@@ -1983,7 +1983,7 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: 2b7343704690fe44082a39bd90ac5296, type: 2}
     - target: {fileID: 5687449145564820169, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
       propertyPath: m_Mass
-      value: 10
+      value: 70
       objectReference: {fileID: 0}
     - target: {fileID: 5687449145564820169, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
       propertyPath: m_UseGravity
@@ -2476,6 +2476,7 @@ MonoBehaviour:
   _recieveAttackEvent: {fileID: 11400000, guid: e6bca7c795a56ff49994ff5ebb32ace4, type: 2}
   _endAnimation: {fileID: 11400000, guid: 84ee518c278608442b5da03c225a1fc1, type: 2}
   _inParryZone: {fileID: 11400000, guid: 48b146ca432fdaf4a98acaef1bbf49a6, type: 2}
+  _rotateShield: {fileID: 11400000, guid: 7f9e479aba9dadf4abc23c350fe51bba, type: 2}
 --- !u!114 &7875268914386589386
 MonoBehaviour:
   m_ObjectHideFlags: 0

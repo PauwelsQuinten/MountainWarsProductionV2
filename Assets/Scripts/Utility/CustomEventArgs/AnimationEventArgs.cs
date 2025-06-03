@@ -1,14 +1,19 @@
 using System;
+using System.Collections.Generic;
 
 namespace UnityEngine
 {
     public class AnimationEventArgs : EventArgs
     {
         public AnimationState AnimState;
+        public bool IsAttackHigh = false;
         public bool DoResetIdle;
-        public bool Interupt;
-        public int AnimLayer;
+        public bool IsFeint = true;
+        public bool IsFullBodyAnim = false;
         public float Speed = 1f;
-        public Direction BlockDirection = Direction.Idle;
+        public List<int> AnimLayer = new List<int>();
+        public Direction BlockDirection = Direction.Default;
+        public BlockMedium BlockMedium = BlockMedium.Shield;
+        public bool AttackWithLeftHand = false;
     }
 }

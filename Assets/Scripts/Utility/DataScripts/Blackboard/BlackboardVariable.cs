@@ -2,39 +2,47 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using static UnityEngine.Rendering.DebugUI;
 
 [CreateAssetMenu(fileName = "BlackboardVariable", menuName = "DataScripts / Blackboard Variable")]
 public class BlackboardVariable : ScriptableObject
 {
     public event EventHandler<BlackboardEventArgs> ValueChanged;
+    int _numOfAttacksSeen = 5;
+    public int Perception = 5;
     public void ResetAtStart()
     {
         _state = AttackState.Idle;
-        //_stamina = 0f;
-        //_health = 0f;
         _isBleeding = false;
-        //_rHEquipmentHealth = 0f;
-        //_lHEquipmentHealth = 0f;
         _self = null;
         _orientation = 0f;
         _target = null;
-        _targetState = AttackState.Idle;
-        //_targetStamina = 0f;
-        //_targetHealth = 0f;
-        _targetIsBleeding = false;
-        //_targetRHEquipmentHealth = 0f;
-        //_targetLHEquipmentHealth = 0f;
-        //_targetWeaponRange = 0f;
-        //_weaponRange = 0f;
+        _targetBlackboard = null;
         _storredAttacks = new Dictionary<AttackType, int>
         {
             { AttackType.Stab, 0 }, { AttackType.HorizontalSlashToRight, 0 }, { AttackType.HorizontalSlashToLeft, 0 }
         };
         _observedAttack = AttackType.None;
-        _targetCurrentAttack = AttackType.None;
-        _targetShieldState = Direction.Idle;
+        _currentAttack = AttackType.None;
         _shieldState = Direction.Idle;
         _isPlayerAgressive = false;
+        _target = null;
+        _targetBlackboard = null;
+    }
+
+    public void SetPerception(int perception)
+    {
+        Perception = perception;
+
+        if (perception < 3)
+            _numOfAttacksSeen = 7;
+        else if (perception < 6)
+            _numOfAttacksSeen = 5;
+         else if (perception < 9)
+            _numOfAttacksSeen = 3;
+        else if (perception == 10)
+            _numOfAttacksSeen = 1;
+
     }
 
     private AttackState _state;
@@ -61,6 +69,7 @@ public class BlackboardVariable : ScriptableObject
             {
                 _stamina = value;
                 ValueChanged?.Invoke(this, new BlackboardEventArgs { ThisChanged = BlackboardEventArgs.WhatChanged.Stamina});
+                
             }
         }
     }
@@ -91,7 +100,6 @@ public class BlackboardVariable : ScriptableObject
             }
         }
     }
-
 
     private float _rHEquipmentHealth;
     public float RHEquipmentHealth
@@ -156,137 +164,68 @@ public class BlackboardVariable : ScriptableObject
             if (_target != value)
             {
                 _target = value;
-                ValueChanged?.Invoke(this, new BlackboardEventArgs { ThisChanged = BlackboardEventArgs.WhatChanged.Target });
+                if (_target == null)
+                    TargetBlackboard = null;
             }
         }
     }
 
-    private AttackState _targetState;
-    public AttackState TargetState
+    private BlackboardReference _targetBlackboard;
+    public BlackboardReference TargetBlackboard
     {
-        get => _targetState;
+        get => _targetBlackboard;
         set
         {
-            if (_targetState != value)
+            if (_targetBlackboard != value && value != null)
             {
-                _targetState = value;
+                _targetBlackboard = value;
+                ValueChanged?.Invoke(this, new BlackboardEventArgs { ThisChanged = BlackboardEventArgs.WhatChanged.TargetBlackboard });
+                _targetBlackboard.variable.ValueChanged += Variable_ValueChanged;
+            }
+            else if (_targetBlackboard != value && value == null)
+            {
+                if (_targetBlackboard != null)
+                    _targetBlackboard.variable.ValueChanged -= Variable_ValueChanged;
+                _targetBlackboard = null;
+                ValueChanged?.Invoke(this, new BlackboardEventArgs { ThisChanged = BlackboardEventArgs.WhatChanged.TargetBlackboard });
+            }
+        }
+    }
+
+    private void Variable_ValueChanged(object sender, BlackboardEventArgs e)
+    {
+        switch (e.ThisChanged)
+        {
+            case BlackboardEventArgs.WhatChanged.Behaviour:
                 ValueChanged?.Invoke(this, new BlackboardEventArgs { ThisChanged = BlackboardEventArgs.WhatChanged.TargetBehaviour });
-                TargetOpening = FindOpening();
-            }
-        }
-    }
-
-    private float _targetStamina;
-    public float TargetStamina
-    {
-        get => _targetStamina;
-        set
-        {
-            if (_targetStamina != value)
-            {
-                _targetStamina = value;
+                break;
+            case BlackboardEventArgs.WhatChanged.Stamina:
                 ValueChanged?.Invoke(this, new BlackboardEventArgs { ThisChanged = BlackboardEventArgs.WhatChanged.TargetStamina });
-            }
-        }
-    }
-
-    private float _targetHealth;
-    public float TargetHealth
-    {
-        get => _targetHealth;
-        set
-        {
-            if (_targetHealth != value)
-            {
-                _targetHealth = value;
+                break;
+            case BlackboardEventArgs.WhatChanged.Health:
                 ValueChanged?.Invoke(this, new BlackboardEventArgs { ThisChanged = BlackboardEventArgs.WhatChanged.TargetHealth });
-            }
-        }
-    }
-    
-    private bool _targetIsBleeding;
-    public bool TargetIsBleeding
-    {
-        get => _targetIsBleeding;
-        set
-        {
-            if (_targetIsBleeding != value)
-            {
-                _targetIsBleeding = value;
-            }
-        }
-    }
-
-    private float _targetRHEquipmentHealth;
-    public float TargetRHEquipmentHealth
-    {
-        get => _targetRHEquipmentHealth;
-        set
-        {
-            if (_targetRHEquipmentHealth != value)
-            {
-                _targetRHEquipmentHealth = value;
+                break;
+            case BlackboardEventArgs.WhatChanged.RHEquipment:
                 ValueChanged?.Invoke(this, new BlackboardEventArgs { ThisChanged = BlackboardEventArgs.WhatChanged.TargetRHEquipment });
-            }
-        }
-    }
-
-    private float _targetLHEquipmentHealth;
-    public float TargetLHEquipmentHealth
-    {
-        get => _targetLHEquipmentHealth;
-        set
-        {
-            if (_targetLHEquipmentHealth != value)
-            {
-                _targetLHEquipmentHealth = value;
+                break;
+            case BlackboardEventArgs.WhatChanged.LHEquipment:
                 ValueChanged?.Invoke(this, new BlackboardEventArgs { ThisChanged = BlackboardEventArgs.WhatChanged.TargetLHEquipment });
-            }
+                break;           
+            case BlackboardEventArgs.WhatChanged.CurrentAttack:
+                AttackType value = _targetBlackboard.variable.CurrentAttack;
+                if (StorredAttacks.ContainsKey(value))
+                {
+                    StorredAttacks[value] += 1;
+                    _observedAttack = EvaluateAttackCount(value);
+                }
+                break;
+            case BlackboardEventArgs.WhatChanged.ShieldState:
+                ValueChanged?.Invoke(this, new BlackboardEventArgs { ThisChanged = BlackboardEventArgs.WhatChanged.TargetShieldState });
+                break;
+           
         }
     }
 
-    private bool _hasRHEquipment;
-    public bool HasRHEquipment
-    {
-        get => _hasRHEquipment;
-        set
-        {
-            if (_hasRHEquipment != value)
-            {
-                _hasRHEquipment = value;
-                ValueChanged?.Invoke(this, new BlackboardEventArgs { ThisChanged = BlackboardEventArgs.WhatChanged.RHEquipmentPossesion });
-            }
-        }
-    }
-
-    private bool _hasLHEquipment;
-    public bool HasLHEquipment
-    {
-        get => _hasLHEquipment;
-        set
-        {
-            if (_hasLHEquipment != value)
-            {
-                _hasLHEquipment = value;
-                ValueChanged?.Invoke(this, new BlackboardEventArgs { ThisChanged = BlackboardEventArgs.WhatChanged.LHEquipmenPossesion });
-            }
-        }
-    }
-
-    private float _targetWeaponRange;
-    public float TargetWeaponRange
-    {
-        get => _targetWeaponRange;
-        set
-        {
-            if (_targetWeaponRange != value)
-            {
-                _targetWeaponRange = value;
-                ValueChanged?.Invoke(this, new BlackboardEventArgs { ThisChanged = BlackboardEventArgs.WhatChanged.TargetWeaponRange });
-            }
-        }
-    }
-    
     private float _weaponRange;
     public float WeaponRange
     {
@@ -296,7 +235,6 @@ public class BlackboardVariable : ScriptableObject
             if (_weaponRange != value)
             {
                 _weaponRange = value;
-                ValueChanged?.Invoke(this, new BlackboardEventArgs { ThisChanged = BlackboardEventArgs.WhatChanged.WeaponRange });
             }
         }
     }
@@ -314,8 +252,7 @@ public class BlackboardVariable : ScriptableObject
         {
             if (_storredAttacks != value)
             {
-                _storredAttacks = value;
-                
+                _storredAttacks = value;               
             }
         }
     }
@@ -326,74 +263,60 @@ public class BlackboardVariable : ScriptableObject
     }
     private AttackType EvaluateAttackCount(AttackType addedAttack)
     {
+        foreach (var key in StorredAttacks.Keys.ToList())
+        {
+            if (key != addedAttack)
+                StorredAttacks[key] -= StorredAttacks[key] > 0 ? 1 : 0;
+            else
+                StorredAttacks[key] -= StorredAttacks[key] > _numOfAttacksSeen ? 1 : 0;
+        }
+                
         int highestCount = 0;
         AttackType attackType = AttackType.None;
         foreach(KeyValuePair<AttackType, int> att in StorredAttacks)
-        {
-            
+        {            
             if (att.Value > highestCount)
             {
                 highestCount = att.Value;
                 attackType = att.Key;
             }
         }
-        
-        
-        foreach (var key in StorredAttacks.Keys.ToList())
-        {
-            if (key != addedAttack)
-                StorredAttacks[key] -= StorredAttacks[key] > 0 ? 1 : 0;
-            else
-                StorredAttacks[key] -= StorredAttacks[key] > 5 ? 1 : 0;
-        }
            
-        return highestCount >= 5? attackType : AttackType.None;
+        return highestCount >= _numOfAttacksSeen ? attackType : AttackType.None;
     }
 
-    private AttackType _targetCurrentAttack;
-    public AttackType TargetCurrentAttack
+    private AttackType _currentAttack;
+    public AttackType CurrentAttack
     {
-        get => _targetCurrentAttack;
+        get => _currentAttack;
         set
         {
-            if (_targetCurrentAttack == AttackType.None && _targetCurrentAttack == value) return;
-            if ( Target )
+            if (_currentAttack != value)
             {
-                _targetCurrentAttack = value;
-                //Debug.Log($"new currentAttack{_targetCurrentAttack}");
-                ValueChanged?.Invoke(this, new BlackboardEventArgs { ThisChanged = BlackboardEventArgs.WhatChanged.TargetCurrentAttack });
-
-                if (StorredAttacks.ContainsKey(value))
-                {
-                    StorredAttacks[_targetCurrentAttack] += 1;
-                    _observedAttack = EvaluateAttackCount(_targetCurrentAttack);
-                    ValueChanged?.Invoke(this, new BlackboardEventArgs { ThisChanged = BlackboardEventArgs.WhatChanged.TargetObservedAttack });
-
-                }
+                _currentAttack = value;
+                //Debug.Log($"new currentAttack{_currentAttack}");
+                ValueChanged?.Invoke(this, new BlackboardEventArgs { ThisChanged = BlackboardEventArgs.WhatChanged.CurrentAttack });
             }
         }
     }
     public void ResetCurrentAttack()
     {
-        _targetCurrentAttack = AttackType.None;
+        _currentAttack = AttackType.None;
     }
 
-
-    private Direction _targetShieldState;
-    public Direction TargetShieldState
+    private int _numOffAttacks = 0;
+    public int NumOffAttacks
     {
-        get => _targetShieldState;
+        get => _numOffAttacks;
         set
         {
-            if (_targetShieldState != value)
-            {
-                _targetShieldState = value;
-                ValueChanged?.Invoke(this, new BlackboardEventArgs { ThisChanged = BlackboardEventArgs.WhatChanged.TargetShieldState });
-                TargetOpening = FindOpening();
-            }
+            if ( _numOffAttacks >= 5)
+                IsPlayerAgressive = true;
+            else
+                IsPlayerAgressive = false;
         }
     }
-    
+
     private Direction _shieldState;
     public Direction ShieldState
     {
@@ -436,42 +359,42 @@ public class BlackboardVariable : ScriptableObject
         }
     }
 
-    private Opening FindOpening()
-    {
-        Direction direction = Direction.Idle;
-        Size size = Size.Small;
-
-        if (TargetState == AttackState.Stun)
-        {
-            size = Size.Large;
-            direction = Direction.ToLeft;
-        }
-        else if (TargetShieldState == Direction.Idle)
-        {
-            size = Size.Medium;
-            direction = Direction.ToCenter;
-        }
-        else if (TargetShieldState != Direction.ToCenter)
-        {
-            size = Size.Medium;
-            if (TargetShieldState != Direction.ToLeft)
-                direction = Direction.ToRight;
-            else if (TargetShieldState != Direction.ToRight)
-                direction = Direction.ToLeft;
-        }
-        else if (TargetShieldState == Direction.ToCenter)
-        {
-            size = Size.Small;
-            direction = Direction.ToRight;
-        }
-        else
-        {
-            size = Size.None;
-            direction = Direction.Idle;
-        }
-
-
-        return new Opening(direction, size);
-    }
+    //private Opening FindOpening()
+    //{
+    //    Direction direction = Direction.Idle;
+    //    Size size = Size.Small;
+    //
+    //    if (TargetState == AttackState.Stun)
+    //    {
+    //        size = Size.Large;
+    //        direction = Direction.ToLeft;
+    //    }
+    //    else if (TargetShieldState == Direction.Idle)
+    //    {
+    //        size = Size.Medium;
+    //        direction = Direction.ToCenter;
+    //    }
+    //    else if (TargetShieldState != Direction.ToCenter)
+    //    {
+    //        size = Size.Medium;
+    //        if (TargetShieldState != Direction.ToLeft)
+    //            direction = Direction.ToRight;
+    //        else if (TargetShieldState != Direction.ToRight)
+    //            direction = Direction.ToLeft;
+    //    }
+    //    else if (TargetShieldState == Direction.ToCenter)
+    //    {
+    //        size = Size.Small;
+    //        direction = Direction.ToRight;
+    //    }
+    //    else
+    //    {
+    //        size = Size.None;
+    //        direction = Direction.Idle;
+    //    }
+    //
+    //
+    //    return new Opening(direction, size);
+    //}
 
 }

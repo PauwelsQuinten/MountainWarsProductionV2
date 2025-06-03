@@ -107,7 +107,7 @@ public class BlockAction : GoapAction
             ,
             AnimationStart = true
         };
-        _outputEvent.Raise(this, package);
+        _outputEvent.Raise(npc.transform, package);
         _aiControllerEvent.Raise(this, new AIInputEventArgs { Input = AIInputAction.LockShield, Sender = npc });
     }
 

@@ -7,7 +7,7 @@ public class StateManager : MonoBehaviour
     private const string PLAYER = "Player";
     [Header("Events")]
     [SerializeField] GameEvent _OnStunRecovery;
-    [SerializeField] GameEvent _OnStunEffects;
+    [SerializeField] GameEvent _vfx;
 
     [Header("Refrence")]
     public BlackboardReference BlackboardRef;
@@ -159,7 +159,7 @@ public class StateManager : MonoBehaviour
         {
             AttackState = AttackState.Stun;
             _recoverCoroutine = StartCoroutine(RecoverStun(stunDuration));
-            _OnStunEffects.Raise(this, new VfxEventArgs { Type = VfxType.Stuned, Duration = stunDuration });
+            _vfx.Raise(this, new VfxEventArgs { Type = VfxType.Stuned, Duration = stunDuration });
         }
 
         BlackboardRef.variable.State = AttackState.Stun;

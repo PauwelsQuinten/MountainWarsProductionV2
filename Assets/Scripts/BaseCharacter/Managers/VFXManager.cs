@@ -19,6 +19,17 @@ public class VFXManager : MonoBehaviour
         var prf = FindPrefab(args.Type);
         if (prf == null) return;
 
+        if (args.Cancel)
+        {
+            CancelVfx(args.Type);
+            return;
+        }
+
+        CreateVfx(args, prf);
+    }
+
+    private void CreateVfx(VfxEventArgs args, VFXState prf)
+    {
         var inst = Instantiate(prf, transform);
         inst.transform.localPosition = Vector3.zero;
         inst.transform.localRotation = Quaternion.identity;
@@ -33,7 +44,7 @@ public class VFXManager : MonoBehaviour
 
         //inst.GetComponentInChildren<VisualEffect>().Play;
 
-        float duration = args.Duration == 0? inst.Duration : args.Duration;
+        float duration = args.Duration == 0 ? inst.Duration : args.Duration;
         _ = ManageLifeTime(inst, duration);
     }
 
@@ -45,6 +56,14 @@ public class VFXManager : MonoBehaviour
         Destroy(inst.gameObject);
         _vfxInstances.Remove(inst.Type);
 
+    }
+
+    private void CancelVfx(VfxType type)
+    {
+        if (!_vfxInstances.ContainsKey(type) && _vfxInstances[type].gameObject == null) return;
+
+        Destroy(_vfxInstances[type].gameObject);
+        _vfxInstances.Remove(type);
     }
 
     private VFXState FindPrefab(VfxType type)

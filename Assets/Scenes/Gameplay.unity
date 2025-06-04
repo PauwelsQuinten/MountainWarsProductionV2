@@ -13448,6 +13448,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2866740043489072018, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
+      propertyPath: _vfx
+      value: 
+      objectReference: {fileID: 11400000, guid: 6c549348f9580bb4ea78b04fe2556749, type: 2}
     - target: {fileID: 3245208991503616836, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
       propertyPath: _maxAngle
       value: 80
@@ -13460,10 +13464,34 @@ PrefabInstance:
       propertyPath: _shoulderOffset
       value: 0.504
       objectReference: {fileID: 0}
+    - target: {fileID: 3801166856632093193, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
+      propertyPath: _vfx
+      value: 
+      objectReference: {fileID: 11400000, guid: 6c549348f9580bb4ea78b04fe2556749, type: 2}
+    - target: {fileID: 3836692364938951464, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
+      propertyPath: _vfxPrefabs.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3836692364938951464, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
+      propertyPath: '_vfxPrefabs.Array.data[1]'
+      value: 
+      objectReference: {fileID: 5132130961500409141, guid: 6cdf394850ee3eb4c803725073aef278, type: 3}
+    - target: {fileID: 3836692364938951464, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
+      propertyPath: '_vfxPrefabs.Array.data[2]'
+      value: 
+      objectReference: {fileID: 5132130961500409141, guid: b1031d869faf90d47a3eb855871387a9, type: 3}
+    - target: {fileID: 3982304234417609198, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
+      propertyPath: _vfx
+      value: 
+      objectReference: {fileID: 11400000, guid: 6c549348f9580bb4ea78b04fe2556749, type: 2}
     - target: {fileID: 3982304234417609198, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
       propertyPath: StartCamera
       value: 
       objectReference: {fileID: 154107438}
+    - target: {fileID: 3982304234417609198, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
+      propertyPath: _OnStunEffects
+      value: 
+      objectReference: {fileID: 11400000, guid: 6c549348f9580bb4ea78b04fe2556749, type: 2}
     - target: {fileID: 3982304234417609198, guid: b86017f2f8100ff4296f48da22866a65, type: 3}
       propertyPath: IsInDialogue.variable
       value: 
@@ -17905,6 +17933,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 154107434}
     - target: {fileID: 5318217082051312346, guid: e9651b4801f36d14e86c1cb82aa75d59, type: 3}
+      propertyPath: _vfx
+      value: 
+      objectReference: {fileID: 11400000, guid: 6c549348f9580bb4ea78b04fe2556749, type: 2}
+    - target: {fileID: 5318217082051312346, guid: e9651b4801f36d14e86c1cb82aa75d59, type: 3}
       propertyPath: IsInDialogue.variable
       value: 
       objectReference: {fileID: 11400000, guid: b4d55fcfd48340444ac77031d3fa370d, type: 2}
@@ -17912,6 +17944,26 @@ PrefabInstance:
       propertyPath: IsInStaticDialogue.variable
       value: 
       objectReference: {fileID: 11400000, guid: f6083cd36ce3da147a3dbea5bc725bb7, type: 2}
+    - target: {fileID: 5354098008686373181, guid: e9651b4801f36d14e86c1cb82aa75d59, type: 3}
+      propertyPath: _vfx
+      value: 
+      objectReference: {fileID: 11400000, guid: 6c549348f9580bb4ea78b04fe2556749, type: 2}
+    - target: {fileID: 6432638051065147558, guid: e9651b4801f36d14e86c1cb82aa75d59, type: 3}
+      propertyPath: _vfx
+      value: 
+      objectReference: {fileID: 11400000, guid: 6c549348f9580bb4ea78b04fe2556749, type: 2}
+    - target: {fileID: 8578922648865236397, guid: e9651b4801f36d14e86c1cb82aa75d59, type: 3}
+      propertyPath: _vfxPrefabs.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8578922648865236397, guid: e9651b4801f36d14e86c1cb82aa75d59, type: 3}
+      propertyPath: '_vfxPrefabs.Array.data[1]'
+      value: 
+      objectReference: {fileID: 5132130961500409141, guid: 6cdf394850ee3eb4c803725073aef278, type: 3}
+    - target: {fileID: 8578922648865236397, guid: e9651b4801f36d14e86c1cb82aa75d59, type: 3}
+      propertyPath: '_vfxPrefabs.Array.data[2]'
+      value: 
+      objectReference: {fileID: 5132130961500409141, guid: b1031d869faf90d47a3eb855871387a9, type: 3}
     - target: {fileID: 8761888366074066331, guid: e9651b4801f36d14e86c1cb82aa75d59, type: 3}
       propertyPath: m_Name
       value: Enemy

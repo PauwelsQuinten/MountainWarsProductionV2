@@ -38,7 +38,7 @@ public class PatchUp : MonoBehaviour
     {
         _patchStartTime = Time.time;
         _patchUpEvent.Raise(this, false);
-        _changeAnimation.Raise(this, new AnimationEventArgs { AnimLayer = { 3 }, AnimState = AnimationState.PatchUp, DoResetIdle = true });
+        _changeAnimation.Raise(this, new AnimationEventArgs { AnimLayer =  3 , AnimState = AnimationState.PatchUp });
 
         _patchupRoutine = StartCoroutine(StartPatchingUp(_patchUpDuration.value));
     }
@@ -55,7 +55,7 @@ public class PatchUp : MonoBehaviour
         else
             _patchUpEvent.Raise(this, false);
 
-        _changeAnimation.Raise(this, new AnimationEventArgs { AnimLayer = { 3 }, AnimState = AnimationState.Empty, DoResetIdle = false });
+        _changeAnimation.Raise(this, new AnimationEventArgs { AnimLayer = 3, AnimState = AnimationState.Empty });
         _patchStartTime = 0;
     }
 

@@ -104,7 +104,9 @@ namespace UnityEngine
         //this will take less Stamina from you and cause a small knockback to the opponent. 
         FullyBlocked,
         //This will take the least amount of Stamina and create the biggest opening to attack the opponent afterwards
-        Parried
+        Parried,
+        //This is when the opponent hit the place of your shied, you wont get damage but the enemy will also not get stunned
+        PassiveBlock
     }
     
     public enum BlockMedium

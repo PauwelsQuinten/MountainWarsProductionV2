@@ -82,7 +82,7 @@ public class Parry : MonoBehaviour
         if (sender.gameObject != gameObject) return;
 
         _InParryZone = (bool)obj;
-        Debug.Log($"Parry mode = {_InParryZone}");
+        //Debug.Log($"Parry mode = {_InParryZone}");
 
         if (_tryDisarm && IsSuccesfullDisarm())
             OnSuccesfullDisarm();
@@ -189,20 +189,20 @@ public class Parry : MonoBehaviour
     
     private void StartAnimation(AimingOutputArgs args, BlockMedium parryMedium)
     {
-        List<int> animLayers = new List<int>{ 1 };
+        int animLayers = 1 ;
         float multiplier = 1f;
         //float _parrySpeedShield = args.Speed < 2.5f ? 2.5f : args.Speed;
         if (args.Direction == Direction.ToLeft)
         {
             if (parryMedium == BlockMedium.Shield)
                 _changeAnimation.Raise(this, new AnimationEventArgs 
-                { AnimState = AnimationState.ParryShieldLeft, AnimLayer = animLayers, DoResetIdle = true, Speed = _parrySpeedShield, IsFullBodyAnim = true });
+                { AnimState = AnimationState.ParryShieldLeft, AnimLayer = animLayers, Speed = _parrySpeedShield, IsFullBodyAnim = true });
             else if (parryMedium == BlockMedium.Sword)
             {                
                 if (_tryDisarm)
                     multiplier = 2f;
                 _changeAnimation.Raise(this, new AnimationEventArgs
-                { AnimState = AnimationState.ParrySwordLeft, AnimLayer = animLayers, DoResetIdle = true, Speed = _parrySpeedSword * multiplier, IsFullBodyAnim = true });
+                { AnimState = AnimationState.ParrySwordLeft, AnimLayer = animLayers, Speed = _parrySpeedSword * multiplier, IsFullBodyAnim = true });
             }
         
         }
@@ -210,13 +210,13 @@ public class Parry : MonoBehaviour
         {
             if (parryMedium == BlockMedium.Shield)
                 _changeAnimation.Raise(this, new AnimationEventArgs 
-                { AnimState = AnimationState.ParryShieldRight, AnimLayer = animLayers, DoResetIdle = true, Speed = _parrySpeedShield, IsFullBodyAnim = true });
+                { AnimState = AnimationState.ParryShieldRight, AnimLayer = animLayers, Speed = _parrySpeedShield, IsFullBodyAnim = true });
             else if (parryMedium == BlockMedium.Sword)
             {
                 if (_tryDisarm)
                     multiplier = 2f;
                 _changeAnimation.Raise(this, new AnimationEventArgs 
-                { AnimState = AnimationState.ParrySwordRight, AnimLayer = animLayers, DoResetIdle = true, Speed = _parrySpeedSword * multiplier, IsFullBodyAnim = true });
+                { AnimState = AnimationState.ParrySwordRight, AnimLayer = animLayers, Speed = _parrySpeedSword * multiplier, IsFullBodyAnim = true });
             }
 
         }

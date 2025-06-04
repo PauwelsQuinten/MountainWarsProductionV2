@@ -49,6 +49,8 @@ public class StaminaManager : MonoBehaviour
         _changedStamina.Raise(this, new StaminaEventArgs { CurrentStamina = CurrentStamina, MaxStamina = _maxStamina });
         if (CurrentStamina <= _maxStamina) return;
         _canRegen = false;
+
+        UpdateBlackboard();
     }
 
     public void LoseStamina(Component sender, object obj)

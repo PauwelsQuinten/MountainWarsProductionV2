@@ -192,6 +192,13 @@ public class Blocking : MonoBehaviour
                     args.BlockPower = 3f;
                     //_succesfullHitEvent.Raise(this, args);
                     break;
+                case BlockResult.PassiveBlock:
+                    _loseStamina.Raise(this, new StaminaEventArgs { StaminaCost = _staminaCost.value * 1.5f});
+                    _stunFeedbackEvent.Raise(this, new StunEventArgs 
+                    { StunDuration = _stunValues.variable.StunWhenGettingPartiallyBlocked *0.5f, StunTarget = args.Attacker });
+                    args.AttackPower *= 0.8f;
+                    args.BlockPower = 3f;
+                    break;
             }
             //Sent to equipment to deal with the damage to used equipment
             if (_equipmentUpdate)
@@ -220,16 +227,17 @@ public class Blocking : MonoBehaviour
         //send event for animation
         if (_blockMedium == BlockMedium.Shield)
             _changeAnimation.Raise(this, new AnimationEventArgs 
-            { AnimState = AnimationState.ShieldEquip, AnimLayer = { 4 }, DoResetIdle = false, BlockDirection = _blockDirection, BlockMedium = BlockMedium.Shield });
+            { AnimState = AnimationState.ShieldEquip, AnimLayer = 4, BlockDirection = _blockDirection, BlockMedium = BlockMedium.Shield });
         else if (_blockMedium == BlockMedium.Sword)
             _changeAnimation.Raise(this, new AnimationEventArgs 
-            { AnimState = AnimationState.SwordEquip, AnimLayer = { 3 }, DoResetIdle = false, BlockDirection = _blockDirection, BlockMedium = BlockMedium.Sword });
+            { AnimState = AnimationState.SwordEquip, AnimLayer = 3, BlockDirection = _blockDirection, BlockMedium = BlockMedium.Sword });
     }
 
     private void LowerEquipment()
     {
-        _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Empty, AnimLayer = { 3,4 }, DoResetIdle = false, BlockDirection = Direction.Idle });
-        _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Idle, AnimLayer = { 1 }, DoResetIdle = false});
+        _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Empty, AnimLayer = 3, BlockDirection = Direction.Idle });
+        _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Empty, AnimLayer = 4, BlockDirection = Direction.Idle });
+        _changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Idle, AnimLayer = 1});
     }
 
     private void UpdateBlackboard(AimingOutputArgs args)
@@ -360,7 +368,7 @@ public class Blocking : MonoBehaviour
         {
             case AttackType.Stab:
                 if (blockDirection == Direction.Idle)
-                    blockResult = BlockResult.Hit;
+                    blockResult = BlockResult.PassiveBlock;
                 else if (blockDirection == Direction.ToCenter)
                     blockResult = BlockResult.FullyBlocked;
                 break;
@@ -370,7 +378,7 @@ public class Blocking : MonoBehaviour
                     blockResult = BlockResult.FullyBlocked;
                 else if (blockDirection == Direction.ToRight )
                     blockResult = BlockResult.Hit;
-                else
+                else if (blockDirection == Direction.ToCenter)
                     blockResult = BlockResult.HalfBlocked;
                 break;
 

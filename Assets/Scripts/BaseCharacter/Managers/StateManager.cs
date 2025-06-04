@@ -38,7 +38,7 @@ public class StateManager : MonoBehaviour
 
     [HideInInspector]
     public bool IsBleeding;
-    [HideInInspector]
+    //[HideInInspector]
     public bool InAnimiation = false;
     [HideInInspector]
     public bool WeaponIsSheathed;

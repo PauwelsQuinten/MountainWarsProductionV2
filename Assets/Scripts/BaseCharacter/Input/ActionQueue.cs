@@ -1,7 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEngine.Rendering.GPUSort;
-using static UnityEngine.Rendering.ReloadAttribute;
 
 public class ActionQueue : MonoBehaviour
 {
@@ -34,16 +32,14 @@ public class ActionQueue : MonoBehaviour
             if (_inputQueue.Peek().Package.AnimationStart && _actionCount > 0)
                 _actionCount--;
             var package = _inputQueue.Dequeue();
-            /*if (gameObject.CompareTag("Player"))
-                Debug.Log($"{package.Package.AttackSignal} ,feint = {package.Package.IsFeint}");*/
+            
             _activateAction.Raise(this, package.Package);
         }
 
         //Call next element imediatly if its about the feint signal, this is to continue the attack
         if (_inputQueue.Count > 0 && !_inputQueue.Peek().Package.IsFeint)
         {
-            if (gameObject.CompareTag("Player"))
-                Debug.Log("Continue attack");
+            
             _activateAction.Raise(this, _inputQueue.Dequeue().Package);
         }
         if (IsOldestElementInQueueToLong(_maxTimeInQueue))

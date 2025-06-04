@@ -81,7 +81,8 @@ public class FMODAudioHandler : MonoBehaviour
     private EventInstance _sheathSFXInstance;
     [SerializeField] private EventReference _unsheathSFX;
     private EventInstance _unsheathSFXInstance;
-
+    [SerializeField] private EventReference _bandagingSFX;
+    private EventInstance _bandagingSFXInstance;
     [Header("SFX/Panels")] 
     [SerializeField] private EventReference _comicPanelSwapSFX;
     private EventInstance _comicPanelSwapSFXInstance;
@@ -250,6 +251,14 @@ public class FMODAudioHandler : MonoBehaviour
         
         _nextDialogueSFXInstance.start();
         _nextDialogueSFXInstance.release();
+    }
+
+    public void PlayPatchUpSFX(Component sender, object obj)
+    {
+        _bandagingSFXInstance = RuntimeManager.CreateInstance(_bandagingSFX);
+        
+        _bandagingSFXInstance.start();
+        _bandagingSFXInstance.release();
     }
 
     public void PlayFootstepsSFX(Component sender, object obj)

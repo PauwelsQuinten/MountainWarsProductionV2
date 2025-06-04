@@ -9,6 +9,10 @@ namespace UnityEngine
         public int NewViewIndex;
         public int CurrentViewIndex;
 
+        public Camera CurrentCamera;
+        public Camera NextCamera;
+
         public bool IsTeleportTrigger;
+        public bool DoRunTriggerExit;
     }
 }

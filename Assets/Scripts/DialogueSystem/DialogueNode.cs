@@ -49,6 +49,8 @@ public class DialogueNode : ScriptableObject
     [SerializeField]
     Rect rect = new Rect(0, 0, 200, 100);
     [SerializeField]
+    GameEvent OnCompletionEvent;
+    [SerializeField]
     string onEnterAction;
 
     [SerializeField]
@@ -170,6 +172,11 @@ public class DialogueNode : ScriptableObject
     public float GetHeight()
     {
         return rect.height;
+    }
+
+    public GameEvent GetOnCompletionEvent()
+    {
+        return OnCompletionEvent;
     }
 
     public bool CheckCondition(IEnumerable<IPredicateEvaluator> evaluators)
@@ -375,6 +382,17 @@ public class DialogueNode : ScriptableObject
             Undo.RecordObject(this, " Update Needs To Be Flipped");
 
             needsToBeFlipped = newNeedsToBeFlipped;
+            EditorUtility.SetDirty(this);
+        }
+    }
+
+    public void SetOnCompletionEvent(GameEvent newOnCompletionEvent)
+    {
+        if (newOnCompletionEvent != OnCompletionEvent)
+        {
+            Undo.RecordObject(this, " Update On Completion Event");
+
+            OnCompletionEvent = newOnCompletionEvent;
             EditorUtility.SetDirty(this);
         }
     }

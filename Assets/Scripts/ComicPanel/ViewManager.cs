@@ -47,6 +47,10 @@ public class ViewManager : MonoBehaviour
     [SerializeField]
     private RenderTexture _renderTexture;
 
+    [Header("canvas")]
+    [SerializeField]
+    private Canvas _canvas;
+
     private Camera _cam;
 
     private TriggerEnterEventArgs _currentArgs;
@@ -75,7 +79,7 @@ public class ViewManager : MonoBehaviour
         {
             if (!_isSwitchingPanel)
             {
-                StartCoroutine(DoSwitchPanel(_biomePanels[args.newSceneIndex].transform.position + (_cam.transform.forward * _offsetZ), _panels[args.NewViewIndex].transform.position + (_cam.transform.forward * _offsetZ), args.CurrentSceneIndex, args.newSceneIndex));
+                StartCoroutine(DoSwitchPanel(_biomePanels[args.newSceneIndex].transform.position + (_cam.transform.forward * _offsetZ), _panels[args.NewViewIndex].transform.position + (_cam.transform.forward * _offsetZ), args.CurrentSceneIndex, args.newSceneIndex, args.CurrentSceneIndex != args.newSceneIndex));
             }
         }
         else
@@ -95,8 +99,14 @@ public class ViewManager : MonoBehaviour
     {
         if(_isNearHidingSpot)_isNearHidingSpot = false;
 
-        TriggerEnterEventArgs args = obj as TriggerEnterEventArgs;
+        TriggerExitEventArgs args = obj as TriggerExitEventArgs;
         if (args == null) return;
+        if (!args.DoRunTriggerExit) return;
+
+        if (!_isSwitchingPanel)
+        {
+            StartCoroutine(DoSwitchPanel(_biomePanels[args.CurrentSceneIndex].transform.position + (_cam.transform.forward * _offsetZ), _panels[args.CurrentViewIndex].transform.position + (_cam.transform.forward * _offsetZ), args.newSceneIndex, args.CurrentSceneIndex, args.CurrentSceneIndex != args.newSceneIndex));
+        }
     }
 
     public void EnterHiding(Component sender, object obj)
@@ -109,8 +119,9 @@ public class ViewManager : MonoBehaviour
         }
     }
 
-    private IEnumerator DoSwitchPanel(Vector3 newCamPosBiome, Vector3 newCamPosPanel, int currentBiomeIndex, int nextBiomeIndex)
+    private IEnumerator DoSwitchPanel(Vector3 newCamPosBiome, Vector3 newCamPosPanel, int currentBiomeIndex, int nextBiomeIndex, bool doBiomeSwitch)
     {
+        _canvas.gameObject.SetActive(false);
         GameObject player = GameObject.Find("Player");
         CharacterMovement playerMove = player.GetComponent<CharacterMovement>();
         playerMove.enabled = false;
@@ -121,38 +132,42 @@ public class ViewManager : MonoBehaviour
         Vector3 startpos = _cam.transform.position;
         _panelSwitchSound.Raise(this, EventArgs.Empty);
 
-        _biomePanels[currentBiomeIndex].gameObject.SetActive(false);
-        _biomePanels[nextBiomeIndex].gameObject.SetActive(true);
-
-
-        while (_cam.orthographicSize < camSize + 0.76f)
+        if (doBiomeSwitch)
         {
-            _cam.orthographicSize += _camZoomSpeed * Time.deltaTime;
-            yield return null;
+            _biomePanels[currentBiomeIndex].gameObject.SetActive(false);
+            _biomePanels[nextBiomeIndex].gameObject.SetActive(true);
+
+
+            while (_cam.orthographicSize < camSize + 0.76f)
+            {
+                _cam.orthographicSize += _camZoomSpeed * Time.deltaTime;
+                yield return null;
+            }
+            _cam.orthographicSize = camSize + 0.76f;
+
+            while (Vector3.Distance(_cam.transform.position, newCamPosBiome) > 0.2f)
+            {
+                time += Time.deltaTime;
+                _cam.transform.position = Vector3.Lerp(startpos, newCamPosBiome, _panelMoveSpeed * time);
+                yield return null;
+            }
+            _cam.transform.position = newCamPosBiome;
+
+            while (_cam.orthographicSize > camSize + 0.76f)
+            {
+                _cam.orthographicSize -= _camZoomSpeed * Time.deltaTime;
+                yield return null;
+            }
+            _cam.orthographicSize = camSize;
+
+            yield return new WaitForSeconds(_panelswitchPauseTime);
+
+            camSize = _cam.orthographicSize;
+            time = 0;
+            startpos = _cam.transform.position;
+            _panelSwitchSound.Raise(this, EventArgs.Empty);
         }
-        _cam.orthographicSize = camSize + 0.76f;
 
-        while (Vector3.Distance(_cam.transform.position, newCamPosBiome) > 0.2f)
-        {
-            time += Time.deltaTime;
-            _cam.transform.position = Vector3.Lerp(startpos, newCamPosBiome, _panelMoveSpeed * time);
-            yield return null;
-        }
-        _cam.transform.position = newCamPosBiome;
-
-        while (_cam.orthographicSize > camSize + 0.76f)
-        {
-            _cam.orthographicSize -= _camZoomSpeed * Time.deltaTime;
-            yield return null;
-        }
-        _cam.orthographicSize = camSize;
-
-        yield return new WaitForSeconds(_panelswitchPauseTime);
-
-        camSize = _cam.orthographicSize;
-        time = 0;
-        startpos = _cam.transform.position;
-        _panelSwitchSound.Raise(this, EventArgs.Empty);
         while (_cam.orthographicSize < camSize + 0.76f)
         {
             _cam.orthographicSize += _camZoomSpeed * Time.deltaTime;
@@ -176,10 +191,12 @@ public class ViewManager : MonoBehaviour
         _cam.orthographicSize = camSize;
         _isSwitchingPanel = false;
         playerMove.enabled = true;
+        _canvas.gameObject.SetActive(true);
     }
 
     private IEnumerator ShowHidingSpot(bool isAvtive)
     {
+        _canvas.gameObject.SetActive(false);
         Vector3 startPos = Vector3.zero;
         Vector3 originPos = Vector3.zero;
         if (!isAvtive)
@@ -218,10 +235,12 @@ public class ViewManager : MonoBehaviour
             _panels[_currentArgs.NewViewIndex].transform.position = startPos;
             _panels[_currentArgs.NewViewIndex].SetActive(false);
         }
+        _canvas.gameObject.SetActive(true);
     }
 
     private IEnumerator DoShowDown(GameObject vsTarget)
     {
+        _canvas.gameObject.SetActive(false);
         List<StateManager> targets = GameObject.FindObjectsOfType<StateManager>().ToList();
 
 
@@ -358,6 +377,6 @@ public class ViewManager : MonoBehaviour
         enemyMove.enabled = true;
         enemyNavMove.enabled = true;
         enemyNavMove.isStopped = false;
-
+        _canvas.gameObject.SetActive(true);
     }
 }

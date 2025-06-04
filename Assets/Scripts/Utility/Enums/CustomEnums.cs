@@ -309,6 +309,11 @@ namespace UnityEngine
 
     }
 
-
+    public enum VfxType
+    {
+        Stuned,
+        Hit,
+        Bleeding
+    }
 
 }

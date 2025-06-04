@@ -7,6 +7,7 @@ public class StateManager : MonoBehaviour
     private const string PLAYER = "Player";
     [Header("Events")]
     [SerializeField] GameEvent _OnStunRecovery;
+    [SerializeField] GameEvent _OnStunEffects;
 
     [Header("Refrence")]
     public BlackboardReference BlackboardRef;
@@ -122,8 +123,9 @@ public class StateManager : MonoBehaviour
         if (loseEquipmentEventArgs != null && sender.gameObject == gameObject)
         {
             IsHoldingShield = false;
-            SetStun(2f);
             InAnimiation = false;
+            float duration = 2f;
+            SetStun(duration);
         }
 
         else if (args != null && args.StunTarget == gameObject)
@@ -157,9 +159,9 @@ public class StateManager : MonoBehaviour
         {
             AttackState = AttackState.Stun;
             _recoverCoroutine = StartCoroutine(RecoverStun(stunDuration));
-            InAnimiation = false;
+            _OnStunEffects.Raise(this, new VfxEventArgs { Type = VfxType.Stuned, Duration = stunDuration });
         }
-       
+
         BlackboardRef.variable.State = AttackState.Stun;
         BlackboardRef.variable.ResetCurrentAttack();
     }

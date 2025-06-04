@@ -25,6 +25,8 @@ public class AnimationEvents : MonoBehaviour
     [SerializeField] 
     private GameEvent _stunned;
     [SerializeField] 
+    private GameEvent _chargeAttack;
+    [SerializeField] 
     private GameEvent _moveAttack;
     private int _storredDirection = 0;
     private void Start()
@@ -103,5 +105,9 @@ public class AnimationEvents : MonoBehaviour
         else
             _moveAttack.Raise(this, new AttackMoveEventArgs { Attacker = transform.parent.gameObject, AttackType = AttackType.Stab });
         Debug.Log($"Move 1 = f, 0 = b. {forward}, {transform.parent}");
+    }
+    public void AttackCharge()
+    {
+        _chargeAttack.Raise(this.transform.parent, null);
     }
 }

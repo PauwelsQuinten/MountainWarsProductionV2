@@ -235,7 +235,14 @@ public class FMODAudioHandler : MonoBehaviour
         _stunnedSFXInstance.start();
         _stunnedSFXInstance.release();
     }
-
+    public void PlayChargeSFX(Component sender, object obj)
+    {
+        _attackChargeSFXInstance = RuntimeManager.CreateInstance(_attackChargeSFX);
+        _attributes = RuntimeUtils.To3DAttributes(sender.transform.position);
+        _attackChargeSFXInstance.set3DAttributes(_attributes);
+        _attackChargeSFXInstance.start();
+        _attackChargeSFXInstance.release();
+    }
     public void PlayDialogueStartSFX(Component sender, object obj)
     {
         _dialogueStartSFXInstance = RuntimeManager.CreateInstance(_dialogueStartSFX);

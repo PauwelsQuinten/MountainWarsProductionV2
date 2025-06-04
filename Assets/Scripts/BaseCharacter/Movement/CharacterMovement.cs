@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.Windows;
 
 public class CharacterMovement : MonoBehaviour
 {
@@ -43,6 +44,13 @@ public class CharacterMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (_stateManager.IsInStaticDialogue.value)
+        {
+            _movedirection = Vector3.zero;
+            _changeAnimation.Raise(this, new WalkingEventArgs
+            { WalkDirection = _movedirection, Speed = 1, IsLockon = _stateManager.Target != null, Orientation = _stateManager.fOrientation });
+            return;
+        }
         if (_stopMovingDuringAttack && _inAttackMotion)
             return;
 

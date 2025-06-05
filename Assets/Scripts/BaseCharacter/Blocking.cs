@@ -195,7 +195,7 @@ public class Blocking : MonoBehaviour
                 case BlockResult.PassiveBlock:
                     _loseStamina.Raise(this, new StaminaEventArgs { StaminaCost = _staminaCost.value * 1.5f});
                     _stunFeedbackEvent.Raise(this, new StunEventArgs 
-                    { StunDuration = _stunValues.variable.StunWhenGettingPartiallyBlocked *0.5f, StunTarget = args.Attacker });
+                    { StunDuration = _stunValues.variable.StunWhenGettingPartiallyBlocked *0.5f, StunTarget = gameObject });
                     args.AttackPower *= 0.8f;
                     args.BlockPower = 3f;
                     break;

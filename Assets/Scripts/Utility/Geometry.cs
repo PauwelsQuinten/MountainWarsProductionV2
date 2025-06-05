@@ -168,5 +168,15 @@ namespace Geometry
 
             return true;
         }
+
+        public static float BodyRotationAngleFromOrientation(Orientation orientation)
+        {
+            float angle = (float)orientation;
+            angle = -angle + 90f;
+            if (angle > 180)
+                angle -= 360;
+            return angle;
+        }
+
     }
 }

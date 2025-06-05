@@ -51,6 +51,8 @@ public class DialogueNode : ScriptableObject
     [SerializeField]
     GameEvent OnCompletionEvent;
     [SerializeField]
+    List<string> EnemiesToActivate;
+    [SerializeField]
     string onEnterAction;
 
     [SerializeField]
@@ -177,6 +179,11 @@ public class DialogueNode : ScriptableObject
     public GameEvent GetOnCompletionEvent()
     {
         return OnCompletionEvent;
+    }
+
+    public List<string> GetEnemiesToActivate()
+    {
+        return EnemiesToActivate;
     }
 
     public bool CheckCondition(IEnumerable<IPredicateEvaluator> evaluators)
@@ -393,6 +400,17 @@ public class DialogueNode : ScriptableObject
             Undo.RecordObject(this, " Update On Completion Event");
 
             OnCompletionEvent = newOnCompletionEvent;
+            EditorUtility.SetDirty(this);
+        }
+    }
+
+    public void SetEnemiesToActivate(List<string> NewEnemiesToActivate)
+    {
+        if(NewEnemiesToActivate != EnemiesToActivate)
+        {
+            Undo.RecordObject(this, " Update Enemies To Activate");
+
+            EnemiesToActivate = NewEnemiesToActivate;
             EditorUtility.SetDirty(this);
         }
     }

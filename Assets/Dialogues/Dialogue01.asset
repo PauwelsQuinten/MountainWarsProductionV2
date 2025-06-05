@@ -23,7 +23,7 @@ MonoBehaviour:
   textDisplaySpeed: 0.01
   hasSecondaryLine: 0
   isShouting: 0
-  shoutIntensity: 0
+  shoutIntensity: 0.5
   newFont: {fileID: 0}
   newTextSize: 0
   balloonObject: {fileID: 2592667508800547744, guid: 2bac7fcd62ad2254ba0b5c6805ad7e98, type: 3}
@@ -38,8 +38,9 @@ MonoBehaviour:
     x: 28.000015
     y: 63.199993
     width: 200
-    height: 855.38
+    height: 802.76
   OnCompletionEvent: {fileID: 0}
+  EnemiesToActivate: []
   onEnterAction: 
   onExitAction: 
   condition:
@@ -79,11 +80,12 @@ MonoBehaviour:
   - 34e63512-100c-4bb8-8ece-3ba38bb83575
   rect:
     serializedVersion: 2
-    x: 249.99992
-    y: 79.20001
+    x: 278.79996
+    y: 102.400024
     width: 200
-    height: 855.37
+    height: 817.28
   OnCompletionEvent: {fileID: 0}
+  EnemiesToActivate: []
   onEnterAction: 
   onExitAction: 
   condition:
@@ -123,11 +125,12 @@ MonoBehaviour:
   - cd1da861-d3e8-430a-ba85-205749486f43
   rect:
     serializedVersion: 2
-    x: 492.00015
-    y: 120.80005
+    x: 528.00024
+    y: 200.80005
     width: 200
-    height: 710.14
+    height: 701.1
   OnCompletionEvent: {fileID: 0}
+  EnemiesToActivate: []
   onEnterAction: 
   onExitAction: 
   condition:
@@ -186,11 +189,13 @@ MonoBehaviour:
   children: []
   rect:
     serializedVersion: 2
-    x: 763.9999
-    y: 76.00003
+    x: 778.39984
+    y: 228.00002
     width: 200
-    height: 681.1
+    height: 786.58
   OnCompletionEvent: {fileID: 11400000, guid: 35a46a95d33d0cf419bdcb59769bff5f, type: 2}
+  EnemiesToActivate:
+  - Paul
   onEnterAction: 
   onExitAction: 
   condition:

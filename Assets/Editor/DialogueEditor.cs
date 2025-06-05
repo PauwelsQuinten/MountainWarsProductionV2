@@ -254,14 +254,14 @@ public class DialogueEditor : EditorWindow
 
             textHeight = textStyle.CalcHeight(guiContent, availableWidth);
 
-            previewHeight = previewStyle.CalcHeight(guiContent, availableWidth);
+            previewHeight = previewStyle.CalcHeight(guiContent, 140);
 
             EditorGUILayout.LabelField("-Text-", labelStyle, GUILayout.Height(20));
             baseNodeHeight += 20;
             EditorGUILayout.LabelField("Character", GUILayout.Height(20));
             baseNodeHeight += 20;
             SerializedObject so = new SerializedObject(node);
-            SerializedProperty characterNameProp = so.FindProperty("Name");
+            SerializedProperty characterNameProp = so.FindProperty("CharacterName");
             EditorGUILayout.PropertyField(characterNameProp, true);
             so.ApplyModifiedProperties();
 
@@ -402,6 +402,16 @@ public class DialogueEditor : EditorWindow
         GUILayout.EndHorizontal();
         baseNodeHeight += 20;
 
+        if(node.GetOnCompletionEvent() != null)
+        {
+            EditorGUILayout.LabelField("EnemiesToActivate", GUILayout.Height(20));
+            baseNodeHeight += 20;
+            SerializedObject so3 = new SerializedObject(node);
+            SerializedProperty EnemiesToActivateProp = so3.FindProperty("EnemiesToActivate");
+            EditorGUILayout.PropertyField(EnemiesToActivateProp, true);
+            so3.ApplyModifiedProperties();
+        }
+
         EditorGUILayout.LabelField("-Nodes-", labelStyle, GUILayout.Height(20));
         baseNodeHeight += 20;
 
@@ -421,22 +431,29 @@ public class DialogueEditor : EditorWindow
 
         if (node.GetCharacterName().Count != 0)
         {
-            characterNameOffset = 60 * (node.GetCharacterName().Count - 1);
+            characterNameOffset = 80 * (node.GetCharacterName().Count);
         }
-        else characterNameOffset = 60;
+        else characterNameOffset = 80;
 
         float imageOffset = 0;
+        float enemiesToActivate = 0f;
         if (node.GetShoutingImages().Count != 0)
         {
-            imageOffset = (60 * (node.GetShoutingImages().Count - 1));
+            imageOffset = (80 * (node.GetShoutingImages().Count));
         }
-        else imageOffset = 60;
+        else imageOffset = 80;
+
+        if (node.GetEnemiesToActivate().Count != 0) enemiesToActivate = (80 * (node.GetEnemiesToActivate().Count));
+        else if(node.GetOnCompletionEvent() == null) enemiesToActivate = 0;
+        else enemiesToActivate = 80;
+
+        if (node.GetOnCompletionEvent() == null) enemiesToActivate = 0;
 
         if (node.GetHasImageSupport())
         {
-            node.SetHeight(imageOffset + characterNameOffset + baseNodeHeight + 140);
+            node.SetHeight(imageOffset + characterNameOffset + baseNodeHeight + enemiesToActivate+ 80);
         }
-        else node.SetHeight(characterNameOffset + baseNodeHeight + textHeight + previewHeight + 140);
+        else node.SetHeight(characterNameOffset + baseNodeHeight + textHeight + previewHeight + enemiesToActivate + 80);
 
 
         GUILayout.EndArea();

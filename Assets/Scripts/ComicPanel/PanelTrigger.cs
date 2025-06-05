@@ -21,8 +21,6 @@ public class PanelTrigger : MonoBehaviour
     [SerializeField] 
     private bool _isTeleportTrigger;
     [SerializeField]
-    private LayerMask _layerMask;
-    [SerializeField]
     private Biome _nextBiome;
 
     [Header("Indexes")]
@@ -46,7 +44,7 @@ public class PanelTrigger : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (((1 << other.gameObject.layer) & _layerMask) != 0)
+        if (other.gameObject.tag == "Player")
         {
             if (_trigger == null) _trigger = GetComponent<BoxCollider>();
             if (_originalScale == Vector3.zero) _originalScale = _trigger.size;
@@ -60,7 +58,7 @@ public class PanelTrigger : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (((1 << other.gameObject.layer) & _layerMask) != 0)
+        if (other.gameObject.tag == "Player")
         {
             if (_scaleTriggerOnEnter) _trigger.size = _originalScale;
 

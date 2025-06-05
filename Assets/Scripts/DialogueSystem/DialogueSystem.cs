@@ -911,6 +911,11 @@ public class DialogueSystem : MonoBehaviour
                 _isInDialogue.variable.value = false;
                 if (_dialogues[_currentDialogueIndex].GetIsStaticDialogue()) _isInStaticDialogue.variable.value = false;
                 _currentLineIndex = 0;
+
+                if (_currentDialogueNode.GetEnemiesToActivate().Count != 0)
+                {
+                    _currentDialogueNode.GetOnCompletionEvent().Raise(this, new ActivateEnemyEventArgs { EnemyNames = _currentDialogueNode.GetEnemiesToActivate() });
+                }
             }
         }
         else
@@ -918,6 +923,11 @@ public class DialogueSystem : MonoBehaviour
             _isInDialogue.variable.value = false;
             if (_dialogues[_currentDialogueIndex].GetIsStaticDialogue()) _isInStaticDialogue.variable.value = false;
             _currentLineIndex = 0;
+
+            if (_currentDialogueNode.GetEnemiesToActivate().Count != 0)
+            {
+                _currentDialogueNode.GetOnCompletionEvent().Raise(this, new ActivateEnemyEventArgs { EnemyNames = _currentDialogueNode.GetEnemiesToActivate() });
+            }
         }
     }
 

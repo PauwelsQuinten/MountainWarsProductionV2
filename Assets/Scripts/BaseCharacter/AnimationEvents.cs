@@ -26,6 +26,8 @@ public class AnimationEvents : MonoBehaviour
     private GameEvent _stunned;
     [SerializeField] 
     private GameEvent _moveAttack;
+    [SerializeField] 
+    private GameEvent _chargeAttack;
     private int _storredDirection = 0;
     private void Start()
     {
@@ -34,20 +36,26 @@ public class AnimationEvents : MonoBehaviour
 
     public void Footstep()
     {
-      _footstep.Raise(this.transform.parent, EventArgs.Empty);
-      
+        _footstep.Raise(this.transform.parent, null);
     }
 
+    public void AttackCharge()
+    {
+        _chargeAttack.Raise(this.transform.parent, null);
+    }
     public void Whoosh()
     {
-        _whoosh.Raise(this.transform.parent, EventArgs.Empty);;
+        _whoosh.Raise(this.transform.parent, null);;
     }
 
     public void SwordHit()
     {
         _recieveAttackEvent.Raise(this.transform.parent, null);
     }
-
+public void Stun()
+    {
+        _stunned.Raise(this.transform.parent, null);
+    }
     public void EndAnimation()
     {
         if ( _endAnimation ) 
@@ -82,7 +90,12 @@ public class AnimationEvents : MonoBehaviour
         bool isSheating = zeroForIn == 0? true : false;
         _sheatSword.Raise(this.transform.parent, isSheating);
     }
-     
+
+    public void ChargeAttack()
+    {
+        _chargeAttack.Raise(this.transform.parent, null);
+    }
+
     public void Pickup()
     {
         _pickup.Raise(this.transform.parent, null);

@@ -39,16 +39,19 @@ public static class EquipmentHelper
     }
 
 
-    public static void DropEquipment(List<Equipment> HeldEquipment, int hand)
+    public static Equipment DropEquipment(List<Equipment> HeldEquipment, int hand)
     {
 
         if (HeldEquipment[hand] == null)
-            return;
+            return null;
         HeldEquipment[hand].transform.parent = null;
 
         SetPhysics(HeldEquipment[hand], false);
 
+        var equipmentRef = HeldEquipment[hand];
         HeldEquipment[hand] = null;
+
+        return equipmentRef;
     }
 
     public static void CreateAndEquip(List<Equipment> HeldEquipment, Equipment Equipment, int hand, Transform socket, Transform parent)
@@ -64,7 +67,7 @@ public static class EquipmentHelper
         SetPhysics(HeldEquipment[hand], true);
     }
 
-    public static bool CheckIfBroken(DefenceEventArgs args, int index, List<Equipment> HeldEquipment, out LoseEquipmentEventArgs package)
+    public static bool CheckIfBroken(DefenceEventArgs args, int index, List<Equipment> HeldEquipment, out LoseEquipmentEventArgs package, GameObject owner)
     {
         //Check if broken
         if (HeldEquipment[index].Durability < 0f)
@@ -74,7 +77,7 @@ public static class EquipmentHelper
             package = new LoseEquipmentEventArgs
             {
                 EquipmentType = args.BlockMedium == BlockMedium.Shield ? EquipmentType.Shield : EquipmentType.Melee,
-                ToSelf = true
+                WhoLostIt = owner
             };
             return true;
         }

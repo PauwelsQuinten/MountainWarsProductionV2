@@ -177,7 +177,8 @@ public class Parry : MonoBehaviour
     private void OnSuccesfullDisarm()
     {
         _loseStamina.Raise(this, new StaminaEventArgs { StaminaCost = _staminaCost.value * 1.5f });
-        _onDisarmEvent.Raise(this, new LoseEquipmentEventArgs{EquipmentType = EquipmentType.Melee, WhoLostIt = _attacker});
+        _onDisarmEvent.Raise(this, new LoseEquipmentEventArgs
+        {EquipmentType = EquipmentType.Melee, WhoLostIt = _attacker, ParryMaster = gameObject});
         _tryDisarm = false;
 
         StopCoroutine(_disarmRoutine);

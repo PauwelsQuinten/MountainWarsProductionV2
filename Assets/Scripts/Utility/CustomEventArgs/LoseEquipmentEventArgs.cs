@@ -6,6 +6,7 @@ namespace UnityEngine
     {
         public EquipmentType EquipmentType;
         public GameObject WhoLostIt;
+        public GameObject ParryMaster;
     }
 
 

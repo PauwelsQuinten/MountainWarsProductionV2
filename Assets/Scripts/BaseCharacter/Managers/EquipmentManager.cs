@@ -100,10 +100,7 @@ public class EquipmentManager : MonoBehaviour
     public void LoseEquipment(Component sender, object obj)
     {
         var args = obj as LoseEquipmentEventArgs;
-        if (args == null) return;
-
-        if (args.ToSelf && sender.gameObject != gameObject) return;
-        if (!args.ToSelf && sender.gameObject == gameObject) return;
+        if (args == null || args.WhoLostIt  != gameObject) return;
 
         int hand = 0;
         switch (args.EquipmentType)
@@ -123,7 +120,14 @@ public class EquipmentManager : MonoBehaviour
                 return;
         }
 
-        EquipmentHelper.DropEquipment(HeldEquipment, hand);
+        var lostObject = EquipmentHelper.DropEquipment(HeldEquipment, hand);
+
+        Vector3 direction = transform.position - args.ParryMaster.transform.position;
+        direction += Vector3.up;
+        direction.Normalize();
+        var comp = lostObject.GetComponent<FlyOff>();
+        if (comp != null) 
+            comp.StartFly(direction);
     }
 
     public void CheckDurability(Component sender, object obj)
@@ -160,7 +164,7 @@ public class EquipmentManager : MonoBehaviour
         });
 
         LoseEquipmentEventArgs send = null;
-        if (EquipmentHelper.CheckIfBroken(args, attackIndex, HeldEquipment, out send))
+        if (EquipmentHelper.CheckIfBroken(args, attackIndex, HeldEquipment, out send, gameObject))
         {
             Destroy(HeldEquipment[attackIndex].gameObject);
             HeldEquipment[attackIndex] = null;
@@ -192,7 +196,7 @@ public class EquipmentManager : MonoBehaviour
         });
 
         LoseEquipmentEventArgs send = null;
-        if(EquipmentHelper.CheckIfBroken(args, index, HeldEquipment, out send))
+        if(EquipmentHelper.CheckIfBroken(args, index, HeldEquipment, out send, gameObject))
         {
             Destroy(HeldEquipment[index].gameObject);
             HeldEquipment[index] = null;

@@ -222,32 +222,32 @@ public class WorldState : MonoBehaviour
                     ResetTargetValues();
                 break;
             case BlackboardEventArgs.WhatChanged.TargetBehaviour:
-                if (HasTarget == EWorldStatePossesion.InPossesion)
+                if (HasTarget == EWorldStatePossesion.InPossesion && _blackboard.variable.TargetBlackboard != null)
                     TargetBehaviour = WatchBehaviour(_blackboard.variable.TargetBlackboard.variable.State);
                 break;
             case BlackboardEventArgs.WhatChanged.TargetStamina:
-                if (HasTarget == EWorldStatePossesion.InPossesion)
+                if (HasTarget == EWorldStatePossesion.InPossesion && _blackboard.variable.TargetBlackboard != null)
                     TargetStamina = CalculateValue(_blackboard.variable.TargetBlackboard.variable.Stamina);
                 break;
             case BlackboardEventArgs.WhatChanged.TargetHealth:
-                if (HasTarget == EWorldStatePossesion.InPossesion)
+                if (HasTarget == EWorldStatePossesion.InPossesion && _blackboard.variable.TargetBlackboard != null)
                     TargetHealth = CalculateValue(_blackboard.variable.TargetBlackboard.variable.Health);
                 break;
             case BlackboardEventArgs.WhatChanged.TargetRHEquipment:
-                if (HasTarget == EWorldStatePossesion.InPossesion)
+                if (HasTarget == EWorldStatePossesion.InPossesion && _blackboard.variable.TargetBlackboard != null)
                     TargetRHEquipment = CalculateValue(_blackboard.variable.TargetBlackboard.variable.RHEquipmentHealth);
                 break;
             case BlackboardEventArgs.WhatChanged.TargetLHEquipment:
-                if (HasTarget == EWorldStatePossesion.InPossesion)
+                if (HasTarget == EWorldStatePossesion.InPossesion && _blackboard.variable.TargetBlackboard != null)
                     TargetLHEquipment = CalculateValue(_blackboard.variable.TargetBlackboard.variable.LHEquipmentHealth);
                 break;
             case BlackboardEventArgs.WhatChanged.TargetShieldState:
-                if (HasTarget == EWorldStatePossesion.InPossesion)
+                if (HasTarget == EWorldStatePossesion.InPossesion && _blackboard.variable.TargetBlackboard != null)
                     TargetShieldState = _blackboard.variable.TargetBlackboard.variable.ShieldState;
                 break;
            case BlackboardEventArgs.WhatChanged.TargetOpening:
                 //Debug.Log($"{_blackboard.variable.TargetOpening.OpeningDirection}, {_blackboard.variable.TargetOpening.OpeningSize}");
-                if (HasTarget == EWorldStatePossesion.InPossesion)
+                if (HasTarget == EWorldStatePossesion.InPossesion && _blackboard.variable.TargetBlackboard != null)
                     HasOpening = _blackboard.variable.TargetOpening.OpeningSize != Size.Small || _blackboard.variable.TargetOpening.OpeningSize != Size.None ? 
                         EWorldStatePossesion.InPossesion : EWorldStatePossesion.NotInPossesion;
                 break;

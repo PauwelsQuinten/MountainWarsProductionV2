@@ -149,6 +149,7 @@ public class PlayerController : MonoBehaviour
 
     public void ProccesMoveInput(InputAction.CallbackContext ctx)
     {
+        if (_stateManager == null || _stateManager.CurrentCamera == null) return;
         if (_stateManager.IsInStaticDialogue.value) return;
         if (Time.timeScale == 0) return;
         Vector2 input = ctx.ReadValue<Vector2>();

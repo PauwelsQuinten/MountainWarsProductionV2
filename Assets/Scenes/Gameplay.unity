@@ -10130,7 +10130,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4957922247227371947, guid: e9651b4801f36d14e86c1cb82aa75d59, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4957922247227371947, guid: e9651b4801f36d14e86c1cb82aa75d59, type: 3}
       propertyPath: Events.Array.size
@@ -10150,7 +10150,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4957922247227371947, guid: e9651b4801f36d14e86c1cb82aa75d59, type: 3}
       propertyPath: Responses.Array.data[36].m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4957922247227371947, guid: e9651b4801f36d14e86c1cb82aa75d59, type: 3}
       propertyPath: Responses.Array.data[36].m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -10184,6 +10184,14 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5318217082051312346, guid: e9651b4801f36d14e86c1cb82aa75d59, type: 3}
+      propertyPath: IsInDialogue.variable
+      value: 
+      objectReference: {fileID: 11400000, guid: b4d55fcfd48340444ac77031d3fa370d, type: 2}
+    - target: {fileID: 5318217082051312346, guid: e9651b4801f36d14e86c1cb82aa75d59, type: 3}
+      propertyPath: IsInStaticDialogue.variable
+      value: 
+      objectReference: {fileID: 11400000, guid: f6083cd36ce3da147a3dbea5bc725bb7, type: 2}
     - target: {fileID: 5354098008686373181, guid: e9651b4801f36d14e86c1cb82aa75d59, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -10211,6 +10219,10 @@ PrefabInstance:
     - target: {fileID: 8761888366074066331, guid: e9651b4801f36d14e86c1cb82aa75d59, type: 3}
       propertyPath: m_Name
       value: Paul
+      objectReference: {fileID: 0}
+    - target: {fileID: 8761888366074066331, guid: e9651b4801f36d14e86c1cb82aa75d59, type: 3}
+      propertyPath: m_Layer
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -10319,6 +10331,9 @@ MonoBehaviour:
   - {fileID: 891831280}
   - {fileID: 891831281}
   - {fileID: 891831283}
+  _layermask:
+    serializedVersion: 2
+    m_Bits: 8
 --- !u!114 &891831260 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4996746403009695576, guid: e9651b4801f36d14e86c1cb82aa75d59, type: 3}
@@ -10347,7 +10362,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 891831252}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 891831253}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: beea91935ee6d2746a0a632c4f077ee0, type: 3}
   m_Name: 
@@ -16823,6 +16838,10 @@ PrefabInstance:
       propertyPath: _doNotRunTriggerExit
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 393769748055476210, guid: a8ad19065268d2244ad27bdf7cd511b8, type: 3}
+      propertyPath: _scaleTriggerOnEnter
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3401551773480972193, guid: a8ad19065268d2244ad27bdf7cd511b8, type: 3}
       propertyPath: m_Size.x
       value: 6.9
@@ -18703,6 +18722,10 @@ PrefabInstance:
     - target: {fileID: 8761888366074066331, guid: e9651b4801f36d14e86c1cb82aa75d59, type: 3}
       propertyPath: m_Name
       value: Enemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 8761888366074066331, guid: e9651b4801f36d14e86c1cb82aa75d59, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

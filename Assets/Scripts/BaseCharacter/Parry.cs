@@ -32,6 +32,7 @@ public class Parry : MonoBehaviour
     private BlockMedium _parryMedium;
     private bool _InParryZone = false;
     private AttackType _opponentsAttack = AttackType.None;
+    private GameObject _attacker = null;
 
 
     public void ParryMovement(Component sender, object obj)
@@ -161,6 +162,8 @@ public class Parry : MonoBehaviour
     {
         _loseStamina.Raise(this, new StaminaEventArgs { StaminaCost = _staminaCost.value });
         _succesfullParryEvent.Raise(this, new StunEventArgs {StunDuration = 2, StunTarget = attackValues.Attacker});
+        _attacker = attackValues.Attacker;
+
 
         attackValues.AttackPower = 0f;
         attackValues.BlockPower = _pushPower;
@@ -174,7 +177,7 @@ public class Parry : MonoBehaviour
     private void OnSuccesfullDisarm()
     {
         _loseStamina.Raise(this, new StaminaEventArgs { StaminaCost = _staminaCost.value * 1.5f });
-        _onDisarmEvent.Raise(this, new LoseEquipmentEventArgs{EquipmentType = EquipmentType.Melee, ToSelf = false});
+        _onDisarmEvent.Raise(this, new LoseEquipmentEventArgs{EquipmentType = EquipmentType.Melee, WhoLostIt = _attacker});
         _tryDisarm = false;
 
         StopCoroutine(_disarmRoutine);
@@ -185,6 +188,7 @@ public class Parry : MonoBehaviour
     {       
         //signal to Block
         _onFailedParryEvent.Raise(this, attackValues);
+        _attacker = null;
     }
     
     private void StartAnimation(AimingOutputArgs args, BlockMedium parryMedium)

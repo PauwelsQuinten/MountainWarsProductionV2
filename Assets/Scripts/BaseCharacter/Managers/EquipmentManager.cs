@@ -204,17 +204,13 @@ public class EquipmentManager : MonoBehaviour
     {       
         _blackboard.variable.LHEquipmentHealth = GetDurabilityPercentage(LEFT_HAND);
         _blackboard.variable.RHEquipmentHealth = GetDurabilityPercentage(RIGHT_HAND);
-        _blackboard.variable.WeaponRange = GetAttackRange();
-        
+        _blackboard.variable.WeaponRange = GetAttackRange();       
     }
 
     public bool CloseToEquipment()
     {
         _hitColliders = Physics.OverlapSphere(transform.position, _itemPickupRadius, _itemMask);
-        if (_hitColliders.Length == 0)
-            return false;
-        return true;
-
+        return (_hitColliders.Length > 0);
     }
 
     public void PickupEquipment(Component sender, object obj)

@@ -33,11 +33,9 @@ public static class EquipmentHelper
         newEquip.transform.parent = socket;
         newEquip.transform.localPosition = Vector3.zero;
         newEquip.transform.localRotation = Quaternion.identity;
-        
 
-        var collider = HeldEquipment[index].GetComponent<CapsuleCollider>();
-        if (collider)
-            collider.enabled = false;
+        SetPhysics(newEquip, true);
+
     }
 
 
@@ -48,9 +46,7 @@ public static class EquipmentHelper
             return;
         HeldEquipment[hand].transform.parent = null;
 
-        var collider = HeldEquipment[hand].GetComponent<CapsuleCollider>();
-        if (collider)
-            collider.enabled = true;
+        SetPhysics(HeldEquipment[hand], false);
 
         HeldEquipment[hand] = null;
     }
@@ -65,10 +61,7 @@ public static class EquipmentHelper
 
         Equipment.transform.localPosition = Vector3.zero;
         HeldEquipment[hand] = Equipment;
-
-        var collider = HeldEquipment[hand].GetComponent<CapsuleCollider>();
-        if (collider)
-            collider.enabled = false;
+        SetPhysics(HeldEquipment[hand], true);
     }
 
     public static bool CheckIfBroken(DefenceEventArgs args, int index, List<Equipment> HeldEquipment, out LoseEquipmentEventArgs package)
@@ -87,6 +80,19 @@ public static class EquipmentHelper
         }
         package = null;
         return false;
+    }
+
+    private static void SetPhysics(Equipment Equipment, bool setForHolding)
+    {
+        var collider = Equipment.GetComponent<CapsuleCollider>();
+        if (collider)
+        {
+            collider.enabled = !setForHolding;
+            //collider.isTrigger = true;
+        }
+        var rb = Equipment.GetComponent<Rigidbody>();
+        if (rb)
+            rb.isKinematic = setForHolding;
     }
 
 }

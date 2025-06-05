@@ -5,7 +5,7 @@ namespace UnityEngine
     public class LoseEquipmentEventArgs : EventArgs
     {
         public EquipmentType EquipmentType;
-        public bool ToSelf;
+        public GameObject WhoLostIt;
     }
 
 

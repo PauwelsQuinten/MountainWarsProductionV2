@@ -26,6 +26,8 @@ public class HealthManager : MonoBehaviour
     private float _bleedOutSpeed;
     [SerializeField]
     private GameEvent _changedBlood;
+    [SerializeField]
+    private GameEvent _vfx;
 
     [Header("Damage")]
     [SerializeField, Tooltip("How much the damage drops when hitting a second limb")]
@@ -160,7 +162,7 @@ public class HealthManager : MonoBehaviour
 
                 
 
-                if (_bodyPartHealth[part] <= 0)
+                if (_bodyPartHealth[part] <= 0 && !_isBleeding)
                 {
                     StartsBleeding(part);
                 }
@@ -169,7 +171,6 @@ public class HealthManager : MonoBehaviour
             {
                 //When regen gets interupted, bodyPart stays <= 0, set bleeding again then
                 StartsBleeding(part);
-                Debug.Log($"{part} has taken too much damage");
             }
         }
     }
@@ -195,9 +196,14 @@ public class HealthManager : MonoBehaviour
             _bleedOutRate += _bleedOutSpeed;
 
         _canRegenBlood = false;
-        _isBleeding = true;
-        _stateManager.IsBleeding = _isBleeding;
         ReduceMaxHealth();
+
+        if (!_isBleeding)
+        {
+            _vfx?.Raise(this, new VfxEventArgs { Type = VfxType.Bleeding, Duration = 30f });
+            _isBleeding = true;
+            _stateManager.IsBleeding = _isBleeding;
+        }       
 
         if (!gameObject.CompareTag(PLAYER) && _currentHealth <= 0)
             Destroy(gameObject);
@@ -311,6 +317,9 @@ public class HealthManager : MonoBehaviour
         _canRegenCoroutine = StartCoroutine(ResetCanRegen());
 
         UpdateBlackboard();
+
+        _vfx.Raise(this, new VfxEventArgs { Type = VfxType.Bleeding, Cancel = true });
+
     }
 
     private void ReduceMaxHealth()

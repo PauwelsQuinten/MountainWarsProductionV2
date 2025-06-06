@@ -1,10 +1,10 @@
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
 public class HitDetection : MonoBehaviour
 {
     [SerializeField] GameEvent _DealDamage;
+    [SerializeField] GameEvent _vfx;
 
     private List<BodyParts> _hitParts = new List<BodyParts>();
 
@@ -16,6 +16,7 @@ public class HitDetection : MonoBehaviour
         if (args == null) return;
         _hitParts = GetDamagedParts(args);
         _DealDamage.Raise(this, new DamageEventArgs { AttackPower = args.AttackPower, HitParts = _hitParts});
+        _vfx?.Raise(this, new VfxEventArgs { Type = VfxType.Hit});
     }
 
     private List<BodyParts> GetDamagedParts(AttackEventArgs args)

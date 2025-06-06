@@ -55,10 +55,12 @@ public class IKSpearMovement : MonoBehaviour
 
     private void LateUpdate()
     {
-        if (_setWeight != RigValue.Default)
-        {
+        //At restart of the game, this value gets reset at start, so change again when that happens
+        //Make sure the Idle State in animator is set to "Write Defaults" or this IK will not work
+        if (_spearRig.weight != (int)_setWeight)
+        {            
             _spearRig.weight = (int)_setWeight;
-            _setWeight = RigValue.Default;
+            _spearRig.enabled = false;
         }
 
     }

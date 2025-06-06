@@ -261,6 +261,7 @@ public class DialogueEditor : EditorWindow
             EditorGUILayout.LabelField("Character", GUILayout.Height(20));
             baseNodeHeight += 20;
             SerializedObject so = new SerializedObject(node);
+
             SerializedProperty characterNameProp = so.FindProperty("CharacterName");
             EditorGUILayout.PropertyField(characterNameProp, true);
             so.ApplyModifiedProperties();
@@ -416,6 +417,7 @@ public class DialogueEditor : EditorWindow
         baseNodeHeight += 20;
 
         GUILayout.BeginHorizontal();
+
         if (GUILayout.Button("X", GUILayout.Height(20)))
         {
             deletingNode = node;
@@ -454,7 +456,6 @@ public class DialogueEditor : EditorWindow
             node.SetHeight(imageOffset + characterNameOffset + baseNodeHeight + enemiesToActivate+ 80);
         }
         else node.SetHeight(characterNameOffset + baseNodeHeight + textHeight + previewHeight + enemiesToActivate + 80);
-
 
         GUILayout.EndArea();
     }

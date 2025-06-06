@@ -158,35 +158,8 @@ public class CharacterMovement : MonoBehaviour
                 if (_stateManager.Orientation == direction) return;
                 _stateManager.Orientation = direction;
                 _stateManager.fOrientation = (float)direction;
-                float targetAngle =0f;
-                switch (direction)
-                {
-                    case Orientation.North:
-                        targetAngle = 0;
-                        break;
-                    case Orientation.NorthEast:
-                        targetAngle = 45;
-                        break;
-                    case Orientation.East:
-                        targetAngle = 90;
-                        break;
-                    case Orientation.SouthEast:
-                        targetAngle = 135;
-                        break;
-                    case Orientation.South:
-                        targetAngle = 180;
-                        break;
-                    case Orientation.SouthWest:
-                        targetAngle = -135;
-                        break;
-                    case Orientation.West:
-                        targetAngle =  -90;
-                        break;
-                    case Orientation.NorthWest:
-                        targetAngle = -45;
-                        break;
-                }
-
+                float targetAngle = Geometry.Geometry.BodyRotationAngleFromOrientation(direction);
+                
                 _targetRotation = Quaternion.Euler(new Vector3(0, targetAngle, 0));
             }
         }

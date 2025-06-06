@@ -1,18 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-5709773079092500867
-MonoBehaviour:
-  m_ObjectHideFlags: 11
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  version: 9
 --- !u!21 &2100000
 Material:
   serializedVersion: 8
@@ -20,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Shader Graphs_CMYK_16_BlackDotted
+  m_Name: HalftoneShader
   m_Shader: {fileID: -6465566751694194690, guid: a61c4ab91838092469373c307662cd4e, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -40,10 +27,6 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _SampleTexture2D_e8e4aec831014f3b9422b570dcd8c163_Texture_1_Texture2D:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -59,27 +42,27 @@ Material:
     m_Ints: []
     m_Floats:
     - _BlackOpacity: 1
-    - _Black_Test: 1
+    - _Black_Test: 0.968
     - _C_Rotation: 0.262
-    - _ColorMaskFuzziness: 0.36
+    - _ColorMaskFuzziness: 0
     - _ColorMaskRange: 0
     - _CyanOpacity: 1
-    - _DotSizeMaxC: 0.974
+    - _DotSizeMaxC: 0.785
     - _DotSizeMaxK: 1
-    - _DotSizeMaxM: 0.968
-    - _DotSizeMaxY: 1
-    - _DotSizeMinC: 0
-    - _DotSizeMinK: 0.02
-    - _DotSizeMinM: 0
-    - _DotSizeMinY: 0.143
-    - _Dots_Scale: 3701
+    - _DotSizeMaxM: 0.864
+    - _DotSizeMaxY: 0.727
+    - _DotSizeMinC: 0.315
+    - _DotSizeMinK: 0.464
+    - _DotSizeMinM: 0.289
+    - _DotSizeMinY: 0.4
+    - _Dots_Scale: 834
     - _K_Rotation: 0
     - _M_Rotation: 0.785
     - _MagentaOpacity: 1
     - _NoiseOpacity: 0
     - _PaperBrightness: 0
-    - _PaperOpacity: 0
-    - _Pattern_Randomness: 0.75
+    - _PaperOpacity: 1
+    - _Pattern_Randomness: 0
     - _UnderlyingColorOpacity: 0
     - _Y_Rotation: 1.309
     - _YellowOpacity: 1
@@ -87,13 +70,13 @@ Material:
     - _Background: {r: 1, g: 1, b: 1, a: 0}
     - _Black: {r: 0, g: 0, b: 0, a: 0}
     - _BlackOffset: {r: 0, g: 0, b: 0, a: 0}
-    - _ColorMask: {r: 0.8037735, g: 0.56760764, b: 0.43525094, a: 1}
-    - _Cyan: {r: 0.3571876, g: 0.83396226, b: 0.83396226, a: 0}
+    - _ColorMask: {r: 0.9611786, g: 1, b: 0.4584905, a: 0}
+    - _Cyan: {r: 0, g: 1, b: 1, a: 0}
     - _CyanOffset: {r: 0, g: 0, b: 0, a: 0}
-    - _Magenta: {r: 0.81960785, g: 0.42352942, b: 0.6039216, a: 0}
+    - _Magenta: {r: 1, g: 0, b: 1, a: 0}
     - _MagentaOffset: {r: 0, g: 0, b: 0, a: 0}
     - _NoiseSize: {r: 1, g: 1, b: 0, a: 0}
-    - _Yellow: {r: 0.83396226, g: 0.83396226, b: 0.38865784, a: 0}
+    - _Yellow: {r: 1, g: 1, b: 0, a: 0}
     - _YellowOffset: {r: 0, g: 0, b: 0, a: 0}
     - _variationNoiseSize: {r: 0.4, g: 0.4, b: 0, a: 0}
   m_BuildTextureStacks: []

@@ -7,6 +7,7 @@ public class StateManager : MonoBehaviour
     private const string PLAYER = "Player";
     [Header("Events")]
     [SerializeField] GameEvent _OnStunRecovery;
+    [SerializeField] GameEvent _vfx;
 
     [Header("Refrence")]
     public BlackboardReference BlackboardRef;
@@ -19,8 +20,16 @@ public class StateManager : MonoBehaviour
     public AttackState AttackState = AttackState.Idle;
     [HideInInspector]
     public AttackHeight AttackHeight = AttackHeight.Torso;
+    private Orientation _orientation= Orientation.West;
     [HideInInspector]
-    public Orientation Orientation;
+    public Orientation Orientation
+    {
+        get => _orientation;
+        set
+        {
+            _orientation = value;
+        }
+    }
     [HideInInspector]
     [Tooltip("Angle of orientation in degree")] public float fOrientation = 0f;
     [Header("Camera")]
@@ -54,6 +63,9 @@ public class StateManager : MonoBehaviour
             EquipmentManager = GetComponent<EquipmentManager>();
 
         ChangeOrientation(this, new OrientationEventArgs { NewOrientation = Orientation, NewFOrientation = (float)Orientation });
+        float bodyRotation = Geometry.Geometry.BodyRotationAngleFromOrientation(Orientation);
+        Quaternion targetRotation = Quaternion.Euler(new Vector3(0, bodyRotation, 0));
+        transform.rotation = targetRotation;
 
         StartCoroutine(InitBlackboard());         
     }
@@ -61,7 +73,8 @@ public class StateManager : MonoBehaviour
     private void FixedUpdate()
     {
         //Rotate smoothly between the 8 directions
-        Quaternion targetRotation = Quaternion.Euler(new Vector3(0, -(int)Orientation + 90, 0));
+        float bodyRotation = Geometry.Geometry.BodyRotationAngleFromOrientation(Orientation);
+        Quaternion targetRotation = Quaternion.Euler(new Vector3(0, bodyRotation, 0));
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
     }
 
@@ -122,8 +135,9 @@ public class StateManager : MonoBehaviour
         if (loseEquipmentEventArgs != null && sender.gameObject == gameObject)
         {
             IsHoldingShield = false;
-            SetStun(2f);
             InAnimiation = false;
+            float duration = 2f;
+            SetStun(duration);
         }
 
         else if (args != null && args.StunTarget == gameObject)
@@ -157,9 +171,9 @@ public class StateManager : MonoBehaviour
         {
             AttackState = AttackState.Stun;
             _recoverCoroutine = StartCoroutine(RecoverStun(stunDuration));
-            InAnimiation = false;
+            _vfx.Raise(this, new VfxEventArgs { Type = VfxType.Stuned, Duration = stunDuration });
         }
-       
+
         BlackboardRef.variable.State = AttackState.Stun;
         BlackboardRef.variable.ResetCurrentAttack();
     }

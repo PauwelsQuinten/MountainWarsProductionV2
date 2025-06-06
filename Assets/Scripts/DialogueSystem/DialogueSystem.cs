@@ -100,7 +100,7 @@ public class DialogueSystem : MonoBehaviour
             _spawnedText[1].transform.position = new Vector3(newBalloonPos.x + xOffset, newBalloonPos.y + -yOffset, 0);
         }
 
-        if(_activeShoutingImages.Count != 0) DistributeImages(_spawnedTextBalloons,false, _activeShoutingImages);
+        if (_activeShoutingImages.Count != 0) DistributeImages(_spawnedTextBalloons, false, _activeShoutingImages);
         SetTailsPosition(_spawnedTextBalloons, true);
     }
 
@@ -222,7 +222,6 @@ public class DialogueSystem : MonoBehaviour
         if (!moveTail) return;
         Vector2 textballonPos = textBalloon[0].GetComponent<Image>().rectTransform.position;
         Vector2 tailPos = new Vector2(textballonPos.x, textballonPos.y);
-        Vector2 returnPos = Vector2.zero;
         float textBalloonWidth = textBalloon[0].GetComponent<Image>().rectTransform.rect.width;
         float textBalloonHeight = textBalloon[0].GetComponent<Image>().rectTransform.rect.height;
         float Yoffset = -textBalloonHeight * 0.25f;
@@ -257,7 +256,6 @@ public class DialogueSystem : MonoBehaviour
             if (side == 1)
             {
                 tailPos = new Vector2(-Xoffset - (70 * tailsOnRight), Yoffset - (7 * tailsOnRight)) + textballonPos;
-                if (returnPos == Vector2.zero) returnPos = tailPos;
                 tailsOnRight++;
                 _spawnedTails[index].transform.rotation = Quaternion.Euler(xRotation, 180, 0);
                 _spawnedTails[index + 1].transform.rotation = Quaternion.Euler(xRotation, 180, 0);
@@ -265,7 +263,6 @@ public class DialogueSystem : MonoBehaviour
             else
             {
                 tailPos = new Vector2(Xoffset + (70 * tailsOnLeft), Yoffset - (7 * tailsOnLeft)) + textballonPos;
-                if (returnPos == Vector2.zero) returnPos = tailPos;
                 tailsOnLeft++;
                 _spawnedTails[index].transform.rotation = Quaternion.Euler(xRotation, 0, 0);
                 _spawnedTails[index + 1].transform.rotation = Quaternion.Euler(xRotation, 0, 0);
@@ -305,6 +302,9 @@ public class DialogueSystem : MonoBehaviour
 
         string tempText = " ";
 
+        if (_currentDialogueNode.GetShoutingImages().Count == 0) tempText = InsertLineBreaksByWord(_currentDialogueNode.GetText(), 5, tempList, text);
+        else DistributeImages(tempList, true);
+
         Vector2 balloonPos = GetTextBalloonPos(tempList, text, _currentDialogueNode.GetNeedsToBeFlipped(), true);
 
         if (_currentDialogueNode.GetIsShouting())
@@ -322,9 +322,8 @@ public class DialogueSystem : MonoBehaviour
             SetTailsPosition(tempList, _TextBalloonBridges.Count == 0);
         }
 
-        if (_currentDialogueNode.GetShoutingImages().Count == 0) tempText = InsertLineBreaksByWord(_currentDialogueNode.GetText(), 5, tempList, text);
-        else DistributeImages(tempList, true);
-
+        //if (_currentDialogueNode.GetShoutingImages().Count == 0) tempText = InsertLineBreaksByWord(_currentDialogueNode.GetText(), 5, tempList, text);
+        //else DistributeImages(tempList, true);
 
         _spawnedDialogue.Add(_currentDialogueNode, tempList);
 
@@ -600,41 +599,6 @@ public class DialogueSystem : MonoBehaviour
         }
     }
 
-    //private void DetermineTextBalloonSizeBasedOnImages(List<GameObject> textBalloon, DialogueNode node, TextMeshProUGUI text)
-    //{
-    //    float imageSizeX = 0;
-    //    float imagesSizeY = 0;
-
-    //    float imageSpacingX = 0;
-    //    float imageSpacingY = 0;
-
-    //    imageSizeX += _activeShoutingImages[0].GetComponent<Image>().rectTransform.rect.width;
-    //    imagesSizeY += _activeShoutingImages[0].GetComponent<Image>().rectTransform.rect.height;
-
-
-    //    if (node.GetShoutingImages().Count > 1)
-    //    {
-    //        imageSpacingX = Vector3.Distance(_activeShoutingImages[0].transform.position, _activeShoutingImages[1].transform.position);
-    //        imageSpacingX -= imageSizeX / node.GetShoutingImages().Count;
-
-    //        if (node.GetHasSecondImageLine())
-    //        {
-    //            imageSpacingY = Vector3.Distance(_activeShoutingImages[0].transform.position, _activeShoutingImages[(int)Mathf.Ceil(node.GetShoutingImages().Count * 0.5f)].transform.position);
-    //            imageSpacingY -= imagesSizeY / 2;
-    //        }
-    //    }
-
-    //    float imagesOnFirstLine = Mathf.Ceil(node.GetShoutingImages().Count * 0.5f);
-    //    Vector2 size = new Vector2((imageSizeX + imageSpacingX) * imagesOnFirstLine, (imagesSizeY + imageSpacingY) * 2);
-    //    size += node.GetSizePadding() + new Vector2(20,20);
-
-    //    textBalloon[0].GetComponent<Image>().rectTransform.sizeDelta = (size * new Vector2(node.GetBorderSize() * 0.85f, node.GetBorderSize())) + node.GetSizePadding();
-    //    textBalloon[2].GetComponent<Image>().rectTransform.sizeDelta = size + node.GetSizePadding();
-    //    if (textBalloon[1] != null) textBalloon[1].GetComponent<Image>().rectTransform.sizeDelta = (size * node.GetBorderSize()) + node.GetSizePadding();
-    //    if (textBalloon[3] != null) textBalloon[3].GetComponent<Image>().rectTransform.sizeDelta = size + node.GetSizePadding();
-    //    text.rectTransform.sizeDelta = size;
-    //}
-
     private float DetermineFontSizeMultiplier(float size)
     {
         float baseSize = 36;
@@ -826,9 +790,11 @@ public class DialogueSystem : MonoBehaviour
 
             if (_activeShoutingImages.Count != 0)
             {
-                foreach (GameObject image in _activeShoutingImages)
+                foreach (GameObject imageObject in _activeShoutingImages)
                 {
-                    image.GetComponent<Image>().color = new Color(0, 0, 0, transparacy);
+                    if (imageObject == null) continue;
+                    Image image = imageObject.GetComponent<Image>();
+                    image.color = new Color(image.color.r, image.color.g, image.color.b, transparacy);
                 }
             }
             yield return null;
@@ -863,9 +829,11 @@ public class DialogueSystem : MonoBehaviour
 
         if (_activeShoutingImages.Count != 0)
         {
-            foreach (GameObject image in _activeShoutingImages)
+            foreach (GameObject imageObject in _activeShoutingImages)
             {
-                image.GetComponent<Image>().color = new Color(0, 0, 0, 0);
+                if (imageObject == null) continue;
+                Image image = imageObject.GetComponent<Image>();
+                image.color = new Color(image.color.r, image.color.g, image.color.b, 0);
             }
         }
 

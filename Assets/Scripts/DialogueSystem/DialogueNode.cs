@@ -15,7 +15,7 @@ public class DialogueNode : ScriptableObject
     [SerializeField]
     List<GameObject> shoutingImages;
     [SerializeField]
-    int imageSize;
+    int imageSize = 100;
     [SerializeField]
     bool hasSecondImageLine;
     [SerializeField]

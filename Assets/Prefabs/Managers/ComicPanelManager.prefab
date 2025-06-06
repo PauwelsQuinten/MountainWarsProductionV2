@@ -49,6 +49,7 @@ MonoBehaviour:
   _spawnPoints:
   - {fileID: 0}
   - {fileID: 0}
+  _changeCam: {fileID: 11400000, guid: 236b0961bb0b8f940961465ceff76340, type: 2}
 --- !u!114 &3199140902055986259
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -61,18 +62,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 378aedac68bdfde41a37845effefbcaf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _panelswitchPauseTime: 1
+  _panelMoveSpeed: 3
   _panels:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  - {fileID: 0}
+  _biomePanels:
+  - {fileID: 0}
+  - {fileID: 0}
   _panelSwitchSound: {fileID: 11400000, guid: 9f1ebbc13b5bcd943b34426bdded2528, type: 2}
   _camZoomSpeed: 2
   _camMoveSpeed: 2
   _offsetZ: -2
+  _showdownPauseTime: 0.7
+  _showdownMoveSpeed: 5
+  _startOffset: 10
   _vsImage: {fileID: 0}
   _ShowdownSound: {fileID: 11400000, guid: 3c342a7b87a6ed947b049977017f3b74, type: 2}
+  _vsSound: {fileID: 11400000, guid: 256011474ec1c184e867e9af51206920, type: 2}
+  _renderTexture: {fileID: 8400000, guid: e500b721db80cde4ea4b3dde2f33b308, type: 2}
+  _canvas: {fileID: 0}
 --- !u!114 &2646941462468221856
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -132,7 +145,7 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 1228663452114195288}
         m_TargetAssemblyTypeName: SceneManager, Assembly-CSharp
-        m_MethodName: ExitTrigger
+        m_MethodName: ExitPanels
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

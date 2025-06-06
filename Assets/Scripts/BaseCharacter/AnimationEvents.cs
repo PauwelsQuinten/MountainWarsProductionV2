@@ -34,23 +34,25 @@ public class AnimationEvents : MonoBehaviour
 
     public void Footstep()
     {
-      _footstep.Raise(this.transform.parent, EventArgs.Empty);
-        Debug.Log("step");
+        if (_footstep && transform.parent) 
+            _footstep.Raise(this.transform.parent, EventArgs.Empty);
     }
 
     public void Whoosh()
     {
-        _whoosh.Raise(this.transform.parent, EventArgs.Empty);;
+        if (_whoosh && transform.parent) 
+            _whoosh.Raise(this.transform.parent, EventArgs.Empty);;
     }
 
     public void SwordHit()
     {
-        _recieveAttackEvent.Raise(this.transform.parent, null);
+        if (_recieveAttackEvent && transform.parent) 
+            _recieveAttackEvent.Raise(this.transform.parent, null);
     }
 
     public void EndAnimation()
     {
-        if ( _endAnimation ) 
+        if (_endAnimation && transform.parent) 
             _endAnimation.Raise(this.transform.parent, null);
     }
 
@@ -59,7 +61,7 @@ public class AnimationEvents : MonoBehaviour
         bool zone = InZone == 0? true : false;
         Debug.Log($"in parry movement signal = {zone}");
 
-        if (_inParryZone)
+        if (_inParryZone && transform.parent)
             _inParryZone.Raise(this.transform.parent, zone);
     }
 
@@ -76,7 +78,7 @@ public class AnimationEvents : MonoBehaviour
     public void DragShield()
     {
 
-        if (_dragShieldDown)
+        if (_dragShieldDown && transform.parent)
             _dragShieldDown.Raise(this.transform.parent, null);
     }
      
@@ -84,19 +86,19 @@ public class AnimationEvents : MonoBehaviour
     {
         bool isSheating = zeroForIn == 0? true : false;
 
-        if (_sheatSword)
+        if (_sheatSword && transform.parent)
             _sheatSword.Raise(this.transform.parent, isSheating);
     }
      
     public void Pickup()
     {
-        if (_pickup)
+        if (_pickup && transform.parent)
             _pickup.Raise(this.transform.parent, null);
     }
 
     public void Stunned()
     {
-        if (_stunned)
+        if (_stunned && transform.parent)
             _stunned?.Raise(this.transform.parent, null);
     }
     

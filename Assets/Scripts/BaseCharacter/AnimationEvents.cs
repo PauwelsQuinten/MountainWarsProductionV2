@@ -35,7 +35,7 @@ public class AnimationEvents : MonoBehaviour
     public void Footstep()
     {
       _footstep.Raise(this.transform.parent, EventArgs.Empty);
-      
+        Debug.Log("step");
     }
 
     public void Whoosh()

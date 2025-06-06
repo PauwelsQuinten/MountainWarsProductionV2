@@ -149,6 +149,7 @@ public class AnimationManager : MonoBehaviour
         _YVelocity = 0f;
         _GotTarget = 0f;
         _movementSpeed = walkArgs.WalkDirection.magnitude * walkArgs.Speed;
+       
 
         if (walkArgs.IsLockon)
         {
@@ -156,7 +157,7 @@ public class AnimationManager : MonoBehaviour
             float angleDiff = input - walkArgs.Orientation * Mathf.Deg2Rad;
             Vector3 animInput = Geometry.Geometry.CalculateVectorFromfOrientation(angleDiff) * _movementSpeed;
             _XVelocity = animInput.x;
-            _YVelocity = animInput.z;
+            _YVelocity =  animInput.z;
             _GotTarget = 1f;
         }
         else
@@ -248,7 +249,12 @@ public class AnimationManager : MonoBehaviour
     {
         _animator.SetFloat(P_ON_TARGET, GotTarget, 0.1f, Time.deltaTime);
         _animator.SetFloat(P_X_MOVEMENT, XVelocity, 0.1f, Time.deltaTime);
+        if (Mathf.Abs(_animator.GetFloat(P_X_MOVEMENT)) < 0.05f)
+            _animator.SetFloat(P_X_MOVEMENT, XVelocity);
+
         _animator.SetFloat(P_y_MOVEMENT, YVelocity, 0.1f, Time.deltaTime);
+        if (Mathf.Abs(_animator.GetFloat(P_y_MOVEMENT)) < 0.05f)
+            _animator.SetFloat(P_y_MOVEMENT, XVelocity);
         //_animator.SetFloat("AttackBlend", attBlend, 0.1f, Time.deltaTime);
     }
 

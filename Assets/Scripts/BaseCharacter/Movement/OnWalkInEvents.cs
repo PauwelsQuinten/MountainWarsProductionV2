@@ -7,10 +7,13 @@ public class OnWalkInEvents : MonoBehaviour
 {
     [SerializeField] private GameEvent _queueEvent;
     [SerializeField] private float _movementPower = 100f;
+    [SerializeField] private float _movementPowerAtRiver = 100f;
     [SerializeField] private float _approachTime = 0.25f;
     private const string NO_TAG = "Untagged";
     private const string TAG_Villager = "Untagged";
     private Rigidbody _rb;
+
+    Vector3 collisionPoint;
 
     private void Start()
     {
@@ -28,9 +31,11 @@ public class OnWalkInEvents : MonoBehaviour
             {
 
                 ContactPoint contact = collision.GetContact(0);
-                Vector3 collisionPoint = contact.point;
+                collisionPoint = contact.point;
 
-                Interact(collisionPoint);
+                float power = tag == SpecialInput.DipWater? _movementPowerAtRiver: _movementPower;
+
+                Interact(collisionPoint, power);
                 _queueEvent.Raise(this, new AimingOutputArgs {Special =  tag});
                 return;
             }
@@ -39,17 +44,28 @@ public class OnWalkInEvents : MonoBehaviour
         Debug.Log("No vallid tag name found on hit object");
     }
 
-    private async Task Interact(Vector3 target)
+    private async Task Interact(Vector3 target, float power)
     {        
         float elpased = 0f;
+        var _offsetDirectionPos = (transform.position - target).normalized;
+
         while( elpased < _approachTime)
         {
             elpased += Time.deltaTime;
-            var _offsetDirectionPos = (transform.position - target).normalized;
-            _rb.AddForce(_offsetDirectionPos * _movementPower, ForceMode.Force);
+            _rb.AddForce(_offsetDirectionPos * power, ForceMode.Force);
             await Task.Yield();  
         }
     }
+
+
+    private void OnDrawGizmos()
+    {
+        
+        Gizmos.color = Color.red;
+        Gizmos.DrawSphere(collisionPoint, 0.1f);
+        
+    }
+
 
 
 }

@@ -33,26 +33,25 @@ public static class EquipmentHelper
         newEquip.transform.parent = socket;
         newEquip.transform.localPosition = Vector3.zero;
         newEquip.transform.localRotation = Quaternion.identity;
-        
 
-        var collider = HeldEquipment[index].GetComponent<CapsuleCollider>();
-        if (collider)
-            collider.enabled = false;
+        SetPhysics(newEquip, true);
+
     }
 
 
-    public static void DropEquipment(List<Equipment> HeldEquipment, int hand)
+    public static Equipment DropEquipment(List<Equipment> HeldEquipment, int hand)
     {
 
         if (HeldEquipment[hand] == null)
-            return;
+            return null;
         HeldEquipment[hand].transform.parent = null;
 
-        var collider = HeldEquipment[hand].GetComponent<CapsuleCollider>();
-        if (collider)
-            collider.enabled = true;
+        SetPhysics(HeldEquipment[hand], false);
 
+        var equipmentRef = HeldEquipment[hand];
         HeldEquipment[hand] = null;
+
+        return equipmentRef;
     }
 
     public static void CreateAndEquip(List<Equipment> HeldEquipment, Equipment Equipment, int hand, Transform socket, Transform parent)
@@ -65,13 +64,10 @@ public static class EquipmentHelper
 
         Equipment.transform.localPosition = Vector3.zero;
         HeldEquipment[hand] = Equipment;
-
-        var collider = HeldEquipment[hand].GetComponent<CapsuleCollider>();
-        if (collider)
-            collider.enabled = false;
+        SetPhysics(HeldEquipment[hand], true);
     }
 
-    public static bool CheckIfBroken(DefenceEventArgs args, int index, List<Equipment> HeldEquipment, out LoseEquipmentEventArgs package)
+    public static bool CheckIfBroken(DefenceEventArgs args, int index, List<Equipment> HeldEquipment, out LoseEquipmentEventArgs package, GameObject owner)
     {
         //Check if broken
         if (HeldEquipment[index].Durability < 0f)
@@ -81,12 +77,25 @@ public static class EquipmentHelper
             package = new LoseEquipmentEventArgs
             {
                 EquipmentType = args.BlockMedium == BlockMedium.Shield ? EquipmentType.Shield : EquipmentType.Melee,
-                ToSelf = true
+                WhoLostIt = owner
             };
             return true;
         }
         package = null;
         return false;
+    }
+
+    private static void SetPhysics(Equipment Equipment, bool setForHolding)
+    {
+        var collider = Equipment.GetComponent<CapsuleCollider>();
+        if (collider)
+        {
+            collider.enabled = !setForHolding;
+            //collider.isTrigger = true;
+        }
+        var rb = Equipment.GetComponent<Rigidbody>();
+        if (rb)
+            rb.isKinematic = setForHolding;
     }
 
 }

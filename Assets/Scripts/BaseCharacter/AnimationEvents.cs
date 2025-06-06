@@ -66,7 +66,8 @@ public void Stun()
         bool zone = InZone == 0? true : false;
         Debug.Log($"in parry movement signal = {zone}");
 
-        _inParryZone.Raise(this.transform.parent, zone);
+        if (_inParryZone)
+            _inParryZone.Raise(this.transform.parent, zone);
     }
 
     public void RotateShield(int direction)
@@ -81,13 +82,17 @@ public void Stun()
     
     public void DragShield()
     {
-        _dragShieldDown.Raise(this.transform.parent, null);
+
+        if (_dragShieldDown)
+            _dragShieldDown.Raise(this.transform.parent, null);
     }
      
     public void SheatSword(int zeroForIn)
     {
         bool isSheating = zeroForIn == 0? true : false;
-        _sheatSword.Raise(this.transform.parent, isSheating);
+
+        if (_sheatSword)
+            _sheatSword.Raise(this.transform.parent, isSheating);
     }
 
     public void ChargeAttack()
@@ -97,12 +102,14 @@ public void Stun()
 
     public void Pickup()
     {
-        _pickup.Raise(this.transform.parent, null);
+        if (_pickup)
+            _pickup.Raise(this.transform.parent, null);
     }
 
     public void Stunned()
     {
-         _stunned.Raise(this.transform.parent, null);
+        if (_stunned)
+            _stunned?.Raise(this.transform.parent, null);
     }
     
     public void MoveBack(int forward)
@@ -115,5 +122,10 @@ public void Stun()
         else
             _moveAttack.Raise(this, new AttackMoveEventArgs { Attacker = transform.parent.gameObject, AttackType = AttackType.Stab });
         Debug.Log($"Move 1 = f, 0 = b. {forward}, {transform.parent}");
+    }
+
+    public void Confusion()
+    {
+
     }
 }

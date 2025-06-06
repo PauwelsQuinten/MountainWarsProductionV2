@@ -119,7 +119,7 @@ namespace Geometry
         public static Vector3 GetRandomPointOnNavMesh(Vector3 center, float radius)
         {
             for (int i = 0; i < 5; i++) // Try up to 5 times
-            {
+ {
                 Vector3 randomDirection = Random.insideUnitSphere * radius;
                 randomDirection += center;
 
@@ -129,8 +129,8 @@ namespace Geometry
                 }
             }
 
-            // If no valid point found, return center
-            return center;
+        // If no valid point found, return center
+        return center;
         }
 
         public static float CalculatefOrientationToTarget(Vector3 target, Vector3 self)

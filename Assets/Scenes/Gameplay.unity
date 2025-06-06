@@ -608,8 +608,52 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 167457055}
     - target: {fileID: -9064225466436632881, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
+      propertyPath: _bandagingSFX.Path
+      value: event:/Combat/Bandaging
+      objectReference: {fileID: 0}
+    - target: {fileID: -9064225466436632881, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
+      propertyPath: _nextDialogueSFX.Path
+      value: event:/Misc/SkipDialogue
+      objectReference: {fileID: 0}
+    - target: {fileID: -9064225466436632881, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
       propertyPath: _vocalizationSFX.Path
       value: event:/Character/Vocalizations
+      objectReference: {fileID: 0}
+    - target: {fileID: -9064225466436632881, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
+      propertyPath: _dialogueStartSFX.Path
+      value: event:/Misc/DialogueStart
+      objectReference: {fileID: 0}
+    - target: {fileID: -9064225466436632881, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
+      propertyPath: _bandagingSFX.Guid.Data1
+      value: 1238830116
+      objectReference: {fileID: 0}
+    - target: {fileID: -9064225466436632881, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
+      propertyPath: _bandagingSFX.Guid.Data2
+      value: 1079708704
+      objectReference: {fileID: 0}
+    - target: {fileID: -9064225466436632881, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
+      propertyPath: _bandagingSFX.Guid.Data3
+      value: -101485633
+      objectReference: {fileID: 0}
+    - target: {fileID: -9064225466436632881, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
+      propertyPath: _bandagingSFX.Guid.Data4
+      value: -1311584211
+      objectReference: {fileID: 0}
+    - target: {fileID: -9064225466436632881, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
+      propertyPath: _nextDialogueSFX.Guid.Data1
+      value: 1373894235
+      objectReference: {fileID: 0}
+    - target: {fileID: -9064225466436632881, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
+      propertyPath: _nextDialogueSFX.Guid.Data2
+      value: 1269015846
+      objectReference: {fileID: 0}
+    - target: {fileID: -9064225466436632881, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
+      propertyPath: _nextDialogueSFX.Guid.Data3
+      value: 509681312
+      objectReference: {fileID: 0}
+    - target: {fileID: -9064225466436632881, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
+      propertyPath: _nextDialogueSFX.Guid.Data4
+      value: -715992120
       objectReference: {fileID: 0}
     - target: {fileID: -9064225466436632881, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
       propertyPath: _vocalizationSFX.Guid.Data1
@@ -626,6 +670,22 @@ PrefabInstance:
     - target: {fileID: -9064225466436632881, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
       propertyPath: _vocalizationSFX.Guid.Data4
       value: -376467414
+      objectReference: {fileID: 0}
+    - target: {fileID: -9064225466436632881, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
+      propertyPath: _dialogueStartSFX.Guid.Data1
+      value: -1328590346
+      objectReference: {fileID: 0}
+    - target: {fileID: -9064225466436632881, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
+      propertyPath: _dialogueStartSFX.Guid.Data2
+      value: 1229781094
+      objectReference: {fileID: 0}
+    - target: {fileID: -9064225466436632881, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
+      propertyPath: _dialogueStartSFX.Guid.Data3
+      value: -1104036461
+      objectReference: {fileID: 0}
+    - target: {fileID: -9064225466436632881, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
+      propertyPath: _dialogueStartSFX.Guid.Data4
+      value: -277543010
       objectReference: {fileID: 0}
     - target: {fileID: -7891369219080097047, guid: a13c678e51e895141bd80a8f9f6aaf98, type: 3}
       propertyPath: Events.Array.size

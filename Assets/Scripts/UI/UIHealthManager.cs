@@ -45,9 +45,11 @@ public class UIHealthManager : MonoBehaviour
     [SerializeField]
     private GameObject _canvas;
     [SerializeField]
-    private GameEvent _gameLost;
+    private GameEvent _characterDeath;
 
     private Coroutine _dissableHealth;
+
+    private string _name;
 
     public void Update()
     {
@@ -65,16 +67,21 @@ public class UIHealthManager : MonoBehaviour
         if(sender.gameObject.GetComponent<PlayerController>() == null)
         {
             if (sender.gameObject != gameObject) return;
+            _name = gameObject.name;
 
             _bloodBar.transform.parent.gameObject.SetActive(true);
             _healthBar.transform.parent.gameObject.SetActive(true);
 
             if (_dissableHealth != null) StopCoroutine(_dissableHealth);
             _dissableHealth = StartCoroutine(DissableHealthUI());
+
+            //if (args.CurrentHealth < 0)
+            //    _characterDeath.Raise(this, new CharacterDeathEventArgs{ CharacterName = _name});
         }
         else
         {
             if (gameObject.GetComponent<AIController>() != null) return;
+            _name = "Player";
         }
 
         float fillAmount = args.CurrentHealth / args.MaxHealth;
@@ -85,12 +92,7 @@ public class UIHealthManager : MonoBehaviour
 
         if (args.CurrentHealth > 0) return;
 
-        if (sender.gameObject.GetComponent<PlayerController>() == null)
-        {
-            Destroy(this.gameObject);
-            return;
-        }
-        _gameLost.Raise(this, EventArgs.Empty);
+        _characterDeath.Raise(this, new CharacterDeathEventArgs { CharacterName = _name });
     }
 
     private void UpdateBodyPartColor(Component sender, HealthEventArgs args)
@@ -128,27 +130,26 @@ public class UIHealthManager : MonoBehaviour
         if (sender.gameObject.GetComponent<PlayerController>() == null)
         {
             if (sender.gameObject != gameObject) return;
+            _name = gameObject.name;
 
             _bloodBar.transform.parent.gameObject.SetActive(true);
             _healthBar.transform.parent.gameObject.SetActive(true);
 
             if (_dissableHealth != null) StopCoroutine(_dissableHealth);
+
+            //if (args.CurrentBlood < 0)
+            //    _characterDeath.Raise(this, new CharacterDeathEventArgs { CharacterName = _name });
         }
         else
         {
             if (gameObject.GetComponent<AIController>() != null) return;
+            _name = "Player";
         }
         float barFill = args.CurrentBlood / args.MaxBlood;
         _bloodBar.fillAmount = barFill;
 
-        if (args.CurrentBlood <= 0 && sender.gameObject.CompareTag("Player"))
-            _gameLost.Raise(this, EventArgs.Empty);
-
-        //if (sender.gameObject.GetComponent<PlayerController>() == null)
-        //{
-        //    Destroy(this.gameObject);
-        //    return;
-        //}
+        if (args.CurrentBlood <= 0)
+            _characterDeath.Raise(this, new CharacterDeathEventArgs { CharacterName = _name });
     }
 
     public void UpdatePatchUp(Component sender, object obj)

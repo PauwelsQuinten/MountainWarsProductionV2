@@ -256,6 +256,7 @@ public class ViewManager : MonoBehaviour
 
         float time = 0;
         int index = 0;
+
         ////if(_previousArgs != null) index = _previousArgs.NewViewIndex;
         ///*else*/ index = _currentArgs.NewViewIndex;
         //index++;

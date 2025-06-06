@@ -2170,12 +2170,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _stateManager: {fileID: 4253691276873583013}
-  _interactEvent: {fileID: 0}
   _MoveEvent: {fileID: 0}
-  _patchUpDuration: 1
-  _patchUpEvent: {fileID: 11400000, guid: b60a265955952bd458a744ff3fa08d58, type: 2}
   _shieldBash: {fileID: 0}
   _LookForTarget: {fileID: 11400000, guid: 7da4419bca02ab342bac3950bdec894c, type: 2}
+  _inQueueAction: {fileID: 0}
 --- !u!114 &1968497683231143963
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2188,12 +2186,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca9dcbcdeae6aa2449c38b809600286e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _blackboard:
-    useConstant: 0
-    constantValue: {x: 0, y: 0}
-    variable: {fileID: 11400000, guid: 4183302ba65dec041ade313c232c61e0, type: 2}
   _characterMentality: 0
-  Perception: 0.8
+  Perception: 0
+  Determination: 8
   _allActionPrefabs:
   - {fileID: -1797275518084691768, guid: 44cf234799c54b64ca6ef818b6279bea, type: 3}
   - {fileID: 2825537844067042917, guid: 827c5341e3600b7459b5434966c7ab4a, type: 3}
@@ -2209,6 +2204,7 @@ MonoBehaviour:
   - {fileID: 3699231227375087124, guid: 0efe03a9ba895124d9f24ff615c18a24, type: 3}
   - {fileID: 6493276799153221584, guid: e2788e57d5589344bb4085b787838778, type: 3}
   - {fileID: 929350043078169161, guid: 983e2c30c8a6e35408579918729de7a0, type: 3}
+  _allInteruptPrefabs: []
 --- !u!195 &8750371083623907664
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -2244,6 +2240,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _healthBar: {fileID: 145169433805499022}
+  _patchupDuration:
+    useConstant: 0
+    constantValue: 0
+    variable: {fileID: 0}
   _fullHealthColor: {r: 0, g: 0, b: 0, a: 0}
   _noHealthColor: {r: 0, g: 0, b: 0, a: 0}
   _bloodBar: {fileID: 6602021442131250098}
@@ -2254,7 +2254,7 @@ MonoBehaviour:
   _weapon: {fileID: 0}
   _cameraToLookAt: {fileID: 0}
   _canvas: {fileID: 7106233093928887932}
-  _gameLost: {fileID: 0}
+  _characterDeath: {fileID: 11400000, guid: dfa121c9025557d41bb84f9c8b83c038, type: 2}
 --- !u!114 &1618796859635072254 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1490819108717279631, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
@@ -2433,6 +2433,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: c2ec0e6284e767941934463c6de9d776, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7875268914386589386}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: c2ec0e6284e767941934463c6de9d776, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5951821647668772353}
   m_SourcePrefab: {fileID: 100100000, guid: c2ec0e6284e767941934463c6de9d776, type: 3}
 --- !u!4 &702348609081467453 stripped
 Transform:
@@ -2477,6 +2480,11 @@ MonoBehaviour:
   _endAnimation: {fileID: 11400000, guid: 84ee518c278608442b5da03c225a1fc1, type: 2}
   _inParryZone: {fileID: 11400000, guid: 48b146ca432fdaf4a98acaef1bbf49a6, type: 2}
   _rotateShield: {fileID: 11400000, guid: 7f9e479aba9dadf4abc23c350fe51bba, type: 2}
+  _dragShieldDown: {fileID: 0}
+  _sheatSword: {fileID: 0}
+  _pickup: {fileID: 0}
+  _stunned: {fileID: 0}
+  _moveAttack: {fileID: 0}
 --- !u!114 &7875268914386589386
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2495,6 +2503,28 @@ MonoBehaviour:
   - m_Rig: {fileID: 8522829091614019372}
     m_Active: 1
   m_Effectors: []
+--- !u!95 &5951821647668772353
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5666861173831915539}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!4 &5965716936051230022 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8021001004253913084, guid: c2ec0e6284e767941934463c6de9d776, type: 3}

@@ -204,9 +204,6 @@ public class HealthManager : MonoBehaviour
             _isBleeding = true;
             _stateManager.IsBleeding = _isBleeding;
         }       
-
-        if (!gameObject.CompareTag(PLAYER) && _currentHealth <= 0)
-            Destroy(gameObject);
     }
 
     private void LoseBlood()
@@ -228,9 +225,6 @@ public class HealthManager : MonoBehaviour
 
         if(_canRegenCoroutine !=  null) StopCoroutine( _canRegenCoroutine );
         _canRegenCoroutine = StartCoroutine(ResetCanRegen());
-
-        if (!gameObject.CompareTag(PLAYER) && _currentBlood <= 0)
-            Destroy(gameObject);
     }
 
     private void RegenBlood()
@@ -344,5 +338,4 @@ public class HealthManager : MonoBehaviour
             StartCoroutine(ResetCanRegen());
         }
     }
-
 }

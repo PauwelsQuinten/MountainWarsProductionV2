@@ -147,7 +147,9 @@ public class Blocking : MonoBehaviour
             BlockResult = blockResult,
             AttackHeight = args.AttackHeight,
             AttackPower = args.AttackPower,
-            BlockMedium = _blockMedium
+            BlockMedium = _blockMedium,
+            Attacker = args.Attacker,
+            Defender  = gameObject
         };
 
         if (blockResult == BlockResult.Hit)

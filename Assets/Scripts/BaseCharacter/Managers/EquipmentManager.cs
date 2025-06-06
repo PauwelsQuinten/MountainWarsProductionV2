@@ -136,9 +136,9 @@ public class EquipmentManager : MonoBehaviour
         DefenceEventArgs args = obj as DefenceEventArgs;
         if (args == null) return;
 
-        if (sender.gameObject == gameObject)
+        if (args.Defender == gameObject)
             BlockMediumReduction(args);
-        else
+        else if (args.Attacker == gameObject)
             AttackMediumReduction(args);
 
         UpdateBlackboard();

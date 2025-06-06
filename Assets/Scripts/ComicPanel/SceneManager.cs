@@ -19,6 +19,9 @@ public class SceneManager : MonoBehaviour
     {
         TriggerEnterEventArgs args = obj as TriggerEnterEventArgs;
         if (args == null) return;
+
+        if (args.IsHidingSpot || args.IsShowDown) return;
+
         Camera currentCam = null;
         Camera nextCam = null;
         if (args.CurrentSceneIndex == args.newSceneIndex)
@@ -32,8 +35,6 @@ public class SceneManager : MonoBehaviour
             _changeCam.Raise(this, nextCam);
             return;
         }
-
-        if (args.IsHidingSpot || args.IsShowDown) return;
 
         currentCam = args.CurrentCamera;
         nextCam = args.NextCamera;

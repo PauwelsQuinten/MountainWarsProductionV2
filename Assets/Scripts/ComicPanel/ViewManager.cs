@@ -246,22 +246,22 @@ public class ViewManager : MonoBehaviour
 
         foreach (StateManager target in targets)
         {
-            if(target.GetComponent<AIController>() != null)
+            if (target.GetComponent<AIController>() != null)
             {
                 var camComp = target.GetComponentInChildren<Camera>();
-                if (camComp != null) 
+                if (camComp != null)
                     camComp.enabled = false;
             }
         }
 
         float time = 0;
         int index = 0;
-        if(_previousArgs != null) index = _previousArgs.NewViewIndex;
-        else index = _currentArgs.NewViewIndex;
-        index++;
-        int newIndex = index;
+        ////if(_previousArgs != null) index = _previousArgs.NewViewIndex;
+        ///*else*/ index = _currentArgs.NewViewIndex;
+        //index++;
+        //int newIndex = index;
 
-        GameObject playerPanel = _panels[newIndex].gameObject;
+        GameObject playerPanel = _panels[1].gameObject;
         GameObject enemy = vsTarget;
         var cam = enemy.GetComponentInChildren<Camera>();
         if ( cam)
@@ -271,7 +271,7 @@ public class ViewManager : MonoBehaviour
             cam.Render();
         }
         
-        GameObject enemyPanel = _panels[++newIndex].gameObject;
+        GameObject enemyPanel = _panels[2].gameObject;
 
         CharacterMovement enemyMove = enemy.GetComponent<CharacterMovement>();
         NavMeshAgent enemyNavMove = enemy.GetComponent<NavMeshAgent>();

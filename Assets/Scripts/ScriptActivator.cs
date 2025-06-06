@@ -17,12 +17,23 @@ public class ScriptActivator : MonoBehaviour
         {
             if (character == gameObject.name)
             {
-                gameObject.layer = _layermask;
                 foreach (MonoBehaviour script in _scriptsToActivate)
                 {
                     script.enabled = true;
                 }
+                gameObject.layer = LayerMaskToLayer(_layermask);
             }
         }
+    }
+
+    public static int LayerMaskToLayer(LayerMask mask)
+    {
+        int value = mask.value;
+        for (int i = 0; i < 32; i++)
+        {
+            if ((value & (1 << i)) != 0)
+                return i;
+        }
+        return -1; // No layer found
     }
 }

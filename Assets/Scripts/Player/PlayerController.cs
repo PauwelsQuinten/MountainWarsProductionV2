@@ -389,10 +389,8 @@ public class PlayerController : MonoBehaviour
 
     private IEnumerator CheckSurrounding()
     {
-        while (true)
-        {
-            yield return new WaitForSeconds(0.5f);
-            _LookForTarget.Raise(this, new OrientationEventArgs { NewOrientation = _stateManager.Orientation });
-        }
+        yield return new WaitForSeconds(0.5f);
+        _LookForTarget.Raise(this, new OrientationEventArgs { NewOrientation = _stateManager.Orientation });
+        StartCoroutine(CheckSurrounding());
     }
 }

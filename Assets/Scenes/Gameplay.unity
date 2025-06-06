@@ -1793,6 +1793,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 614285990809907580, guid: 612450168a7df0444a258ec2be0a03ee, type: 3}
+      propertyPath: m_Texture
+      value: 
+      objectReference: {fileID: 2800000, guid: 231b0aa7a81db7944b5131a5bc98a8a9, type: 3}
     - target: {fileID: 1107607502517485495, guid: 612450168a7df0444a258ec2be0a03ee, type: 3}
       propertyPath: m_Name
       value: ComicPanelCanvas
@@ -1805,10 +1809,14 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4312773297684293650, guid: 612450168a7df0444a258ec2be0a03ee, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 13
+      objectReference: {fileID: 0}
     - target: {fileID: 4457800707215652366, guid: 612450168a7df0444a258ec2be0a03ee, type: 3}
       propertyPath: m_Texture
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 2800000, guid: 231b0aa7a81db7944b5131a5bc98a8a9, type: 3}
     - target: {fileID: 4943456866223265795, guid: 612450168a7df0444a258ec2be0a03ee, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -1893,6 +1901,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5609096109715900016, guid: 612450168a7df0444a258ec2be0a03ee, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 13
+      objectReference: {fileID: 0}
     - target: {fileID: 6780615039242120356, guid: 612450168a7df0444a258ec2be0a03ee, type: 3}
       propertyPath: m_AnchoredPosition.x
       value: -5
@@ -1900,6 +1912,10 @@ PrefabInstance:
     - target: {fileID: 6780615039242120356, guid: 612450168a7df0444a258ec2be0a03ee, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 7092330353690205268, guid: 612450168a7df0444a258ec2be0a03ee, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 15.38
       objectReference: {fileID: 0}
     - target: {fileID: 7536724293365570995, guid: 612450168a7df0444a258ec2be0a03ee, type: 3}
       propertyPath: m_IsActive
@@ -1909,7 +1925,7 @@ PrefabInstance:
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 4943456866223265795, guid: 612450168a7df0444a258ec2be0a03ee, type: 3}
-      insertIndex: 5
+      insertIndex: 2
       addedObject: {fileID: 560705158}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 612450168a7df0444a258ec2be0a03ee, type: 3}
@@ -3144,6 +3160,10 @@ PrefabInstance:
     - target: {fileID: 2321488178333560226, guid: f8e524e8d99e7f94d8a5e751f78bcc07, type: 3}
       propertyPath: m_Name
       value: ComicPanelManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 2321488178333560226, guid: f8e524e8d99e7f94d8a5e751f78bcc07, type: 3}
+      propertyPath: m_Layer
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2646941462468221856, guid: f8e524e8d99e7f94d8a5e751f78bcc07, type: 3}
       propertyPath: Events.Array.size
@@ -5336,7 +5356,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 0}
+  m_Texture: {fileID: 2800000, guid: 231b0aa7a81db7944b5131a5bc98a8a9, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0
@@ -5576,6 +5596,10 @@ PrefabInstance:
     - target: {fileID: 6168163967946298814, guid: ebda3d553a834264ebd7b3df69ac6dd3, type: 3}
       propertyPath: m_Name
       value: DialogueTrigger
+      objectReference: {fileID: 0}
+    - target: {fileID: 6168163967946298814, guid: ebda3d553a834264ebd7b3df69ac6dd3, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8319330883209865449, guid: ebda3d553a834264ebd7b3df69ac6dd3, type: 3}
       propertyPath: m_Size.x
@@ -10096,6 +10120,10 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1880462878531367034, guid: e9651b4801f36d14e86c1cb82aa75d59, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2724192922246951129, guid: e9651b4801f36d14e86c1cb82aa75d59, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -10110,7 +10138,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3363722153122832148, guid: e9651b4801f36d14e86c1cb82aa75d59, type: 3}
       propertyPath: m_Enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4041348560418194016, guid: e9651b4801f36d14e86c1cb82aa75d59, type: 3}
       propertyPath: m_Enabled
@@ -10176,13 +10204,17 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4996746403009695576, guid: e9651b4801f36d14e86c1cb82aa75d59, type: 3}
+      propertyPath: _cameraToLookAt
+      value: 
+      objectReference: {fileID: 1996493054}
     - target: {fileID: 5245217995566118396, guid: e9651b4801f36d14e86c1cb82aa75d59, type: 3}
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5318217082051312346, guid: e9651b4801f36d14e86c1cb82aa75d59, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5318217082051312346, guid: e9651b4801f36d14e86c1cb82aa75d59, type: 3}
       propertyPath: IsInDialogue.variable
@@ -10560,7 +10592,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 891831252}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 891831253}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2909b8547fd4161429a8659c53b32d0c, type: 3}
   m_Name: 
@@ -16858,6 +16890,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PaulFightTrigger
       objectReference: {fileID: 0}
+    - target: {fileID: 4451216149216901044, guid: a8ad19065268d2244ad27bdf7cd511b8, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6121488225196172770, guid: a8ad19065268d2244ad27bdf7cd511b8, type: 3}
       propertyPath: m_LocalPosition.x
       value: -2.58
@@ -17513,7 +17549,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 3
+  orthographic size: 2
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -17538,7 +17574,7 @@ Transform:
   m_GameObject: {fileID: 1996493054}
   serializedVersion: 2
   m_LocalRotation: {x: -0.16712143, y: 0.79159766, z: -0.3836064, w: -0.44529733}
-  m_LocalPosition: {x: 3.3735113, y: 21.751356, z: 31.001318}
+  m_LocalPosition: {x: 2.03, y: 21.751356, z: 31.001318}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

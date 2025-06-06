@@ -57,7 +57,7 @@ public class AnimationEvents : MonoBehaviour
     public void SetInParryZone(int InZone)
     {
         bool zone = InZone == 0? true : false;
-        Debug.Log($"in parry movement signal = {zone}");
+        //Debug.Log($"in parry movement signal = {zone}");
 
         _inParryZone.Raise(this.transform.parent, zone);
     }
@@ -102,6 +102,6 @@ public class AnimationEvents : MonoBehaviour
         //To move Forward
         else
             _moveAttack.Raise(this, new AttackMoveEventArgs { Attacker = transform.parent.gameObject, AttackType = AttackType.Stab });
-        Debug.Log($"Move 1 = f, 0 = b. {forward}, {transform.parent}");
+        //Debug.Log($"Move 1 = f, 0 = b. {forward}, {transform.parent}");
     }
 }

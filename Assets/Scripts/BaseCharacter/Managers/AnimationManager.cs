@@ -248,8 +248,12 @@ public class AnimationManager : MonoBehaviour
     {
         _animator.SetFloat(P_ON_TARGET, GotTarget, 0.1f, Time.deltaTime);
         _animator.SetFloat(P_X_MOVEMENT, XVelocity, 0.1f, Time.deltaTime);
+        if (Mathf.Abs(_animator.GetFloat(P_X_MOVEMENT)) < 0.05f)
+            _animator.SetFloat(P_X_MOVEMENT, XVelocity);
+
         _animator.SetFloat(P_y_MOVEMENT, YVelocity, 0.1f, Time.deltaTime);
-        //_animator.SetFloat("AttackBlend", attBlend, 0.1f, Time.deltaTime);
+        if (Mathf.Abs(_animator.GetFloat(P_y_MOVEMENT)) < 0.05f)
+            _animator.SetFloat(P_y_MOVEMENT, XVelocity);
     }
 
     private void InteruptAnimation(bool isFeint)

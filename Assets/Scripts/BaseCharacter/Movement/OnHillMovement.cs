@@ -31,8 +31,8 @@ public class OnHillMovement : MonoBehaviour
         {
             float angle = Vector3.Angle(contact.normal, Vector3.up);
 
-            // Check if the contact is with the ground (not a wall)
-            if (angle < _mxWalkAngle)
+                // Check if the contact is with the ground (not a wall)
+            if (angle < _mxWalkAngle)
             {
                 _groundNormal = contact.normal;
                 _isGrounded = true;

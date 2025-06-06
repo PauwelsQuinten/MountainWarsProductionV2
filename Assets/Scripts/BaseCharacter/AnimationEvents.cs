@@ -1,4 +1,5 @@
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class AnimationEvents : MonoBehaviour
@@ -29,10 +30,8 @@ public class AnimationEvents : MonoBehaviour
     [SerializeField] 
     private GameEvent _chargeAttack;
     private int _storredDirection = 0;
-    private void Start()
-    {
-        
-    }
+
+    private bool _footstepTriggered = false;
 
     public void Footstep()
     {

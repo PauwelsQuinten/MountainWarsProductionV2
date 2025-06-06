@@ -39,6 +39,8 @@ public class IKSpearMovement : MonoBehaviour
         _stateManager = GetComponent<StateManager>();
         _defaultOrientation = _aimTargetAdjuster.transform.localRotation;
 
+        
+
         if (_IKTargetRh && _rShoulderTarget)
         {
             GetComponent<SpearAiming>()?.SetIdlePosition();

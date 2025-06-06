@@ -5,6 +5,11 @@ using FMOD;
 using FMOD.Studio;
 using UnityEngine;
 using FMODUnity;
+using Unity.VisualScripting;
+using UnityEditor.AnimatedValues;
+using UnityEditor.Experimental.GraphView;
+using Debug = FMOD.Debug;
+using STOP_MODE = FMOD.Studio.STOP_MODE;
 
 
 public class FMODAudioHandler : MonoBehaviour
@@ -236,11 +241,28 @@ public class FMODAudioHandler : MonoBehaviour
         _stunnedSFXInstance.start();
         _stunnedSFXInstance.release();
     }
+    public void PlayAttackChargeSFX(Component sender, object obj)
+    {
+            _attackChargeSFXInstance = RuntimeManager.CreateInstance(_attackChargeSFX);
+            _attributes = RuntimeUtils.To3DAttributes(sender.transform.position);
+            _attackChargeSFXInstance.set3DAttributes(_attributes);
+            _attackChargeSFXInstance.start();
+            _attackChargeSFXInstance.release();
+        
+    }
 
+    public void PlayBandagingSFX(Component sender, object obj)
+    {
+            _bandagingSFXInstance = RuntimeManager.CreateInstance(_bandagingSFX);
+            _attributes = RuntimeUtils.To3DAttributes(sender.transform.position);
+            _bandagingSFXInstance.set3DAttributes(_attributes);
+            _bandagingSFXInstance.start();
+            _bandagingSFXInstance.release();
+        
+    }
     public void PlayDialogueStartSFX(Component sender, object obj)
     {
         _dialogueStartSFXInstance = RuntimeManager.CreateInstance(_dialogueStartSFX);
-        
         _dialogueStartSFXInstance.start();
         _dialogueStartSFXInstance.release();
     }
@@ -248,7 +270,6 @@ public class FMODAudioHandler : MonoBehaviour
     public void PlayNextDialogueSFX(Component sender, object obj)
     {
         _nextDialogueSFXInstance = RuntimeManager.CreateInstance(_nextDialogueSFX);
-        
         _nextDialogueSFXInstance.start();
         _nextDialogueSFXInstance.release();
     }
@@ -256,7 +277,6 @@ public class FMODAudioHandler : MonoBehaviour
     public void PlayPatchUpSFX(Component sender, object obj)
     {
         _bandagingSFXInstance = RuntimeManager.CreateInstance(_bandagingSFX);
-        
         _bandagingSFXInstance.start();
         _bandagingSFXInstance.release();
     }
@@ -303,19 +323,24 @@ public class FMODAudioHandler : MonoBehaviour
                 _surfaceTypeIDValue = 0.0f;
                 break;
         }
-
-        if (_player.GetComponentInChildren<Animator>().GetCurrentAnimatorStateInfo(2).IsName("Walk"))
-        {
-            _TypeOfWalkingIDValue = 1.0f;
-        }
-        else
-        {
-            _TypeOfWalkingIDValue = 2.0f;
-        }
-        SetParameterID(_footstepsSFXInstance, _surfaceTypeID, _surfaceTypeIDValue);
-        SetParameterID(_footstepsSFXInstance, _TypeOfWalkingID, _TypeOfWalkingIDValue);
-        _footstepsSFXInstance.start();
-        _footstepsSFXInstance.release();
+        
+        float absXmovement = Mathf.Abs(_player.GetComponentInChildren<Animator>().GetFloat("Xmovement"));
+            if (absXmovement > 1.0f && absXmovement < 1.51f)
+            {
+                _TypeOfWalkingIDValue = 2.0f;
+                SetParameterID(_footstepsSFXInstance, _surfaceTypeID, _surfaceTypeIDValue);
+                SetParameterID(_footstepsSFXInstance, _TypeOfWalkingID, _TypeOfWalkingIDValue);
+                _footstepsSFXInstance.start();
+                _footstepsSFXInstance.release();
+            }
+            else
+            {
+                _TypeOfWalkingIDValue = 1.0f;
+                SetParameterID(_footstepsSFXInstance, _surfaceTypeID, _surfaceTypeIDValue);
+                SetParameterID(_footstepsSFXInstance, _TypeOfWalkingID, _TypeOfWalkingIDValue);
+                _footstepsSFXInstance.start();
+                _footstepsSFXInstance.release(); 
+            }
     }
 
     private string DetectSurfaceType()
@@ -346,7 +371,6 @@ public class FMODAudioHandler : MonoBehaviour
                             _dominantLayer = layer.Key;
                         }
                     }
-
                     return _dominantLayer;
                 }
             }
@@ -390,8 +414,6 @@ public class FMODAudioHandler : MonoBehaviour
         SetWeaponHitSFXParameter();
         _weaponHitSFXInstance.start();
         _weaponHitSFXInstance.release();
-        
-      
     }
 
     public void PlayBlockSFX(Component sender, object obj)

@@ -12,7 +12,7 @@ public class HealthManager : MonoBehaviour
     private float _maxBaseLimbHealth;
     [SerializeField, Tooltip("The rate at which health regens")]
     private float _regenRate;
-     [SerializeField, Tooltip("The amount multiplied to the max health for recovering, this is done when you get an opponent to bleed. lowering his max HP")]
+    [SerializeField, Tooltip("The amount multiplied to the max health for recovering, this is done when you get an opponent to bleed. lowering his max HP")]
     private float _maxHealthMultiplier = 0.9f;
     [SerializeField]
     private GameEvent _changedHealth;
@@ -120,8 +120,8 @@ public class HealthManager : MonoBehaviour
         _bodyPartHealth.Add(BodyParts.Torso, _maxBaseLimbHealth * 1.5f);
         _bodyPartHealth.Add(BodyParts.LeftArm, _maxBaseLimbHealth);
         _bodyPartHealth.Add(BodyParts.RightArm, _maxBaseLimbHealth);
-        _bodyPartHealth.Add(BodyParts.LeftLeg, _maxBaseLimbHealth);
-        _bodyPartHealth.Add(BodyParts.RightLeg, _maxBaseLimbHealth);
+        //_bodyPartHealth.Add(BodyParts.LeftLeg, _maxBaseLimbHealth);
+        //_bodyPartHealth.Add(BodyParts.RightLeg, _maxBaseLimbHealth);
 
         foreach(var part in _bodyPartHealth)
         {

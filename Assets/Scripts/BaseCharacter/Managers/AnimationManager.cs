@@ -154,9 +154,9 @@ public class AnimationManager : MonoBehaviour
         {
             float input = Geometry.Geometry.CalculateAngleRadOfInput(walkArgs.WalkDirection);
             float angleDiff = input - walkArgs.Orientation * Mathf.Deg2Rad;
-            Vector2 animInput = Geometry.Geometry.CalculateVectorFromfOrientation(angleDiff) * _movementSpeed;
+            Vector3 animInput = Geometry.Geometry.CalculateVectorFromfOrientation(angleDiff) * _movementSpeed;
             _XVelocity = animInput.x;
-            _YVelocity = animInput.y;
+            _YVelocity = animInput.z;
             _GotTarget = 1f;
         }
         else

@@ -49,8 +49,7 @@ public class SpearAiming : MonoBehaviour
         _refAimingInput.variable.ValueChanged += OnSpearMovement;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void FixedUpdate()
     {
         if (!_isActive) return;
 

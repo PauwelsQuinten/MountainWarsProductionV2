@@ -11,8 +11,11 @@ public class SpearHitDetection : MonoBehaviour
     [SerializeField] private float _minPower = 1f;
     [SerializeField] private float _maxPower = 20f;
     [SerializeField] private float _powerOnSpeed = 7.5f;
-    private float _velocity = 0f;
+
+    private Vector3 _spearForwardDirection = Vector3.zero;
     private Vector3 _PreviousPosition = Vector3.zero;
+    private float _fOrientation = 0f;
+    private AttackType _attackType = UnityEngine.AttackType.Stab;
 
     private float _power = 10f;
     private bool _active = true;
@@ -21,28 +24,67 @@ public class SpearHitDetection : MonoBehaviour
     {
         _active = false;
     }
+   
     async void Start()
     {
-        await foreach(float value in CalculateVelocity())
+        await foreach(Vector3 value in CalculateVelocity())
         {
-            _power = value;
+            if (value == Vector3.zero)
+            {
+                _power = _minPower;
+                continue;
+            }
+
+            float inputLength = value.magnitude;
+            _attackType = AttackType(value, inputLength);
+            _power = _power * _powerOnSpeed;
         }
     }
 
-   
-    private async IAsyncEnumerable<float> CalculateVelocity()
+    private AttackType AttackType(Vector3 direction, float distance)
     {
+        float dot = Vector3.Dot(_spearForwardDirection, direction);
+        if (distance < 0.1f)
+        {
+            return UnityEngine.AttackType.Stab;
+        }
 
+        float dotDiff = dot / distance;
+        if (dotDiff > 0.5f && distance < 0.5f)
+        {
+            Debug.Log($"Dot = {dotDiff}, power = {distance}, stab");
+            return UnityEngine.AttackType.Stab;
+        }
+        else if (dotDiff > 0f)
+        {
+            float cross = direction.x * _spearForwardDirection.y - direction.y * _spearForwardDirection.x;
+            if (cross > 0f) 
+                return UnityEngine.AttackType.HorizontalSlashToRight;
+            else
+                return UnityEngine.AttackType.HorizontalSlashToLeft;
+        }
+        else
+            return UnityEngine.AttackType.Stab;
+    }
+
+    private void Update()
+    {
+        var comp = transform.root.GetComponent<StateManager>();
+        if (comp != null) 
+            _fOrientation = comp.fOrientation * Mathf.Deg2Rad;
+        _spearForwardDirection = Geometry.Geometry.CalculateVectorFromfOrientation(_fOrientation);
+    }
+
+    private async IAsyncEnumerable<Vector3> CalculateVelocity()
+    {
         while (_active)
         {
-
-            float value = Vector3.Distance(_PreviousPosition, transform.position);
+            Vector3 value = _PreviousPosition - transform.position;
             _PreviousPosition = transform.position;
 
             yield return value;
             await Task.Delay(100);
         }
-
     }
 
     private void OnTriggerEnter(Collider other)
@@ -62,7 +104,7 @@ public class SpearHitDetection : MonoBehaviour
             Debug.Log(power);
             _recieveAttackEvent.Raise(transform.root, new AttackEventArgs
             {
-                Attacker = transform.root.gameObject, AttackPower = power, Defender = other.gameObject
+                Attacker = transform.root.gameObject, AttackPower = power, Defender = other.gameObject, AttackType = _attackType
             });
 
         }

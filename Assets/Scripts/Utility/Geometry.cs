@@ -178,5 +178,27 @@ namespace Geometry
             return angle;
         }
 
+
+        public static float CalculateSpearAngle(float inputAngle, float maxAngle)
+        {
+            float angle = inputAngle;
+            float sign = Mathf.Sign(inputAngle);
+            float absAngle = Mathf.Abs(angle);
+            float deadAngle = 90f - maxAngle;
+
+            if (absAngle > 90 + deadAngle)
+            {
+                //float newAngle = _maxAngle - (absAngle - _maxAngle);
+                //angle = (newAngle >= 0f)? sign * newAngle : 0f;
+                angle = sign * (180 - absAngle);
+            }
+            else if (absAngle > maxAngle)
+            {
+                angle = sign * maxAngle;
+            }
+            return angle;
+        }
+
+
     }
 }

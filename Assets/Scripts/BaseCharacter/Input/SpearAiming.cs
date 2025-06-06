@@ -88,7 +88,7 @@ public class SpearAiming : MonoBehaviour
             _outputLength = _refAimingInput.variable.value.x * transform.forward.x + _refAimingInput.variable.value.y * transform.forward.z;
 
         //Slashing angle
-        float clampedAngle = CalculateSpearAngle(angle);
+        float clampedAngle = Geometry.Geometry.CalculateSpearAngle(angle, _maxAngle);
         if (IsNegativeAngle(clampedAngle))
             clampedAngle *= -1;
 
@@ -120,26 +120,6 @@ public class SpearAiming : MonoBehaviour
     {
         _spearIdlePosition = _aimTarget.transform.localPosition;
         _shoulderIdlePosition = _rShoulderTarget.transform.localPosition ;
-    }
-
-    private float CalculateSpearAngle(float inputAngle)
-    {
-        float angle = inputAngle;
-        float sign = Mathf.Sign(inputAngle);
-        float absAngle = Mathf.Abs(angle);
-        float deadAngle = 90f - _maxAngle;
-
-        if (absAngle > 90 + deadAngle)
-        {
-            //float newAngle = _maxAngle - (absAngle - _maxAngle);
-            //angle = (newAngle >= 0f)? sign * newAngle : 0f;
-            angle = sign * (180 - absAngle);
-        }
-        else if (absAngle > _maxAngle)
-        {
-            angle = sign * _maxAngle;
-        }
-        return angle;
     }
 
 

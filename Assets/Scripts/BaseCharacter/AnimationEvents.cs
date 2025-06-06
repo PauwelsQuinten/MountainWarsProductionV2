@@ -54,7 +54,7 @@ public class AnimationEvents : MonoBehaviour
         if (_recieveAttackEvent && transform.parent) 
             _recieveAttackEvent.Raise(this.transform.parent, null);
     }
-public void Stun()
+    public void Stun()
     {
         _stunned.Raise(this.transform.parent, null);
     }

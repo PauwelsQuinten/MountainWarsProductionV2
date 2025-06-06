@@ -4324,6 +4324,10 @@ PrefabInstance:
       propertyPath: m_ApplyRootMotion
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7205140776170859923, guid: 4e2c6420063dd714b8c944052235040b, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 9e197ab77ac601e44beec908a35697cf, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -4512,6 +4516,7 @@ MonoBehaviour:
   _pickup: {fileID: 11400000, guid: 6ae7cf8fbff13b34baa83d4c5c01a86f, type: 2}
   _stunned: {fileID: 0}
   _moveAttack: {fileID: 11400000, guid: 8ea44205ac5e1174fbd6602ffe30892e, type: 2}
+  _chargeAttack: {fileID: 0}
 --- !u!111 &7006336616512421870
 Animation:
   m_ObjectHideFlags: 0

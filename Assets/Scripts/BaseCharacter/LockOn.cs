@@ -77,9 +77,9 @@ public class LockOn : MonoBehaviour
         _lockonEvent.Raise(this, new OrientationEventArgs { NewOrientation = _storedOrientation, NewFOrientation = fOrientation });
 
         if (_previousTarget == _lockonTarget) return;
+        if (_changePanel != null && _previousTarget == null)
+            _changePanel.Raise(this, new TriggerEnterEventArgs { NewViewIndex = 0, IsShowDown = true, VsTarget = _lockonTarget });
         _previousTarget = _lockonTarget;
-        if (_changePanel == null) return;
-        _changePanel.Raise(this, new TriggerEnterEventArgs { NewViewIndex = 0, IsShowDown = true, VsTarget = _lockonTarget });
     }
 
     public void WeaponSheathed(Component sender, object obj)

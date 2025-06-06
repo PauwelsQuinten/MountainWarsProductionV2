@@ -997,6 +997,10 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: -7690356527730125722, guid: e96cefd68e64ddf48b549a9af58e5cae, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 45c581dfdd468da46a89d694a8dc9ed6, type: 2}
     - target: {fileID: 919132149155446097, guid: e96cefd68e64ddf48b549a9af58e5cae, type: 3}
       propertyPath: m_Name
       value: ANI_Enemy_A-pose 1
@@ -1111,6 +1115,7 @@ MonoBehaviour:
   _pickup: {fileID: 11400000, guid: 6ae7cf8fbff13b34baa83d4c5c01a86f, type: 2}
   _stunned: {fileID: 0}
   _moveAttack: {fileID: 11400000, guid: 8ea44205ac5e1174fbd6602ffe30892e, type: 2}
+  _chargeAttack: {fileID: 0}
 --- !u!4 &6218326792145403419 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8077630765205240530, guid: e96cefd68e64ddf48b549a9af58e5cae, type: 3}

@@ -186,6 +186,7 @@ public class StateManager : MonoBehaviour
         Camera newCam = obj as Camera;
         if (newCam == null) return;
 
+        //AdjustOrientationToCamera(CurrentCamera, newCam);
         CurrentCamera = newCam;
     }
 
@@ -215,6 +216,7 @@ public class StateManager : MonoBehaviour
         float yawnNew = cameraNew.transform.eulerAngles.y;
         float diffAngle = Mathf.DeltaAngle(yawnOld, yawnNew);
 
-
+        fOrientation += diffAngle;
+        Orientation = Geometry.Geometry.FindOrientationFromAngle(fOrientation);
     }
 }

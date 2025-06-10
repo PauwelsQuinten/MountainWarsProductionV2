@@ -3,6 +3,7 @@ using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Windows;
 
 public class PlayerController : MonoBehaviour
 {
@@ -118,7 +119,11 @@ public class PlayerController : MonoBehaviour
         if (_stateManager.IsInStaticDialogue.value) return;
         if (Time.timeScale == 0) return;
         if (_staminaManager.CurrentStamina < _aimCost.value) return;
-        _aimInputRef.variable.value = ctx.ReadValue<Vector2>();
+
+        Vector2 input = ctx.ReadValue<Vector2>();
+        Vector2 output = CalculateInputOnCamera(input);
+
+        _aimInputRef.variable.value = output;
     }
 
     private void AimInputRef_ValueChanged(object sender, AimInputEventArgs e)
@@ -154,6 +159,13 @@ public class PlayerController : MonoBehaviour
         if (Time.timeScale == 0) return;
         Vector2 input = ctx.ReadValue<Vector2>();
 
+        Vector2 output = CalculateInputOnCamera(input);
+
+        _moveInputRef.variable.value = output;
+    }
+
+    private Vector2 CalculateInputOnCamera(Vector2 input)
+    {
         // Get camera vectors and flatten them to horizontal plane
         Vector3 forward = _stateManager.CurrentCamera.transform.forward;
         Vector3 right = _stateManager.CurrentCamera.transform.right;
@@ -167,8 +179,7 @@ public class PlayerController : MonoBehaviour
 
         // If you need Vector2 output for ground movement (XZ plane)
         Vector2 output = new Vector2(moveDirection.x, moveDirection.z);
-
-        _moveInputRef.variable.value = output;
+        return output;
     }
 
     public void ProccesSetBlockInput(InputAction.CallbackContext ctx)

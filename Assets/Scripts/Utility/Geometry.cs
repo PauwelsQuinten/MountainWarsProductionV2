@@ -116,14 +116,14 @@ namespace Geometry
             return cross < 0 ? Direction.ToLeft : Direction.ToRight;
         }
 
-        public static Vector3 GetRandomPointOnNavMesh(Vector3 center, float radius)
+        public static Vector3 GetRandomPointOnNavMesh(Vector3 center, float radius, float minRadius)
         {
             for (int i = 0; i < 5; i++) // Try up to 5 times
             {
-                Vector3 randomDirection = Random.insideUnitSphere * radius;
+                Vector3 randomDirection = Random.insideUnitSphere * Random.Range(minRadius, radius);
                 randomDirection += center;
 
-                if (NavMesh.SamplePosition(randomDirection, out NavMeshHit hit, 2.0f, NavMesh.AllAreas))
+                if (NavMesh.SamplePosition(randomDirection, out NavMeshHit hit, radius, NavMesh.AllAreas))
                 {
                     return hit.position;
                 }

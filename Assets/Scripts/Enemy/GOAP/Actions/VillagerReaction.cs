@@ -12,11 +12,14 @@ public class VillagerReaction : GoapAction
     [SerializeField] private GameEvent _changeRotation;
     [SerializeField] private GameEvent _moveOffset;
     [SerializeField] private GameEvent _changeTarget;
+    private bool _isMoving = false;
     public override async void  StartAction(WorldState currentWorldState, BlackboardReference blackboard)
     {
         base.StartAction(currentWorldState, blackboard);
+        if (_isMoving) return;
 
-        _= Reaction(blackboard);
+        _isMoving = true;
+        _ = Reaction(blackboard);
 
     }
 
@@ -55,8 +58,9 @@ public class VillagerReaction : GoapAction
 
             //Target eliminated
             _changeTarget.Raise(npc.transform, new NewTargetEventArgs { NewTarget = null });
-            ActionCompleted();
 
+            _isMoving = false;
+            ActionCompleted();
         }
 
         catch (Exception ex)

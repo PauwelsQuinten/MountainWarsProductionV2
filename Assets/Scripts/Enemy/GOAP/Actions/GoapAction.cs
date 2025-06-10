@@ -47,14 +47,15 @@ public class GoapAction : MonoBehaviour, IActions
         if (_isActivated)
             return;
         _isActivated = true;
+
+        float runtime = _actionMaxRunTime;
+        if (_randomWalkingTime)
+            runtime = Random.Range(_actionMaxRunTime * 0.5f, _actionMaxRunTime);
+
         if (_actionMaxRunTime >= 0)
-            _actionCoroutine = StartCoroutine(StartTimer(_actionMaxRunTime));
+            _actionCoroutine = StartCoroutine(StartTimer(runtime));
 
         npc = transform.parent.gameObject;
-
-
-        if (_randomWalkingTime)
-            _actionMaxRunTime = Random.Range(_actionMaxRunTime * 0.1f, _actionMaxRunTime);
 
         
     }

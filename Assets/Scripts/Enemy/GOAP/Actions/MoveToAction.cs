@@ -24,7 +24,7 @@ public class MoveToAction : GoapAction
     Vector3 _targetPos = Vector3.zero;
     Vector3 _startPos = Vector3.zero;
 
-
+    
     public override void StartAction(WorldState currentWorldState, BlackboardReference blackboard)
     {
         base.StartAction(currentWorldState, blackboard);
@@ -59,7 +59,8 @@ public class MoveToAction : GoapAction
                 }
                 break;
             case ObjectTarget.InRadius:
-                _startPos = npc.transform.position; 
+                if (_startPos == Vector3.zero)
+                    _startPos = npc.transform.position;
                 _targetPos = _startPos;
                 break;
             case ObjectTarget.Backward:
@@ -81,7 +82,7 @@ public class MoveToAction : GoapAction
         _navMeshAgent.SetDestination(_targetPos);
 
         ReactivateAgent();
-
+        Debug.Log("restart walk");
     }
 
     public override void UpdateAction(WorldState currentWorldState, BlackboardReference blackboard)
@@ -107,6 +108,17 @@ public class MoveToAction : GoapAction
         }
 
         FindTargetPosAndDirection(blackboard, ref targetDir, npcPos, ref targetPos, ref angleRad);
+
+        if (_MoveTo == ObjectTarget.InRadius )
+        {
+            if (targetPos == _targetPos) return;
+            _targetPos = targetPos;
+            _targetDir = targetDir;
+            _navMeshAgent.SetDestination(targetPos);
+            _moveInput.Raise(this, new DirectionEventArgs { MoveDirection = targetDir, SpeedMultiplier = 1f, Sender = npc });
+            ReactivateAgent();
+            return;
+        }
 
         //Update target position when he moves around
         if (Vector2.Distance(new Vector2(npcPos.x, npcPos.z), new Vector2(targetPos.x, targetPos.z)) > 1f
@@ -249,8 +261,8 @@ public class MoveToAction : GoapAction
                 targetDir.Normalize(); 
                 break;
             case ObjectTarget.InRadius:
-                if (Vector3.Distance(npcPos, _targetPos) < 0.5f)
-                    targetPos = Geometry.Geometry.GetRandomPointOnNavMesh(_startPos, _radius);
+                if (Vector3.Distance(npcPos, _targetPos) < 0.35f)
+                    targetPos = Geometry.Geometry.GetRandomPointOnNavMesh(_startPos, _radius, 2.5f);
                 else
                     targetPos = _targetPos;
                

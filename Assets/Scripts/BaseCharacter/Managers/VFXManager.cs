@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -50,11 +51,18 @@ public class VFXManager : MonoBehaviour
 
     private async Task ManageLifeTime(VFXState inst, float durationInSeconds)
     {
-        await Task.Delay(Mathf.RoundToInt(durationInSeconds * 1000));
-        if (inst.gameObject == null) return;
+        try
+        {
+            await Task.Delay(Mathf.RoundToInt(durationInSeconds * 1000));
+            if (inst.gameObject == null) return;
 
-        Destroy(inst.gameObject);
-        _vfxInstances.Remove(inst.Type);
+            Destroy(inst.gameObject);
+            _vfxInstances.Remove(inst.Type);
+        }
+        catch(Exception )
+        {
+
+        }
 
     }
 

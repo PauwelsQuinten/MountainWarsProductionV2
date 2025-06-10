@@ -4,12 +4,13 @@ public class Hearing : MonoBehaviour
 {
     [Header("State")]
     [SerializeField] private float _hearingRange = 2f;
-    [SerializeField] private LayerMask _characterMask;
-    
-    
+    [HideInInspector]
+    public LayerMask CharacterMask;
+
+
     public GameObject HearSurrounding()
     {
-        Collider[] hitColliders = Physics.OverlapSphere(transform.position, _hearingRange, _characterMask);
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, _hearingRange, CharacterMask);
         foreach (var hitCollider in hitColliders)
         {
             if (hitCollider.gameObject != gameObject)

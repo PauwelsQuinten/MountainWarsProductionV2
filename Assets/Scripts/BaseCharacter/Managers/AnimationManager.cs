@@ -1,7 +1,10 @@
 using System;
 using System.Collections;
 using System.Diagnostics.CodeAnalysis;
+using System.Security.Cryptography.X509Certificates;
+using System.Threading.Tasks;
 using Unity.VisualScripting;
+using UnityEditorInternal;
 using UnityEngine;
 using static UnityEditor.Experimental.GraphView.GraphView;
 using static UnityEngine.Rendering.GPUSort;
@@ -119,23 +122,27 @@ public class AnimationManager : MonoBehaviour
             }
         }
 
-        _currentState = args.AnimState;
-
-        
+        _currentState = args.AnimState;        
     }
 
     private void SetAttackAnim(AnimationEventArgs args, float attNum)
     {
         _animator.SetBool(P_ATTACK_HEIGHT, args.IsAttackHigh);
+        string stateName; 
         if (args.IsAttackHigh)
-            _animator.CrossFade("AttackHigh", 0.1f, 1, 0f);
+            stateName = "AttackHigh";
         else
-            _animator.CrossFade("AttackLow", 0.1f, 1, 0f);
+            stateName = "AttackLow";
+
+        if (!_animator.IsInTransition(args.AnimLayer))
+            _animator.CrossFade(stateName, 0.1f, args.AnimLayer, 0f);
+        else
+            _animator.Play(stateName, args.AnimLayer);
 
         _animator.SetBool(P_ATTACK_MEDIUM, args.AttackWithLeftHand);
         _animator.SetFloat(P_ATTACK_STATE, attNum);
-
         _attBlend = 1f;
+        Debug.Log($"AttackSignal {args.AnimState}, {gameObject}");
     }
 
     private void ResetBoredTime()
@@ -149,14 +156,15 @@ public class AnimationManager : MonoBehaviour
         _YVelocity = 0f;
         _GotTarget = 0f;
         _movementSpeed = walkArgs.WalkDirection.magnitude * walkArgs.Speed;
+       
 
         if (walkArgs.IsLockon)
         {
             float input = Geometry.Geometry.CalculateAngleRadOfInput(walkArgs.WalkDirection);
             float angleDiff = input - walkArgs.Orientation * Mathf.Deg2Rad;
-            Vector2 animInput = Geometry.Geometry.CalculateVectorFromfOrientation(angleDiff) * _movementSpeed;
+            Vector3 animInput = Geometry.Geometry.CalculateVectorFromfOrientation(angleDiff) * _movementSpeed;
             _XVelocity = animInput.x;
-            _YVelocity = animInput.y;
+            _YVelocity =  animInput.z;
             _GotTarget = 1f;
         }
         else
@@ -248,8 +256,12 @@ public class AnimationManager : MonoBehaviour
     {
         _animator.SetFloat(P_ON_TARGET, GotTarget, 0.1f, Time.deltaTime);
         _animator.SetFloat(P_X_MOVEMENT, XVelocity, 0.1f, Time.deltaTime);
+        if (Mathf.Abs(_animator.GetFloat(P_X_MOVEMENT)) < 0.05f)
+            _animator.SetFloat(P_X_MOVEMENT, XVelocity);
+
         _animator.SetFloat(P_y_MOVEMENT, YVelocity, 0.1f, Time.deltaTime);
-        //_animator.SetFloat("AttackBlend", attBlend, 0.1f, Time.deltaTime);
+        if (Mathf.Abs(_animator.GetFloat(P_y_MOVEMENT)) < 0.05f)
+            _animator.SetFloat(P_y_MOVEMENT, XVelocity);
     }
 
     private void InteruptAnimation(bool isFeint)
@@ -293,9 +305,19 @@ public class AnimationManager : MonoBehaviour
         for (int i = 1; i < 4; i++)
         {
             if (i == 1)
-                _animator.CrossFade(AnimationState.Hit.ToString(), 0.2f, i, 0f);
+            {
+                if (!_animator.IsInTransition(i))
+                    _animator.CrossFade(AnimationState.Hit.ToString(), 0.1f, i, 0f);
+                else
+                    _animator.Play(AnimationState.Hit.ToString(), i);
+            }
             else
-                _animator.CrossFade(AnimationState.Empty.ToString(), 0.2f, i, 0f);
+            {
+                if (!_animator.IsInTransition(i))
+                    _animator.CrossFade(AnimationState.Empty.ToString(), 0.2f, i, 0f);
+                else
+                    _animator.Play(AnimationState.Empty.ToString(), i);
+            }
         }
         
     }
@@ -392,12 +414,24 @@ public class AnimationManager : MonoBehaviour
         for (int i = 1; i < 4; i++)
         {
             if (i == 1)
-                _animator.CrossFade(AnimationState.Stun.ToString(), 0.2f, i, 0f);
+            {
+                if (!_animator.IsInTransition(i))
+                    _animator.CrossFade(AnimationState.Stun.ToString(), 0.1f, i, 0f);
+                else
+                    _animator.Play(AnimationState.Stun.ToString(), i);
+            }
             else
-                _animator.CrossFade(AnimationState.Empty.ToString(), 0.2f, i, 0f);
+            {
+                if (!_animator.IsInTransition(i))
+                    _animator.CrossFade(AnimationState.Empty.ToString(), 0.2f, i, 0f);
+                else
+                    _animator.Play(AnimationState.Empty.ToString(), i);
+            }
         }
         _animator.SetBool(P_Stun, true);
         _animator.SetFloat(P_ACTION_SPEED, 1f);
     }
+
+    
 
 }

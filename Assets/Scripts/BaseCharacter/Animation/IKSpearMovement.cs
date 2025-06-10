@@ -39,6 +39,8 @@ public class IKSpearMovement : MonoBehaviour
         _stateManager = GetComponent<StateManager>();
         _defaultOrientation = _aimTargetAdjuster.transform.localRotation;
 
+        
+
         if (_IKTargetRh && _rShoulderTarget)
         {
             GetComponent<SpearAiming>()?.SetIdlePosition();
@@ -47,6 +49,7 @@ public class IKSpearMovement : MonoBehaviour
 
     private void Update()
     {
+        if (!_IKTargetLh || !_lhHoldingPosition) return; 
         _IKTargetLh.transform.position = _lhHoldingPosition.transform.position;
         AdjustAim();
         if (_targetRotation != Quaternion.identity) 

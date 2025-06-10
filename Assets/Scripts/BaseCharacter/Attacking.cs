@@ -36,8 +36,6 @@ public class Attacking : MonoBehaviour
     [SerializeField]
     private GameEvent _loseStamina;
 
-    [Header("Enemy")]
-    [SerializeField]
     private LayerMask _characterLayer;
     private BlackboardReference _blackboardRef;
 
@@ -45,7 +43,6 @@ public class Attacking : MonoBehaviour
     [SerializeField]
     private GameEvent _changeAnimation;
 
-    [SerializeField]
     private bool _isFullBodyAnim = false;
 
     private float _chargePower = 0f;
@@ -68,6 +65,11 @@ public class Attacking : MonoBehaviour
         if (_stateManager == null) 
             _stateManager = GetComponent<StateManager>();
         _blackboardRef = _stateManager.BlackboardRef;
+    }
+
+    private void Start()
+    {
+        _characterLayer = _stateManager.TargetLayers;
     }
     private void Update()
     {

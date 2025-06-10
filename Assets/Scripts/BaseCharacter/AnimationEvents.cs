@@ -1,4 +1,5 @@
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class AnimationEvents : MonoBehaviour
@@ -26,31 +27,41 @@ public class AnimationEvents : MonoBehaviour
     private GameEvent _stunned;
     [SerializeField] 
     private GameEvent _moveAttack;
+    [SerializeField] 
+    private GameEvent _chargeAttack;
     private int _storredDirection = 0;
-    private void Start()
-    {
-        
-    }
+
+    private bool _footstepTriggered = false;
 
     public void Footstep()
     {
-      _footstep.Raise(this.transform.parent, EventArgs.Empty);
-      
+        if (_footstep && transform.parent) 
+            _footstep.Raise(this.transform.parent, EventArgs.Empty);
     }
 
+    public void AttackCharge()
+    {
+        _chargeAttack.Raise(this.transform.parent, null);
+    }
     public void Whoosh()
     {
-        _whoosh.Raise(this.transform.parent, EventArgs.Empty);;
+        if (_whoosh && transform.parent) 
+            _whoosh.Raise(this.transform.parent, EventArgs.Empty);;
     }
 
     public void SwordHit()
     {
-        _recieveAttackEvent.Raise(this.transform.parent, null);
+        if (_recieveAttackEvent && transform.parent) 
+            _recieveAttackEvent.Raise(this.transform.parent, null);
     }
-
+    public void Stun()
+    {
+        if (_stunned && transform.parent) 
+            _stunned.Raise(this.transform.parent, null);
+    }
     public void EndAnimation()
     {
-        if ( _endAnimation ) 
+        if (_endAnimation && transform.parent) 
             _endAnimation.Raise(this.transform.parent, null);
     }
 
@@ -59,7 +70,7 @@ public class AnimationEvents : MonoBehaviour
         bool zone = InZone == 0? true : false;
         //Debug.Log($"in parry movement signal = {zone}");
 
-        if (_inParryZone)
+        if (_inParryZone && transform.parent)
             _inParryZone.Raise(this.transform.parent, zone);
     }
 
@@ -76,7 +87,7 @@ public class AnimationEvents : MonoBehaviour
     public void DragShield()
     {
 
-        if (_dragShieldDown)
+        if (_dragShieldDown && transform.parent)
             _dragShieldDown.Raise(this.transform.parent, null);
     }
      
@@ -84,36 +95,38 @@ public class AnimationEvents : MonoBehaviour
     {
         bool isSheating = zeroForIn == 0? true : false;
 
-        if (_sheatSword)
+        if (_sheatSword && transform.parent)
             _sheatSword.Raise(this.transform.parent, isSheating);
     }
-     
+
+    public void ChargeAttack()
+    {
+        if (_chargeAttack && transform.parent)
+            _chargeAttack.Raise(this.transform.parent, null);
+    }
+
     public void Pickup()
     {
-        if (_pickup)
+        if (_pickup && transform.parent)
             _pickup.Raise(this.transform.parent, null);
     }
 
     public void Stunned()
     {
-        if (_stunned)
+        if (_stunned && transform.parent)
             _stunned?.Raise(this.transform.parent, null);
     }
     
     public void MoveBack(int forward)
     {
         //To move Back
-        if (forward == 0)
+        if (forward == 0 && _moveAttack && transform.parent)
             _moveAttack.Raise(this, new AttackMoveEventArgs { Attacker = transform.parent.gameObject });
 
         //To move Forward
-        else
+        else if (_moveAttack && transform.parent)
             _moveAttack.Raise(this, new AttackMoveEventArgs { Attacker = transform.parent.gameObject, AttackType = AttackType.Stab });
         //Debug.Log($"Move 1 = f, 0 = b. {forward}, {transform.parent}");
     }
 
-    public void Confusion()
-    {
-
-    }
 }

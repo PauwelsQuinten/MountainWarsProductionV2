@@ -11,10 +11,17 @@ public class AIPerception : MonoBehaviour
 
     private void Start()
     {
+        var state = GetComponent<StateManager>();
+   
         _hearing = GetComponent<Hearing>();
-        _seeing = GetComponent<Seeing>();
+        if (_hearing && state)
+            _hearing.CharacterMask = state.TargetLayers;
 
-        if (_seeing == null || _hearing == null)
+        _seeing = GetComponent<Seeing>();
+        if (_seeing && state)
+            _seeing.CharacterMask = state.TargetLayers;
+
+        if (_seeing == null && _hearing == null)
             Debug.LogError("no senses inserted in AIPerception");
     }
 

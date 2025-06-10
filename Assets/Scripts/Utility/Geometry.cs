@@ -39,9 +39,9 @@ namespace Geometry
             float angle = (int)orientation * Mathf.Deg2Rad;
             return new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
         }
-         public static Vector2 CalculateVectorFromfOrientation(float orientation)
+        public static Vector3 CalculateVectorFromfOrientation(float orientationRad)
         {
-            return new Vector2(Mathf.Cos(orientation), Mathf.Sin(orientation));
+            return new Vector3(Mathf.Cos(orientationRad), 0f, Mathf.Sin(orientationRad));
         }
 
         public static float CalculateSwingSpeed(float length, float currentTime, float minResult, float maxResult)
@@ -119,7 +119,7 @@ namespace Geometry
         public static Vector3 GetRandomPointOnNavMesh(Vector3 center, float radius)
         {
             for (int i = 0; i < 5; i++) // Try up to 5 times
-            {
+ {
                 Vector3 randomDirection = Random.insideUnitSphere * radius;
                 randomDirection += center;
 
@@ -129,8 +129,8 @@ namespace Geometry
                 }
             }
 
-            // If no valid point found, return center
-            return center;
+        // If no valid point found, return center
+        return center;
         }
 
         public static float CalculatefOrientationToTarget(Vector3 target, Vector3 self)

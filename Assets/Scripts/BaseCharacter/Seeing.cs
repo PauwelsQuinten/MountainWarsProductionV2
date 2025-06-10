@@ -4,7 +4,8 @@ public class Seeing : MonoBehaviour
 {
     [Header("State")]
     [SerializeField] private float _eyesightRange = 5f;
-    [SerializeField] private LayerMask _characterMask;
+    [HideInInspector]
+    public LayerMask CharacterMask;
 
     private Vector3 debugPos = Vector3.zero;
 
@@ -15,7 +16,7 @@ public class Seeing : MonoBehaviour
         Vector3 position = transform.position + direction * _eyesightRange;
         debugPos = position;
 
-        Collider[] hitColliders = Physics.OverlapSphere(position, _eyesightRange, _characterMask);
+        Collider[] hitColliders = Physics.OverlapSphere(position, _eyesightRange, CharacterMask);
         foreach (var hitCollider in hitColliders)
         {
             if (hitCollider.gameObject != gameObject)

@@ -61,9 +61,9 @@ public class DialogueNode : ScriptableObject
     [SerializeField]
     GameEvent triggerEnter;
     [SerializeField]
-    Camera currentCamera;
+    string currentCameraName;
     [SerializeField]
-    Camera nextCamera;
+    string nextCameraName;
     [SerializeField]
     int currentViewIndex;
     [SerializeField] 
@@ -175,14 +175,14 @@ public class DialogueNode : ScriptableObject
         return playAtEnd;
     }
 
-    public Camera GetCurrentCamera()
+    public string GetCurrentCameraName()
     {
-        return currentCamera;
+        return currentCameraName;
     }
 
-    public Camera GetNextCamera()
+    public string GetNextCameraName()
     {
-        return nextCamera;
+        return nextCameraName;
     }
 
     public int GetCurrentViewIndex()
@@ -496,24 +496,24 @@ public class DialogueNode : ScriptableObject
         }
     }
 
-    public void SetCurrentCamera(Camera newCurrentCamera)
+    public void SetCurrentCameraName(string newCurrentCameraName)
     {
-        if (newCurrentCamera != currentCamera)
+        if (newCurrentCameraName != currentCameraName)
         {
-            Undo.RecordObject(this, " Update Current Camera");
+            Undo.RecordObject(this, " Update Current Camera Name");
 
-            currentCamera = newCurrentCamera;
+            currentCameraName = newCurrentCameraName;
             EditorUtility.SetDirty(this);
         }
     }
 
-    public void SetNextCamera(Camera newNextCamera)
+    public void SetNextCameraName(string newNextCameraName)
     {
-        if (newNextCamera != nextCamera)
+        if (newNextCameraName != nextCameraName)
         {
-            Undo.RecordObject(this, " Update Next Camera");
+            Undo.RecordObject(this, " Update Next Camera Name");
 
-            nextCamera = newNextCamera;
+            nextCameraName = newNextCameraName;
             EditorUtility.SetDirty(this);
         }
     }

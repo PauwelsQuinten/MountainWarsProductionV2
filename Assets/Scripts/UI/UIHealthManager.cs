@@ -47,6 +47,14 @@ public class UIHealthManager : MonoBehaviour
     [SerializeField]
     private GameEvent _characterDeath;
 
+    [Header("Dialogue")]
+    [SerializeField]
+    GameEvent _dialogueTrigger;
+    [SerializeField]
+    private bool _triggerDialogueOnDeath;
+    [SerializeField]
+    private int _dialogueToTrigger;
+
     private Coroutine _dissableHealth;
 
     private string _name;
@@ -91,7 +99,8 @@ public class UIHealthManager : MonoBehaviour
             UpdateBodyPartColor(sender, args);
 
         if (args.CurrentHealth > 0) return;
-
+        if (_triggerDialogueOnDeath)
+            _dialogueTrigger.Raise(this, new DialogueTriggerEventArgs { NextDialogueIndex = _dialogueToTrigger });
         _characterDeath.Raise(this, new CharacterDeathEventArgs { CharacterName = _name });
     }
 
@@ -148,8 +157,11 @@ public class UIHealthManager : MonoBehaviour
         float barFill = args.CurrentBlood / args.MaxBlood;
         _bloodBar.fillAmount = barFill;
 
-        if (args.CurrentBlood <= 0)
-            _characterDeath.Raise(this, new CharacterDeathEventArgs { CharacterName = _name });
+        if (args.CurrentBlood > 0) return;
+
+        if (_triggerDialogueOnDeath)
+            _dialogueTrigger.Raise(this, new DialogueTriggerEventArgs { NextDialogueIndex = _dialogueToTrigger });
+        _characterDeath.Raise(this, new CharacterDeathEventArgs { CharacterName = _name });
     }
 
     public void UpdatePatchUp(Component sender, object obj)

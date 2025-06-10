@@ -216,7 +216,8 @@ public class HealthManager : MonoBehaviour
         
         _currentBlood -= _bleedOutRate * Time.deltaTime;
 
-        _changedBlood.Raise
+        if (_changedBlood != null)
+            _changedBlood.Raise
                     (this, new BloodEventArgs
                     {
                         CurrentBlood = _currentBlood,
@@ -237,7 +238,8 @@ public class HealthManager : MonoBehaviour
             _currentBlood = _maxBlood;
         }
 
-        _changedBlood.Raise
+        if (_changedBlood != null)
+            _changedBlood.Raise
             (this, new BloodEventArgs
             {
                 CurrentBlood = _currentBlood,
@@ -337,5 +339,11 @@ public class HealthManager : MonoBehaviour
                 StopCoroutine(_canRegenCoroutine);
             StartCoroutine(ResetCanRegen());
         }
+    }
+
+    private void OnDestroy()
+    {
+        _changedBlood = null;
+        _changedHealth = null;
     }
 }

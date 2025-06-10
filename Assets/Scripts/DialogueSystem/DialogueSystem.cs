@@ -294,11 +294,12 @@ public class DialogueSystem : MonoBehaviour
     {
         if (!_currentDialogueNode.GetPlayAtEnd() && _currentDialogueNode.GetDoPanelSwitch())
         {
-            Camera currentCam = _currentDialogueNode.GetCurrentCamera();
-            Camera nextCam = _currentDialogueNode.GetNextCamera();
+            Camera currentCam = GameObject.Find(_currentDialogueNode.GetCurrentCameraName()).GetComponent<Camera>();
+            Camera nextCam = GameObject.Find(_currentDialogueNode.GetNextCameraName()).GetComponent<Camera>();
             int currentViewIndex = _currentDialogueNode.GetCurrentViewIndex();
             int nexttViewIndex = _currentDialogueNode.GetNextViewIndex();
 
+            _currentDialogueNode.GetSwitchPanelEvent().Raise(this, new TriggerEnterEventArgs { CurrentCamera = currentCam, NextCamera = nextCam, CurrentViewIndex = currentViewIndex, NewViewIndex = nexttViewIndex, IsHidingSpot = false, IsShowDown = false });
         }
         _allowMovement = true;
         _isTyping = true;
@@ -888,6 +889,16 @@ public class DialogueSystem : MonoBehaviour
                 if (_dialogues[_currentDialogueIndex].GetIsStaticDialogue()) _isInStaticDialogue.variable.value = false;
                 _currentLineIndex = 0;
 
+                if (_currentDialogueNode.GetPlayAtEnd() && _currentDialogueNode.GetDoPanelSwitch())
+                {
+                    Camera currentCam = GameObject.Find(_currentDialogueNode.GetCurrentCameraName()).GetComponent<Camera>();
+                    Camera nextCam = GameObject.Find(_currentDialogueNode.GetNextCameraName()).GetComponent<Camera>();
+                    int currentViewIndex = _currentDialogueNode.GetCurrentViewIndex();
+                    int nexttViewIndex = _currentDialogueNode.GetNextViewIndex();
+
+                    _currentDialogueNode.GetSwitchPanelEvent().Raise(this, new TriggerEnterEventArgs { CurrentCamera = currentCam, NextCamera = nextCam, CurrentViewIndex = currentViewIndex, NewViewIndex = nexttViewIndex, IsHidingSpot = false, IsShowDown = false });
+                }
+
                 if (_currentDialogueNode.GetEnemiesToActivate().Count != 0)
                 {
                     _currentDialogueNode.GetOnCompletionEvent().Raise(this, new ActivateEnemyEventArgs { EnemyNames = _currentDialogueNode.GetEnemiesToActivate() });
@@ -899,6 +910,17 @@ public class DialogueSystem : MonoBehaviour
             _isInDialogue.variable.value = false;
             if (_dialogues[_currentDialogueIndex].GetIsStaticDialogue()) _isInStaticDialogue.variable.value = false;
             _currentLineIndex = 0;
+
+
+            if (_currentDialogueNode.GetPlayAtEnd() && _currentDialogueNode.GetDoPanelSwitch())
+            {
+                Camera currentCam = GameObject.Find(_currentDialogueNode.GetCurrentCameraName()).GetComponent<Camera>();
+                Camera nextCam = GameObject.Find(_currentDialogueNode.GetNextCameraName()).GetComponent<Camera>();
+                int currentViewIndex = _currentDialogueNode.GetCurrentViewIndex();
+                int nexttViewIndex = _currentDialogueNode.GetNextViewIndex();
+
+                _currentDialogueNode.GetSwitchPanelEvent().Raise(this, new TriggerEnterEventArgs { CurrentCamera = currentCam, NextCamera = nextCam, CurrentViewIndex = currentViewIndex, NewViewIndex = nexttViewIndex, IsHidingSpot = false, IsShowDown = false });
+            }
 
             if (_currentDialogueNode.GetEnemiesToActivate().Count != 0)
             {

@@ -9,6 +9,9 @@ public class StateManager : MonoBehaviour
     [SerializeField] GameEvent _OnStunRecovery;
     [SerializeField] GameEvent _vfx;
 
+    [Header("Enemies")]
+    public LayerMask TargetLayers;
+
     [Header("Refrence")]
     public BlackboardReference BlackboardRef;
     public BoolReference IsInDialogue;
@@ -47,7 +50,7 @@ public class StateManager : MonoBehaviour
 
     [HideInInspector]
     public bool IsBleeding;
-    //[HideInInspector]
+    [HideInInspector]
     public bool InAnimiation = false;
     [HideInInspector]
     public bool WeaponIsSheathed;

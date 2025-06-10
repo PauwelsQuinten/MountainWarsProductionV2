@@ -56,7 +56,8 @@ public class AnimationEvents : MonoBehaviour
     }
     public void Stun()
     {
-        _stunned.Raise(this.transform.parent, null);
+        if (_stunned && transform.parent) 
+            _stunned.Raise(this.transform.parent, null);
     }
     public void EndAnimation()
     {
@@ -100,7 +101,8 @@ public class AnimationEvents : MonoBehaviour
 
     public void ChargeAttack()
     {
-        _chargeAttack.Raise(this.transform.parent, null);
+        if (_chargeAttack && transform.parent)
+            _chargeAttack.Raise(this.transform.parent, null);
     }
 
     public void Pickup()
@@ -118,17 +120,13 @@ public class AnimationEvents : MonoBehaviour
     public void MoveBack(int forward)
     {
         //To move Back
-        if (forward == 0)
+        if (forward == 0 && _moveAttack && transform.parent)
             _moveAttack.Raise(this, new AttackMoveEventArgs { Attacker = transform.parent.gameObject });
 
         //To move Forward
-        else
+        else if (_moveAttack && transform.parent)
             _moveAttack.Raise(this, new AttackMoveEventArgs { Attacker = transform.parent.gameObject, AttackType = AttackType.Stab });
-        Debug.Log($"Move 1 = f, 0 = b. {forward}, {transform.parent}");
+        //Debug.Log($"Move 1 = f, 0 = b. {forward}, {transform.parent}");
     }
 
-    public void Confusion()
-    {
-
-    }
 }

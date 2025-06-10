@@ -54,6 +54,20 @@ public class DialogueNode : ScriptableObject
     List<string> EnemiesToActivate;
     [SerializeField]
     string onEnterAction;
+    [SerializeField]
+    bool DoPanelSwitch;
+    [SerializeField]
+    bool playAtEnd;
+    [SerializeField]
+    GameEvent triggerEnter;
+    [SerializeField]
+    Camera currentCamera;
+    [SerializeField]
+    Camera nextCamera;
+    [SerializeField]
+    int currentViewIndex;
+    [SerializeField] 
+    int nextViewIndex;
 
     [SerializeField]
     string onExitAction;
@@ -151,6 +165,35 @@ public class DialogueNode : ScriptableObject
         return needsToBeFlipped;
     }
 
+    public bool GetDoPanelSwitch()
+    {
+        return DoPanelSwitch;
+    }
+
+    public bool GetPlayAtEnd()
+    {
+        return playAtEnd;
+    }
+
+    public Camera GetCurrentCamera()
+    {
+        return currentCamera;
+    }
+
+    public Camera GetNextCamera()
+    {
+        return nextCamera;
+    }
+
+    public int GetCurrentViewIndex()
+    {
+        return currentViewIndex;
+    }
+
+    public int GetNextViewIndex()
+    {
+        return nextViewIndex;
+    }
 
     public List<string> GetChildren() { return children; }
 
@@ -189,6 +232,11 @@ public class DialogueNode : ScriptableObject
     public bool CheckCondition(IEnumerable<IPredicateEvaluator> evaluators)
     {
         return condition.Check(evaluators);
+    }
+
+    public GameEvent GetSwitchPanelEvent()
+    {
+        return triggerEnter;
     }
 
 #if UNITY_EDITOR
@@ -411,6 +459,83 @@ public class DialogueNode : ScriptableObject
             Undo.RecordObject(this, " Update Enemies To Activate");
 
             EnemiesToActivate = NewEnemiesToActivate;
+            EditorUtility.SetDirty(this);
+        }
+    }
+
+    public void SetDoPanelSwitch(bool newDoPanelSwitch)
+    {
+        if (newDoPanelSwitch != DoPanelSwitch)
+        {
+            Undo.RecordObject(this, " Update Do Panel Switch On Start");
+
+            DoPanelSwitch = newDoPanelSwitch;
+            EditorUtility.SetDirty(this);
+        }
+    }
+
+    public void SetPanelSwitchEvent(GameEvent newTriggerEnter)
+    {
+        if (newTriggerEnter != triggerEnter)
+        {
+            Undo.RecordObject(this, " Update Panel Switch Event");
+
+            triggerEnter = newTriggerEnter;
+            EditorUtility.SetDirty(this);
+        }
+    }
+
+    public void SetPlayAtEnd(bool newPlayAtEnd)
+    {
+        if (newPlayAtEnd != playAtEnd)
+        {
+            Undo.RecordObject(this, " Update Play At End");
+
+            playAtEnd = newPlayAtEnd;
+            EditorUtility.SetDirty(this);
+        }
+    }
+
+    public void SetCurrentCamera(Camera newCurrentCamera)
+    {
+        if (newCurrentCamera != currentCamera)
+        {
+            Undo.RecordObject(this, " Update Current Camera");
+
+            currentCamera = newCurrentCamera;
+            EditorUtility.SetDirty(this);
+        }
+    }
+
+    public void SetNextCamera(Camera newNextCamera)
+    {
+        if (newNextCamera != nextCamera)
+        {
+            Undo.RecordObject(this, " Update Next Camera");
+
+            nextCamera = newNextCamera;
+            EditorUtility.SetDirty(this);
+        }
+    }
+
+    public void SetCurrentViewIndex(int newCurrentViewIndex)
+    {
+        if (newCurrentViewIndex != currentViewIndex)
+        {
+            Undo.RecordObject(this, " Update Current View Index");
+
+            currentViewIndex = newCurrentViewIndex;
+            EditorUtility.SetDirty(this);
+        }
+    }
+
+    public void SetNextViewIndex(int newNextViewIndex)
+    {
+        if (newNextViewIndex != nextViewIndex)
+        {
+            Undo.RecordObject(this, " Update Next View Index");
+
+            nextViewIndex = newNextViewIndex;
             EditorUtility.SetDirty(this);
         }
     }

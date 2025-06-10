@@ -292,6 +292,14 @@ public class DialogueSystem : MonoBehaviour
 
     private IEnumerator EnableTextBalloon()
     {
+        if (!_currentDialogueNode.GetPlayAtEnd())
+        {
+            Camera currentCam = _currentDialogueNode.GetCurrentCamera();
+            Camera nextCam = _currentDialogueNode.GetNextCamera();
+            int currentViewIndex = _currentDialogueNode.GetCurrentViewIndex();
+            int nexttViewIndex = _currentDialogueNode.GetNextViewIndex();
+
+        }
         _allowMovement = true;
         _isTyping = true;
         GameObject textObject = Instantiate(new GameObject());

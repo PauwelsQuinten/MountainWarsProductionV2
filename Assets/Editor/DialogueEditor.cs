@@ -413,6 +413,54 @@ public class DialogueEditor : EditorWindow
             so3.ApplyModifiedProperties();
         }
 
+        EditorGUILayout.LabelField("-PanelSwitch-", labelStyle, GUILayout.Height(20));
+        baseNodeHeight += 20;
+
+        GUILayout.BeginHorizontal();
+        EditorGUILayout.LabelField("Do Panel Switch", GUILayout.Width(142.5f), GUILayout.Height(20));
+        node.SetDoPanelSwitch(EditorGUILayout.Toggle(node.GetDoPanelSwitch(), GUILayout.Height(20)));
+        GUILayout.EndHorizontal();
+        baseNodeHeight += 20;
+
+        if (node.GetDoPanelSwitch())
+        {
+            GUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField("Panel Switch", GUILayout.Width(100), GUILayout.Height(20));
+            node.SetPanelSwitchEvent((GameEvent)EditorGUILayout.ObjectField(node.GetSwitchPanelEvent(), typeof(GameEvent), false, GUILayout.Height(20)));
+            GUILayout.EndHorizontal();
+            baseNodeHeight += 20;
+
+            GUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField("Play At End", GUILayout.Width(142.5f), GUILayout.Height(20));
+            node.SetPlayAtEnd(EditorGUILayout.Toggle(node.GetPlayAtEnd(), GUILayout.Height(20)));
+            GUILayout.EndHorizontal();
+            baseNodeHeight += 20;
+
+            GUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField("Current Camera", GUILayout.Width(100), GUILayout.Height(20));
+            node.SetCurrentCamera((Camera)EditorGUILayout.ObjectField(node.GetCurrentCamera(), typeof(Camera), false, GUILayout.Height(20)));
+            GUILayout.EndHorizontal();
+            baseNodeHeight += 20;
+
+            GUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField("Next Camera", GUILayout.Width(100), GUILayout.Height(20));
+            node.SetNextCamera((Camera)EditorGUILayout.ObjectField(node.GetNextCamera(), typeof(Camera), false, GUILayout.Height(20)));
+            GUILayout.EndHorizontal();
+            baseNodeHeight += 20;
+
+            GUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField("Current View Index", GUILayout.Width(100), GUILayout.Height(20));
+            node.SetCurrentViewIndex(EditorGUILayout.IntField(node.GetCurrentViewIndex(), GUILayout.Height(20)));
+            GUILayout.EndHorizontal();
+            baseNodeHeight += 20;
+
+            GUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField("Next View Index", GUILayout.Width(100), GUILayout.Height(20));
+            node.SetNextViewIndex(EditorGUILayout.IntField(node.GetNextViewIndex(), GUILayout.Height(20)));
+            GUILayout.EndHorizontal();
+            baseNodeHeight += 20;
+        }
+
         EditorGUILayout.LabelField("-Nodes-", labelStyle, GUILayout.Height(20));
         baseNodeHeight += 20;
 

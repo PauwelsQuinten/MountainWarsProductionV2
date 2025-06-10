@@ -292,7 +292,7 @@ public class DialogueSystem : MonoBehaviour
 
     private IEnumerator EnableTextBalloon()
     {
-        if (!_currentDialogueNode.GetPlayAtEnd())
+        if (!_currentDialogueNode.GetPlayAtEnd() && _currentDialogueNode.GetDoPanelSwitch())
         {
             Camera currentCam = _currentDialogueNode.GetCurrentCamera();
             Camera nextCam = _currentDialogueNode.GetNextCamera();

@@ -35,11 +35,20 @@ MonoBehaviour:
   - ad2acf9c-81c3-4f71-9d35-e5e221b7a28f
   rect:
     serializedVersion: 2
-    x: 28.000015
-    y: 63.199993
+    x: 357
+    y: 93.2
     width: 200
     height: 815.38
+  OnCompletionEvent: {fileID: 0}
+  EnemiesToActivate: []
   onEnterAction: 
+  DoPanelSwitch: 0
+  playAtEnd: 0
+  triggerEnter: {fileID: 0}
+  currentCamera: {fileID: 0}
+  nextCamera: {fileID: 0}
+  currentViewIndex: 0
+  nextViewIndex: 0
   onExitAction: 
   condition:
     and: []
@@ -66,7 +75,7 @@ MonoBehaviour:
   textDisplaySpeed: 0.01
   hasSecondaryLine: 0
   isShouting: 0
-  shoutIntensity: 0.737
+  shoutIntensity: 0.5
   newFont: {fileID: 0}
   newTextSize: 0
   balloonObject: {fileID: 2592667508800547744, guid: 2bac7fcd62ad2254ba0b5c6805ad7e98, type: 3}
@@ -78,11 +87,20 @@ MonoBehaviour:
   - 34e63512-100c-4bb8-8ece-3ba38bb83575
   rect:
     serializedVersion: 2
-    x: 272.39993
-    y: 108.00002
+    x: 604.7999
+    y: 143.2
     width: 200
     height: 815.37
+  OnCompletionEvent: {fileID: 0}
+  EnemiesToActivate: []
   onEnterAction: 
+  DoPanelSwitch: 0
+  playAtEnd: 0
+  triggerEnter: {fileID: 0}
+  currentCamera: {fileID: 0}
+  nextCamera: {fileID: 0}
+  currentViewIndex: 0
+  nextViewIndex: 0
   onExitAction: 
   condition:
     and: []
@@ -121,11 +139,20 @@ MonoBehaviour:
   - cd1da861-d3e8-430a-ba85-205749486f43
   rect:
     serializedVersion: 2
-    x: 511.20013
-    y: 105.60003
+    x: 838.6002
+    y: 235.40005
     width: 200
     height: 670.14
+  OnCompletionEvent: {fileID: 0}
+  EnemiesToActivate: []
   onEnterAction: 
+  DoPanelSwitch: 0
+  playAtEnd: 0
+  triggerEnter: {fileID: 0}
+  currentCamera: {fileID: 0}
+  nextCamera: {fileID: 0}
+  currentViewIndex: 0
+  nextViewIndex: 0
   onExitAction: 
   condition:
     and: []
@@ -147,7 +174,7 @@ MonoBehaviour:
   - {fileID: -2989413853084130841}
   - {fileID: 2262670474335264596}
   newNodeOffset: {x: 250, y: 0}
-  isStaticDialogue: 0
+  isStaticDialogue: 1
   isStarted: 0
 --- !u!114 &2262670474335264596
 MonoBehaviour:
@@ -172,7 +199,7 @@ MonoBehaviour:
   textDisplaySpeed: 0.01
   hasSecondaryLine: 0
   isShouting: 0
-  shoutIntensity: 0.5
+  shoutIntensity: 1.017
   newFont: {fileID: 0}
   newTextSize: 0
   balloonObject: {fileID: 2592667508800547744, guid: 2bac7fcd62ad2254ba0b5c6805ad7e98, type: 3}
@@ -183,11 +210,20 @@ MonoBehaviour:
   children: []
   rect:
     serializedVersion: 2
-    x: 743.9999
-    y: 127.20003
+    x: 1094.3999
+    y: 247.00005
     width: 200
     height: 641.1
+  OnCompletionEvent: {fileID: 0}
+  EnemiesToActivate: []
   onEnterAction: 
+  DoPanelSwitch: 0
+  playAtEnd: 0
+  triggerEnter: {fileID: 0}
+  currentCamera: {fileID: 0}
+  nextCamera: {fileID: 0}
+  currentViewIndex: 0
+  nextViewIndex: 0
   onExitAction: 
   condition:
     and: []

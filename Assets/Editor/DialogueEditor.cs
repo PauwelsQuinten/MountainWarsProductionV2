@@ -254,15 +254,16 @@ public class DialogueEditor : EditorWindow
 
             textHeight = textStyle.CalcHeight(guiContent, availableWidth);
 
-            previewHeight = previewStyle.CalcHeight(guiContent, availableWidth);
+            previewHeight = previewStyle.CalcHeight(guiContent, 140);
 
             EditorGUILayout.LabelField("-Text-", labelStyle, GUILayout.Height(20));
             baseNodeHeight += 20;
             EditorGUILayout.LabelField("Character", GUILayout.Height(20));
             baseNodeHeight += 20;
-            SerializedObject so = new SerializedObject(node); 
+            SerializedObject so = new SerializedObject(node);
+
             SerializedProperty characterNameProp = so.FindProperty("CharacterName");
-            EditorGUILayout.PropertyField(characterNameProp, true); 
+            EditorGUILayout.PropertyField(characterNameProp, true);
             so.ApplyModifiedProperties();
 
             GUILayout.BeginHorizontal();
@@ -393,10 +394,78 @@ public class DialogueEditor : EditorWindow
         GUILayout.EndHorizontal();
         baseNodeHeight += 20;
 
+        EditorGUILayout.LabelField("-Event-", labelStyle, GUILayout.Height(20));
+        baseNodeHeight += 20;
+
+        GUILayout.BeginHorizontal();
+        EditorGUILayout.LabelField("On Completion", GUILayout.Width(100), GUILayout.Height(20));
+        node.SetOnCompletionEvent((GameEvent)EditorGUILayout.ObjectField(node.GetOnCompletionEvent(), typeof(GameEvent), false, GUILayout.Height(20)));
+        GUILayout.EndHorizontal();
+        baseNodeHeight += 20;
+
+        if(node.GetOnCompletionEvent() != null)
+        {
+            EditorGUILayout.LabelField("EnemiesToActivate", GUILayout.Height(20));
+            baseNodeHeight += 20;
+            SerializedObject so3 = new SerializedObject(node);
+            SerializedProperty EnemiesToActivateProp = so3.FindProperty("EnemiesToActivate");
+            EditorGUILayout.PropertyField(EnemiesToActivateProp, true);
+            so3.ApplyModifiedProperties();
+        }
+
+        EditorGUILayout.LabelField("-PanelSwitch-", labelStyle, GUILayout.Height(20));
+        baseNodeHeight += 20;
+
+        GUILayout.BeginHorizontal();
+        EditorGUILayout.LabelField("Do Panel Switch", GUILayout.Width(142.5f), GUILayout.Height(20));
+        node.SetDoPanelSwitch(EditorGUILayout.Toggle(node.GetDoPanelSwitch(), GUILayout.Height(20)));
+        GUILayout.EndHorizontal();
+        baseNodeHeight += 20;
+
+        if (node.GetDoPanelSwitch())
+        {
+            GUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField("Panel Switch", GUILayout.Width(100), GUILayout.Height(20));
+            node.SetPanelSwitchEvent((GameEvent)EditorGUILayout.ObjectField(node.GetSwitchPanelEvent(), typeof(GameEvent), false, GUILayout.Height(20)));
+            GUILayout.EndHorizontal();
+            baseNodeHeight += 20;
+
+            GUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField("Play At End", GUILayout.Width(142.5f), GUILayout.Height(20));
+            node.SetPlayAtEnd(EditorGUILayout.Toggle(node.GetPlayAtEnd(), GUILayout.Height(20)));
+            GUILayout.EndHorizontal();
+            baseNodeHeight += 20;
+
+            GUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField("Current Camera", GUILayout.Width(100), GUILayout.Height(20));
+            node.SetCurrentCamera((Camera)EditorGUILayout.ObjectField(node.GetCurrentCamera(), typeof(Camera), false, GUILayout.Height(20)));
+            GUILayout.EndHorizontal();
+            baseNodeHeight += 20;
+
+            GUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField("Next Camera", GUILayout.Width(100), GUILayout.Height(20));
+            node.SetNextCamera((Camera)EditorGUILayout.ObjectField(node.GetNextCamera(), typeof(Camera), false, GUILayout.Height(20)));
+            GUILayout.EndHorizontal();
+            baseNodeHeight += 20;
+
+            GUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField("Current View Index", GUILayout.Width(100), GUILayout.Height(20));
+            node.SetCurrentViewIndex(EditorGUILayout.IntField(node.GetCurrentViewIndex(), GUILayout.Height(20)));
+            GUILayout.EndHorizontal();
+            baseNodeHeight += 20;
+
+            GUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField("Next View Index", GUILayout.Width(100), GUILayout.Height(20));
+            node.SetNextViewIndex(EditorGUILayout.IntField(node.GetNextViewIndex(), GUILayout.Height(20)));
+            GUILayout.EndHorizontal();
+            baseNodeHeight += 20;
+        }
+
         EditorGUILayout.LabelField("-Nodes-", labelStyle, GUILayout.Height(20));
         baseNodeHeight += 20;
 
         GUILayout.BeginHorizontal();
+
         if (GUILayout.Button("X", GUILayout.Height(20)))
         {
             deletingNode = node;
@@ -412,23 +481,29 @@ public class DialogueEditor : EditorWindow
 
         if (node.GetCharacterName().Count != 0)
         {
-            characterNameOffset = 60 * (node.GetCharacterName().Count - 1);
+            characterNameOffset = 80 * (node.GetCharacterName().Count);
         }
-        else characterNameOffset = 60;
+        else characterNameOffset = 80;
 
         float imageOffset = 0;
+        float enemiesToActivate = 0f;
         if (node.GetShoutingImages().Count != 0)
         {
-            imageOffset = (60 * (node.GetShoutingImages().Count - 1));
+            imageOffset = (80 * (node.GetShoutingImages().Count));
         }
-        else imageOffset = 60;
+        else imageOffset = 80;
+
+        if (node.GetEnemiesToActivate().Count != 0) enemiesToActivate = (80 * (node.GetEnemiesToActivate().Count));
+        else if(node.GetOnCompletionEvent() == null) enemiesToActivate = 0;
+        else enemiesToActivate = 80;
+
+        if (node.GetOnCompletionEvent() == null) enemiesToActivate = 0;
 
         if (node.GetHasImageSupport())
         {
-            node.SetHeight(imageOffset + characterNameOffset + baseNodeHeight + 140);
+            node.SetHeight(imageOffset + characterNameOffset + baseNodeHeight + enemiesToActivate+ 80);
         }
-        else node.SetHeight(characterNameOffset + baseNodeHeight + textHeight + previewHeight + 140);
-
+        else node.SetHeight(characterNameOffset + baseNodeHeight + textHeight + previewHeight + enemiesToActivate + 80);
 
         GUILayout.EndArea();
     }

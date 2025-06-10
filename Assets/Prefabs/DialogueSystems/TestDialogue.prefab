@@ -46,16 +46,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _dialogues:
-  - {fileID: 11400000, guid: 16e90e3e77c590a41a3c0c518946f646, type: 2}
-  - {fileID: 11400000, guid: 27898b9f16cfe1e409a0b0bfbf7991ad, type: 2}
-  _text: {fileID: 0}
+  - {fileID: 11400000, guid: e66fd7105a3e1414a9619febf703a143, type: 2}
   _isInDialogue:
     useConstant: 0
     constantValue: 0
-    variable: {fileID: 0}
+    variable: {fileID: 11400000, guid: b4d55fcfd48340444ac77031d3fa370d, type: 2}
+  _isInStaticDialogue:
+    useConstant: 0
+    constantValue: 0
+    variable: {fileID: 11400000, guid: f6083cd36ce3da147a3dbea5bc725bb7, type: 2}
   _fadeInSpeed: 2
   _stateManager: {fileID: 0}
   _canvas: {fileID: 0}
+  _whiteHolder: {fileID: 0}
+  _blackHolder: {fileID: 0}
+  _balloonHolder: {fileID: 0}
+  _bridgeObject: {fileID: 7944494520826801616, guid: bfe52b7e5e8d70e45a01754d6930d6ff, type: 3}
 --- !u!114 &-6491899581437761990
 MonoBehaviour:
   m_ObjectHideFlags: 0

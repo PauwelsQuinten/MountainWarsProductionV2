@@ -33,6 +33,11 @@ public class AIPerception : MonoBehaviour
 
         GameObject target = null;
 
+        //if (sender.gameObject.name == "Player")
+        //{
+        //    Debug.Log("player is looking for target");
+        //}
+
         target = _hearing.HearSurrounding();
 
         if (target == null)
@@ -43,7 +48,5 @@ public class AIPerception : MonoBehaviour
             _target = target;
             _foundTargetEvent.Raise(this, new NewTargetEventArgs { NewTarget = target });
         }
-
     }
-
 }

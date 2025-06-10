@@ -9,6 +9,9 @@ namespace UnityEngine
         public int NewViewIndex;
         public int CurrentViewIndex;
 
+        public Camera CurrentCamera;
+        public Camera NextCamera;
+
         public bool IsHidingSpot;
         public bool IsShowDown;
         public GameObject VsTarget = null;

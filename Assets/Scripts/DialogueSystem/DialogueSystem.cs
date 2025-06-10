@@ -163,24 +163,30 @@ public class DialogueSystem : MonoBehaviour
 
     private Vector2 GetTextBalloonPos(List<GameObject> textBalloon, TextMeshProUGUI text, bool needsFlip, bool addOffset)
     {
-        Vector2 TextballoonPos = Vector2.zero;
+        Vector2 textBalloonPos = Vector2.zero;
         if (_spawnSubBalloon && addOffset)
         {
-            TextballoonPos = new Vector2(_previousPos.x, _previousPos.y);
+            textBalloonPos = new Vector2(_previousPos.x, _previousPos.y);
             float yOffset = 0;
             float xOffset = 0;
             if (textBalloon[0] != null) yOffset = textBalloon[0].GetComponent<Image>().rectTransform.rect.height * 0.35f;
             if (textBalloon[0] != null) xOffset = textBalloon[0].GetComponent<Image>().rectTransform.rect.width * 0.35f;
-            TextballoonPos += new Vector2(xOffset, -yOffset);
-            return TextballoonPos;
+            textBalloonPos += new Vector2(xOffset, -yOffset);
+            return textBalloonPos;
         }
         GameObject target = GameObject.Find(_currentDialogueNode.GetCharacterName()[0]);
         Vector3 targetPos = target.transform.position;
         targetPos.y += target.GetComponent<CapsuleCollider>().height * 0.5f;
 
-        TextballoonPos = _stateManager.CurrentCamera.WorldToScreenPoint(targetPos);
+        textBalloonPos = _stateManager.CurrentCamera.WorldToScreenPoint(targetPos);
+        RenderTexture texture = _stateManager.CurrentCamera.targetTexture;
+        if (texture.width != 1920)
+        {
+            if(_currentDialogueNode.GetCharacterName()[0] != "Player") textBalloonPos.x += texture.width;
+            else textBalloonPos.x += texture.width / 2;
+        }
 
-        float Xoffset = 0;
+            float Xoffset = 0;
         float Yoffset = 0;
         if (textBalloon[0] != null) Xoffset = textBalloon[0].GetComponent<Image>().rectTransform.rect.width * 0.45f;
         if (textBalloon[0] != null) Yoffset = textBalloon[0].GetComponent<Image>().rectTransform.rect.height * 0.55f;
@@ -189,7 +195,7 @@ public class DialogueSystem : MonoBehaviour
         {
             if (_previousPos != Vector2.zero)
             {
-                TextballoonPos = _previousPos;
+                textBalloonPos = _previousPos;
                 if (textBalloon[0] != null) Xoffset = -textBalloon[0].GetComponent<Image>().rectTransform.rect.width * 0.75f;
                 if (textBalloon[0] != null) Yoffset = -(textBalloon[0].GetComponent<Image>().rectTransform.rect.height * 0.5f) - (_previousTextBalloonSize.y * 0.5f) + 100;
             }
@@ -201,14 +207,14 @@ public class DialogueSystem : MonoBehaviour
 
         if (needsFlip)
         {
-            TextballoonPos = new Vector2(-Xoffset, Yoffset) + TextballoonPos;
+            textBalloonPos = new Vector2(-Xoffset, Yoffset) + textBalloonPos;
         }
         else
         {
-            TextballoonPos = new Vector2(Xoffset, Yoffset) + TextballoonPos;
+            textBalloonPos = new Vector2(Xoffset, Yoffset) + textBalloonPos;
         }
 
-        return TextballoonPos;
+        return textBalloonPos;
     }
 
     private void SetTailsPosition(List<GameObject> textBalloon, bool moveTail)
@@ -286,6 +292,14 @@ public class DialogueSystem : MonoBehaviour
 
     private IEnumerator EnableTextBalloon()
     {
+        if (!_currentDialogueNode.GetPlayAtEnd())
+        {
+            Camera currentCam = _currentDialogueNode.GetCurrentCamera();
+            Camera nextCam = _currentDialogueNode.GetNextCamera();
+            int currentViewIndex = _currentDialogueNode.GetCurrentViewIndex();
+            int nexttViewIndex = _currentDialogueNode.GetNextViewIndex();
+
+        }
         _allowMovement = true;
         _isTyping = true;
         GameObject textObject = Instantiate(new GameObject());
@@ -873,6 +887,11 @@ public class DialogueSystem : MonoBehaviour
                 _isInDialogue.variable.value = false;
                 if (_dialogues[_currentDialogueIndex].GetIsStaticDialogue()) _isInStaticDialogue.variable.value = false;
                 _currentLineIndex = 0;
+
+                if (_currentDialogueNode.GetEnemiesToActivate().Count != 0)
+                {
+                    _currentDialogueNode.GetOnCompletionEvent().Raise(this, new ActivateEnemyEventArgs { EnemyNames = _currentDialogueNode.GetEnemiesToActivate() });
+                }
             }
         }
         else
@@ -880,6 +899,11 @@ public class DialogueSystem : MonoBehaviour
             _isInDialogue.variable.value = false;
             if (_dialogues[_currentDialogueIndex].GetIsStaticDialogue()) _isInStaticDialogue.variable.value = false;
             _currentLineIndex = 0;
+
+            if (_currentDialogueNode.GetEnemiesToActivate().Count != 0)
+            {
+                _currentDialogueNode.GetOnCompletionEvent().Raise(this, new ActivateEnemyEventArgs { EnemyNames = _currentDialogueNode.GetEnemiesToActivate() });
+            }
         }
     }
 

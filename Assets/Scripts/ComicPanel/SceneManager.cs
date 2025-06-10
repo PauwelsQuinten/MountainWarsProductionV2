@@ -19,20 +19,52 @@ public class SceneManager : MonoBehaviour
     {
         TriggerEnterEventArgs args = obj as TriggerEnterEventArgs;
         if (args == null) return;
-        if (args.CurrentSceneIndex == args.newSceneIndex) return;
 
         if (args.IsHidingSpot || args.IsShowDown) return;
 
-        Camera currentCam = _spawnPoints[args.CurrentSceneIndex].transform.parent.GetComponentInChildren<Camera>();
-        Camera Nextcam = _spawnPoints[args.newSceneIndex].transform.parent.GetComponentInChildren<Camera>();
+        Camera currentCam = null;
+        Camera nextCam = null;
+        if (args.CurrentSceneIndex == args.newSceneIndex)
+        {
+            currentCam = args.CurrentCamera;
+            nextCam = args.NextCamera;
+
+            currentCam.GetComponent<FollowObject>().enabled = false;
+            nextCam.GetComponent<FollowObject>().enabled = true;
+
+            _changeCam.Raise(this, nextCam);
+            return;
+        }
+
+        currentCam = args.CurrentCamera;
+        nextCam = args.NextCamera;
 
         currentCam.GetComponent<FollowObject>().enabled = false;
-        Nextcam.GetComponent<FollowObject>().enabled = true;
+        nextCam.GetComponent<FollowObject>().enabled = true;
 
-        _changeCam.Raise(this, Nextcam);
+        _changeCam.Raise(this, nextCam);
 
+        if (args.newSceneIndex == null) return;
         if (_player == null) _player = GameObject.Find("Player");
 
         _player.transform.position = _spawnPoints[args.newSceneIndex].transform.position;
+    }
+
+    public void ExitPanels(Component sender, object obj)
+    {
+        TriggerExitEventArgs args = obj as TriggerExitEventArgs;
+        if (args == null) return;
+        if (!args.DoRunTriggerExit) return;
+
+        Camera currentCam = null;
+        Camera nextCam = null;
+
+        currentCam = args.NextCamera;
+        nextCam = args.CurrentCamera;
+
+        currentCam.GetComponent<FollowObject>().enabled = false;
+        nextCam.GetComponent<FollowObject>().enabled = true;
+
+        _changeCam.Raise(this, nextCam);
     }
 }

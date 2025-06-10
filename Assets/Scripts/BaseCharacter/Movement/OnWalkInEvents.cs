@@ -12,16 +12,20 @@ public class OnWalkInEvents : MonoBehaviour
     private const string NO_TAG = "Untagged";
     private const string TAG_Villager = "Untagged";
     private Rigidbody _rb;
+    private StateManager _stateManager;
 
     Vector3 collisionPoint;
 
     private void Start()
     {
         _rb = GetComponent<Rigidbody>();
+        _stateManager = GetComponent<StateManager>();
     }
 
     private void OnCollisionEnter(Collision collision)
     {
+        if (_stateManager.Target != null) return;
+
         if (collision.collider.gameObject.CompareTag(NO_TAG) || collision.collider.gameObject.CompareTag(TAG_Villager))
             return;
 

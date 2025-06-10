@@ -49,6 +49,7 @@ public class IKSpearMovement : MonoBehaviour
 
     private void Update()
     {
+        if (!_IKTargetLh || !_lhHoldingPosition) return; 
         _IKTargetLh.transform.position = _lhHoldingPosition.transform.position;
         AdjustAim();
         if (_targetRotation != Quaternion.identity) 

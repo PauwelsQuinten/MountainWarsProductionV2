@@ -197,13 +197,24 @@ public class StateManager : MonoBehaviour
         _OnStunRecovery.Raise(this, null);
 
         BlackboardRef.variable.State = AttackState.Idle;
-       
     }
+       
     private IEnumerator InitBlackboard()
     {
         yield return new WaitForEndOfFrame();
         BlackboardRef.variable.State = AttackState;
         BlackboardRef.variable.Self = gameObject;
         BlackboardRef.variable.Orientation = Orientation;
+    }
+
+    private void AdjustOrientationToCamera(Camera cameraOld, Camera cameraNew)
+    {
+        if (cameraNew == null || cameraOld == null) return;
+
+        float yawnOld = cameraOld.transform.eulerAngles.y;
+        float yawnNew = cameraNew.transform.eulerAngles.y;
+        float diffAngle = Mathf.DeltaAngle(yawnOld, yawnNew);
+
+
     }
 }

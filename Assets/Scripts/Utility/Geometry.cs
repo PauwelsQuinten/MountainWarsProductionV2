@@ -31,6 +31,7 @@ namespace Geometry
         {
             float angle = CalculateAngleRadOfInput(direction) * Mathf.Rad2Deg;
             float angleDiff = angle - orientation;
+            Debug.Log($"{angleDiff} for stab calculation");
             return Mathf.Abs(angleDiff) < acceptedRange || Mathf.Abs(angleDiff) > 360 - acceptedRange;
         }
 
@@ -42,6 +43,12 @@ namespace Geometry
         public static Vector3 CalculateVectorFromfOrientation(float orientationRad)
         {
             return new Vector3(Mathf.Cos(orientationRad), 0f, Mathf.Sin(orientationRad));
+        }
+
+        public static Vector2 Calculate2DVectorFromfOrientation(float orientation)
+        {
+            float angle = (int)orientation * Mathf.Deg2Rad;
+            return new Vector3(Mathf.Cos(angle), Mathf.Sin(angle));
         }
 
         public static float CalculateSwingSpeed(float length, float currentTime, float minResult, float maxResult)
@@ -116,14 +123,14 @@ namespace Geometry
             return cross < 0 ? Direction.ToLeft : Direction.ToRight;
         }
 
-        public static Vector3 GetRandomPointOnNavMesh(Vector3 center, float radius)
+        public static Vector3 GetRandomPointOnNavMesh(Vector3 center, float radius, float minRadius)
         {
             for (int i = 0; i < 5; i++) // Try up to 5 times
             {
-                Vector3 randomDirection = Random.insideUnitSphere * radius;
+                Vector3 randomDirection = Random.insideUnitSphere * Random.Range(minRadius, radius);
                 randomDirection += center;
 
-                if (NavMesh.SamplePosition(randomDirection, out NavMeshHit hit, 2.0f, NavMesh.AllAreas))
+                if (NavMesh.SamplePosition(randomDirection, out NavMeshHit hit, radius, NavMesh.AllAreas))
                 {
                     return hit.position;
                 }

@@ -36,6 +36,8 @@ public class StateManager : MonoBehaviour
     }
     [HideInInspector]
     [Tooltip("Angle of orientation in degree")] public float fOrientation = 0f;
+    [HideInInspector]
+    [Tooltip("Angle of orientation for aiming in degree, this will be equal to fOrienation if camera angle.y == 0")] public float fAimOrientation = 0f;
     [Header("Camera")]
     [SerializeField]
     public Camera StartCamera;

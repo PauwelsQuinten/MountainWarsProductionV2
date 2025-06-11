@@ -206,6 +206,12 @@ namespace Geometry
             return angle;
         }
 
+        public static bool InFrontOfAttacker(float OrientationAttacker, float orientationDefender, float margin)
+        {
+            float diff = OrientationAttacker - orientationDefender;
+            float sign = Mathf.Sign(diff);
+            return Mathf.Abs(diff * sign - 180) < margin;
+        }
 
     }
 }

@@ -149,7 +149,7 @@ public class Aiming : MonoBehaviour
             && (_refAimingInput.variable.State == AttackState.Idle || _refAimingInput.variable.State == AttackState.Attack || _refAimingInput.variable.State == AttackState.BlockAttack)
             && _previousLength < inputLength)
         {
-            var direction = Geometry.Geometry.CalculateFeintDirection(_refAimingInput.variable.StateManager.fOrientation, _refAimingInput.variable.value, _maxAllowedBlockAngle);
+            var direction = Geometry.Geometry.CalculateFeintDirection(_refAimingInput.variable.StateManager.fAimOrientation, _refAimingInput.variable.value, _maxAllowedBlockAngle);
                   
             if (direction != Direction.Wrong)
             {
@@ -239,7 +239,8 @@ public class Aiming : MonoBehaviour
 
     private void OnHoldevents()
     {
-        Vector2 orient = Geometry.Geometry.CalculateVectorFromOrientation(_refAimingInput.variable.StateManager.Orientation);
+        //Vector2 orient = Geometry.Geometry.CalculateVectorFromOrientation(_refAimingInput.variable.StateManager.Orientation);
+        Vector2 orient = Geometry.Geometry.Calculate2DVectorFromfOrientation(_refAimingInput.variable.StateManager.fAimOrientation);
 
         switch (_refAimingInput.variable.State)
         {
@@ -288,7 +289,7 @@ public class Aiming : MonoBehaviour
     private bool IsStabMovement(float inputLength)
     {
         return (inputLength >= 0.9f && inputLength > _previousLength + 0.01f
-                    && Geometry.Geometry.IsInputInFrontOfOrientation(_refAimingInput.variable.value, _stabAcceptedRange, _refAimingInput.variable.StateManager.fOrientation)
+                    && Geometry.Geometry.IsInputInFrontOfOrientation(_refAimingInput.variable.value, _stabAcceptedRange, _refAimingInput.variable.StateManager.fAimOrientation)
                     && (_refAimingInput.variable.State != AttackState.SwordDefence && _refAimingInput.variable.State != AttackState.ShieldDefence)
                     && _enmAttackSignal == AttackSignal.Idle
                     && _traversedAngle < F_MAX_ALLOWED_ANGLE_ON_ORIENTATION) ;
@@ -310,7 +311,7 @@ public class Aiming : MonoBehaviour
             Direction = _swingDirection
                 ,
             BlockDirection = Geometry.Geometry.CalculateBlockDirection
-                (_refAimingInput.variable.StateManager.fOrientation, _refAimingInput.variable.value, _refAimingInput.variable.StateManager.IsHoldingShield, _acceptedAngleForCenter, _maxAllowedBlockAngle)
+                (_refAimingInput.variable.StateManager.fAimOrientation, _refAimingInput.variable.value, _refAimingInput.variable.StateManager.IsHoldingShield, _acceptedAngleForCenter, _maxAllowedBlockAngle)
                 ,
             Speed = Geometry.Geometry.CalculateSwingSpeed(_traversedAngle, _fMovingTime, _minSwingSpeed, _maxSwingSpeed)
                 ,

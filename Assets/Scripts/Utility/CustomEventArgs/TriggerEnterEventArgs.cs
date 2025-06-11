@@ -9,6 +9,8 @@ namespace UnityEngine
         public int NewViewIndex;
         public int CurrentViewIndex;
 
+        public bool ActivateNewCamera;
+
         public Camera CurrentCamera;
         public Camera NextCamera;
 

@@ -182,11 +182,11 @@ public class DialogueSystem : MonoBehaviour
         RenderTexture texture = _stateManager.CurrentCamera.targetTexture;
         if (texture.width != 1920)
         {
-            if(_currentDialogueNode.GetCharacterName()[0] != "Player") textBalloonPos.x += texture.width;
+            if (_currentDialogueNode.GetCharacterName()[0] != "Player") textBalloonPos.x += texture.width;
             else textBalloonPos.x += texture.width / 2;
         }
 
-            float Xoffset = 0;
+        float Xoffset = 0;
         float Yoffset = 0;
         if (textBalloon[0] != null) Xoffset = textBalloon[0].GetComponent<Image>().rectTransform.rect.width * 0.45f;
         if (textBalloon[0] != null) Yoffset = textBalloon[0].GetComponent<Image>().rectTransform.rect.height * 0.55f;
@@ -294,11 +294,13 @@ public class DialogueSystem : MonoBehaviour
     {
         if (!_currentDialogueNode.GetPlayAtEnd() && _currentDialogueNode.GetDoPanelSwitch())
         {
-            Camera currentCam = _currentDialogueNode.GetCurrentCamera();
-            Camera nextCam = _currentDialogueNode.GetNextCamera();
+            Camera currentCam = GameObject.Find(_currentDialogueNode.GetCurrentCameraName()).GetComponent<Camera>();
+            Camera nextCam = GameObject.Find(_currentDialogueNode.GetNextCameraName()).GetComponent<Camera>();
             int currentViewIndex = _currentDialogueNode.GetCurrentViewIndex();
             int nexttViewIndex = _currentDialogueNode.GetNextViewIndex();
+            bool activateNewCam = _currentDialogueNode.GetEnableNewCamera();
 
+            _currentDialogueNode.GetSwitchPanelEvent().Raise(this, new TriggerEnterEventArgs { CurrentCamera = currentCam, NextCamera = nextCam, CurrentViewIndex = currentViewIndex, NewViewIndex = nexttViewIndex, IsHidingSpot = false, IsShowDown = false, ActivateNewCamera = activateNewCam });
         }
         _allowMovement = true;
         _isTyping = true;
@@ -535,10 +537,10 @@ public class DialogueSystem : MonoBehaviour
         return result.ToString();
     }
 
-    private void DetermineTextBalloonSizeBasedOnText(int LetterCount, int linecount, List<GameObject> textBalloon, TextMeshProUGUI text)
+    private void DetermineTextBalloonSizeBasedOnText(int LetterCount, int linecount, List<GameObject> textBalloon, TextMeshProUGUI textMeshPro)
     {
         DialogueNode node = _currentDialogueNode;
-        TMP_FontAsset tempFont = text.font;
+        TMP_FontAsset tempFont = textMeshPro.font;
         if (tempFont == null)
         {
             Debug.LogError("Font asset is null!");
@@ -560,7 +562,9 @@ public class DialogueSystem : MonoBehaviour
             Debug.LogError($"Font {tempFont.name} is missing character '{sampleChar}'");
         }
 
-        float FontSizeMultiplier = DetermineFontSizeMultiplier(text.fontSize);
+        //float FontSizeMultiplier = DetermineFontSizeMultiplier(text.fontSize);
+
+        //string text = node.GetText();
 
         Vector2 size = new Vector2(((FontSizeMultiplier * characterWidth) * LetterCount), ((FontSizeMultiplier * characterHeight) * linecount));
         size += _currentDialogueNode.GetSizePadding() + new Vector2(20,20);
@@ -601,21 +605,21 @@ public class DialogueSystem : MonoBehaviour
             }
         }
 
-        if (text != null)
+        if (textMeshPro != null)
         {
-            text.rectTransform.sizeDelta = size;
+            textMeshPro.rectTransform.sizeDelta = size;
         }
     }
 
-    private float DetermineFontSizeMultiplier(float size)
-    {
-        float baseSize = 36;
-         float currentSize = size;
+    //private float DetermineFontSizeMultiplier(float size)
+    //{
+    //    float baseSize = 36;
+    //     float currentSize = size;
 
-        float multiplier = currentSize / baseSize;
+    //    float multiplier = currentSize / baseSize;
 
-         return multiplier;
-    }
+    //     return multiplier;
+    //}
 
     public void DistributeImages(List<GameObject> textBalloon, bool spawnImages, List<GameObject> shoutingImages = null)
     {
@@ -888,6 +892,17 @@ public class DialogueSystem : MonoBehaviour
                 if (_dialogues[_currentDialogueIndex].GetIsStaticDialogue()) _isInStaticDialogue.variable.value = false;
                 _currentLineIndex = 0;
 
+                if (_currentDialogueNode.GetPlayAtEnd() && _currentDialogueNode.GetDoPanelSwitch())
+                {
+                    Camera currentCam = GameObject.Find(_currentDialogueNode.GetCurrentCameraName()).GetComponent<Camera>();
+                    Camera nextCam = GameObject.Find(_currentDialogueNode.GetNextCameraName()).GetComponent<Camera>();
+                    int currentViewIndex = _currentDialogueNode.GetCurrentViewIndex();
+                    int nexttViewIndex = _currentDialogueNode.GetNextViewIndex();
+                    bool activateNewCam = _currentDialogueNode.GetEnableNewCamera();
+
+                    _currentDialogueNode.GetSwitchPanelEvent().Raise(this, new TriggerEnterEventArgs { CurrentCamera = currentCam, NextCamera = nextCam, CurrentViewIndex = currentViewIndex, NewViewIndex = nexttViewIndex, IsHidingSpot = false, IsShowDown = false, ActivateNewCamera = activateNewCam});
+                }
+
                 if (_currentDialogueNode.GetEnemiesToActivate().Count != 0)
                 {
                     _currentDialogueNode.GetOnCompletionEvent().Raise(this, new ActivateEnemyEventArgs { EnemyNames = _currentDialogueNode.GetEnemiesToActivate() });
@@ -899,6 +914,18 @@ public class DialogueSystem : MonoBehaviour
             _isInDialogue.variable.value = false;
             if (_dialogues[_currentDialogueIndex].GetIsStaticDialogue()) _isInStaticDialogue.variable.value = false;
             _currentLineIndex = 0;
+
+
+            if (_currentDialogueNode.GetPlayAtEnd() && _currentDialogueNode.GetDoPanelSwitch())
+            {
+                Camera currentCam = GameObject.Find(_currentDialogueNode.GetCurrentCameraName()).GetComponent<Camera>();
+                Camera nextCam = GameObject.Find(_currentDialogueNode.GetNextCameraName()).GetComponent<Camera>();
+                int currentViewIndex = _currentDialogueNode.GetCurrentViewIndex();
+                int nexttViewIndex = _currentDialogueNode.GetNextViewIndex();
+                bool activateNewCam = _currentDialogueNode.GetEnableNewCamera();
+
+                _currentDialogueNode.GetSwitchPanelEvent().Raise(this, new TriggerEnterEventArgs { CurrentCamera = currentCam, NextCamera = nextCam, CurrentViewIndex = currentViewIndex, NewViewIndex = nexttViewIndex, IsHidingSpot = false, IsShowDown = false, ActivateNewCamera = activateNewCam });
+            }
 
             if (_currentDialogueNode.GetEnemiesToActivate().Count != 0)
             {

@@ -52,7 +52,7 @@ public class GoapAction : MonoBehaviour, IActions
         if (_randomWalkingTime)
             runtime = Random.Range(_actionMaxRunTime * 0.5f, _actionMaxRunTime);
 
-        if (_actionMaxRunTime >= 0)
+        if (runtime >= 0)
             _actionCoroutine = StartCoroutine(StartTimer(runtime));
 
         npc = transform.parent.gameObject;

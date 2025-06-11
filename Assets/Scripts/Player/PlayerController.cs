@@ -3,6 +3,7 @@ using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UIElements;
 using UnityEngine.Windows;
 
 public class PlayerController : MonoBehaviour
@@ -121,7 +122,8 @@ public class PlayerController : MonoBehaviour
         if (_staminaManager.CurrentStamina < _aimCost.value) return;
 
         Vector2 input = ctx.ReadValue<Vector2>();
-        Vector2 output = CalculateInputOnCamera(input);
+        Vector2 output = CalculateInputOnCameraThroughRotation(input);
+        //Vector2 output = CalculateInputOnCamera(input);
 
         _aimInputRef.variable.value = output;
     }
@@ -180,6 +182,22 @@ public class PlayerController : MonoBehaviour
         // If you need Vector2 output for ground movement (XZ plane)
         Vector2 output = new Vector2(moveDirection.x, moveDirection.z);
         return output;
+    }
+    private Vector2 CalculateInputOnCameraThroughRotation(Vector2 input)
+    {
+        float angle = _stateManager.CurrentCamera.transform.rotation.eulerAngles.y;
+        //angle /= 45f;
+        //angle = Mathf.RoundToInt(angle) * 45;
+        float newOrient = _stateManager.fOrientation + angle;
+        if (newOrient > 180) newOrient -= 360;
+        if (newOrient < -180) newOrient += 360;
+        if (newOrient == -180) newOrient = 180;
+        _stateManager.fAimOrientation = newOrient;
+        //Vector2 moveDirection = new Vector2(
+        //    Mathf.Cos(angle) * input.x - Mathf.Sin(angle) * input.y,
+        //    Mathf.Sin(angle) * input.x + Mathf.Cos(angle) * input.y
+        //    );
+        return input;
     }
 
     public void ProccesSetBlockInput(InputAction.CallbackContext ctx)

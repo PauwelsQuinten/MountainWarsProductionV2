@@ -65,7 +65,7 @@ public class VillagerReaction : GoapAction
 
         catch (Exception ex)
    {
-            Debug.LogError($"Error in RunReactionSequence: {ex}");
+            //Debug.LogError($"Error in RunReactionSequence: {ex}");
             ActionCompleted();
         }
 

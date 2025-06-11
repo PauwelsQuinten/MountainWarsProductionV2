@@ -31,6 +31,7 @@ namespace Geometry
         {
             float angle = CalculateAngleRadOfInput(direction) * Mathf.Rad2Deg;
             float angleDiff = angle - orientation;
+            Debug.Log($"{angleDiff} for stab calculation");
             return Mathf.Abs(angleDiff) < acceptedRange || Mathf.Abs(angleDiff) > 360 - acceptedRange;
         }
 
@@ -42,6 +43,12 @@ namespace Geometry
         public static Vector3 CalculateVectorFromfOrientation(float orientationRad)
         {
             return new Vector3(Mathf.Cos(orientationRad), 0f, Mathf.Sin(orientationRad));
+        }
+
+        public static Vector2 Calculate2DVectorFromfOrientation(float orientation)
+        {
+            float angle = (int)orientation * Mathf.Deg2Rad;
+            return new Vector3(Mathf.Cos(angle), Mathf.Sin(angle));
         }
 
         public static float CalculateSwingSpeed(float length, float currentTime, float minResult, float maxResult)

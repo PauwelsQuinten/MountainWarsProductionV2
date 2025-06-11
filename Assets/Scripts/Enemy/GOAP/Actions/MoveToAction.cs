@@ -82,7 +82,6 @@ public class MoveToAction : GoapAction
         _navMeshAgent.SetDestination(_targetPos);
 
         ReactivateAgent();
-        Debug.Log("restart walk");
     }
 
     public override void UpdateAction(WorldState currentWorldState, BlackboardReference blackboard)

@@ -122,8 +122,9 @@ public class EquipmentManager : MonoBehaviour
 
         var lostObject = EquipmentHelper.DropEquipment(HeldEquipment, hand);
 
+        //Calculate direction for the dissarmed sword to fly off to
         Vector3 direction = transform.position - args.ParryMaster.transform.position;
-        direction += Vector3.up;
+        direction += Vector3.up * 2f;
         direction.Normalize();
         var comp = lostObject.GetComponent<FlyOff>();
         if (comp != null) 
@@ -334,7 +335,9 @@ public class EquipmentManager : MonoBehaviour
             return HeldEquipment[RIGHT_HAND].Range;
         else if (!HeldEquipment[RIGHT_HAND] && HeldEquipment[LEFT_HAND])
             return HeldEquipment[LEFT_HAND].Range;
-        return HeldEquipment[FISTS].Range;
+        else if (HeldEquipment[FISTS])
+            return HeldEquipment[FISTS].Range;
+        else return 0;
     }
 
     private float GetDurabilityPercentage(int index)

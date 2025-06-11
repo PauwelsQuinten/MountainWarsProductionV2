@@ -41,8 +41,6 @@ public class UIHealthManager : MonoBehaviour
     private Image _weapon;
 
     [SerializeField]
-    private GameObject _cameraToLookAt;
-    [SerializeField]
     private GameObject _canvas;
     [SerializeField]
     private GameEvent _characterDeath;
@@ -59,12 +57,18 @@ public class UIHealthManager : MonoBehaviour
 
     private string _name;
 
+    private StateManager _playerStateManager;
+
     public void Update()
     {
+        if(_playerStateManager == null)
+        {
+            _playerStateManager = GameObject.Find("Player").GetComponent<StateManager>();
+        }
         if (gameObject.GetComponent<AIController>() != null)
         {
-            if (_cameraToLookAt == null) return;
-            _canvas.transform.LookAt(_cameraToLookAt.transform);
+            if (_playerStateManager.CurrentCamera == null) return;
+            _canvas.transform.LookAt(_playerStateManager.CurrentCamera.transform);
         }
     }
     public void UpdateHealth(Component sender, object obj)

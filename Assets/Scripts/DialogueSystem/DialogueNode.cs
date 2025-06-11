@@ -65,6 +65,8 @@ public class DialogueNode : ScriptableObject
     [SerializeField]
     string nextCameraName;
     [SerializeField]
+    bool EnableNewCamera;
+    [SerializeField]
     int currentViewIndex;
     [SerializeField] 
     int nextViewIndex;
@@ -183,6 +185,11 @@ public class DialogueNode : ScriptableObject
     public string GetNextCameraName()
     {
         return nextCameraName;
+    }
+
+    public bool GetEnableNewCamera()
+    {
+        return EnableNewCamera;
     }
 
     public int GetCurrentViewIndex()
@@ -514,6 +521,17 @@ public class DialogueNode : ScriptableObject
             Undo.RecordObject(this, " Update Next Camera Name");
 
             nextCameraName = newNextCameraName;
+            EditorUtility.SetDirty(this);
+        }
+    }
+
+    public void SetEnableNewCamera(bool newEnableNewCamera)
+    {
+        if(newEnableNewCamera != EnableNewCamera)
+        {
+            Undo.RecordObject(this, " Update Enable New Camera");
+
+            EnableNewCamera = newEnableNewCamera;
             EditorUtility.SetDirty(this);
         }
     }

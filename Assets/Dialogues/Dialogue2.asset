@@ -37,18 +37,16 @@ MonoBehaviour:
   text: Oh no he killed paul
   CharacterName:
   - Bystander2
-  - Bystander1
-  - Bystander3
   textDisplaySpeed: 0.01
   hasSecondaryLine: 0
-  isShouting: 1
-  shoutIntensity: 1.125
+  isShouting: 0
+  shoutIntensity: 0.734
   newFont: {fileID: 0}
   newTextSize: 0
   balloonObject: {fileID: 2592667508800547744, guid: 2bac7fcd62ad2254ba0b5c6805ad7e98, type: 3}
   tailObject: {fileID: 8216558290986259432, guid: 89ac598207ca10e43b46e0a3e1c6d86d, type: 3}
   borderSize: 1.2
-  sizePadding: {x: -10, y: 70}
+  sizePadding: {x: 0, y: 20}
   needsToBeFlipped: 0
   children: []
   rect:
@@ -56,17 +54,18 @@ MonoBehaviour:
     x: 232
     y: -1.5999985
     width: 200
-    height: 1061.1
+    height: 921.1
   OnCompletionEvent: {fileID: 0}
   EnemiesToActivate: []
   onEnterAction: 
   DoPanelSwitch: 1
-  playAtEnd: 1
+  playAtEnd: 0
   triggerEnter: {fileID: 11400000, guid: 4a495bc1b3ec91143bda2133b134a2c3, type: 2}
   currentCameraName: PaulFightCam
   nextCameraName: BystandersCam
+  EnableNewCamera: 1
   currentViewIndex: 5
-  nextViewIndex: 5
+  nextViewIndex: 0
   onExitAction: 
   condition:
     and: []

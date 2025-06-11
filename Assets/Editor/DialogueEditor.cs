@@ -249,6 +249,7 @@ public class DialogueEditor : EditorWindow
             GUIContent guiContent = new GUIContent(node.GetText());
             GUIStyle textStyle = new GUIStyle(EditorStyles.textArea);
             textStyle.wordWrap = true;
+            textStyle.richText = false;
 
             float availableWidth = 60;
 
@@ -444,6 +445,12 @@ public class DialogueEditor : EditorWindow
             EditorGUILayout.LabelField("Next Camera Name", GUILayout.Height(20));
             baseNodeHeight += 20;
             node.SetNextCameraName(EditorGUILayout.TextArea(node.GetNextCameraName(), GUILayout.Height(20)));
+            baseNodeHeight += 20;
+
+            GUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField("Enable New Camera", GUILayout.Width(142.5f), GUILayout.Height(20));
+            node.SetEnableNewCamera(EditorGUILayout.Toggle(node.GetEnableNewCamera(), GUILayout.Height(20)));
+            GUILayout.EndHorizontal();
             baseNodeHeight += 20;
 
             GUILayout.BeginHorizontal();

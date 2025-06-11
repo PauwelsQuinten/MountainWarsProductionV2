@@ -23,7 +23,7 @@ MonoBehaviour:
   textDisplaySpeed: 0.01
   hasSecondaryLine: 0
   isShouting: 0
-  shoutIntensity: 0.5
+  shoutIntensity: 1.248
   newFont: {fileID: 0}
   newTextSize: 0
   balloonObject: {fileID: 2592667508800547744, guid: 2bac7fcd62ad2254ba0b5c6805ad7e98, type: 3}
@@ -82,7 +82,7 @@ MonoBehaviour:
   balloonObject: {fileID: 2592667508800547744, guid: 2bac7fcd62ad2254ba0b5c6805ad7e98, type: 3}
   tailObject: {fileID: 8216558290986259432, guid: 89ac598207ca10e43b46e0a3e1c6d86d, type: 3}
   borderSize: 1.2
-  sizePadding: {x: -10, y: 190}
+  sizePadding: {x: -10, y: 220}
   needsToBeFlipped: 1
   children:
   - 34e63512-100c-4bb8-8ece-3ba38bb83575
@@ -226,7 +226,7 @@ MonoBehaviour:
   triggerEnter: {fileID: 11400000, guid: 4a495bc1b3ec91143bda2133b134a2c3, type: 2}
   currentCameraName: Panel1Cam
   nextCameraName: PaulFightCam
-  EnableNewCamera: 0
+  EnableNewCamera: 1
   currentViewIndex: 0
   nextViewIndex: 5
   onExitAction: 

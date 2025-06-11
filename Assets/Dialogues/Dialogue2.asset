@@ -17,19 +17,19 @@ MonoBehaviour:
   shoutingImages: []
   imageSize: 100
   hasSecondImageLine: 0
-  text: Quickly somebody call a gaurd!
+  text: <size=50>Quickly somebody call a gaurd!</size>
   CharacterName:
   - Bystander3
   textDisplaySpeed: 0
   hasSecondaryLine: 0
-  isShouting: 0
+  isShouting: 1
   shoutIntensity: 0.5
   newFont: {fileID: 0}
-  newTextSize: 0
+  newTextSize: 50
   balloonObject: {fileID: 2592667508800547744, guid: 2bac7fcd62ad2254ba0b5c6805ad7e98, type: 3}
   tailObject: {fileID: 8216558290986259432, guid: 89ac598207ca10e43b46e0a3e1c6d86d, type: 3}
   borderSize: 1.2
-  sizePadding: {x: 0, y: 0}
+  sizePadding: {x: -20, y: 100}
   needsToBeFlipped: 0
   children: []
   rect:
@@ -37,7 +37,7 @@ MonoBehaviour:
     x: 481.2
     y: -1.6000061
     width: 200
-    height: 950.15
+    height: 1373.72
   OnCompletionEvent: {fileID: 0}
   EnemiesToActivate: []
   onEnterAction: 
@@ -141,9 +141,11 @@ MonoBehaviour:
   text: <size=75>Oh no he killed paul!</size>
   CharacterName:
   - Bystander2
+  - Bystander1
+  - Bystander3
   textDisplaySpeed: 0.01
   hasSecondaryLine: 0
-  isShouting: 0
+  isShouting: 1
   shoutIntensity: 0.734
   newFont: {fileID: 0}
   newTextSize: 75
@@ -159,7 +161,7 @@ MonoBehaviour:
     x: 231.20001
     y: -1.6000061
     width: 200
-    height: 1570.99
+    height: 1730.99
   OnCompletionEvent: {fileID: 0}
   EnemiesToActivate: []
   onEnterAction: 

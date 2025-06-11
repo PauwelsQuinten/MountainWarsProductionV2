@@ -1,5 +1,108 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-7820335265279098436
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a7a6ddfe04bf004fbb402deb2b21761, type: 3}
+  m_Name: 810e2637-cda6-4f4d-b9dd-e9b101cca6dc
+  m_EditorClassIdentifier: 
+  isPlayerSpeaking: 1
+  hasImageSupport: 0
+  shoutingImages: []
+  imageSize: 100
+  hasSecondImageLine: 0
+  text: Quickly somebody call a gaurd!
+  CharacterName:
+  - Bystander3
+  textDisplaySpeed: 0
+  hasSecondaryLine: 0
+  isShouting: 0
+  shoutIntensity: 0.5
+  newFont: {fileID: 0}
+  newTextSize: 0
+  balloonObject: {fileID: 2592667508800547744, guid: 2bac7fcd62ad2254ba0b5c6805ad7e98, type: 3}
+  tailObject: {fileID: 8216558290986259432, guid: 89ac598207ca10e43b46e0a3e1c6d86d, type: 3}
+  borderSize: 1.2
+  sizePadding: {x: 0, y: 0}
+  needsToBeFlipped: 0
+  children: []
+  rect:
+    serializedVersion: 2
+    x: 481.2
+    y: -1.6000061
+    width: 200
+    height: 950.15
+  OnCompletionEvent: {fileID: 0}
+  EnemiesToActivate: []
+  onEnterAction: 
+  DoPanelSwitch: 1
+  playAtEnd: 1
+  triggerEnter: {fileID: 11400000, guid: 4a495bc1b3ec91143bda2133b134a2c3, type: 2}
+  currentCameraName: BystandersCam
+  nextCameraName: Panel1Cam
+  EnableNewCamera: 1
+  currentViewIndex: 0
+  nextViewIndex: 0
+  onExitAction: 
+  condition:
+    and: []
+--- !u!114 &-6482475002688546984
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a7a6ddfe04bf004fbb402deb2b21761, type: 3}
+  m_Name: c1748487-4f06-460d-a913-73a6a5430374
+  m_EditorClassIdentifier: 
+  isPlayerSpeaking: 1
+  hasImageSupport: 0
+  shoutingImages: []
+  imageSize: 100
+  hasSecondImageLine: 0
+  text: 
+  CharacterName: []
+  textDisplaySpeed: 0
+  hasSecondaryLine: 0
+  isShouting: 0
+  shoutIntensity: 0.5
+  newFont: {fileID: 0}
+  newTextSize: 0
+  balloonObject: {fileID: 0}
+  tailObject: {fileID: 0}
+  borderSize: 0
+  sizePadding: {x: 0, y: 0}
+  needsToBeFlipped: 0
+  children: []
+  rect:
+    serializedVersion: 2
+    x: 481.2
+    y: -1.6000061
+    width: 200
+    height: 100
+  OnCompletionEvent: {fileID: 0}
+  EnemiesToActivate: []
+  onEnterAction: 
+  DoPanelSwitch: 0
+  playAtEnd: 0
+  triggerEnter: {fileID: 0}
+  currentCameraName: 
+  nextCameraName: 
+  EnableNewCamera: 0
+  currentViewIndex: 0
+  nextViewIndex: 0
+  onExitAction: 
+  condition:
+    and: []
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14,6 +117,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nodes:
   - {fileID: 4438391517485192654}
+  - {fileID: -7820335265279098436}
   newNodeOffset: {x: 250, y: 0}
   isStaticDialogue: 0
   isStarted: 0
@@ -34,7 +138,7 @@ MonoBehaviour:
   shoutingImages: []
   imageSize: 100
   hasSecondImageLine: 0
-  text: Oh no he killed paul
+  text: <size=75>Oh no he killed paul!</size>
   CharacterName:
   - Bystander2
   textDisplaySpeed: 0.01
@@ -42,19 +146,20 @@ MonoBehaviour:
   isShouting: 0
   shoutIntensity: 0.734
   newFont: {fileID: 0}
-  newTextSize: 0
+  newTextSize: 75
   balloonObject: {fileID: 2592667508800547744, guid: 2bac7fcd62ad2254ba0b5c6805ad7e98, type: 3}
   tailObject: {fileID: 8216558290986259432, guid: 89ac598207ca10e43b46e0a3e1c6d86d, type: 3}
   borderSize: 1.2
-  sizePadding: {x: 0, y: 20}
+  sizePadding: {x: -1000, y: 300}
   needsToBeFlipped: 0
-  children: []
+  children:
+  - 810e2637-cda6-4f4d-b9dd-e9b101cca6dc
   rect:
     serializedVersion: 2
-    x: 232
-    y: -1.5999985
+    x: 231.20001
+    y: -1.6000061
     width: 200
-    height: 921.1
+    height: 1570.99
   OnCompletionEvent: {fileID: 0}
   EnemiesToActivate: []
   onEnterAction: 

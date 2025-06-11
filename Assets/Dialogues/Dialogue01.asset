@@ -29,7 +29,7 @@ MonoBehaviour:
   balloonObject: {fileID: 2592667508800547744, guid: 2bac7fcd62ad2254ba0b5c6805ad7e98, type: 3}
   tailObject: {fileID: 8216558290986259432, guid: 89ac598207ca10e43b46e0a3e1c6d86d, type: 3}
   borderSize: 1.2
-  sizePadding: {x: -10, y: 70}
+  sizePadding: {x: -10, y: 160}
   needsToBeFlipped: 0
   children:
   - ad2acf9c-81c3-4f71-9d35-e5e221b7a28f
@@ -47,6 +47,7 @@ MonoBehaviour:
   triggerEnter: {fileID: 0}
   currentCameraName: 
   nextCameraName: 
+  EnableNewCamera: 0
   currentViewIndex: 0
   nextViewIndex: 0
   onExitAction: 
@@ -81,7 +82,7 @@ MonoBehaviour:
   balloonObject: {fileID: 2592667508800547744, guid: 2bac7fcd62ad2254ba0b5c6805ad7e98, type: 3}
   tailObject: {fileID: 8216558290986259432, guid: 89ac598207ca10e43b46e0a3e1c6d86d, type: 3}
   borderSize: 1.2
-  sizePadding: {x: -10, y: 100}
+  sizePadding: {x: -10, y: 190}
   needsToBeFlipped: 1
   children:
   - 34e63512-100c-4bb8-8ece-3ba38bb83575
@@ -99,6 +100,7 @@ MonoBehaviour:
   triggerEnter: {fileID: 0}
   currentCameraName: 
   nextCameraName: 
+  EnableNewCamera: 0
   currentViewIndex: 0
   nextViewIndex: 0
   onExitAction: 
@@ -133,7 +135,7 @@ MonoBehaviour:
   balloonObject: {fileID: 2592667508800547744, guid: 2bac7fcd62ad2254ba0b5c6805ad7e98, type: 3}
   tailObject: {fileID: 8216558290986259432, guid: 89ac598207ca10e43b46e0a3e1c6d86d, type: 3}
   borderSize: 1.2
-  sizePadding: {x: -10, y: 60}
+  sizePadding: {x: -10, y: 120}
   needsToBeFlipped: 0
   children:
   - cd1da861-d3e8-430a-ba85-205749486f43
@@ -151,6 +153,7 @@ MonoBehaviour:
   triggerEnter: {fileID: 0}
   currentCameraName: 
   nextCameraName: 
+  EnableNewCamera: 0
   currentViewIndex: 0
   nextViewIndex: 0
   onExitAction: 
@@ -205,7 +208,7 @@ MonoBehaviour:
   balloonObject: {fileID: 2592667508800547744, guid: 2bac7fcd62ad2254ba0b5c6805ad7e98, type: 3}
   tailObject: {fileID: 8216558290986259432, guid: 89ac598207ca10e43b46e0a3e1c6d86d, type: 3}
   borderSize: 1.2
-  sizePadding: {x: -10, y: 50}
+  sizePadding: {x: -10, y: 110}
   needsToBeFlipped: 0
   children: []
   rect:
@@ -213,7 +216,7 @@ MonoBehaviour:
     x: 1094.3999
     y: 247.00005
     width: 200
-    height: 986.58
+    height: 1006.58
   OnCompletionEvent: {fileID: 11400000, guid: 35a46a95d33d0cf419bdcb59769bff5f, type: 2}
   EnemiesToActivate:
   - Paul
@@ -223,6 +226,7 @@ MonoBehaviour:
   triggerEnter: {fileID: 11400000, guid: 4a495bc1b3ec91143bda2133b134a2c3, type: 2}
   currentCameraName: Panel1Cam
   nextCameraName: PaulFightCam
+  EnableNewCamera: 0
   currentViewIndex: 0
   nextViewIndex: 5
   onExitAction: 

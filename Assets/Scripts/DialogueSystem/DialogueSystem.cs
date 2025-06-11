@@ -232,6 +232,7 @@ public class DialogueSystem : MonoBehaviour
             index = _spawnedTails.Count - (2 * _currentDialogueNode.GetCharacterName().Count);
         int tailsOnLeft = 0;
         int tailsOnRight = 0;
+        int zShoutingRotation = 10;
 
         foreach(string character in _currentDialogueNode.GetCharacterName())
         {
@@ -256,16 +257,26 @@ public class DialogueSystem : MonoBehaviour
             if (side == 1)
             {
                 tailPos = new Vector2(-Xoffset - (70 * tailsOnRight), Yoffset - (7 * tailsOnRight)) + textballonPos;
+                if (_currentDialogueNode.GetIsShouting())
+                {
+                    tailPos = new Vector2(-Xoffset - (140 * tailsOnRight), Yoffset - (7 * tailsOnRight)) + textballonPos;
+                }
+                else zShoutingRotation = 0;
                 tailsOnRight++;
-                _spawnedTails[index].transform.rotation = Quaternion.Euler(xRotation, 180, 0);
-                _spawnedTails[index + 1].transform.rotation = Quaternion.Euler(xRotation, 180, 0);
+                _spawnedTails[index].transform.rotation = Quaternion.Euler(xRotation, 180, zShoutingRotation);
+                _spawnedTails[index + 1].transform.rotation = Quaternion.Euler(xRotation, 180, zShoutingRotation);
             }
             else
             {
                 tailPos = new Vector2(Xoffset + (70 * tailsOnLeft), Yoffset - (7 * tailsOnLeft)) + textballonPos;
+                if (_currentDialogueNode.GetIsShouting())
+                {
+                    tailPos = new Vector2(Xoffset + (140 * tailsOnLeft), Yoffset - (7 * tailsOnLeft)) + textballonPos;
+                }
+                else zShoutingRotation = 0;
                 tailsOnLeft++;
-                _spawnedTails[index].transform.rotation = Quaternion.Euler(xRotation, 0, 0);
-                _spawnedTails[index + 1].transform.rotation = Quaternion.Euler(xRotation, 0, 0);
+                _spawnedTails[index].transform.rotation = Quaternion.Euler(xRotation, 0, zShoutingRotation);
+                _spawnedTails[index + 1].transform.rotation = Quaternion.Euler(xRotation, 0, zShoutingRotation);
             }
 
             if (_currentDialogueNode.GetIsShouting() || _shoutingNode != null && _spawnSubBalloon)
@@ -365,7 +376,7 @@ public class DialogueSystem : MonoBehaviour
         if (tempList[0] != null) _previousTextBalloonSize = tempList[0].GetComponent<Image>().rectTransform.sizeDelta;
         if (tempList[0] != null) _previousPos = new Vector2(tempList[0].transform.position.x, tempList[0].transform.position.y);
 
-        text.transform.parent = _balloonHolder.transform;
+        text.transform.SetParent(_balloonHolder.transform);
         if (tempList[0] != null)
             text.transform.position = new Vector3(balloonPos.x, balloonPos.y, 0);
         else
@@ -440,7 +451,7 @@ public class DialogueSystem : MonoBehaviour
         {
             textBalloonBorder = Instantiate(_currentDialogueNode.GetBalloonObject());
             textBalloonBorder.GetComponent<Image>().color = Color.black;
-            textBalloonBorder.transform.parent = _blackHolder.transform;
+            textBalloonBorder.transform.SetParent(_blackHolder.transform);
         }
 
         if(_spawnedDialogue.Count != 0 && !_spawnSubBalloon && _currentDialogue.GetIsStaticDialogue())
@@ -451,11 +462,11 @@ public class DialogueSystem : MonoBehaviour
                 {
                     spawnTail = false;
                     GameObject temp = Instantiate(_bridgeObject);
-                    temp.transform.parent = _whiteHolder.transform;
+                    temp.transform.SetParent (_whiteHolder.transform);
                     _TextBalloonBridges.Add(temp);
                     _bridgeOrigin = _spawnedDialogue[node][0].transform.position;
                     temp = Instantiate(_bridgeObject);
-                    temp.transform.parent = _blackHolder.transform;
+                    temp.transform.SetParent (_blackHolder.transform);
                     _TextBalloonBridges.Add(temp);
                 }
             }
@@ -465,7 +476,7 @@ public class DialogueSystem : MonoBehaviour
         if(_currentDialogueNode.GetBalloonObject() != null)
         {
             textBalloon = Instantiate(_currentDialogueNode.GetBalloonObject());
-            textBalloon.transform.parent = _whiteHolder.transform;
+            textBalloon.transform.SetParent(_whiteHolder.transform);
         }
 
         list.Add(textBalloonBorder);
@@ -483,13 +494,13 @@ public class DialogueSystem : MonoBehaviour
             {
                 GameObject tempBorder = Instantiate(_currentDialogueNode.GetTailObject());
                 tempBorder.GetComponent<Image>().color = Color.black;
-                tempBorder.transform.parent = _blackHolder.transform;
+                tempBorder.transform.SetParent(_blackHolder.transform);
                 if(tailBorder == null) tailBorder = tempBorder;
                 tailBorder.name = $"{tempBorder.name} {i}";
                 _spawnedTails.Add(tempBorder);
 
                 GameObject temptail = Instantiate(_currentDialogueNode.GetTailObject());
-                temptail.transform.parent = _whiteHolder.transform;
+                temptail.transform.SetParent(_whiteHolder.transform);
                 if (tail == null) tail = temptail;
                 temptail.name = $"{temptail.name} {i}";
                 _spawnedTails.Add(temptail);
@@ -564,10 +575,37 @@ public class DialogueSystem : MonoBehaviour
 
         //float FontSizeMultiplier = DetermineFontSizeMultiplier(text.fontSize);
 
-        //string text = node.GetText();
+        string text = node.GetText();
 
-        Vector2 size = new Vector2(((FontSizeMultiplier * characterWidth) * LetterCount), ((FontSizeMultiplier * characterHeight) * linecount));
-        size += _currentDialogueNode.GetSizePadding() + new Vector2(20,20);
+        Stack<int> fontSizes = new Stack<int>();
+        fontSizes.Push(36);
+        int tagLength;
+        List<int> allFontSizes = new List<int>();
+
+        for (int i = 0; i < text.Length; i++)
+        {
+            if (IsOpeningSizeTag(text, i, out int newSize, out tagLength))
+            {
+                fontSizes.Push(newSize);
+                i += tagLength - 1;
+            }
+            else if (IsClosingSizeTag(text, i, out tagLength))
+            {
+                fontSizes.Pop();
+                i += tagLength - 1;
+            }
+            else
+            {
+                int currentFontSize = fontSizes.Peek();
+                allFontSizes.Add(currentFontSize);
+            }
+        }
+
+        float averageFontSize = (float)allFontSizes.Average();
+        float fontSizeMultiplier = DetermineFontSizeMultiplier(averageFontSize);
+        Vector2 size = new Vector2((fontSizeMultiplier * characterWidth) * LetterCount, (fontSizeMultiplier * characterHeight) * linecount);
+        //Vector2 padding = _currentDialogueNode.GetSizePadding();
+        //size += padding + new Vector2(20,20);
 
         //for(int i = 0; i < textBalloon.Count; i++)
         //{
@@ -600,8 +638,9 @@ public class DialogueSystem : MonoBehaviour
         {
             for (int i = 0; i < textBalloon.Count - 2; i++)
             {
-                textBalloon[1 + i].GetComponent<Image>().rectTransform.sizeDelta += new Vector2(2000 * _currentDialogueNode.GetShoutIntensity(), 25);
-                textBalloon[1 + (i + 1)].GetComponent<Image>().rectTransform.sizeDelta += new Vector2(2000 * _currentDialogueNode.GetShoutIntensity(), 25);
+                textBalloon[2 + i].GetComponent<Image>().rectTransform.sizeDelta += new Vector2(2000 * _currentDialogueNode.GetShoutIntensity(), 25);
+                textBalloon[2 + (i + 1)].GetComponent<Image>().rectTransform.sizeDelta += new Vector2(2000 * _currentDialogueNode.GetShoutIntensity(), 25);
+                i++;
             }
         }
 
@@ -611,15 +650,15 @@ public class DialogueSystem : MonoBehaviour
         }
     }
 
-    //private float DetermineFontSizeMultiplier(float size)
-    //{
-    //    float baseSize = 36;
-    //     float currentSize = size;
+    private float DetermineFontSizeMultiplier(float size)
+    {
+        float baseSize = 36;
+        float currentSize = size;
 
-    //    float multiplier = currentSize / baseSize;
+        float multiplier = currentSize / baseSize;
 
-    //     return multiplier;
-    //}
+        return multiplier;
+    }
 
     public void DistributeImages(List<GameObject> textBalloon, bool spawnImages, List<GameObject> shoutingImages = null)
     {
@@ -732,6 +771,33 @@ public class DialogueSystem : MonoBehaviour
                 image.rectTransform.sizeDelta = size + node.GetSizePadding();
             }
         }
+    }
+
+    bool IsOpeningSizeTag(string text, int index, out int newSize, out int tagLength)
+    {
+        newSize = 0;
+        tagLength = 0;
+        string pattern = @"<size=(\d+)>"; // simple pattern for numbers
+        var match = System.Text.RegularExpressions.Regex.Match(text.Substring(index), pattern);
+        if (match.Success && match.Index == 0)
+        {
+            newSize = int.Parse(match.Groups[1].Value);
+            tagLength = match.Length;
+            return true;
+        }
+        return false;
+    }
+
+    bool IsClosingSizeTag(string text, int index, out int tagLength)
+    {
+        tagLength = 0;
+        string closingTag = "</size>";
+        if (text.Substring(index).StartsWith(closingTag))
+        {
+            tagLength = closingTag.Length;
+            return true;
+        }
+        return false;
     }
 
     private IEnumerator TypeText(string text, TextMeshProUGUI textObject, DialogueNode node)
@@ -854,7 +920,7 @@ public class DialogueSystem : MonoBehaviour
             TextMeshProUGUI text = textObject.GetComponent<TextMeshProUGUI>();
             text.text = "";
             text.color = Color.black;
-            text.transform.parent = _canvas.transform;
+            text.transform.SetParent(_canvas.transform);
         }
 
         foreach (GameObject image in _spawnedTextBalloons)
@@ -933,6 +999,7 @@ public class DialogueSystem : MonoBehaviour
             }
         }
     }
+
 
     private void OnDestroy()
     {

@@ -142,7 +142,6 @@ public class AnimationManager : MonoBehaviour
         _animator.SetBool(P_ATTACK_MEDIUM, args.AttackWithLeftHand);
         _animator.SetFloat(P_ATTACK_STATE, attNum);
         _attBlend = 1f;
-        Debug.Log($"AttackSignal {args.AnimState}, {gameObject}");
     }
 
     private void ResetBoredTime()

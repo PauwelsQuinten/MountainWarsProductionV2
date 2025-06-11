@@ -1318,7 +1318,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 691636631868949397, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
       propertyPath: m_Layer
-      value: 0
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 691636631868949397, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
       propertyPath: m_IsActive
@@ -2773,6 +2773,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: 6c549348f9580bb4ea78b04fe2556749, type: 2}
     - target: {fileID: 4165634575879343316, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
+      propertyPath: TargetLayers.m_Bits
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 4165634575879343316, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
       propertyPath: IsInDialogue.variable
       value: 
       objectReference: {fileID: 11400000, guid: b4d55fcfd48340444ac77031d3fa370d, type: 2}
@@ -2970,15 +2974,15 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: f56e344763da3c34d9b3e5d48d24a9e4, type: 2}
     - target: {fileID: 8819790937953159563, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -2.76
+      value: 22.026936
       objectReference: {fileID: 0}
     - target: {fileID: 8819790937953159563, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 17.33
+      value: 8.899127
       objectReference: {fileID: 0}
     - target: {fileID: 8819790937953159563, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 31.68
+      value: 30.218758
       objectReference: {fileID: 0}
     - target: {fileID: 8819790937953159563, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
       propertyPath: m_LocalRotation.w
@@ -3283,6 +3287,9 @@ MonoBehaviour:
   _cameraToLookAt: {fileID: 0}
   _canvas: {fileID: 8603294817133284207}
   _characterDeath: {fileID: 11400000, guid: dfa121c9025557d41bb84f9c8b83c038, type: 2}
+  _dialogueTrigger: {fileID: 11400000, guid: e8c3f45c85ff14841877c32ef16a6faa, type: 2}
+  _triggerDialogueOnDeath: 1
+  _dialogueToTrigger: 1
 --- !u!114 &664329527683313959
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3695,6 +3702,7 @@ MonoBehaviour:
   _pickup: {fileID: 11400000, guid: 6ae7cf8fbff13b34baa83d4c5c01a86f, type: 2}
   _stunned: {fileID: 0}
   _moveAttack: {fileID: 11400000, guid: 8ea44205ac5e1174fbd6602ffe30892e, type: 2}
+  _chargeAttack: {fileID: 0}
 --- !u!4 &5759891999912614985 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: dd604a2ee8375f344bd5bbdf22db0362, type: 3}

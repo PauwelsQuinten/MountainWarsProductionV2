@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -21,12 +22,12 @@ public class ScriptActivator : MonoBehaviour
                 {
                     script.enabled = true;
                 }
-                gameObject.layer = LayerMaskToLayer(_layermask);
+                StartCoroutine(SetLayerWithDelay());
             }
         }
     }
 
-    public static int LayerMaskToLayer(LayerMask mask)
+    private static int LayerMaskToLayer(LayerMask mask)
     {
         int value = mask.value;
         for (int i = 0; i < 32; i++)
@@ -35,5 +36,11 @@ public class ScriptActivator : MonoBehaviour
                 return i;
         }
         return -1; // No layer found
+    }
+
+    private IEnumerator SetLayerWithDelay()
+    {
+        yield return new WaitForSeconds(0.75f);
+        gameObject.layer = LayerMaskToLayer(_layermask);
     }
 }

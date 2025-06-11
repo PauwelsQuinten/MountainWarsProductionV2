@@ -25,6 +25,7 @@ public class StateManager : MonoBehaviour
     public AttackHeight AttackHeight = AttackHeight.Torso;
     private Orientation _orientation= Orientation.West;
     [HideInInspector]
+
     public Orientation Orientation
     {
         get => _orientation;

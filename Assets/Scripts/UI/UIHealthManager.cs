@@ -41,22 +41,34 @@ public class UIHealthManager : MonoBehaviour
     private Image _weapon;
 
     [SerializeField]
-    private GameObject _cameraToLookAt;
-    [SerializeField]
     private GameObject _canvas;
     [SerializeField]
     private GameEvent _characterDeath;
+
+    [Header("Dialogue")]
+    [SerializeField]
+    GameEvent _dialogueTrigger;
+    [SerializeField]
+    private bool _triggerDialogueOnDeath;
+    [SerializeField]
+    private int _dialogueToTrigger;
 
     private Coroutine _dissableHealth;
 
     private string _name;
 
+    private StateManager _playerStateManager;
+
     public void Update()
     {
+        if(_playerStateManager == null)
+        {
+            _playerStateManager = GameObject.Find("Player").GetComponent<StateManager>();
+        }
         if (gameObject.GetComponent<AIController>() != null)
         {
-            if (_cameraToLookAt == null) return;
-            _canvas.transform.LookAt(_cameraToLookAt.transform);
+            if (_playerStateManager.CurrentCamera == null) return;
+            _canvas.transform.LookAt(_playerStateManager.CurrentCamera.transform);
         }
     }
     public void UpdateHealth(Component sender, object obj)
@@ -91,7 +103,8 @@ public class UIHealthManager : MonoBehaviour
             UpdateBodyPartColor(sender, args);
 
         if (args.CurrentHealth > 0) return;
-
+        if (_triggerDialogueOnDeath)
+            _dialogueTrigger.Raise(this, new DialogueTriggerEventArgs { NextDialogueIndex = _dialogueToTrigger });
         _characterDeath.Raise(this, new CharacterDeathEventArgs { CharacterName = _name });
     }
 
@@ -148,8 +161,11 @@ public class UIHealthManager : MonoBehaviour
         float barFill = args.CurrentBlood / args.MaxBlood;
         _bloodBar.fillAmount = barFill;
 
-        if (args.CurrentBlood <= 0)
-            _characterDeath.Raise(this, new CharacterDeathEventArgs { CharacterName = _name });
+        if (args.CurrentBlood > 0) return;
+
+        if (_triggerDialogueOnDeath)
+            _dialogueTrigger.Raise(this, new DialogueTriggerEventArgs { NextDialogueIndex = _dialogueToTrigger });
+        _characterDeath.Raise(this, new CharacterDeathEventArgs { CharacterName = _name });
     }
 
     public void UpdatePatchUp(Component sender, object obj)

@@ -62,7 +62,7 @@ public class ParryAttackAction : GoapAction
 
     override public bool IsCompleted(WorldState current)
     {
-        //return base.IsCompleted(current);
+        return base.IsCompleted(current);
         return _isMovementEnded;
     }
 

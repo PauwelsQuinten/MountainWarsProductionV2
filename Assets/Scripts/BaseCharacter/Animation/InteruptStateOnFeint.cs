@@ -25,8 +25,12 @@ public class InteruptStateOnFeint : StateMachineBehaviour
 
     public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        _cts?.Cancel();
-        _cts?.Dispose();
+        try
+        {
+            _cts?.Cancel();
+            _cts?.Dispose();
+        }
+        catch { }
     }
 
 

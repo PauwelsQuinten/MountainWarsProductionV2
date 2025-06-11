@@ -9,7 +9,7 @@ public class InteruptOnBeingAttacked : GoapInterupter
         if (blackboard.variable.TargetBlackboard == null ) return false;
 
         if ( blackboard.variable.TargetBlackboard.variable.CurrentAttack != AttackType.None
-                && currentWorldState.AttackRange == EWorldStateRange.InRange)
+                && currentWorldState.AttackRange <= EWorldStateRange.OutOfRange)
         {
             if (!SetInvallid)
                 _= StartTimeOut();

@@ -31,7 +31,6 @@ namespace Geometry
         {
             float angle = CalculateAngleRadOfInput(direction) * Mathf.Rad2Deg;
             float angleDiff = angle - orientation;
-            Debug.Log($"{angleDiff} for stab calculation");
             return Mathf.Abs(angleDiff) < acceptedRange || Mathf.Abs(angleDiff) > 360 - acceptedRange;
         }
 
@@ -206,6 +205,12 @@ namespace Geometry
             return angle;
         }
 
+        public static bool InFrontOfAttacker(float OrientationAttacker, float orientationDefender, float margin)
+        {
+            float diff = OrientationAttacker - orientationDefender;
+            float sign = Mathf.Sign(diff);
+            return Mathf.Abs(diff * sign - 180) < margin;
+        }
 
     }
 }

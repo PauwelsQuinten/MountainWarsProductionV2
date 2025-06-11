@@ -4,13 +4,7 @@ using UnityEngine.Animations.Rigging;
 
 public class IKSpearMovement : MonoBehaviour
 {
-    private enum RigValue
-    {
-        Default = -1,
-        Zero = 0,
-        One = 1
-    }
-
+    
 
     [Header("Rigs")]
     [SerializeField, Tooltip("the parent rig of all th spear IK")]

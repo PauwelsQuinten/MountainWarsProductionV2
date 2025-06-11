@@ -562,7 +562,7 @@ public class DialogueSystem : MonoBehaviour
             Debug.LogError($"Font {tempFont.name} is missing character '{sampleChar}'");
         }
 
-        //float FontSizeMultiplier = DetermineFontSizeMultiplier(text.fontSize);
+        float FontSizeMultiplier = DetermineFontSizeMultiplier(textMeshPro.fontSize);
 
         //string text = node.GetText();
 
@@ -611,15 +611,15 @@ public class DialogueSystem : MonoBehaviour
         }
     }
 
-    //private float DetermineFontSizeMultiplier(float size)
-    //{
-    //    float baseSize = 36;
-    //     float currentSize = size;
+    private float DetermineFontSizeMultiplier(float size)
+    {
+        float baseSize = 36;
+         float currentSize = size;
 
-    //    float multiplier = currentSize / baseSize;
+        float multiplier = currentSize / baseSize;
 
-    //     return multiplier;
-    //}
+         return multiplier;
+    }
 
     public void DistributeImages(List<GameObject> textBalloon, bool spawnImages, List<GameObject> shoutingImages = null)
     {

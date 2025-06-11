@@ -39,7 +39,7 @@ public class ParryAttackAction : GoapAction
 
         if (_isMovementSet == false)
         {
-            if (blackboard.variable.CurrentAttack == AttackType.HorizontalSlashToLeft)
+            if (blackboard.variable.TargetBlackboard.variable.CurrentAttack == AttackType.HorizontalSlashToLeft)
                 _direction = Direction.ToLeft;
             else
                 _direction = Direction.ToRight;
@@ -62,7 +62,7 @@ public class ParryAttackAction : GoapAction
 
     override public bool IsCompleted(WorldState current)
     {
-        //return base.IsCompleted(current);
+        return base.IsCompleted(current);
         return _isMovementEnded;
     }
 

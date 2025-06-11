@@ -22,6 +22,11 @@ public class Blocking : MonoBehaviour
 
     [Header("StunFeedback")]
     [SerializeField] StunVariablesReference _stunValues;
+    
+    [Header("Block")]
+    [SerializeField, Tooltip("From center + this value is your block valid. meaning if you block an attack while standing in a bigger angle (eg your back to him) will automaticly hit")]
+    [Range(0f, 180f)]
+    float _blockOrientationMargin = 40f;
 
     private StateManager _stateManager;
     private Direction _blockDirection;
@@ -121,16 +126,26 @@ public class Blocking : MonoBehaviour
         if (!IsBlockMediumVallid() || _stateManager.AttackState == AttackState.Stun)
             tempMedium = BlockMedium.Nothing;
 
+        float attOrientation = 0f;
+        StateManager attackerState = args.Attacker.GetComponent<StateManager>();
+        if (attackerState)
+            attOrientation = attackerState.fOrientation;
 
         BlockResult blockResult;
         switch(tempMedium)
         {
             case BlockMedium.Shield:
-                blockResult = UsingShield(args);
+                if (Geometry.Geometry.InFrontOfAttacker(_stateManager.fOrientation, attOrientation, _blockOrientationMargin))
+                    blockResult = UsingShield(args);
+                else
+                    blockResult = BlockResult.Hit;
                 break;
 
             case BlockMedium.Sword:
-                blockResult = UsingSword(args);
+                if (Geometry.Geometry.InFrontOfAttacker(_stateManager.fOrientation, attOrientation, _blockOrientationMargin))
+                    blockResult = UsingSword(args);
+                else
+                    blockResult = BlockResult.Hit;
                 break;
 
             case BlockMedium.Nothing:

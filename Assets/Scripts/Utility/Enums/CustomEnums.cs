@@ -316,4 +316,11 @@ namespace UnityEngine
         Bleeding
     }
 
+    public enum RigValue
+    {
+        Default = -1,
+        Zero = 0,
+        One = 1
+    }
+
 }

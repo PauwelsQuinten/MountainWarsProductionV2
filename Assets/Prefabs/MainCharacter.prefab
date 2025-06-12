@@ -114,7 +114,7 @@ Transform:
   m_GameObject: {fileID: 569259897578985621}
   serializedVersion: 2
   m_LocalRotation: {x: -0.864241, y: 0.0072119622, z: 0.0017570034, w: 0.50302327}
-  m_LocalPosition: {x: -0.001229992, y: -0.0031438023, z: 0.0012221746}
+  m_LocalPosition: {x: -0.000604, y: 0.000305, z: 0.001022}
   m_LocalScale: {x: 1.4999998, y: 1.5000006, z: 1.5000005}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -4110,9 +4110,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _queueEvent: {fileID: 11400000, guid: 5bbe9fe65ae2c8546a64169ae42e8a8a, type: 2}
+  _changeRotation: {fileID: 0}
   _movementPower: 1000
-  _movementPowerAtRiver: 4000
   _approachTime: 0.25
+  _contactTime: 0.25
+  _useInput: 0
+  _fullRig: {fileID: 0}
 --- !u!114 &1960915244639302302
 MonoBehaviour:
   m_ObjectHideFlags: 0

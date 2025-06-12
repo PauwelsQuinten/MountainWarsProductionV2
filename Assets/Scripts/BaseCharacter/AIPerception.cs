@@ -43,10 +43,22 @@ public class AIPerception : MonoBehaviour
         if (target == null)
             target = _seeing.SeeSurrounding(args.NewOrientation);
 
+
+        //When you found a new target but your old target is closer, do nothing.
+        if (target && _target && !IsNewTargetCloser(target))
+            return;
+
         if (target != _target )
         {
             _target = target;
             _foundTargetEvent.Raise(this, new NewTargetEventArgs { NewTarget = target });
         }
     }
+
+    private bool IsNewTargetCloser(GameObject target)
+    {
+
+        return Vector3.Distance(target.transform.position, transform.position) < Vector3.Distance(_target.transform.position, transform.position);
+    }
+
 }

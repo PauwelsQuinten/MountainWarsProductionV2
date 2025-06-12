@@ -142,10 +142,10 @@ namespace Geometry
         public static Vector3 GetPointInDirectionOnNavMesh(Vector3 center, Vector3 direction, float radius)
         {
             int sign = 1;
-            for (int i = 0; i < 10; i++) // Try up to 10 times
+            for (int i = 0; i < 30; i++) // Try up to i times
             {
                 sign *= -1;
-                Vector3 rotatedAngle = Quaternion.Euler(0, 5 * i * sign, 0) * direction;
+                Vector3 rotatedAngle = Quaternion.Euler(0, 10 * i * sign, 0) * direction;
                 Vector3 target = center + rotatedAngle * radius;
                 if (NavMesh.SamplePosition(target, out NavMeshHit hit, radius, NavMesh.AllAreas))
                 {

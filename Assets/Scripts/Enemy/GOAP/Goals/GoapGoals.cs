@@ -28,7 +28,7 @@ public class GoapGoal : MonoBehaviour, IGoals
     public virtual bool IsVallid(WorldState currentWorldState, BlackboardReference blackboard)
     {
 
-        return _isVallid && currentWorldState.Behaviour != EBehaviourValue.Knock;
+        return _isVallid;
     }
 
     public virtual float GoalScore(CharacterMentality menatlity, WorldState currentWorldState, BlackboardReference blackboard)

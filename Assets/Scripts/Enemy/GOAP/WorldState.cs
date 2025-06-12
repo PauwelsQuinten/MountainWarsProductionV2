@@ -355,6 +355,9 @@ public class WorldState : MonoBehaviour
         }
         else
             TargetBehaviour = EBehaviourValue.Default;
+
+        CcalculateSpeed();
+
     }
 
     private void CalculateRange()
@@ -459,7 +462,8 @@ public class WorldState : MonoBehaviour
                 WorldStateValues.Add(EWorldState.RHEquipment, RHEquipment);
             if (LHEquipment != EWorldStateValue.Default)
                 WorldStateValues.Add(EWorldState.LHEquipment, LHEquipment);
-
+            if (MovementSpeed != EWorldStateValue.Default)
+                WorldStateValues.Add(EWorldState.MovementSpeed, MovementSpeed);
 
             //Possesions
             if (HasTarget != EWorldStatePossesion.Default)
@@ -491,6 +495,16 @@ public class WorldState : MonoBehaviour
 
     }
 
+    private void CcalculateSpeed()
+    {
+        var comp = GetComponent<AnimationManager>();
+        if (!comp) return;
+        float speed = comp.Velocity.magnitude;
+        if (speed > 1f) MovementSpeed = EWorldStateValue.High;
+        if (speed > 0.9f) MovementSpeed = EWorldStateValue.Mid;
+        if (speed == 0f) MovementSpeed = EWorldStateValue.Zero;
+        else MovementSpeed = EWorldStateValue.Low;
+    }
 
     //------------------------------------------------------------------------------
     //WORLDSTATE PUBLIC SETTERS TO UPDATE LIST AT SAME TIME

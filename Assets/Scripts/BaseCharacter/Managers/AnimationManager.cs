@@ -265,13 +265,7 @@ public class AnimationManager : MonoBehaviour
 
     private void InteruptAnimation(bool isFeint)
     {
-        //if(isFeint) 
-        //    _animator.SetTrigger(P_FEINT);
-        //else
-        //    _animator.ResetTrigger(P_FEINT);
-
-        _animator.SetBool(P_FEINT, isFeint);
-        
+        _animator.SetBool(P_FEINT, isFeint);       
     }
 
     //Deprectated probably

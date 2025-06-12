@@ -139,6 +139,33 @@ namespace Geometry
         return center;
         }
 
+        public static Vector3 GetPointInDirectionOnNavMesh(Vector3 center, Vector3 direction, float radius)
+        {
+            int sign = 1;
+            for (int i = 0; i < 10; i++) // Try up to 10 times
+            {
+                sign *= -1;
+                Vector3 rotatedAngle = Quaternion.Euler(0, 5 * i * sign, 0) * direction;
+                Vector3 target = center + rotatedAngle * radius;
+                if (NavMesh.SamplePosition(target, out NavMeshHit hit, radius, NavMesh.AllAreas))
+                {
+                    if (Vector3.Distance(hit.position, center) > 1f)
+                        return hit.position;
+                }
+            }
+            // If no valid point found, return center
+            return center;
+        }
+
+
+        public static Vector3 GetPointAtAngle(float angleDegrees)
+        {
+            float angleRadians = angleDegrees * Mathf.Deg2Rad;
+            Vector3 direction = new Vector3(Mathf.Cos(angleRadians), 0, Mathf.Sin(angleRadians));
+            return direction;
+        }
+
+
         public static float CalculatefOrientationToTarget(Vector3 target, Vector3 self)
         {
             Vector3 direction = target - self;

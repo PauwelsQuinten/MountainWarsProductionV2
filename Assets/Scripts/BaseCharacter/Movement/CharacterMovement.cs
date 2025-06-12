@@ -156,8 +156,11 @@ public class CharacterMovement : MonoBehaviour
             _inAttckMotionTimer = StartCoroutine(StartTimer(1f));
         else
         {
-            StopCoroutine(_inAttckMotionTimer);
-            _inAttckMotionTimer = null;
+            if (_inAttckMotionTimer != null)
+            {
+                StopCoroutine(_inAttckMotionTimer);
+                _inAttckMotionTimer = null;
+            }
         }
     }
 

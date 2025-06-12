@@ -161,7 +161,9 @@ namespace UnityEngine
 
         TargetOpening,
         TargetAttackRange,
-        AttackRange
+        AttackRange,
+
+        MovementSpeed
 
     }
 

@@ -26,6 +26,8 @@ public class WorldState : MonoBehaviour
     private EWorldStateValue _rHEquipment = EWorldStateValue.Default;
     [SerializeField]
     private EWorldStateValue _lHEquipment = EWorldStateValue.Default;
+    [SerializeField]
+    private EWorldStateValue _movementSpeed = EWorldStateValue.Default;
 
     [Header("Possesion")]
     [SerializeField]
@@ -391,6 +393,8 @@ public class WorldState : MonoBehaviour
                 WorldStateValues.Add(EWorldState.TargetRHEquipment, TargetRHEquipment);
             if (!WorldStateValues.ContainsKey(EWorldState.TargetLHEquipment))
                 WorldStateValues.Add(EWorldState.TargetLHEquipment, TargetLHEquipment);
+            if (!WorldStateValues.ContainsKey(EWorldState.TargetLHEquipment))
+                WorldStateValues.Add(EWorldState.TargetLHEquipment, TargetLHEquipment);
 
             if (!WorldStateValues.ContainsKey(EWorldState.Health))
                 WorldStateValues.Add(EWorldState.Health, Health);
@@ -398,8 +402,8 @@ public class WorldState : MonoBehaviour
                 WorldStateValues.Add(EWorldState.Stamina, Stamina);
             if (!WorldStateValues.ContainsKey(EWorldState.RHEquipment))
                 WorldStateValues.Add(EWorldState.RHEquipment, RHEquipment);
-            if (!WorldStateValues.ContainsKey(EWorldState.LHEquipment))
-                WorldStateValues.Add(EWorldState.LHEquipment, LHEquipment);
+            if (!WorldStateValues.ContainsKey(EWorldState.MovementSpeed))
+                WorldStateValues.Add(EWorldState.MovementSpeed, MovementSpeed);
 
 
             //Possesions
@@ -571,6 +575,16 @@ public class WorldState : MonoBehaviour
         {
             _lHEquipment = value;
             WorldStateValues[EWorldState.LHEquipment] = _lHEquipment;
+        }
+    }
+    
+    public EWorldStateValue MovementSpeed
+    {
+        get { return _movementSpeed; }
+        set
+        {
+            _movementSpeed = value;
+            WorldStateValues[EWorldState.MovementSpeed] = _movementSpeed;
         }
     }
 

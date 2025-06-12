@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using static UnityEngine.Rendering.GPUSort;
@@ -244,8 +245,9 @@ public class UIHealthManager : MonoBehaviour
         float time = 0;
         float size = 0;
         _patchUpBar.transform.parent.gameObject.SetActive(true);
-        while(_patchUpBar.fillAmount < 1)
+        while(_patchUpBar != null && _patchUpBar.fillAmount < 1)
         {
+            if (this == null) yield break;
             time += Time.deltaTime / _patchupDuration.value;
             size = time;
             _patchUpBar.fillAmount = size;
@@ -262,7 +264,7 @@ public class UIHealthManager : MonoBehaviour
     private IEnumerator DissableHealthUI()
     {
          yield return new WaitForSeconds(10);
-
+        if (this == null || _bloodBar == null || _healthBar) yield break;
         _bloodBar.transform.parent.gameObject.SetActive(false);
         _healthBar.transform.parent.gameObject.SetActive(false);
     }

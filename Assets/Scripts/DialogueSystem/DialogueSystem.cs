@@ -654,7 +654,7 @@ public class DialogueSystem : MonoBehaviour
 
     private float DetermineFontSizeMultiplier(float size)
     {
-        float baseSize = _currentDialogueNode.GetBaseFontSize();
+        float baseSize = 36;
         float currentSize = size;
 
         float multiplier = currentSize / baseSize;

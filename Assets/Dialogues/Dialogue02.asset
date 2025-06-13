@@ -30,13 +30,13 @@ MonoBehaviour:
   balloonObject: {fileID: 2592667508800547744, guid: 2bac7fcd62ad2254ba0b5c6805ad7e98, type: 3}
   tailObject: {fileID: 8216558290986259432, guid: 89ac598207ca10e43b46e0a3e1c6d86d, type: 3}
   borderSize: 1.2
-  sizePadding: {x: 60, y: 260}
+  sizePadding: {x: 40, y: 260}
   needsToBeFlipped: 0
   children: []
   rect:
     serializedVersion: 2
-    x: 618
-    y: 91.19998
+    x: 622
+    y: 53.599976
     width: 200
     height: 970.15
   OnCompletionEvent: {fileID: 0}
@@ -142,9 +142,9 @@ MonoBehaviour:
   hasSecondImageLine: 0
   text: Oh no he killed paul!
   CharacterName:
-  - Bystander2
-  - Bystander1
   - Bystander3
+  - Bystander1
+  - Bystander2
   textDisplaySpeed: 0.01
   hasSecondaryLine: 0
   isShouting: 1
@@ -155,7 +155,7 @@ MonoBehaviour:
   balloonObject: {fileID: 2592667508800547744, guid: 2bac7fcd62ad2254ba0b5c6805ad7e98, type: 3}
   tailObject: {fileID: 8216558290986259432, guid: 89ac598207ca10e43b46e0a3e1c6d86d, type: 3}
   borderSize: 1.2
-  sizePadding: {x: 60, y: 300}
+  sizePadding: {x: 120, y: 300}
   needsToBeFlipped: 0
   children:
   - 810e2637-cda6-4f4d-b9dd-e9b101cca6dc

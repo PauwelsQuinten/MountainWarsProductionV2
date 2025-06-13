@@ -27,8 +27,8 @@ MonoBehaviour:
   newFont: {fileID: 0}
   newTextSize: 0
   baseTextSize: 36
-  balloonObject: {fileID: 0}
-  tailObject: {fileID: 0}
+  balloonObject: {fileID: 2592667508800547744, guid: 264e34e62017e6246aefbb4554858f24, type: 3}
+  tailObject: {fileID: 3521332350237957445, guid: be3f5699a3d09184fb5ab27c12d364a2, type: 3}
   borderSize: 1.2
   sizePadding: {x: -10, y: 190}
   needsToBeFlipped: 0
@@ -43,7 +43,7 @@ MonoBehaviour:
   EnemiesToActivate: []
   onEnterAction: 
   DoPanelSwitch: 1
-  playAtEnd: 1
+  playAtEnd: 0
   triggerEnter: {fileID: 11400000, guid: 4a495bc1b3ec91143bda2133b134a2c3, type: 2}
   currentCameraName: RomanFightCam
   nextCameraName: Panel2Cam

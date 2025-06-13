@@ -46,6 +46,7 @@ public class GoapGoal : MonoBehaviour, IGoals
         _goalCoroutine = StartCoroutine(ResetGoalValidation(_invalidTime));
     }
 
+
     public void DeterminationSetup(int determination)
     {
         _invalidTime *= ((10f - determination)*0.2f);

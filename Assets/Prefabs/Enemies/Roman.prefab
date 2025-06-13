@@ -370,13 +370,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5741304051444086252}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.001, y: -0, z: -0.00036}
+  m_LocalRotation: {x: -0.8798721, y: -0.000000029802319, z: 0.0000000074505797, w: 0.47521055}
+  m_LocalPosition: {x: -0.00089, y: 0.00043, z: 0.00089}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2759169446425763015}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -123.254, y: 0, z: 0}
 --- !u!1 &6113944662185607174
 GameObject:
   m_ObjectHideFlags: 0
@@ -746,6 +746,14 @@ PrefabInstance:
       propertyPath: _animStabTarget
       value: 
       objectReference: {fileID: 4512281357638257834}
+    - target: {fileID: 1376441188278556422, guid: e9651b4801f36d14e86c1cb82aa75d59, type: 3}
+      propertyPath: _stunEvent
+      value: 
+      objectReference: {fileID: 11400000, guid: 2cc625b4ec016e14899ad658a28da4c8, type: 2}
+    - target: {fileID: 1376441188278556422, guid: e9651b4801f36d14e86c1cb82aa75d59, type: 3}
+      propertyPath: _stunValues.variable
+      value: 
+      objectReference: {fileID: 11400000, guid: 78c0a0fede93f0e45b86506556b26a1c, type: 2}
     - target: {fileID: 1691472449187918597, guid: e9651b4801f36d14e86c1cb82aa75d59, type: 3}
       propertyPath: m_Layer
       value: 15

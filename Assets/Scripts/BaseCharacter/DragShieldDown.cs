@@ -8,11 +8,15 @@ public class DragShieldDown : MonoBehaviour
     [Header("Events")]
     [SerializeField] private GameEvent _changeAnimation;
     [SerializeField] private GameEvent _lowerBlock;
+    [SerializeField] private GameEvent _stunEvent;
     [Header("Stamina")]
     [SerializeField]
     private FloatReference _staminaCost;
     [SerializeField]
     private GameEvent _loseStamina;
+    [Header("StunFeedback")]
+    [SerializeField] StunVariablesReference _stunValues;
+
 
     //Start the animation that grabs your opponent shield
     public void GrabShield(Component sender, object obj)
@@ -33,7 +37,10 @@ public class DragShieldDown : MonoBehaviour
     {
         if (sender.gameObject == this.gameObject) return;
         if (Vector3.Distance(gameObject.transform.position, sender.gameObject.transform.position) > _shieldGrabDistance) return;
-        _lowerBlock.Raise(this, new AimingOutputArgs { AttackSignal = AttackSignal.Idle, AttackState = AttackState.Idle});
+        if (_lowerBlock)
+            _lowerBlock.Raise(this, new AimingOutputArgs { AttackSignal = AttackSignal.Idle, AttackState = AttackState.Idle});
+        if (_stunEvent)
+            _stunEvent.Raise(this, new StunEventArgs { StunDuration = _stunValues.variable.StunOnShieldDraggedDown, StunTarget = gameObject});
         //_changeAnimation.Raise(this, new AnimationEventArgs { AnimState = AnimationState.Empty, AnimLayer = 4, DoResetIdle = true, BlockDirection = 0 });
     }
 

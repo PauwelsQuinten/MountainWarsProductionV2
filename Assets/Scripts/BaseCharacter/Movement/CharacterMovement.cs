@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Windows;
 
@@ -23,6 +24,8 @@ public class CharacterMovement : MonoBehaviour
     [Header("Animation")]
     [SerializeField]
     private GameEvent _changeAnimation;
+    [SerializeField]
+    private GameEvent _stopFullBodyMovement;
 
     private StateManager _stateManager;
     private StaminaManager _staminaManager;
@@ -33,6 +36,7 @@ public class CharacterMovement : MonoBehaviour
     private Quaternion _targetRotation;
     private float _rotationSpeed = 5f;
     private bool _inAttackMotion = false;
+    private Coroutine _inAttckMotionTimer ;
 
     private void Start()
     {
@@ -126,6 +130,11 @@ public class CharacterMovement : MonoBehaviour
         if (stunEventArgs != null && stunEventArgs.StunTarget == gameObject)
         {
             _inAttackMotion = false;
+            if (_inAttckMotionTimer != null)
+            {
+                StopCoroutine( _inAttckMotionTimer );
+                _inAttckMotionTimer = null; 
+            }
             return;
         }
 
@@ -133,6 +142,11 @@ public class CharacterMovement : MonoBehaviour
         if (attackEventArgs != null && attackEventArgs.Attacker == gameObject)
         {
             _inAttackMotion = false;
+            if (_inAttckMotionTimer != null)
+            {
+                StopCoroutine(_inAttckMotionTimer);
+                _inAttckMotionTimer = null;
+            }
             return;
         }
 
@@ -140,6 +154,16 @@ public class CharacterMovement : MonoBehaviour
         if (args == null || args.Attacker != gameObject) return;
 
         _inAttackMotion = args.AttackType == AttackType.None? false : true;
+        if (_inAttackMotion)
+            _inAttckMotionTimer = StartCoroutine(StartTimer(1f));
+        else
+        {
+            if (_inAttckMotionTimer != null)
+            {
+                StopCoroutine(_inAttckMotionTimer);
+                _inAttckMotionTimer = null;
+            }
+        }
     }
 
     private void UpdateOrientation()
@@ -176,4 +200,18 @@ public class CharacterMovement : MonoBehaviour
     {
         _moveInput.variable.ValueChanged -= MoveInput_ValueChanged;
     }
+
+    private IEnumerator StartTimer(float time)
+    {
+        yield return new WaitForSeconds(time);
+        if (_inAttckMotionTimer != null)
+        {
+            _inAttackMotion = false;
+            if (_stopFullBodyMovement)
+                _stopFullBodyMovement.Raise(this, null);
+            Debug.Log("attackmotion reset by timer");
+        }
+
+    }
+
 }

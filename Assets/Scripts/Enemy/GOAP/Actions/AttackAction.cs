@@ -99,7 +99,8 @@ public class AttckAction : GoapAction
         SendPackage(outOfRange, true);
         SendPackage(outOfRange, false);
         yield return new WaitForSeconds(executionTime);
-        ActionCompleted();
+        if (npc)
+            ActionCompleted();
     }
 
 }

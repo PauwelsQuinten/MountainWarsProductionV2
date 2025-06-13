@@ -3173,11 +3173,16 @@ MonoBehaviour:
   _shieldGrabDistance: 1
   _changeAnimation: {fileID: 11400000, guid: f56e344763da3c34d9b3e5d48d24a9e4, type: 2}
   _lowerBlock: {fileID: 11400000, guid: 3ce36d1a0cee9b64db3b05b01a8aece3, type: 2}
+  _stunEvent: {fileID: 11400000, guid: 2cc625b4ec016e14899ad658a28da4c8, type: 2}
   _staminaCost:
     useConstant: 0
     constantValue: 0
     variable: {fileID: 11400000, guid: 344cb57a5ba49bc42a7f7c94bccbf69c, type: 2}
   _loseStamina: {fileID: 11400000, guid: 0b82292daaabdcb4e964a69a69667662, type: 2}
+  _stunValues:
+    useConstant: 0
+    constantValue: {x: 0, y: 0}
+    variable: {fileID: 11400000, guid: 78c0a0fede93f0e45b86506556b26a1c, type: 2}
 --- !u!114 &1742199816163671094
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -20,7 +20,7 @@ public class VFXManager : MonoBehaviour
         var prf = FindPrefab(args.Type);
         if (prf == null) return;
 
-        if (args.Cancel)
+        if (args.Cancel && this != null)
         {
             CancelVfx(args.Type);
             return;

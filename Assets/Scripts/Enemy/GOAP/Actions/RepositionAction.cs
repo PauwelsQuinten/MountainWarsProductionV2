@@ -27,7 +27,9 @@ public class RepositionAction : GoapAction
 
     public override float CalculateCost(BlackboardReference blackboard, WorldState currentWorldState)
     {
-        if (blackboard.variable.IsPlayerAgressive || currentWorldState.TargetBehaviour == EBehaviourValue.Knock)
+        if (blackboard.variable.IsPlayerAgressive 
+            || currentWorldState.Behaviour == EBehaviourValue.Knock 
+            || currentWorldState.Stamina >= EWorldStateValue.Low )
             return 0.5f;
         
         else

@@ -116,11 +116,29 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _OnStunRecovery: {fileID: 11400000, guid: ef1c1e852f404ef41a2a5ae46280abb3, type: 2}
-  _blackboardRefs: []
+  _vfx: {fileID: 0}
+  TargetLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  BlackboardRef:
+    useConstant: 0
+    constantValue: {x: 0, y: 0}
+    variable: {fileID: 0}
+  IsInDialogue:
+    useConstant: 0
+    constantValue: 0
+    variable: {fileID: 0}
+  IsInStaticDialogue:
+    useConstant: 0
+    constantValue: 0
+    variable: {fileID: 0}
+  _rotationSpeed: 5
   AttackState: 0
   AttackHeight: 0
-  Orientation: 0
   fOrientation: 0
+  fAimOrientation: 0
+  StartCamera: {fileID: 0}
+  CurrentCamera: {fileID: 0}
   Target: {fileID: 0}
   IsHoldingShield: 0
   EquipmentManager: {fileID: 1490819108717279631}
@@ -144,14 +162,18 @@ MonoBehaviour:
     useConstant: 0
     constantValue: {x: 0, y: 0}
     variable: {fileID: 0}
-  _speed: 5
+  _speed:
+    useConstant: 0
+    constantValue: 0
+    variable: {fileID: 0}
+  _stopMovingDuringAttack: 0
   _sprintCost:
     useConstant: 0
     constantValue: 0
     variable: {fileID: 0}
   _removeStamina: {fileID: 11400000, guid: 0b82292daaabdcb4e964a69a69667662, type: 2}
   _changeAnimation: {fileID: 11400000, guid: f56e344763da3c34d9b3e5d48d24a9e4, type: 2}
-  _stateManager: {fileID: 4165634575879343316}
+  _stopFullBodyMovement: {fileID: 11400000, guid: e2f2bee1f16169b47bfbe407ff2ea64b, type: 2}
 --- !u!114 &3755031848856493801
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -172,8 +194,9 @@ MonoBehaviour:
   _stabAcceptedRange: 45
   _maxAllowedBlockAngle: 150
   _acceptedAngleForCenter: 35
-  _feintAngle: 100
   _maxSwingSpeed: 2
+  _minSwingAngle: 60
+  _useDynamicBlock: 1
 --- !u!114 &6458811806028097463
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -190,18 +213,17 @@ MonoBehaviour:
   _overCommitAngle: 210
   _basePower: 5
   _chargeSpeed: 2
-  _attackRange: 2
+  _chargeDownSpeed: 0
+  _maxChargedPower: 20
   _doAttack: {fileID: 11400000, guid: d9f26e2d81ed1fe40933eaca01e8ff59, type: 2}
+  _moveAttack: {fileID: 0}
   _staminaCost:
     useConstant: 0
     constantValue: 0
     variable: {fileID: 11400000, guid: b800ab1f6bf0c9949a8cb81bac2036dd, type: 2}
   _loseStamina: {fileID: 11400000, guid: 0b82292daaabdcb4e964a69a69667662, type: 2}
-  _characterLayer:
-    serializedVersion: 2
-    m_Bits: 8
-  _blackboardRefs: []
   _changeAnimation: {fileID: 11400000, guid: f56e344763da3c34d9b3e5d48d24a9e4, type: 2}
+  ChargePowerUsed: 0
 --- !u!114 &6469151571926413075
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -214,16 +236,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c20b34aa3e83034996fae4520c0383b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _blackboards: []
-  _succesfullBlockevent: {fileID: 11400000, guid: 2cc625b4ec016e14899ad658a28da4c8, type: 2}
+  _stunFeedbackEvent: {fileID: 0}
   _equipmentUpdate: {fileID: 11400000, guid: 1fa0ac8c24365fa4fa43f0ccc057a02a, type: 2}
   _succesfullHitEvent: {fileID: 11400000, guid: 0bab4ec7dd547c941b5209c87202a055, type: 2}
   _changeAnimation: {fileID: 0}
+  _blockAnimation: {fileID: 0}
   _staminaCost:
     useConstant: 0
     constantValue: 0
     variable: {fileID: 11400000, guid: 509aa20229fc65144be6100a8cda973e, type: 2}
   _loseStamina: {fileID: 11400000, guid: 0b82292daaabdcb4e964a69a69667662, type: 2}
+  _stunValues:
+    useConstant: 0
+    constantValue: {x: 0, y: 0}
+    variable: {fileID: 0}
+  _blockOrientationMargin: 40
 --- !u!114 &2973509247929452200
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -237,6 +264,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _DealDamage: {fileID: 11400000, guid: adf3d2d15933fe3409767bb76cff4168, type: 2}
+  _vfx: {fileID: 0}
 --- !u!114 &8814302524761109724
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -253,7 +281,11 @@ MonoBehaviour:
   _onFailedParryEvent: {fileID: 11400000, guid: e4d2257f33828fe45a8ba3c1de9a6a8c, type: 2}
   _onDisarmEvent: {fileID: 11400000, guid: 80230798183380d4d9daccd349bb9632, type: 2}
   _changeAnimation: {fileID: 0}
+  _pushOfEvent: {fileID: 0}
   _disarmTime: 2.5
+  _parrySpeedShield: 1.5
+  _parrySpeedSword: 2.5
+  _pushPower: 10
   _staminaCost:
     useConstant: 0
     constantValue: 0
@@ -278,17 +310,11 @@ MonoBehaviour:
   _maxBlood: 100
   _bleedOutSpeed: 5
   _changedBlood: {fileID: 11400000, guid: e4f4ee8ab6150234d9854f343b1fed94, type: 2}
+  _vfx: {fileID: 0}
   _damageDropOff: 1
   _damageIncreaseWhenStunned: 1.25
-  _patchUpSpeed:
-    useConstant: 0
-    constantValue: 0
-    variable: {fileID: 0}
   _timeBeforeRegerating: 2
-  _patchUp: {fileID: 11400000, guid: b60a265955952bd458a744ff3fa08d58, type: 2}
   _healAmount: 100
-  _stateManager: {fileID: 4165634575879343316}
-  _blackboards: []
 --- !u!114 &3036795874959978044
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -305,7 +331,6 @@ MonoBehaviour:
   _maxStamina: 100
   _regenSpeed: 5
   _changedStamina: {fileID: 11400000, guid: d96f2c247ec32f843932f40997f1c382, type: 2}
-  _blackboards: []
 --- !u!114 &1490819108717279631
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -324,6 +349,7 @@ MonoBehaviour:
   _onEquipmentBreak: {fileID: 11400000, guid: b339da683b285f6418bc7b64f180c581, type: 2}
   _onEquipmentDamage: {fileID: 11400000, guid: c914e9c28dde5604d9c103f474e083b2, type: 2}
   _changeAnimation: {fileID: 0}
+  _changeIKStance: {fileID: 0}
   _leftHandSocket: {fileID: 0}
   _rightHandSocket: {fileID: 0}
   _sheathSocket: {fileID: 0}
@@ -331,10 +357,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   _itemPickupRadius: 1
-  _startAngle: 195
-  _sideAngleToStart: 60
-  _swordStartRotation: {x: 0.82728744, y: -0.03841147, z: -0.4745222, w: -0.29824284}
-  _blackboards: []
+  _spearStartRotation: {x: 0.39458582, y: -0.8933861, z: 0.052874647, w: 0.20824888}
 --- !u!114 &6822675981429713178
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -361,11 +384,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b4f0ed89ec20a84090b3a6998576f29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _lockonTarget: {fileID: 0}
   _lockonEvent: {fileID: 11400000, guid: d92c25f84e9ed4c4f9490fccdf017560, type: 2}
-  _sheathWeapon: {fileID: 11400000, guid: 40551c3801499a64ea4751aa179ac61e, type: 2}
+  _inQueue: {fileID: 0}
   _changePanel: {fileID: 0}
   _minAngleBeforeSendEvent: 10
+  _timewithoutTarget: 5
 --- !u!114 &8294375085882615592
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -442,9 +465,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _hearingRange: 2
-  _characterMask:
+  CharacterMask:
     serializedVersion: 2
-    m_Bits: 8
+    m_Bits: 0
 --- !u!114 &8284157178089308381
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -458,9 +481,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _eyesightRange: 5
-  _characterMask:
+  CharacterMask:
     serializedVersion: 2
-    m_Bits: 8
+    m_Bits: 0
 --- !u!114 &3805331497090860965
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -947,7 +970,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _animTarget: {fileID: 0}
-  _lerpSpeed: 5
+  _lerpSpeedTorso: 10
+  _lookRig: {fileID: 0}
+  _animStabTarget: {fileID: 0}
+  _rArmRig: {fileID: 0}
+  _lerpSpeedRArm: 0.1
+  _heightStab: 0.25
 --- !u!1 &6617748585025692743
 GameObject:
   m_ObjectHideFlags: 0

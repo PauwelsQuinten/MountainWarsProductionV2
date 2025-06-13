@@ -83,7 +83,7 @@ public class Parry : MonoBehaviour
         if (sender.gameObject != gameObject) return;
 
         _InParryZone = (bool)obj;
-        //Debug.Log($"Parry mode = {_InParryZone}");
+        Debug.Log($"Parry mode = {_InParryZone}, {gameObject}");
 
         if (_tryDisarm && IsSuccesfullDisarm())
             OnSuccesfullDisarm();
@@ -190,8 +190,10 @@ public class Parry : MonoBehaviour
         //signal to Block
         _onFailedParryEvent.Raise(this, attackValues);
         _attacker = null;
+        Debug.Log($"fail block {gameObject}");
+
     }
-    
+
     private void StartAnimation(AimingOutputArgs args, BlockMedium parryMedium)
     {
         int animLayers = 1 ;

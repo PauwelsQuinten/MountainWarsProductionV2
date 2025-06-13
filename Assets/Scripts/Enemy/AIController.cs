@@ -8,11 +8,9 @@ public class AIController : MonoBehaviour
     [SerializeField]
     private StateManager _stateManager;
 
-    [Header("Variables")]
+    [Header("Events")]
     [SerializeField]
-    private GameEvent _MoveEvent;
-
-    
+    private GameEvent _MoveEvent;   
     [SerializeField]
     private GameEvent _shieldBash;
 
@@ -34,7 +32,7 @@ public class AIController : MonoBehaviour
         StartCoroutine(CheckSurrounding());
     }
 
-    //This ClearQueue is purely for storing his attackstate for if he is hilding shield or not
+    //This ClearQueue is purely for storing his attackstate for if he is holding shield or not
     //!! its important that this event is called before the statemanager stunEvent!!!
     public void OnStun(Component sender, object obj)
     {
@@ -92,6 +90,11 @@ public class AIController : MonoBehaviour
         }
     }
 
+
+    //----------------------------------------------------------------------------
+    //Functions
+    //----------------------------------------------------------------------------
+
     private void Sprint(bool sprint)
     {
         DirectionEventArgs package;
@@ -109,7 +112,6 @@ public class AIController : MonoBehaviour
         }
        
     }
-
     private void PatchUp()
     {
         _inQueueAction.Raise(this, new AimingOutputArgs { Special = SpecialInput.PatchUp, AnimationStart = true});

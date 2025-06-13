@@ -161,7 +161,9 @@ namespace UnityEngine
 
         TargetOpening,
         TargetAttackRange,
-        AttackRange
+        AttackRange,
+
+        MovementSpeed
 
     }
 
@@ -314,6 +316,13 @@ namespace UnityEngine
         Stuned,
         Hit,
         Bleeding
+    }
+
+    public enum RigValue
+    {
+        Default = -1,
+        Zero = 0,
+        One = 1
     }
 
 }

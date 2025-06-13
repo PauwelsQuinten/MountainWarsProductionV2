@@ -1808,6 +1808,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Roman
       objectReference: {fileID: 0}
+    - target: {fileID: 3045424017039574766, guid: c5fd76fddb430bd43a8171bb93b6b212, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4666265767625483379, guid: c5fd76fddb430bd43a8171bb93b6b212, type: 3}
       propertyPath: _stunEvent
       value: 
@@ -14938,7 +14942,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3045424017039574766, guid: c5fd76fddb430bd43a8171bb93b6b212, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3552315494819057974, guid: c5fd76fddb430bd43a8171bb93b6b212, type: 3}
       propertyPath: m_Layer
@@ -20504,6 +20508,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy
       objectReference: {fileID: 0}
+    - target: {fileID: 8761888366074066331, guid: e9651b4801f36d14e86c1cb82aa75d59, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -20667,3 +20675,4 @@ SceneRoots:
   - {fileID: 5158366599381846256}
   - {fileID: 5903486568222800523}
   - {fileID: 688645971}
+  - {fileID: 85176081}

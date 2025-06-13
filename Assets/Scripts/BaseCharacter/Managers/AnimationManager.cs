@@ -23,6 +23,7 @@ public class AnimationManager : MonoBehaviour
     private float _movementSpeed = 1f;
     private float _attBlend = 0f;
     private float _newBlockDirection = 0f;
+    public Vector2 Velocity = Vector2.zero;
 
     private const string P_FULL_BODY = "FullBodyAnimation";
     private const string P_BLOCK_DIR = "fBlockDirection";
@@ -165,10 +166,12 @@ public class AnimationManager : MonoBehaviour
             _XVelocity = animInput.x;
             _YVelocity =  animInput.z;
             _GotTarget = 1f;
+            Velocity = new Vector2(_XVelocity, _YVelocity);
         }
         else
         {
             _XVelocity = _movementSpeed;
+            Velocity = new Vector2(_XVelocity, 0);
         }
         ResetBoredTime();
     }
@@ -265,13 +268,7 @@ public class AnimationManager : MonoBehaviour
 
     private void InteruptAnimation(bool isFeint)
     {
-        //if(isFeint) 
-        //    _animator.SetTrigger(P_FEINT);
-        //else
-        //    _animator.ResetTrigger(P_FEINT);
-
-        _animator.SetBool(P_FEINT, isFeint);
-        
+        _animator.SetBool(P_FEINT, isFeint);       
     }
 
     //Deprectated probably

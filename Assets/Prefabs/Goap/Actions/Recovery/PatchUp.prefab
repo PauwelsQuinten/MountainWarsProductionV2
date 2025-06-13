@@ -50,6 +50,7 @@ MonoBehaviour:
   SatisfyingWorldState: {fileID: 0}
   Cost: 1
   _actionMaxRunTime: 3
+  _randomWalkingTime: 0
   _aiInputEvent: {fileID: 11400000, guid: 08c91237b3eb8604cbb626b34a29c05a, type: 2}
   _input: 0
   _actionActivationTime: 0.1
@@ -76,8 +77,11 @@ MonoBehaviour:
   _stamina: 5
   _rHEquipment: 5
   _lHEquipment: 5
+  _movementSpeed: 5
   _hasTarget: 2
   _hasOpening: 2
+  _hasRHEquipment: 2
+  _hasLHEquipment: 2
   _targetBehaviour: 4
   _behaviour: 0
   _targetAttackRange: 3
@@ -97,7 +101,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   WorldStateType: 0
-  PriorityList: 
+  PriorityList: 1000000012000000
   _targetHealth: 5
   _targetStamina: 5
   _targetRHEquipment: 5
@@ -106,8 +110,11 @@ MonoBehaviour:
   _stamina: 5
   _rHEquipment: 5
   _lHEquipment: 5
+  _movementSpeed: 1
   _hasTarget: 2
   _hasOpening: 2
+  _hasRHEquipment: 2
+  _hasLHEquipment: 2
   _targetBehaviour: 4
   _behaviour: 4
   _targetAttackRange: 2

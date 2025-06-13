@@ -24,6 +24,8 @@ public class CharacterMovement : MonoBehaviour
     [Header("Animation")]
     [SerializeField]
     private GameEvent _changeAnimation;
+    [SerializeField]
+    private GameEvent _stopFullBodyMovement;
 
     private StateManager _stateManager;
     private StaminaManager _staminaManager;
@@ -156,8 +158,11 @@ public class CharacterMovement : MonoBehaviour
             _inAttckMotionTimer = StartCoroutine(StartTimer(1f));
         else
         {
-            StopCoroutine(_inAttckMotionTimer);
-            _inAttckMotionTimer = null;
+            if (_inAttckMotionTimer != null)
+            {
+                StopCoroutine(_inAttckMotionTimer);
+                _inAttckMotionTimer = null;
+            }
         }
     }
 
@@ -202,6 +207,8 @@ public class CharacterMovement : MonoBehaviour
         if (_inAttckMotionTimer != null)
         {
             _inAttackMotion = false;
+            if (_stopFullBodyMovement)
+                _stopFullBodyMovement.Raise(this, null);
             Debug.Log("attackmotion reset by timer");
         }
 

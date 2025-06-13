@@ -11,5 +11,6 @@ public class StunVariables : ScriptableObject
     public float StunWhenGettingPartiallyBlocked;
     public float StunWhenGettingFullyBlockedBySword;
     public float StunWhenGettingPartiallyBlockedBySword;
+    public float StunOnShieldDraggedDown;
 
 }

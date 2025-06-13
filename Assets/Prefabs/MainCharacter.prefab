@@ -3402,6 +3402,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: 4aa2a05291286a74bb9920c75d553284, type: 2}
     - target: {fileID: 5547100133384318507, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
+      propertyPath: _stopFullBodyMovement
+      value: 
+      objectReference: {fileID: 11400000, guid: e2f2bee1f16169b47bfbe407ff2ea64b, type: 2}
+    - target: {fileID: 5547100133384318507, guid: b245a706e1a2a4d4eb3e08f64ac6340d, type: 3}
       propertyPath: _stopMovingDuringAttack
       value: 1
       objectReference: {fileID: 0}
@@ -4092,11 +4096,16 @@ MonoBehaviour:
   _shieldGrabDistance: 1
   _changeAnimation: {fileID: 11400000, guid: f56e344763da3c34d9b3e5d48d24a9e4, type: 2}
   _lowerBlock: {fileID: 11400000, guid: 3ce36d1a0cee9b64db3b05b01a8aece3, type: 2}
+  _stunEvent: {fileID: 0}
   _staminaCost:
     useConstant: 0
     constantValue: 0
     variable: {fileID: 11400000, guid: 344cb57a5ba49bc42a7f7c94bccbf69c, type: 2}
   _loseStamina: {fileID: 11400000, guid: 0b82292daaabdcb4e964a69a69667662, type: 2}
+  _stunValues:
+    useConstant: 0
+    constantValue: {x: 0, y: 0}
+    variable: {fileID: 0}
 --- !u!114 &6715549973372245863
 MonoBehaviour:
   m_ObjectHideFlags: 0

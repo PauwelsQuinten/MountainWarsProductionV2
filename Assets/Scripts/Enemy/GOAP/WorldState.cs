@@ -26,6 +26,8 @@ public class WorldState : MonoBehaviour
     private EWorldStateValue _rHEquipment = EWorldStateValue.Default;
     [SerializeField]
     private EWorldStateValue _lHEquipment = EWorldStateValue.Default;
+    [SerializeField]
+    private EWorldStateValue _movementSpeed = EWorldStateValue.Default;
 
     [Header("Possesion")]
     [SerializeField]
@@ -353,6 +355,9 @@ public class WorldState : MonoBehaviour
         }
         else
             TargetBehaviour = EBehaviourValue.Default;
+
+        CcalculateSpeed();
+
     }
 
     private void CalculateRange()
@@ -391,6 +396,8 @@ public class WorldState : MonoBehaviour
                 WorldStateValues.Add(EWorldState.TargetRHEquipment, TargetRHEquipment);
             if (!WorldStateValues.ContainsKey(EWorldState.TargetLHEquipment))
                 WorldStateValues.Add(EWorldState.TargetLHEquipment, TargetLHEquipment);
+            if (!WorldStateValues.ContainsKey(EWorldState.TargetLHEquipment))
+                WorldStateValues.Add(EWorldState.TargetLHEquipment, TargetLHEquipment);
 
             if (!WorldStateValues.ContainsKey(EWorldState.Health))
                 WorldStateValues.Add(EWorldState.Health, Health);
@@ -398,8 +405,8 @@ public class WorldState : MonoBehaviour
                 WorldStateValues.Add(EWorldState.Stamina, Stamina);
             if (!WorldStateValues.ContainsKey(EWorldState.RHEquipment))
                 WorldStateValues.Add(EWorldState.RHEquipment, RHEquipment);
-            if (!WorldStateValues.ContainsKey(EWorldState.LHEquipment))
-                WorldStateValues.Add(EWorldState.LHEquipment, LHEquipment);
+            if (!WorldStateValues.ContainsKey(EWorldState.MovementSpeed))
+                WorldStateValues.Add(EWorldState.MovementSpeed, MovementSpeed);
 
 
             //Possesions
@@ -455,7 +462,8 @@ public class WorldState : MonoBehaviour
                 WorldStateValues.Add(EWorldState.RHEquipment, RHEquipment);
             if (LHEquipment != EWorldStateValue.Default)
                 WorldStateValues.Add(EWorldState.LHEquipment, LHEquipment);
-
+            if (MovementSpeed != EWorldStateValue.Default)
+                WorldStateValues.Add(EWorldState.MovementSpeed, MovementSpeed);
 
             //Possesions
             if (HasTarget != EWorldStatePossesion.Default)
@@ -487,6 +495,16 @@ public class WorldState : MonoBehaviour
 
     }
 
+    private void CcalculateSpeed()
+    {
+        var comp = GetComponent<AnimationManager>();
+        if (!comp) return;
+        float speed = comp.Velocity.magnitude;
+        if (speed > 1f) MovementSpeed = EWorldStateValue.High;
+        if (speed > 0.9f) MovementSpeed = EWorldStateValue.Mid;
+        if (speed == 0f) MovementSpeed = EWorldStateValue.Zero;
+        else MovementSpeed = EWorldStateValue.Low;
+    }
 
     //------------------------------------------------------------------------------
     //WORLDSTATE PUBLIC SETTERS TO UPDATE LIST AT SAME TIME
@@ -571,6 +589,16 @@ public class WorldState : MonoBehaviour
         {
             _lHEquipment = value;
             WorldStateValues[EWorldState.LHEquipment] = _lHEquipment;
+        }
+    }
+    
+    public EWorldStateValue MovementSpeed
+    {
+        get { return _movementSpeed; }
+        set
+        {
+            _movementSpeed = value;
+            WorldStateValues[EWorldState.MovementSpeed] = _movementSpeed;
         }
     }
 

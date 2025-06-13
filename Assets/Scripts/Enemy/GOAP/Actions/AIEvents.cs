@@ -24,13 +24,14 @@ public class AIEvents : GoapAction
 
     public override void StartAction(WorldState currentWorldState, BlackboardReference blackboard)
     {
+        base.StartAction(currentWorldState, blackboard);
         if (_actionActivationTime > 0f)
         {
             _actionPreperationCoroutine = StartCoroutine(StartPreparingAction());
             _actionState = ActionState.Preparing;
         }
         else
-            _actionState = ActionState.Going;
+            _actionState = ActionState.Start;
     }
 
     public override void UpdateAction(WorldState currentWorldState, BlackboardReference blackboard)
@@ -50,7 +51,7 @@ public class AIEvents : GoapAction
 
     public override bool IsCompleted(WorldState current)
     {
-        return _actionState == ActionState.Finished;
+        return base.IsCompleted(current) || _actionState == ActionState.Finished;
     }
 
     public override bool IsInterupted(WorldState currentWorldState, BlackboardReference blackboard)

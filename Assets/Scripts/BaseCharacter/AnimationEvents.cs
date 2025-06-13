@@ -126,7 +126,6 @@ public class AnimationEvents : MonoBehaviour
         //To move Forward
         else if (_moveAttack && transform.parent)
             _moveAttack.Raise(this, new AttackMoveEventArgs { Attacker = transform.parent.gameObject, AttackType = AttackType.Stab });
-        //Debug.Log($"Move 1 = f, 0 = b. {forward}, {transform.parent}");
     }
 
 }

@@ -242,7 +242,7 @@ public class MoveToAction : GoapAction
 
             case ObjectTarget.Backward:
                 targetDir = -new Vector2(Mathf.Cos(angleRad), Mathf.Sin(angleRad));
-                targetPos = Geometry.Geometry.GetPointInDirectionOnNavMesh(npcPos, targetDir, 7f);
+                targetPos = Geometry.Geometry.GetPointInDirectionOnNavMesh(npcPos, targetDir, 10f);
                 break;
 
             case ObjectTarget.Side:

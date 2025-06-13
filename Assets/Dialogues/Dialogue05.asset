@@ -1,0 +1,73 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5795a2dd33b2e3d4d9d64c417ce8d471, type: 3}
+  m_Name: Dialogue05
+  m_EditorClassIdentifier: 
+  nodes:
+  - {fileID: 6847492321696641938}
+  newNodeOffset: {x: 250, y: 0}
+  isStaticDialogue: 0
+  isStarted: 0
+--- !u!114 &6847492321696641938
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a7a6ddfe04bf004fbb402deb2b21761, type: 3}
+  m_Name: a6c5f9ac-699f-4ef0-adf1-9f02d250f802
+  m_EditorClassIdentifier: 
+  isPlayerSpeaking: 0
+  hasImageSupport: 0
+  shoutingImages: []
+  imageSize: 100
+  hasSecondImageLine: 0
+  text: I will kill you in the name of the Emperor!
+  CharacterName:
+  - RomanSoldier
+  textDisplaySpeed: 0.01
+  hasSecondaryLine: 0
+  isShouting: 0
+  shoutIntensity: 0.5
+  newFont: {fileID: 0}
+  newTextSize: 0
+  baseTextSize: 36
+  balloonObject: {fileID: 2592667508800547744, guid: 2bac7fcd62ad2254ba0b5c6805ad7e98, type: 3}
+  tailObject: {fileID: 8216558290986259432, guid: 89ac598207ca10e43b46e0a3e1c6d86d, type: 3}
+  borderSize: 1.2
+  sizePadding: {x: -10, y: 160}
+  needsToBeFlipped: 0
+  children: []
+  rect:
+    serializedVersion: 2
+    x: 384.80002
+    y: 30.399994
+    width: 200
+    height: 1099.19
+  OnCompletionEvent: {fileID: 11400000, guid: 35a46a95d33d0cf419bdcb59769bff5f, type: 2}
+  EnemiesToActivate:
+  - RomanSoldier
+  onEnterAction: 
+  DoPanelSwitch: 1
+  playAtEnd: 1
+  triggerEnter: {fileID: 11400000, guid: 4a495bc1b3ec91143bda2133b134a2c3, type: 2}
+  currentCameraName: Panel2Cam
+  nextCameraName: RomanFightCam
+  EnableNewCamera: 1
+  currentViewIndex: 4
+  nextViewIndex: 5
+  onExitAction: 
+  condition:
+    and: []

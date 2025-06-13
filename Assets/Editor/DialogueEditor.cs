@@ -339,13 +339,19 @@ public class DialogueEditor : EditorWindow
             baseNodeHeight += 20;
 
             GUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("Font Size", GUILayout.Width(60), GUILayout.Height(20));
+            EditorGUILayout.LabelField("Base Font Size", GUILayout.Width(100), GUILayout.Height(20));
+            node.SetBaseSize(EditorGUILayout.IntField(node.GetBaseFontSize(), GUILayout.Height(20)));
+            GUILayout.EndHorizontal();
+            baseNodeHeight += 20;
+
+            GUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField("New Font Size", GUILayout.Width(100), GUILayout.Height(20));
             node.SetNewSize(EditorGUILayout.IntField(node.GetNewFontSize(), GUILayout.Height(20)));
             GUILayout.EndHorizontal();
             baseNodeHeight += 20;
 
             GUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("New Font", GUILayout.Width(60), GUILayout.Height(20));
+            EditorGUILayout.LabelField("New Font", GUILayout.Width(100), GUILayout.Height(20));
             node.SetNewFont((TMP_FontAsset)EditorGUILayout.ObjectField(node.GetNewFont(), typeof(TMP_FontAsset), false, GUILayout.Height(20)));
             GUILayout.EndHorizontal();
             baseNodeHeight += 20;

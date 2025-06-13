@@ -169,7 +169,7 @@ public class DialogueSystem : MonoBehaviour
             textBalloonPos = new Vector2(_previousPos.x, _previousPos.y);
             float yOffset = 0;
             float xOffset = 0;
-            if (textBalloon[0] != null) yOffset = textBalloon[0].GetComponent<Image>().rectTransform.rect.height * 0.35f;
+            if (textBalloon[0] != null) yOffset = textBalloon[0].GetComponent<Image>().rectTransform.rect.height * 0.35f + (_previousTextBalloonSize.y * 0.15f);
             if (textBalloon[0] != null) xOffset = textBalloon[0].GetComponent<Image>().rectTransform.rect.width * 0.35f;
             textBalloonPos += new Vector2(xOffset, -yOffset);
             return textBalloonPos;
@@ -197,7 +197,7 @@ public class DialogueSystem : MonoBehaviour
             {
                 textBalloonPos = _previousPos;
                 if (textBalloon[0] != null) Xoffset = -textBalloon[0].GetComponent<Image>().rectTransform.rect.width * 0.75f;
-                if (textBalloon[0] != null) Yoffset = -(textBalloon[0].GetComponent<Image>().rectTransform.rect.height * 0.5f) - (_previousTextBalloonSize.y * 0.5f) + 100;
+                if (textBalloon[0] != null) Yoffset = -(textBalloon[0].GetComponent<Image>().rectTransform.rect.height * 0.5f) - (_previousTextBalloonSize.y * 0.5f) - 50;
             }
             else
             {
@@ -257,7 +257,7 @@ public class DialogueSystem : MonoBehaviour
             if (side == 1)
             {
                 tailPos = new Vector2(-Xoffset - (70 * tailsOnRight), Yoffset - (7 * tailsOnRight)) + textballonPos;
-                if (_currentDialogueNode.GetIsShouting())
+                if (_currentDialogueNode.GetIsShouting() && _currentDialogueNode.GetCharacterName().Count > 1)
                 {
                     tailPos = new Vector2(-Xoffset - (140 * tailsOnRight), Yoffset - (7 * tailsOnRight)) + textballonPos;
                 }
@@ -269,7 +269,7 @@ public class DialogueSystem : MonoBehaviour
             else
             {
                 tailPos = new Vector2(Xoffset + (70 * tailsOnLeft), Yoffset - (7 * tailsOnLeft)) + textballonPos;
-                if (_currentDialogueNode.GetIsShouting())
+                if (_currentDialogueNode.GetIsShouting() && _currentDialogueNode.GetCharacterName().Count > 1)
                 {
                     tailPos = new Vector2(Xoffset + (140 * tailsOnLeft), Yoffset - (7 * tailsOnLeft)) + textballonPos;
                 }
@@ -316,8 +316,10 @@ public class DialogueSystem : MonoBehaviour
         _allowMovement = true;
         _isTyping = true;
         GameObject textObject = Instantiate(new GameObject());
+        textObject.name = "TextObject";
         textObject.AddComponent<TextMeshProUGUI>();
         TextMeshProUGUI text = textObject.GetComponent<TextMeshProUGUI>();
+        text.fontSize = _currentDialogueNode.GetBaseFontSize();
         _spawnedText.Add(textObject);
         List<GameObject> tempList = ConstructTextBalloon(!_spawnSubBalloon);
 
@@ -578,7 +580,7 @@ public class DialogueSystem : MonoBehaviour
         string text = node.GetText();
 
         Stack<int> fontSizes = new Stack<int>();
-        fontSizes.Push(36);
+        fontSizes.Push(_currentDialogueNode.GetBaseFontSize());
         int tagLength;
         List<int> allFontSizes = new List<int>();
 
@@ -652,7 +654,7 @@ public class DialogueSystem : MonoBehaviour
 
     private float DetermineFontSizeMultiplier(float size)
     {
-        float baseSize = 36;
+        float baseSize = _currentDialogueNode.GetBaseFontSize();
         float currentSize = size;
 
         float multiplier = currentSize / baseSize;
@@ -764,7 +766,8 @@ public class DialogueSystem : MonoBehaviour
             Image image = go.GetComponent<Image>();
             if (image.color == Color.black)
             {
-                image.rectTransform.sizeDelta = (size * new Vector2(node.GetBorderSize() * 0.85f, node.GetBorderSize())) + node.GetSizePadding();
+                Vector2 borderSize = new Vector2(node.GetBorderSize() * 0.85f, node.GetBorderSize());
+                image.rectTransform.sizeDelta = (size * borderSize) + node.GetSizePadding();
             }
             else
             {
@@ -935,7 +938,7 @@ public class DialogueSystem : MonoBehaviour
 
         foreach (GameObject textObject in _spawnedText)
         {
-            Destroy(textObject);
+            Destroy(textObject.gameObject);
         }
 
         _spawnedTextBalloons = new List<GameObject>();

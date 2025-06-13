@@ -1,0 +1,127 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-4133525786252869320
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a7a6ddfe04bf004fbb402deb2b21761, type: 3}
+  m_Name: 09f19d64-76ca-4f6d-b28d-ac526cebab04
+  m_EditorClassIdentifier: 
+  isPlayerSpeaking: 1
+  hasImageSupport: 0
+  shoutingImages: []
+  imageSize: 100
+  hasSecondImageLine: 0
+  text: I better run to the forrest.
+  CharacterName:
+  - Player
+  textDisplaySpeed: 0.01
+  hasSecondaryLine: 0
+  isShouting: 0
+  shoutIntensity: 0.5
+  newFont: {fileID: 0}
+  newTextSize: 0
+  baseTextSize: 36
+  balloonObject: {fileID: 2592667508800547744, guid: 264e34e62017e6246aefbb4554858f24, type: 3}
+  tailObject: {fileID: 3521332350237957445, guid: be3f5699a3d09184fb5ab27c12d364a2, type: 3}
+  borderSize: 1.2
+  sizePadding: {x: -10, y: 190}
+  needsToBeFlipped: 0
+  children: []
+  rect:
+    serializedVersion: 2
+    x: 533.2001
+    y: 252.00002
+    width: 200
+    height: 790.15
+  OnCompletionEvent: {fileID: 0}
+  EnemiesToActivate: []
+  onEnterAction: 
+  DoPanelSwitch: 0
+  playAtEnd: 0
+  triggerEnter: {fileID: 0}
+  currentCameraName: 
+  nextCameraName: 
+  EnableNewCamera: 0
+  currentViewIndex: 0
+  nextViewIndex: 0
+  onExitAction: 
+  condition:
+    and: []
+--- !u!114 &-3771309263629457482
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a7a6ddfe04bf004fbb402deb2b21761, type: 3}
+  m_Name: 2c3ec49f-28d0-44fb-b2ba-939677037283
+  m_EditorClassIdentifier: 
+  isPlayerSpeaking: 0
+  hasImageSupport: 0
+  shoutingImages: []
+  imageSize: 100
+  hasSecondImageLine: 0
+  text: Hopefully i don't get cuaght.
+  CharacterName:
+  - Player
+  textDisplaySpeed: 0.01
+  hasSecondaryLine: 0
+  isShouting: 0
+  shoutIntensity: 0.5
+  newFont: {fileID: 0}
+  newTextSize: 0
+  baseTextSize: 36
+  balloonObject: {fileID: 2592667508800547744, guid: 264e34e62017e6246aefbb4554858f24, type: 3}
+  tailObject: {fileID: 3521332350237957445, guid: be3f5699a3d09184fb5ab27c12d364a2, type: 3}
+  borderSize: 1.2
+  sizePadding: {x: -10, y: 190}
+  needsToBeFlipped: 0
+  children:
+  - 09f19d64-76ca-4f6d-b28d-ac526cebab04
+  rect:
+    serializedVersion: 2
+    x: 300.80005
+    y: 188.80002
+    width: 200
+    height: 790.15
+  OnCompletionEvent: {fileID: 0}
+  EnemiesToActivate: []
+  onEnterAction: 
+  DoPanelSwitch: 0
+  playAtEnd: 0
+  triggerEnter: {fileID: 0}
+  currentCameraName: 
+  nextCameraName: 
+  EnableNewCamera: 0
+  currentViewIndex: 0
+  nextViewIndex: 0
+  onExitAction: 
+  condition:
+    and: []
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5795a2dd33b2e3d4d9d64c417ce8d471, type: 3}
+  m_Name: Dialogue03
+  m_EditorClassIdentifier: 
+  nodes:
+  - {fileID: -3771309263629457482}
+  - {fileID: -4133525786252869320}
+  newNodeOffset: {x: 250, y: 0}
+  isStaticDialogue: 0
+  isStarted: 0

@@ -23,7 +23,7 @@ public class DialogueNode : ScriptableObject
     [SerializeField]
     List<string> CharacterName;
     [SerializeField]
-    float textDisplaySpeed;
+    float textDisplaySpeed = 0.01f;
     [SerializeField]
     bool hasSecondaryLine = false;
     [SerializeField]
@@ -35,11 +35,13 @@ public class DialogueNode : ScriptableObject
     [SerializeField]
     int newTextSize;
     [SerializeField]
+    int baseTextSize = 36;
+    [SerializeField]
     GameObject balloonObject;
     [SerializeField]
     GameObject tailObject;
     [SerializeField]
-    float borderSize;
+    float borderSize = 1.2f;
     [SerializeField]
     Vector2 sizePadding;
     [SerializeField]
@@ -140,6 +142,11 @@ public class DialogueNode : ScriptableObject
     public int GetNewFontSize()
     {
         return newTextSize;
+    }
+
+    public int GetBaseFontSize()
+    {
+        return baseTextSize;
     }
 
     public GameObject GetBalloonObject()
@@ -378,6 +385,17 @@ public class DialogueNode : ScriptableObject
             Undo.RecordObject(this, " Update Dialogue New text Size ");
 
             newTextSize = size;
+            EditorUtility.SetDirty(this);
+        }
+    }
+
+    public void SetBaseSize(int newSize)
+    {
+        if (newSize != baseTextSize)
+        {
+            Undo.RecordObject(this, " Update Dialogue Base Text Size ");
+
+            baseTextSize = newSize;
             EditorUtility.SetDirty(this);
         }
     }

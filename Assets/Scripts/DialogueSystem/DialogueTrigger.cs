@@ -5,6 +5,8 @@ public class DialogueTrigger : MonoBehaviour
     [SerializeField]
     private BoolReference _startCondition;
     [SerializeField]
+    private bool _needsToBeNegative;
+    [SerializeField]
     private GameEvent _StartDialogue;
     [SerializeField]
     private int _nextDialogueIndex;
@@ -12,7 +14,8 @@ public class DialogueTrigger : MonoBehaviour
     {
         if (_startCondition.variable != null)
         {
-            if (!_startCondition.value) return;
+            if (!_startCondition.value && !_needsToBeNegative) return;
+            else if (_startCondition.value && _needsToBeNegative) return;
         }
         if (other.gameObject.tag != "Player") return;
 

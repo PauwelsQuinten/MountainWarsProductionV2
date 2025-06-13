@@ -28,9 +28,13 @@ public class SceneManager : MonoBehaviour
         {
             currentCam = args.CurrentCamera;
             nextCam = args.NextCamera;
-            if(args.ActivateNewCamera) nextCam.enabled = true;
+            if (args.ActivateNewCamera)
+            {
+                currentCam.enabled = false;
+                nextCam.enabled = true;
+            }
 
-            currentCam.GetComponent<FollowObject>().enabled = false;
+                currentCam.GetComponent<FollowObject>().enabled = false;
             nextCam.GetComponent<FollowObject>().enabled = true;
 
             _changeCam.Raise(this, nextCam);

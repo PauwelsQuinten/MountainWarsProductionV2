@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-7264227322239673264
+--- !u!114 &-3968082796122314815
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -10,70 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4a7a6ddfe04bf004fbb402deb2b21761, type: 3}
-  m_Name: 67374305-2854-457e-ba66-dd0e2216c61d
-  m_EditorClassIdentifier: 
-  isPlayerSpeaking: 0
-  hasImageSupport: 0
-  shoutingImages: []
-  imageSize: 0
-  hasSecondImageLine: 0
-  text: Oh hello there Paul. how's the wife doing these days?
-  CharacterName:
-  - Player
-  textDisplaySpeed: 0.01
-  hasSecondaryLine: 0
-  isShouting: 0
-  shoutIntensity: 1.248
-  newFont: {fileID: 0}
-  newTextSize: 0
-  baseTextSize: 36
-  balloonObject: {fileID: 2592667508800547744, guid: 2bac7fcd62ad2254ba0b5c6805ad7e98, type: 3}
-  tailObject: {fileID: 8216558290986259432, guid: 89ac598207ca10e43b46e0a3e1c6d86d, type: 3}
-  borderSize: 1.2
-  sizePadding: {x: -10, y: 190}
-  needsToBeFlipped: 0
-  children:
-  - ad2acf9c-81c3-4f71-9d35-e5e221b7a28f
-  rect:
-    serializedVersion: 2
-    x: 171.4
-    y: 104.399994
-    width: 200
-    height: 862.76
-  OnCompletionEvent: {fileID: 0}
-  EnemiesToActivate: []
-  onEnterAction: 
-  DoPanelSwitch: 0
-  playAtEnd: 0
-  triggerEnter: {fileID: 0}
-  currentCameraName: 
-  nextCameraName: 
-  EnableNewCamera: 0
-  currentViewIndex: 0
-  nextViewIndex: 0
-  onExitAction: 
-  condition:
-    and: []
---- !u!114 &-4182607501235757020
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4a7a6ddfe04bf004fbb402deb2b21761, type: 3}
-  m_Name: ad2acf9c-81c3-4f71-9d35-e5e221b7a28f
+  m_Name: 4ea8d459-f030-4620-bdd5-4b0e7947bdd4
   m_EditorClassIdentifier: 
   isPlayerSpeaking: 1
   hasImageSupport: 0
   shoutingImages: []
-  imageSize: 0
+  imageSize: 100
   hasSecondImageLine: 0
-  text: Hi Friend. Whell she left me a couple of weeks ago.
+  text: Have a nice day sir.
   CharacterName:
-  - Paul
+  - Gaurd
   textDisplaySpeed: 0.01
   hasSecondaryLine: 0
   isShouting: 0
@@ -83,17 +29,16 @@ MonoBehaviour:
   baseTextSize: 36
   balloonObject: {fileID: 2592667508800547744, guid: 2bac7fcd62ad2254ba0b5c6805ad7e98, type: 3}
   tailObject: {fileID: 8216558290986259432, guid: 89ac598207ca10e43b46e0a3e1c6d86d, type: 3}
-  borderSize: 1.2
-  sizePadding: {x: -10, y: 250}
+  borderSize: 0
+  sizePadding: {x: -10, y: 130}
   needsToBeFlipped: 1
-  children:
-  - 34e63512-100c-4bb8-8ece-3ba38bb83575
+  children: []
   rect:
     serializedVersion: 2
-    x: 438.3999
-    y: 188.79999
+    x: 923.6
+    y: 144.80002
     width: 200
-    height: 877.28
+    height: 761.1
   OnCompletionEvent: {fileID: 0}
   EnemiesToActivate: []
   onEnterAction: 
@@ -108,7 +53,7 @@ MonoBehaviour:
   onExitAction: 
   condition:
     and: []
---- !u!114 &-2989413853084130841
+--- !u!114 &-1341847211474266244
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -118,36 +63,36 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4a7a6ddfe04bf004fbb402deb2b21761, type: 3}
-  m_Name: 34e63512-100c-4bb8-8ece-3ba38bb83575
+  m_Name: cc9c8b67-7e5d-468b-a8b8-792586ba7786
   m_EditorClassIdentifier: 
   isPlayerSpeaking: 0
   hasImageSupport: 0
   shoutingImages: []
-  imageSize: 0
+  imageSize: 100
   hasSecondImageLine: 0
-  text: Oh no! So sad Paul.
+  text: The wife huh? thanks for the lead.
   CharacterName:
-  - Player
+  - Gaurd
   textDisplaySpeed: 0.01
   hasSecondaryLine: 1
   isShouting: 0
-  shoutIntensity: 1.221
+  shoutIntensity: 0.5
   newFont: {fileID: 0}
   newTextSize: 0
   baseTextSize: 36
   balloonObject: {fileID: 2592667508800547744, guid: 2bac7fcd62ad2254ba0b5c6805ad7e98, type: 3}
   tailObject: {fileID: 8216558290986259432, guid: 89ac598207ca10e43b46e0a3e1c6d86d, type: 3}
   borderSize: 1.2
-  sizePadding: {x: -10, y: 120}
-  needsToBeFlipped: 0
+  sizePadding: {x: -10, y: 160}
+  needsToBeFlipped: 1
   children:
-  - cd1da861-d3e8-430a-ba85-205749486f43
+  - 4ea8d459-f030-4620-bdd5-4b0e7947bdd4
   rect:
     serializedVersion: 2
-    x: 699.4002
-    y: 308.20007
+    x: 676.8
+    y: 95.200005
     width: 200
-    height: 761.1
+    height: 804.67
   OnCompletionEvent: {fileID: 0}
   EnemiesToActivate: []
   onEnterAction: 
@@ -172,18 +117,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5795a2dd33b2e3d4d9d64c417ce8d471, type: 3}
-  m_Name: Dialogue01
+  m_Name: Dialogue04
   m_EditorClassIdentifier: 
   nodes:
-  - {fileID: -7264227322239673264}
-  - {fileID: -4182607501235757020}
-  - {fileID: -2989413853084130841}
-  - {fileID: 2262670474335264596}
-  - {fileID: 3688482382928617705}
+  - {fileID: 1114044022719754494}
+  - {fileID: 2289264603350648489}
+  - {fileID: -1341847211474266244}
+  - {fileID: -3968082796122314815}
   newNodeOffset: {x: 250, y: 0}
-  isStaticDialogue: 0
+  isStaticDialogue: 1
   isStarted: 0
---- !u!114 &2262670474335264596
+--- !u!114 &1114044022719754494
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -193,36 +137,36 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4a7a6ddfe04bf004fbb402deb2b21761, type: 3}
-  m_Name: cd1da861-d3e8-430a-ba85-205749486f43
+  m_Name: 8491b881-90ed-4256-a07f-0638915a20cf
   m_EditorClassIdentifier: 
-  isPlayerSpeaking: 1
+  isPlayerSpeaking: 0
   hasImageSupport: 0
   shoutingImages: []
-  imageSize: 0
+  imageSize: 100
   hasSecondImageLine: 0
-  text: Anyway Bye!
+  text: Hey you! Stop now. You heard anything About Pauls murder?
   CharacterName:
-  - Player
+  - Gaurd
   textDisplaySpeed: 0.01
   hasSecondaryLine: 0
   isShouting: 0
-  shoutIntensity: 1.017
+  shoutIntensity: 0.5
   newFont: {fileID: 0}
   newTextSize: 0
   baseTextSize: 36
   balloonObject: {fileID: 2592667508800547744, guid: 2bac7fcd62ad2254ba0b5c6805ad7e98, type: 3}
   tailObject: {fileID: 8216558290986259432, guid: 89ac598207ca10e43b46e0a3e1c6d86d, type: 3}
   borderSize: 1.2
-  sizePadding: {x: -10, y: 110}
-  needsToBeFlipped: 0
+  sizePadding: {x: -10, y: 160}
+  needsToBeFlipped: 1
   children:
-  - 8aea8f5b-3f98-42bb-826f-4d273e10d257
+  - 168ab02d-9612-4ae9-8031-09e910c3b346
   rect:
     serializedVersion: 2
-    x: 959.19995
-    y: 307.00006
+    x: 211.2
+    y: -5.5999985
     width: 200
-    height: 746.58
+    height: 877.28
   OnCompletionEvent: {fileID: 0}
   EnemiesToActivate: []
   onEnterAction: 
@@ -237,7 +181,7 @@ MonoBehaviour:
   onExitAction: 
   condition:
     and: []
---- !u!114 &3688482382928617705
+--- !u!114 &2289264603350648489
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -247,50 +191,47 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4a7a6ddfe04bf004fbb402deb2b21761, type: 3}
-  m_Name: 8aea8f5b-3f98-42bb-826f-4d273e10d257
+  m_Name: 168ab02d-9612-4ae9-8031-09e910c3b346
   m_EditorClassIdentifier: 
-  isPlayerSpeaking: 0
-  hasImageSupport: 1
-  shoutingImages:
-  - {fileID: 1643545390761264672, guid: f6a23aea52d0f674dbadaa776aedbebc, type: 3}
-  - {fileID: 1857187268575111128, guid: 8049f496604332949ba4389d7343e6db, type: 3}
-  - {fileID: 1643545390761264672, guid: f6a23aea52d0f674dbadaa776aedbebc, type: 3}
-  imageSize: 200
+  isPlayerSpeaking: 1
+  hasImageSupport: 0
+  shoutingImages: []
+  imageSize: 100
   hasSecondImageLine: 0
-  text: 
+  text: I heard he was having a break up with Brenda.
   CharacterName:
-  - Paul
-  textDisplaySpeed: 0
+  - Player
+  textDisplaySpeed: 0.01
   hasSecondaryLine: 0
   isShouting: 0
   shoutIntensity: 0.5
   newFont: {fileID: 0}
   newTextSize: 0
-  baseTextSize: 0
+  baseTextSize: 36
   balloonObject: {fileID: 2592667508800547744, guid: 2bac7fcd62ad2254ba0b5c6805ad7e98, type: 3}
   tailObject: {fileID: 8216558290986259432, guid: 89ac598207ca10e43b46e0a3e1c6d86d, type: 3}
   borderSize: 1.2
-  sizePadding: {x: 60, y: 100}
+  sizePadding: {x: -10, y: 160}
   needsToBeFlipped: 0
-  children: []
+  children:
+  - cc9c8b67-7e5d-468b-a8b8-792586ba7786
   rect:
     serializedVersion: 2
-    x: 1218.0001
-    y: 348.60004
+    x: 447.60004
+    y: 69.599976
     width: 200
-    height: 1120
-  OnCompletionEvent: {fileID: 11400000, guid: 35a46a95d33d0cf419bdcb59769bff5f, type: 2}
-  EnemiesToActivate:
-  - Paul
+    height: 819.19
+  OnCompletionEvent: {fileID: 0}
+  EnemiesToActivate: []
   onEnterAction: 
-  DoPanelSwitch: 1
-  playAtEnd: 1
-  triggerEnter: {fileID: 11400000, guid: 4a495bc1b3ec91143bda2133b134a2c3, type: 2}
-  currentCameraName: Panel1Cam
-  nextCameraName: PaulFightCam
-  EnableNewCamera: 1
+  DoPanelSwitch: 0
+  playAtEnd: 0
+  triggerEnter: {fileID: 0}
+  currentCameraName: 
+  nextCameraName: 
+  EnableNewCamera: 0
   currentViewIndex: 0
-  nextViewIndex: 5
+  nextViewIndex: 0
   onExitAction: 
   condition:
     and: []

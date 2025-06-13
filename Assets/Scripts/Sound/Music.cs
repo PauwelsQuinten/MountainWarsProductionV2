@@ -140,24 +140,21 @@ public class Music : MonoBehaviour
         }
             SetGlobalParameterID(_musiczoneID, _musiczoneIDValue);
     }
-    public void SetCombatLevel(Component sender, object obj)
+    public void StartCombatLevel(Component sender, object obj)
     {
-        // Ensure obj is of the correct type
-        if (obj is NewTargetEventArgs newTargetArgs)
-        {
-            _newTargetEventArgs = newTargetArgs;
+        _combatLevelIDValue = 1.0f;
 
-            if (_newTargetEventArgs.NewTarget == null)
-            {
-                _combatLevelIDValue = 0.0f;
-            }
-            else
-            {
-                _combatLevelIDValue = 1.0f;
-            }
+        SetGlobalParameterID(_combatLevelID, _combatLevelIDValue);
+    }
 
-            SetGlobalParameterID(_combatLevelID, _combatLevelIDValue);
-        }
+    public void StopCombatLevel(Component sender, object obj)
+    {
+        CharacterDeathEventArgs args = obj as CharacterDeathEventArgs;
+
+        if (args.CharacterName == "Player") return;
+        _combatLevelIDValue = 0f;
+
+        SetGlobalParameterID(_combatLevelID, _combatLevelIDValue);
     }
 
     private void OnDestroy()
